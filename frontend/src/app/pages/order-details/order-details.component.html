@@ -1,0 +1,172 @@
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="text-center py-12">
+            <i class="fas fa-spinner fa-spin text-4xl text-emerald-600"></i>
+            <p class="mt-4 text-gray-600">Loading order details...</p>
+        </div>
+
+        <!-- Order Details -->
+        <div *ngIf="!loading && order" class="space-y-6">
+
+            <!-- Header -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Order {{ order.order_number }}</h1>
+                        <p class="mt-1 text-sm text-gray-600">
+                            Placed on {{ formatDate(order.created_at) }}
+                        </p>
+                    </div>
+                    <div class="mt-4 sm:mt-0">
+                        <span
+                            [class]="'inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold ' + getStatusColor(order.status)">
+                            <i [class]="'fas ' + getStatusIcon(order.status) + ' mr-2'"></i>
+                            {{ order.status | titlecase }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Timeline -->
+            <div *ngIf="order.status !== 'cancelled'" class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-lg font-bold text-gray-900 mb-6">Order Status</h2>
+
+                <div class="relative">
+                    <!-- Timeline -->
+                    <div class="absolute left-4 top-0 h-full w-0.5 bg-gray-200"></div>
+
+                    <!-- Steps -->
+                    <div class="space-y-6">
+                        <div *ngFor="let step of ['pending', 'confirmed', 'processing', 'shipped', 'delivered']; let i = index"
+                            class="relative flex items-start">
+                            <div [class.bg-emerald-600]="getStatusStep(order.status) > i"
+                                [class.bg-gray-300]="getStatusStep(order.status) <= i"
+                                class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center z-10">
+                                <i *ngIf="getStatusStep(order.status) > i" class="fas fa-check text-white text-sm"></i>
+                                <i *ngIf="getStatusStep(order.status) <= i"
+                                    class="fas fa-circle text-xs text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p [class.font-semibold]="getStatusStep(order.status) > i"
+                                    [class.text-gray-900]="getStatusStep(order.status) > i"
+                                    [class.text-gray-600]="getStatusStep(order.status) <= i" class="text-sm">
+                                    {{ step | titlecase }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-lg font-bold text-gray-900 mb-4">Order Items</h2>
+
+                <div class="space-y-4">
+                    <div *ngFor="let item of order.items"
+                        class="flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0">
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-900">{{ item.product_name }}</p>
+                            <p class="text-sm text-gray-600">
+                                Quantity: {{ item.quantity }} × ₹{{ item.price }}
+                            </p>
+                        </div>
+                        <p class="font-bold text-gray-900">₹{{ item.total_price }}</p>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">Subtotal</span>
+                        <span class="font-semibold">₹{{ (order.total_amount - order.tax - order.delivery_fee).toFixed(2)
+                            }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">Tax</span>
+                        <span class="font-semibold">₹{{ order.tax }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">Delivery Fee</span>
+                        <span class="font-semibold">₹{{ order.delivery_fee }}</span>
+                    </div>
+                    <div class="flex justify-between pt-2 border-t border-gray-200">
+                        <span class="text-lg font-bold text-gray-900">Total</span>
+                        <span class="text-2xl font-bold text-emerald-600">₹{{ order.total_amount }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Information -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-lg font-bold text-gray-900 mb-4">Delivery Information</h2>
+
+                <div class="space-y-3">
+                    <div>
+                        <p class="text-sm text-gray-600">Address</p>
+                        <p class="font-semibold text-gray-900">{{ order.delivery_address }}</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <p class="text-sm text-gray-600">City</p>
+                            <p class="font-semibold text-gray-900">{{ order.delivery_city }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">State</p>
+                            <p class="font-semibold text-gray-900">{{ order.delivery_state }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Pincode</p>
+                            <p class="font-semibold text-gray-900">{{ order.delivery_pincode }}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Phone</p>
+                        <p class="font-semibold text-gray-900">{{ order.delivery_phone }}</p>
+                    </div>
+                    <div *ngIf="order.notes">
+                        <p class="text-sm text-gray-600">Notes</p>
+                        <p class="font-semibold text-gray-900">{{ order.notes }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Information -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-lg font-bold text-gray-900 mb-4">Payment Information</h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-600">Payment Method</p>
+                        <p class="font-semibold text-gray-900">{{ order.payment_method }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Payment Status</p>
+                        <span [class]="order.payment_status === 'paid' ? 'text-green-600' : 'text-yellow-600'"
+                            class="font-semibold">
+                            {{ order.payment_status | titlecase }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button *ngIf="canCancelOrder()" (click)="cancelOrder()" [disabled]="cancelling"
+                    class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i *ngIf="!cancelling" class="fas fa-times-circle mr-2"></i>
+                    <i *ngIf="cancelling" class="fas fa-spinner fa-spin mr-2"></i>
+                    {{ cancelling ? 'Cancelling...' : 'Cancel Order' }}
+                </button>
+
+                <a routerLink="/orders"
+                    class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Back to Orders
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

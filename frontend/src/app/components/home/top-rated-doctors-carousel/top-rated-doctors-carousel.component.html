@@ -1,0 +1,138 @@
+<!-- Loading State -->
+<div *ngIf="loading" id="topDoctors" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-12">Top Rated Doctors</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Skeleton Cards -->
+                <div *ngFor="let i of [1,2,3,4]" class="animate-pulse">
+                    <div class="bg-gray-200 h-48 rounded-2xl mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Empty State -->
+<div *ngIf="!loading && showEmptyState" id="topDoctors" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center py-12">
+            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-user-md text-5xl text-gray-300"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">No Doctors Available</h3>
+            <p class="text-gray-500 mb-6">We're working on adding more doctors to our platform</p>
+            <button (click)="searchClicked.emit()"
+                class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
+                Search Doctors
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Actual Carousel -->
+<div *ngIf="!loading && !showEmptyState" id="topDoctors" class="py-16 bg-white relative">
+    <!-- Carousel Navigation - Minimal Design -->
+    <!-- Previous Button -->
+    <button (click)="prevCarousel()"
+        class="absolute left-16 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center transition-all duration-300 text-gray-400 hover:text-emerald-600 hover:scale-125">
+        <i class="fas fa-chevron-left text-2xl"></i>
+    </button>
+
+    <!-- Next Button -->
+    <button (click)="nextCarousel()"
+        class="absolute right-16 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center transition-all duration-300 text-gray-400 hover:text-emerald-600 hover:scale-125">
+        <i class="fas fa-chevron-right text-2xl"></i>
+    </button>
+
+    <!-- Heading & Grids-->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-3xl font-extrabold text-gray-900">Top Rated Doctors</h2>
+                <p class="mt-2 text-lg text-gray-500">Consult with highly rated specialists trusted by thousands</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carousel Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div class="relative">
+            <!-- Carousel Wrapper with Drag Support -->
+            <div class="overflow-hidden rounded-2xl">
+                <div class="carousel-wrapper" [style.transform]="getCarouselTransform()"
+                    (mousedown)="onDragStart($event)" (mousemove)="onDragMove($event)" (mouseup)="onDragEnd()"
+                    (mouseleave)="onDragEnd()">
+
+                    <div *ngFor="let doctor of doctors; trackBy: trackByDoctorId" (click)="openDoctorDetails(doctor)"
+                        class="doctor-card group bg-white rounded-2xl overflow-hidden 
+                        hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1">
+
+                        <!-- Doctor Image -->
+                        <div class="relative h-48 overflow-hidden bg-gray-200">
+                            <img *ngIf="doctor.profile_image" [src]="doctor.profile_image" loading="lazy"
+                                [alt]="doctor.name || 'Doctor'" class="w-full h-full object-cover">
+
+                            <!-- Blank placeholder if no image -->
+                            <div *ngIf="!doctor.profile_image"
+                                class="w-full h-full bg-gradient-to-br from-emerald-100 to-teal-100"></div>
+
+                            <!-- Rating Badge - Top Right -->
+                            <div class="absolute top-4 right-4 bg-white px-3 py-1.5 rounded-full shadow-md">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                    <span class="text-gray-900 font-bold text-sm">{{doctor.rating || '4.8'}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor Info -->
+                        <div class="p-6 space-y-3">
+                            <!-- Name -->
+                            <h3 class="text-xl font-bold text-emerald-600">
+                                Dr. {{doctor.name || 'Unknown'}}
+                            </h3>
+
+                            <!-- Specialty -->
+                            <p class="text-emerald-600 font-medium text-base">
+                                {{doctor.specialty || 'General Physician'}}
+                            </p>
+
+                            <!-- Location -->
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <i class="fas fa-map-marker-alt text-gray-400 text-sm"></i>
+                                <span class="text-sm">
+                                    {{doctor.location || 'Location not specified'}}
+                                </span>
+                            </div>
+
+                            <!-- Availability -->
+                            <div class="flex items-center gap-2 text-emerald-600">
+                                <i class="fas fa-clock text-sm"></i>
+                                <span class="text-sm font-medium">
+                                    Next Available: {{doctor.availability || 'Tomorrow'}}
+                                </span>
+                            </div>
+
+                            <!-- Divider -->
+                            <div class="border-t border-gray-200 pt-4 mt-4">
+                                <div class="flex items-center justify-between text-gray-600">
+                                    <!-- Experience -->
+                                    <div class="text-sm">
+                                        <span class="font-semibold">{{doctor.experience || '12'}}+ years</span>
+                                    </div>
+                                    <!-- Reviews -->
+                                    <div class="text-sm">
+                                        <span class="font-semibold">{{doctor.totalReviews || '189'}} reviews</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

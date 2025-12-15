@@ -1,0 +1,15 @@
+/* Safe area for devices with notches */
+.safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Smooth transitions */
+nav a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Active state animation */
+nav a.text-emerald-600 i {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}

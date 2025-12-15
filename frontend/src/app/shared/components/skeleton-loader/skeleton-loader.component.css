@@ -1,0 +1,5 @@
+:host {
+    display: block;
+}
+
+/* Pulse animation is handled by Tailwind's animate-pulse class */

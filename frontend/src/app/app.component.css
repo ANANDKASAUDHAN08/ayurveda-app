@@ -1,0 +1,8 @@
+/* Global styles to prevent overflow */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+}

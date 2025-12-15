@@ -1,0 +1,316 @@
+<div class="bg-white min-h-screen">
+    <!-- Hero Section with Auth Card -->
+    <div class="relative bg-slate-900 overflow-hidden min-h-screen flex items-center">
+        <div class="absolute inset-0">
+            <img class="w-full h-full object-cover opacity-10"
+                src="https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                alt="Medical background">
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900/50"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
+                <!-- Left Side: Hero Content -->
+                <main class="-mt-8 sm:-mt-4 md:-mt-2 lg:-mt-8 xl:-mt-12">
+                    <div class="lg:text-left">
+                        <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl mb-6">
+                            Elevate Your Medical Practice with <span class="text-emerald-400">Digital Excellence</span>
+                        </h1>
+                        <p class="mt-4 text-xl text-slate-300 max-w-3xl">
+                            Join the premier network of healthcare professionals. Streamline appointments, manage
+                            patient
+                            records securely, and grow your practice with our comprehensive digital ecosystem.
+                        </p>
+
+                        <!-- Stats Banner -->
+                        <div class="mt-12 grid grid-cols-2 gap-8 md:grid-cols-4 border-t border-slate-700 pt-8">
+                            <div>
+                                <div class="text-3xl font-bold text-white">500+</div>
+                                <div class="text-sm text-slate-400 mt-1">Verified Doctors</div>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-bold text-white">10k+</div>
+                                <div class="text-sm text-slate-400 mt-1">Monthly Patients</div>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-bold text-white">98%</div>
+                                <div class="text-sm text-slate-400 mt-1">Satisfaction Rate</div>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-bold text-white">24/7</div>
+                                <div class="text-sm text-slate-400 mt-1">Support Team</div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- Right Side: Auth Card -->
+                <div class="mt-12 lg:mt-8 px-4 sm:px-6 lg:px-8 pb-8">
+                    <div class="w-full max-w-md mx-auto">
+                        <!-- Tabs -->
+                        <div class="flex bg-transparent">
+                            <button (click)="switchTab('login')"
+                                class="flex-1 py-4 text-sm font-medium text-center focus:outline-none transition-all"
+                                [ngClass]="activeTab === 'login' ? 'text-emerald-400 bg-slate-800/40' : 'text-slate-400 hover:text-slate-200'">
+                                Sign In
+                            </button>
+                            <button (click)="switchTab('register')"
+                                class="flex-1 py-4 text-sm font-medium text-center focus:outline-none transition-all"
+                                [ngClass]="activeTab === 'register' ? 'text-emerald-400 bg-slate-800/40' : 'text-slate-400 hover:text-slate-200'">
+                                Create Account
+                            </button>
+                        </div>
+
+                        <div class="p-8 min-h-[500px]">
+                            <!-- Login Form -->
+                            <form *ngIf="activeTab === 'login'" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()"
+                                class="space-y-6">
+                                <div>
+                                    <label for="login-email" class="block text-sm font-medium text-slate-300">Email
+                                        Address</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-envelope text-slate-500"></i>
+                                        </div>
+                                        <input type="email" id="login-email" formControlName="email"
+                                            class="bg-slate-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-10 sm:text-sm border-slate-600 rounded-md py-3 text-white placeholder-slate-400"
+                                            placeholder="doctor@example.com">
+                                        <div *ngIf="loginForm.get('email')?.value"
+                                            class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                            (click)="clearField(loginForm, 'email')">
+                                            <i class="fas fa-times-circle text-slate-500 hover:text-slate-300"></i>
+                                        </div>
+                                    </div>
+                                    <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                                        class="mt-1 text-xs text-red-400">Valid email is required</p>
+                                </div>
+
+                                <div>
+                                    <label for="login-password"
+                                        class="block text-sm font-medium text-slate-300">Password</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-lock text-slate-500"></i>
+                                        </div>
+                                        <input [type]="showLoginPassword ? 'text' : 'password'" id="login-password"
+                                            formControlName="password"
+                                            class="bg-slate-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-20 sm:text-sm border-slate-600 rounded-md py-3 text-white placeholder-slate-400"
+                                            placeholder="••••••••">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
+                                            <i *ngIf="loginForm.get('password')?.value"
+                                                class="fas fa-times-circle text-slate-500 hover:text-slate-300 cursor-pointer"
+                                                (click)="clearField(loginForm, 'password')"></i>
+                                            <i [class]="showLoginPassword ? 'fas fa-eye-slash text-slate-500 hover:text-slate-300' : 'fas fa-eye text-slate-500 hover:text-slate-300'"
+                                                class="cursor-pointer" (click)="toggleLoginPassword()"></i>
+                                        </div>
+                                    </div>
+                                    <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                                        class="mt-1 text-xs text-red-400">Password is required</p>
+                                </div>
+
+                                <button type="submit" [disabled]="loginForm.invalid || isLoading"
+                                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-900 bg-emerald-400 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                    <span *ngIf="!isLoading">Sign In</span>
+                                    <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin mr-2"></i> Signing
+                                        in...</span>
+                                </button>
+                            </form>
+
+                            <!-- Register Form -->
+                            <form *ngIf="activeTab === 'register'" [formGroup]="registerForm"
+                                (ngSubmit)="onRegisterSubmit()" class="space-y-4">
+                                <div>
+                                    <label for="reg-name" class="block text-sm font-medium text-slate-300">Full
+                                        Name</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-user text-slate-500"></i>
+                                        </div>
+                                        <input type="text" id="reg-name" formControlName="name"
+                                            class="bg-slate-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-10 sm:text-sm border-slate-600 rounded-md py-3 text-white placeholder-slate-400"
+                                            placeholder="Dr. John Doe">
+                                        <div *ngIf="registerForm.get('name')?.value"
+                                            class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                            (click)="clearField(registerForm, 'name')">
+                                            <i class="fas fa-times-circle text-slate-500 hover:text-slate-300"></i>
+                                        </div>
+                                    </div>
+                                    <p *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched"
+                                        class="mt-1 text-xs text-red-400">Name is required</p>
+                                </div>
+
+                                <div>
+                                    <label for="reg-email" class="block text-sm font-medium text-slate-300">Email
+                                        Address</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-envelope text-slate-500"></i>
+                                        </div>
+                                        <input type="email" id="reg-email" formControlName="email"
+                                            class="bg-slate-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-10 sm:text-sm border-slate-600 rounded-md py-3 text-white placeholder-slate-400"
+                                            placeholder="doctor@example.com">
+                                        <div *ngIf="registerForm.get('email')?.value"
+                                            class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                            (click)="clearField(registerForm, 'email')">
+                                            <i class="fas fa-times-circle text-slate-500 hover:text-slate-300"></i>
+                                        </div>
+                                    </div>
+                                    <p *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+                                        class="mt-1 text-xs text-red-400">Valid email is required</p>
+                                </div>
+
+                                <div>
+                                    <label for="reg-password"
+                                        class="block text-sm font-medium text-slate-300">Password</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-lock text-slate-500"></i>
+                                        </div>
+                                        <input [type]="showRegisterPassword ? 'text' : 'password'" id="reg-password"
+                                            formControlName="password"
+                                            class="bg-slate-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-20 sm:text-sm border-slate-600 rounded-md py-3 text-white placeholder-slate-400"
+                                            placeholder="Min 6 chars">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
+                                            <i *ngIf="registerForm.get('password')?.value"
+                                                class="fas fa-times-circle text-slate-500 hover:text-slate-300 cursor-pointer"
+                                                (click)="clearField(registerForm, 'password')"></i>
+                                            <i [class]="showRegisterPassword ? 'fas fa-eye-slash text-slate-500 hover:text-slate-300' : 'fas fa-eye text-slate-500 hover:text-slate-300'"
+                                                class="cursor-pointer" (click)="toggleRegisterPassword()"></i>
+                                        </div>
+                                    </div>
+                                    <p *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                                        class="mt-1 text-xs text-red-400">Password is required (min 6 chars)</p>
+                                </div>
+
+                                <button type="submit" [disabled]="registerForm.invalid || isLoading"
+                                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-900 bg-emerald-400 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                    <span *ngIf="!isLoading">Create Account</span>
+                                    <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin mr-2"></i> Creating
+                                        Account...</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-base text-emerald-600 font-semibold tracking-wide uppercase">Powerful Tools</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                    Everything you need to succeed
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+                <!-- Feature 1 -->
+                <div
+                    class="bg-white rounded-2xl shadow-sm p-8 transition-all duration-300 hover:shadow-lg hover:scale-105">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Smart Records</h3>
+                    <p class="text-slate-600">
+                        Digital prescription management and secure patient history at your fingertips.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div
+                    class="bg-white rounded-2xl shadow-sm p-8 transition-all duration-300 hover:shadow-lg hover:scale-105">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Flexible Scheduling</h3>
+                    <p class="text-slate-600">
+                        Set your availability, manage slots, and handle rescheduling effortlessly.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div
+                    class="bg-white rounded-2xl shadow-sm p-8 transition-all duration-300 hover:shadow-lg hover:scale-105">
+                    <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Practice Analytics</h3>
+                    <p class="text-slate-600">
+                        Gain insights into your practice growth, patient demographics, and revenue.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How it Works Timeline -->
+    <div class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold text-slate-900">How It Works</h2>
+            </div>
+
+            <div class="relative">
+                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-slate-200 hidden md:block">
+                </div>
+                <div class="space-y-12">
+                    <!-- Step 1 -->
+                    <div class="relative flex flex-col md:flex-row items-center">
+                        <div class="flex-1 md:text-right md:pr-12 mb-4 md:mb-0">
+                            <h3 class="text-xl font-bold text-slate-900">Register Profile</h3>
+                            <p class="mt-2 text-slate-600">Create your professional profile with credentials and
+                                specialization details.</p>
+                        </div>
+                        <div
+                            class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold z-10 border-4 border-white shadow">
+                            1</div>
+                        <div class="flex-1 md:pl-12"></div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative flex flex-col md:flex-row items-center">
+                        <div class="flex-1 md:pr-12"></div>
+                        <div
+                            class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold z-10 border-4 border-white shadow">
+                            2</div>
+                        <div class="flex-1 md:pl-12 md:text-left mt-4 md:mt-0">
+                            <h3 class="text-xl font-bold text-slate-900">Get Verified</h3>
+                            <p class="mt-2 text-slate-600">Our team verifies your credentials to ensure quality and
+                                trust.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative flex flex-col md:flex-row items-center">
+                        <div class="flex-1 md:text-right md:pr-12 mb-4 md:mb-0">
+                            <h3 class="text-xl font-bold text-slate-900">Start Practicing</h3>
+                            <p class="mt-2 text-slate-600">Set your schedule and start accepting appointments from
+                                patients.</p>
+                        </div>
+                        <div
+                            class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold z-10 border-4 border-white shadow">
+                            3</div>
+                        <div class="flex-1 md:pl-12"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

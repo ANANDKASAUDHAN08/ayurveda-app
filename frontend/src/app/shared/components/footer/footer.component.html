@@ -1,0 +1,82 @@
+<footer *ngIf="!isAdminRoute()" class="bg-slate-800 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+            <!-- Company Info -->
+            <div class="lg:col-span-2">
+                <div class="flex items-center mb-4">
+                    <svg class="h-8 w-8 mr-2 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    <h2 class="text-2xl font-bold text-white">Health<span class="text-emerald-500">Connect</span>
+                    </h2>
+                </div>
+                <p class="text-gray-400 mb-4">Connecting you with quality healthcare professionals for a healthier
+                    tomorrow.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-2xl hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-2xl hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-2xl hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-2xl hover:text-emerald-400 transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Services -->
+            <div>
+                <h3 class="text-white font-semibold mb-4">Services</h3>
+                <ul class="space-y-2">
+                    <li><a routerLink="/user/find-doctors" class="hover:text-emerald-500 transition-colors">Find
+                            Doctors</a></li>
+                    <li><a routerLink="/hospitals" class="hover:text-emerald-500 transition-colors">Hospitals</a>
+                    </li>
+                    <li><a routerLink="/pharmacies" class="hover:text-emerald-500 transition-colors">Pharmacies</a>
+                    </li>
+                    <li><a routerLink="/home" fragment="articles"
+                            class="hover:text-emerald-500 transition-colors">Health Articles</a></li>
+                </ul>
+            </div>
+
+            <!-- Company -->
+            <div>
+                <h3 class="text-white font-semibold mb-4">Company</h3>
+                <ul class="space-y-2">
+                    <li><a routerLink="/home" fragment="about" class="hover:text-emerald-500 transition-colors">About
+                            Us</a></li>
+                    <li><a href="#" class="hover:text-emerald-500 transition-colors">Careers</a></li>
+                    <li><a href="#" class="hover:text-emerald-500 transition-colors">Press</a></li>
+                    <li><a routerLink="/home" fragment="contact"
+                            class="hover:text-emerald-500 transition-colors">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal -->
+            <div>
+                <h3 class="text-white font-semibold mb-4">Legal</h3>
+                <ul class="space-y-2">
+                    <li><a routerLink="/privacy-policy" class="hover:text-emerald-500 transition-colors">Privacy
+                            Policy</a></li>
+                    <li><a routerLink="/terms-of-service" class="hover:text-emerald-500 transition-colors">Terms of
+                            Service</a></li>
+                    <li><a routerLink="/cookie-policy" class="hover:text-emerald-500 transition-colors">Cookie
+                            Policy</a></li>
+                    <li><a routerLink="/hipaa-compliance" class="hover:text-emerald-500 transition-colors">HIPAA
+                            Compliance</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800 mt-8 pt-8">
+            <p class="text-center text-gray-400 text-sm">
+                © {{ currentYear }} HealthConnect. All rights reserved.
+            </p>
+        </div>
+    </div>
+</footer>

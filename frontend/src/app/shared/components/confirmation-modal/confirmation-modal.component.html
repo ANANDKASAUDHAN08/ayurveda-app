@@ -1,0 +1,43 @@
+<!-- Modal Backdrop -->
+<div *ngIf="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+    (click)="onBackdropClick($event)" [@modalAnimation]>
+
+    <!-- Modal Container -->
+    <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full mx-4 transform transition-all"
+        (click)="$event.stopPropagation()">
+
+        <!-- Icon -->
+        <div class="flex justify-center mb-4">
+            <div [ngClass]="{
+        'bg-red-100': confirmColor === 'danger',
+        'bg-blue-100': confirmColor === 'primary'
+      }" class="rounded-full p-3">
+                <i [ngClass]="{
+          'fas fa-exclamation-triangle text-red-600': confirmColor === 'danger',
+          'fas fa-question-circle text-blue-600': confirmColor === 'primary'
+        }" class="text-3xl"></i>
+            </div>
+        </div>
+        <!-- Title -->
+        <h3 class="text-xl font-bold text-gray-900 text-center mb-2">
+            {{ title }}
+        </h3>
+        <!-- Message -->
+        <p class="text-gray-600 text-center mb-6">
+            {{ message }}
+        </p>
+        <!-- Buttons -->
+        <div class="flex gap-3">
+            <button (click)="onCancel()"
+                class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
+                {{ cancelText }}
+            </button>
+            <button (click)="onConfirm()" [ngClass]="{
+                'bg-red-600 hover:bg-red-700': confirmColor === 'danger',
+                'bg-blue-600 hover:bg-blue-700': confirmColor === 'primary'
+              }" class="flex-1 px-4 py-2.5 text-white rounded-lg font-medium transition-colors">
+                {{ confirmText }}
+            </button>
+        </div>
+    </div>
+</div>

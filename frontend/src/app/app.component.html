@@ -1,0 +1,24 @@
+<div class="flex flex-col min-h-screen bg-gray-50">
+  <!-- Top Navbar -->
+  <app-top-navbar [onMenuToggle]="toggleHamburgerMenu"></app-top-navbar>
+
+  <!-- Hamburger Menu -->
+  <app-hamburger-menu [isOpen]="hamburgerMenuOpen" (close)="closeHamburgerMenu()"></app-hamburger-menu>
+
+  <!-- Main Content -->
+  <main class="flex-1">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer (hide on admin routes) -->
+  <app-footer *ngIf="!isAdminRoute"></app-footer>
+
+  <!-- Bottom Navigation (Mobile only) -->
+  <app-bottom-navigation></app-bottom-navigation>
+
+  <!-- Snackbar -->
+  <app-snackbar></app-snackbar>
+
+  <!-- Scroll to Top Button -->
+  <app-scroll-to-top></app-scroll-to-top>
+</div>

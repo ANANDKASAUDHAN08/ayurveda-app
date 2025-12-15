@@ -1,0 +1,24 @@
+<div (click)="navigate()"
+    class="group cursor-pointer bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 border border-slate-200 relative">
+
+    <!-- Badge -->
+    <div *ngIf="category.badge"
+        class="absolute -top-2 -right-2 px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg">
+        {{ category.badge }}
+    </div>
+
+    <!-- Icon Container -->
+    <div [class]="'w-16 h-16 mx-auto rounded-lg flex items-center justify-center mb-3 ' + category.color">
+        <i [class]="category.icon + ' text-3xl ' + category.iconColor"></i>
+    </div>
+
+    <!-- Title -->
+    <h4 class="text-center text-sm font-semibold text-slate-900 mb-1">
+        {{ category.title }}
+    </h4>
+
+    <!-- Count -->
+    <p *ngIf="category.count" class="text-center text-xs text-slate-500">
+        {{ category.count }}+ items
+    </p>
+</div>

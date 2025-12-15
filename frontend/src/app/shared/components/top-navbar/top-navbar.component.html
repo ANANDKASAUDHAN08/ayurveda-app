@@ -1,0 +1,167 @@
+<nav *ngIf="!isAdminRoute()" class="fixed top-0 left-0 right-0 z-50 bg-slate-50 shadow-sm">
+    <!-- Row 1: Main Actions -->
+    <div class="border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+
+                <!-- Left: Hamburger (Mobile) + Logo -->
+                <div class="flex items-center gap-3">
+                    <!-- Hamburger Menu (Mobile/Tablet only) -->
+                    <button (click)="toggleHamburger()"
+                        class="md:hidden p-2 rounded-lg hover:bg-slate-100 text-slate-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+
+                    <!-- Logo -->
+                    <a routerLink="/" class="flex items-center gap-2">
+                        <div
+                            class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center shadow-lg">
+                            <i class="fas fa-heartbeat text-white text-xl"></i>
+                        </div>
+                        <div class="hidden sm:block">
+                            <h1 class="text-lg font-bold text-slate-900">HealthConnect</h1>
+                            <p class="text-xs text-slate-600 -mt-1">Your Health Partner</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Center: Location (Desktop) -->
+                <app-location-selector class="hidden lg:block"></app-location-selector>
+
+                <!-- Right: Search + Actions -->
+                <div class="flex items-center gap-2 sm:gap-4 flex-1 justify-end max-w-3xl">
+                    <!-- Search Bar (Desktop) -->
+                    <div class="hidden md:flex flex-1 max-w-xl">
+                        <div class="relative w-full">
+                            <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()"
+                                placeholder="Search doctors, medicines, tests..."
+                                class="w-full px-4 py-2.5 pl-11 rounded-lg border-2 border-slate-200 focus:border-emerald-500 focus:outline-none text-slate-900 placeholder-slate-400">
+                            <i class="fas fa-search absolute left-4 top-3.5 text-slate-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Search Icon (Mobile) -->
+                    <button class="md:hidden p-2 rounded-lg hover:bg-slate-100">
+                        <i class="fas fa-search text-xl text-slate-600"></i>
+                    </button>
+
+                    <!-- Cart -->
+                    <!-- <a routerLink="/cart" class="relative p-2 rounded-lg hover:bg-slate-100">
+                        <i class="fas fa-shopping-cart text-xl text-slate-700"></i>
+                        <span *ngIf="cartItemCount > 0"
+                            class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-xs font-semibold">
+                            {{cartItemCount > 99 ? '99+' : cartItemCount}}
+                        </span>
+                    </a> -->
+
+                    <!-- Cart Icon -->
+                    <button *ngIf="isLoggedIn" routerLink="/cart"
+                        class="relative p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span *ngIf="cartCount > 0"
+                            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                            {{ cartCount }}
+                        </span>
+                    </button>
+
+                    <!-- User Menu -->
+                    <div class="hidden sm:block">
+                        <!-- Not Logged In -->
+                        <div *ngIf="!isLoggedIn" class="flex items-center gap-2">
+                            <a routerLink="/for-users"
+                                class="px-4 py-2 text-sm font-medium text-slate-700 hover:text-emerald-600 transition-colors">
+                                Login
+                            </a>
+                            <a routerLink="/for-doctors"
+                                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors">
+                                For Doctors
+                            </a>
+                        </div>
+
+                        <!-- Logged In -->
+                        <div *ngIf="isLoggedIn" class="relative">
+                            <button (click)="toggleProfileMenu()"
+                                class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors">
+                                <div
+                                    class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-semibold shadow">
+                                    {{ getUserInitials() }}
+                                </div>
+                                <div class="hidden lg:block text-left">
+                                    <p class="text-sm font-medium text-slate-900">{{ userName }}</p>
+                                    <p class="text-xs text-slate-500 capitalize">{{ userRole }}</p>
+                                </div>
+                                <i [class]="profileMenuOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
+                                    class="text-xs text-slate-500"></i>
+                            </button>
+                            <!-- Dropdown Menu -->
+                            <div *ngIf="profileMenuOpen"
+                                class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden z-50">
+                                <div class="py-2">
+                                    <a (click)="navigateToDashboard()"
+                                        class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 transition-colors text-slate-700 cursor-pointer">
+                                        <i class="fas fa-chart-line text-emerald-600"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+
+                                    <a (click)="navigateToProfile()"
+                                        class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 transition-colors text-slate-700 cursor-pointer">
+                                        <i class="fas fa-user text-emerald-600"></i>
+                                        <span>My Profile</span>
+                                    </a>
+
+                                    <div class="border-t border-slate-200 my-1"></div>
+
+                                    <button (click)="navigateToOrders()"
+                                        class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2">
+                                        <i class="fas fa-shopping-bag text-emerald-600"></i>
+                                        <span class="text-slate-700">My Orders</span>
+                                    </button>
+
+                                    <button (click)="logout()"
+                                        class="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors text-red-600">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        <span>Logout</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Click outside to close -->
+                            <div *ngIf="profileMenuOpen" (click)="profileMenuOpen = false" class="fixed inset-0 z-40">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2: Categories (Desktop Only) -->
+    <div class="hidden md:block bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center h-12 space-x-8">
+                <a routerLink="/medicine" routerLinkActive="text-emerald-600 font-semibold"
+                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer">
+                    Medicine
+                </a>
+                <a routerLink="/lab-tests" routerLinkActive="text-emerald-600 font-semibold"
+                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer">
+                    Lab Tests
+                </a>
+                <a routerLink="/consult" routerLinkActive="text-emerald-600 font-semibold"
+                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer">
+                    Consult Doctor
+                </a>
+                <a routerLink="/health-plans" routerLinkActive="text-emerald-600 font-semibold"
+                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer">
+                    Health Plans
+                </a>
+                <a routerLink="/pharmacies" routerLinkActive="text-emerald-600 font-semibold"
+                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer">
+                    Pharmacies
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<!-- Spacer for fixed navbar -->
+<div *ngIf="!isAdminRoute()" class="h-16 md:h-28"></div>

@@ -1,0 +1,29 @@
+<div class="relative">
+    <button (click)="toggleDropdown()"
+        class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors">
+        <i class="fas fa-map-marker-alt text-emerald-600"></i>
+        <div class="hidden md:block text-left">
+            <p class="text-xs text-slate-500">Delivering to</p>
+            <p class="text-sm font-semibold text-slate-900">{{ selectedLocation }}</p>
+        </div>
+        <i class="fas fa-chevron-down text-xs text-slate-500"></i>
+    </button>
+
+    <!-- Dropdown -->
+    <div *ngIf="showDropdown"
+        class="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-slate-200 z-50 max-h-80 overflow-y-auto">
+        <div class="p-2">
+            <p class="text-xs text-slate-500 px-3 py-2">Select your location</p>
+            <button *ngFor="let location of locations" (click)="selectLocation(location)"
+                [class.bg-emerald-50]="location === selectedLocation"
+                [class.text-emerald-700]="location === selectedLocation"
+                class="w-full text-left px-3 py-2.5 rounded hover:bg-slate-50 transition-colors flex items-center justify-between">
+                <span>{{ location }}</span>
+                <i *ngIf="location === selectedLocation" class="fas fa-check text-emerald-600"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Click outside to close -->
+<div *ngIf="showDropdown" (click)="closeDropdown()" class="fixed inset-0 z-40"></div>

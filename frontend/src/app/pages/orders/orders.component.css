@@ -1,0 +1,18 @@
+/* Orders page styles */
+
+.order-card {
+    transition: all 0.3s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Filter buttons animation */
+button {
+    transition: all 0.2s ease;
+}
+
+button:active {
+    transform: scale(0.98);
+}

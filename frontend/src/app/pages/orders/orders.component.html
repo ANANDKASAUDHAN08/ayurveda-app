@@ -1,0 +1,90 @@
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">My Orders</h1>
+            <p class="mt-2 text-sm text-gray-600">Track and manage your orders</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="mb-6 flex flex-wrap gap-2">
+            <button *ngFor="let filter of filters" (click)="filterOrders(filter.value)"
+                [class.bg-emerald-600]="selectedFilter === filter.value"
+                [class.text-white]="selectedFilter === filter.value" [class.bg-white]="selectedFilter !== filter.value"
+                [class.text-gray-700]="selectedFilter !== filter.value"
+                class="px-4 py-2 rounded-lg border border-gray-300 font-medium text-sm transition-colors hover:border-emerald-600">
+                {{ filter.label }}
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="text-center py-12">
+            <i class="fas fa-spinner fa-spin text-4xl text-emerald-600"></i>
+            <p class="mt-4 text-gray-600">Loading orders...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!loading && filteredOrders.length === 0" class="text-center py-12 bg-white rounded-lg shadow-sm">
+            <i class="fas fa-shopping-bag text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">No orders found</h3>
+            <p class="text-gray-600 mb-4">You haven't placed any orders yet</p>
+            <a routerLink="/"
+                class="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                Start Shopping
+            </a>
+        </div>
+
+        <!-- Orders List -->
+        <div *ngIf="!loading && filteredOrders.length > 0" class="space-y-4">
+            <div *ngFor="let order of filteredOrders"
+                class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+
+                <div class="p-6">
+                    <!-- Order Header -->
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">{{ order.order_number }}</h3>
+                            <p class="text-sm text-gray-600 mt-1">
+                                <i class="far fa-calendar mr-1"></i>
+                                {{ formatDate(order.created_at) }}
+                            </p>
+                        </div>
+                        <div class="mt-3 sm:mt-0">
+                            <span
+                                [class]="'inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold ' + getStatusColor(order.status)">
+                                <i [class]="'fas ' + getStatusIcon(order.status) + ' mr-2'"></i>
+                                {{ order.status | titlecase }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Order Details -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <p class="text-sm text-gray-600">Total Items</p>
+                            <p class="font-semibold text-gray-900">{{ order.total_items }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Payment Method</p>
+                            <p class="font-semibold text-gray-900">{{ order.payment_method }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Total Amount</p>
+                            <p class="text-xl font-bold text-emerald-600">₹{{ order.total_amount }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <div class="flex justify-end">
+                        <a [routerLink]="['/orders', order.id]"
+                            class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-semibold text-sm">
+                            View Details
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

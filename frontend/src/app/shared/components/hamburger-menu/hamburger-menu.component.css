@@ -1,0 +1,14 @@
+/* Prevent body scroll when menu is open */
+:host {
+    display: contents;
+}
+
+/* Smooth touch interactions */
+.fixed {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Active tap feedback */
+a:active {
+    transform: scale(0.98);
+}

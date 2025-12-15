@@ -1,0 +1,35 @@
+/* Carousel Wrapper */
+.carousel-wrapper {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 1.8rem;
+}
+
+/* Article Card (3 cols) */
+.article-card {
+    flex: 0 0 calc(33.333% - 1.35rem);
+    /* Default 3 columns */
+    min-width: 300px;
+}
+
+@media (max-width: 1280px) {
+    .article-card {
+        flex: 0 0 calc(50% - 1rem);
+        /* 2 cols */
+    }
+}
+
+@media (max-width: 768px) {
+    .article-card {
+        flex: 0 0 100%;
+        /* 1 col */
+    }
+}
+
+/* Utility Classes */
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

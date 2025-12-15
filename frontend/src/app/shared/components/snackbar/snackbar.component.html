@@ -1,0 +1,20 @@
+<div *ngIf="show" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] transform transition-all duration-300"
+    [ngClass]="{'translate-y-0 opacity-100': show, 'translate-y-4 opacity-0': !show}">
+
+    <!-- Added dynamic background classes and rounded-lg -->
+    <div class="flex items-center gap-3 px-6 py-3 shadow-lg min-w-[300px] rounded-lg" [ngClass]="{
+             'bg-emerald-600 text-white': type === 'success',
+             'bg-red-600 text-white': type === 'error',
+             'bg-amber-500 text-white': type === 'warning',
+             'bg-blue-600 text-white': type === 'info'
+         }">
+
+        <!-- Message -->
+        <p class="text-sm font-medium flex-1">{{ message }}</p>
+
+        <!-- Close Button -->
+        <button (click)="close()" class="text-white/80 hover:text-white transition-colors">
+            <i class="fas fa-times text-xs"></i>
+        </button>
+    </div>
+</div>

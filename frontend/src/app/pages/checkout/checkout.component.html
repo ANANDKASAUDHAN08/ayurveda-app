@@ -1,0 +1,173 @@
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Checkout</h1>
+            <p class="mt-2 text-sm text-gray-600">Complete your order</p>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="text-center py-12">
+            <i class="fas fa-spinner fa-spin text-4xl text-emerald-600"></i>
+            <p class="mt-4 text-gray-600">Loading checkout...</p>
+        </div>
+
+        <!-- Checkout Form -->
+        <div *ngIf="!loading && cart" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Delivery Details Form -->
+            <div class="lg:col-span-2">
+                <form [formGroup]="checkoutForm" (ngSubmit)="placeOrder()" class="bg-white rounded-lg shadow-sm p-6">
+
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Delivery Details</h2>
+
+                    <!-- Address -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Delivery Address *
+                        </label>
+                        <textarea formControlName="delivery_address" rows="3"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            placeholder="Enter your full address"></textarea>
+                        <p *ngIf="checkoutForm.get('delivery_address')?.touched && checkoutForm.get('delivery_address')?.invalid"
+                            class="mt-1 text-sm text-red-600">
+                            {{ getFieldError('delivery_address') }}
+                        </p>
+                    </div>
+
+                    <!-- City + State -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                City *
+                            </label>
+                            <input type="text" formControlName="delivery_city"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                placeholder="City">
+                            <p *ngIf="checkoutForm.get('delivery_city')?.touched && checkoutForm.get('delivery_city')?.invalid"
+                                class="mt-1 text-sm text-red-600">
+                                {{ getFieldError('delivery_city') }}
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                State *
+                            </label>
+                            <input type="text" formControlName="delivery_state"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                placeholder="State">
+                            <p *ngIf="checkoutForm.get('delivery_state')?.touched && checkoutForm.get('delivery_state')?.invalid"
+                                class="mt-1 text-sm text-red-600">
+                                {{ getFieldError('delivery_state') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Pincode + Phone -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Pincode *
+                            </label>
+                            <input type="text" formControlName="delivery_pincode" maxlength="6"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                placeholder="6-digit pincode">
+                            <p *ngIf="checkoutForm.get('delivery_pincode')?.touched && checkoutForm.get('delivery_pincode')?.invalid"
+                                class="mt-1 text-sm text-red-600">
+                                {{ getFieldError('delivery_pincode') }}
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Phone *
+                            </label>
+                            <input type="tel" formControlName="delivery_phone" maxlength="10"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                placeholder="10-digit phone">
+                            <p *ngIf="checkoutForm.get('delivery_phone')?.touched && checkoutForm.get('delivery_phone')?.invalid"
+                                class="mt-1 text-sm text-red-600">
+                                {{ getFieldError('delivery_phone') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Payment Method *
+                        </label>
+                        <select formControlName="payment_method"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <option value="COD">Cash on Delivery</option>
+                            <option value="UPI">UPI</option>
+                            <option value="Card">Debit/Credit Card</option>
+                        </select>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Order Notes (Optional)
+                        </label>
+                        <textarea formControlName="notes" rows="2"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            placeholder="Any special instructions"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" [disabled]="submitting"
+                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i *ngIf="!submitting" class="fas fa-lock mr-2"></i>
+                        <i *ngIf="submitting" class="fas fa-spinner fa-spin mr-2"></i>
+                        {{ submitting ? 'Placing Order...' : 'Place Order' }}
+                    </button>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
+
+                    <!-- Items -->
+                    <div class="space-y-3 mb-4">
+                        <div *ngFor="let item of cart.items" class="flex justify-between text-sm">
+                            <span class="text-gray-600">{{ item.product_name }} (×{{ item.quantity }})</span>
+                            <span class="font-semibold">₹{{ item.total_price }}</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4 space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Subtotal</span>
+                            <span class="font-semibold">₹{{ subtotal.toFixed(2) }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Tax (9%)</span>
+                            <span class="font-semibold">₹{{ tax.toFixed(2) }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Delivery Fee</span>
+                            <span class="font-semibold" [class.text-green-600]="subtotal >= 500">
+                                {{ subtotal >= 500 ? 'FREE' : '₹50' }}
+                            </span>
+                        </div>
+                        <div class="border-t border-gray-200 pt-2 flex justify-between">
+                            <span class="text-lg font-bold text-gray-900">Total</span>
+                            <span class="text-2xl font-bold text-emerald-600">₹{{ total.toFixed(2) }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Free Delivery Message -->
+                    <div *ngIf="subtotal < 500" class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <p class="text-xs text-yellow-800">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Add ₹{{ (500 - subtotal).toFixed(2) }} more for free delivery!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

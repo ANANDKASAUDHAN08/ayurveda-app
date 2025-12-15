@@ -1,0 +1,110 @@
+<div class="space-y-8">
+    <!-- Welcome Section -->
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-2xl p-8 shadow-lg">
+        <h1 class="text-3xl font-bold mb-2">Welcome to Admin Panel</h1>
+        <p class="text-emerald-100">Manage all content and data for HealthConnect platform</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div *ngFor="let i of [1,2,3,4]" class="bg-white rounded-xl p-6 shadow-sm animate-pulse">
+            <div class="h-4 bg-slate-200 rounded w-24 mb-4"></div>
+            <div class="h-8 bg-slate-200 rounded w-16"></div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Featured Doctors -->
+        <div routerLink="/admin/featured-doctors"
+            class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow hover:bg-blue-50 cursor-pointer">
+            <div class="flex items-center justify-between mb-4">
+                <div class="h-12 w-12 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                    <i class="fas fa-user-md text-xl"></i>
+                </div>
+                <a routerLink="/admin/featured-doctors" class="text-emerald-600 hover:text-emerald-700">
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-1">{{ stats.featuredDoctors }}</h3>
+            <p class="text-sm text-slate-500">Featured Doctors</p>
+        </div>
+
+        <!-- Health Articles -->
+        <div routerLink="/admin/articles"
+            class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow hover:bg-blue-50 cursor-pointer">
+            <div class="flex items-center justify-between mb-4">
+                <div class="h-12 w-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                    <i class="fas fa-newspaper text-xl"></i>
+                </div>
+                <a routerLink="/admin/articles" class="text-blue-600 hover:text-blue-700">
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-1">{{ stats.articles }}</h3>
+            <p class="text-sm text-slate-500">Health Articles</p>
+        </div>
+
+        <!-- Hospitals -->
+        <div routerLink="/admin/hospitals"
+            class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow hover:bg-purple-50 cursor-pointer">
+            <div class="flex items-center justify-between mb-4">
+                <div class="h-12 w-12 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
+                    <i class="fas fa-hospital text-xl"></i>
+                </div>
+                <a routerLink="/admin/hospitals" class="text-purple-600 hover:text-purple-700">
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-1">{{ stats.hospitals }}</h3>
+            <p class="text-sm text-slate-500">Hospitals</p>
+        </div>
+
+        <!-- Pharmacies -->
+        <div routerLink="/admin/pharmacies"
+            class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow hover:bg-amber-50 cursor-pointer">
+            <div class="flex items-center justify-between mb-4">
+                <div class="h-12 w-12 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
+                    <i class="fas fa-pills text-xl"></i>
+                </div>
+                <a routerLink="/admin/pharmacies" class="text-amber-600 hover:text-amber-700">
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-1">{{ stats.pharmacies }}</h3>
+            <p class="text-sm text-slate-500">Pharmacies</p>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+        <h2 class="text-xl font-bold text-slate-800 mb-4">Quick Actions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a routerLink="/admin/doctors"
+                class="flex items-center gap-3 p-4 border border-slate-200 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-all cursor-pointer">
+                <i class="fas fa-plus-circle text-emerald-600 text-2xl"></i>
+                <span class="font-medium text-slate-700">Add New Doctor</span>
+            </a>
+            <a routerLink="/admin/featured-doctors"
+                class="flex items-center gap-3 p-4 border border-slate-200 rounded-lg hover:border-teal-500 hover:bg-teal-50 transition-all cursor-pointer">
+                <i class="fas fa-plus-circle text-teal-600 text-2xl"></i>
+                <span class="font-medium text-slate-700">Add Featured Doctor</span>
+            </a>
+            <a routerLink="/admin/articles"
+                class="flex items-center gap-3 p-4 border border-slate-200 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-all cursor-pointer">
+                <i class="fas fa-plus-circle text-emerald-600 text-2xl"></i>
+                <span class="font-medium text-slate-700">Add New Article</span>
+            </a>
+            <a routerLink="/admin/hospitals"
+                class="flex items-center gap-3 p-4 border border-slate-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all cursor-pointer">
+                <i class="fas fa-plus-circle text-purple-600 text-2xl"></i>
+                <span class="font-medium text-slate-700">Add New Hospital</span>
+            </a>
+            <a routerLink="/admin/pharmacies"
+                class="flex items-center gap-3 p-4 border border-slate-200 rounded-lg hover:border-amber-500 hover:bg-amber-50 transition-all cursor-pointer">
+                <i class="fas fa-plus-circle text-amber-600 text-2xl"></i>
+                <span class="font-medium text-slate-700">Add New Pharmacy</span>
+            </a>
+        </div>
+    </div>
+</div>

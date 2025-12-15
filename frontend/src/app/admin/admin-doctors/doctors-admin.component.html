@@ -1,0 +1,221 @@
+<div class="space-y-6">
+    <!-- Header -->
+    <div
+        class="sticky top-0 z-10 bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-5 -mx-5 px-6 -mt-6 shadow-md flex items-center justify-between rounded-2xl">
+        <div>
+            <h1 class="text-3xl font-bold">Doctors</h1>
+            <p class="text-emerald-100 mt-1">Manage doctor profiles and information</p>
+        </div>
+        <button (click)="openAddModal()"
+            class="px-6 py-3 bg-white text-emerald-600 hover:bg-emerald-50 rounded-lg font-semibold shadow-lg transition-colors flex items-center gap-2">
+            <i class="fas fa-plus"></i>
+            Add New Doctor
+        </button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="bg-white rounded-xl p-8 text-center">
+        <i class="fas fa-spinner fa-spin text-4xl text-emerald-600 mb-4"></i>
+        <p class="text-slate-500">Loading doctors...</p>
+    </div>
+
+
+    <!-- Table -->
+    <div *ngIf="!loading" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Doctor
+                        </th>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                            Specialization</th>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                            Experience</th>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Fee
+                        </th>
+                        <th class="text-right px-6 py-4 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr *ngFor="let doctor of doctors" class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="font-semibold text-slate-800">{{ doctor.name }}</div>
+                            <div class="text-sm text-slate-500">{{ doctor.phone }}</div>
+                        </td>
+                        <td class="px-6 py-4 text-slate-600">{{ doctor.specialization }}</td>
+                        <td class="px-6 py-4 text-slate-600">{{ doctor.experience }} years</td>
+                        <td class="px-6 py-4 text-slate-600">₹{{ doctor.consultationFee }}</td>
+                        <td class="px-6 py-4 text-right space-x-2">
+                            <button (click)="openEditModal(doctor)"
+                                class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button (click)="delete(doctor.id)"
+                                class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Empty State -->
+            <div *ngIf="doctors.length === 0" class="p-12 text-center">
+                <i class="fas fa-user-md text-6xl text-slate-300 mb-4"></i>
+                <p class="text-slate-500 text-lg mb-4">No doctors yet</p>
+                <button (click)="openAddModal()"
+                    class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium">
+                    Add First Doctor
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div *ngIf="showModal"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8">
+            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white">
+                <h3 class="text-xl font-bold text-slate-800">
+                    {{ modalMode === 'add' ? 'Add New Doctor' : 'Edit Doctor' }}
+                </h3>
+                <button (click)="closeModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                <!-- Basic Information -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Title</label>
+                        <select [(ngModel)]="selectedDoctor.title"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <option value="Dr.">Dr.</option>
+                            <option value="Prof.">Prof.</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Full Name *</label>
+                        <input type="text" [(ngModel)]="selectedDoctor.name"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                            placeholder="John Doe">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Specialization *</label>
+                        <input type="text" [(ngModel)]="selectedDoctor.specialization"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                            placeholder="Cardiologist">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Experience (years) *</label>
+                        <input type="number" [(ngModel)]="selectedDoctor.experience"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                            placeholder="10">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Phone</label>
+                        <input type="tel" [(ngModel)]="selectedDoctor.phone"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                            placeholder="+91 9876543210">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Registration Number</label>
+                        <input type="text" [(ngModel)]="selectedDoctor.registration_number"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                            placeholder="REG12345">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Consultation Fee (₹)</label>
+                        <input type="number" [(ngModel)]="selectedDoctor.consultationFee"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                            placeholder="500">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Mode</label>
+                        <select [(ngModel)]="selectedDoctor.mode"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <option value="online">Online</option>
+                            <option value="offline">Offline</option>
+                            <option value="both">Both</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Languages</label>
+                    <input type="text" [(ngModel)]="selectedDoctor.languages"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                        placeholder="English, Hindi">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Qualifications</label>
+                    <textarea [(ngModel)]="selectedDoctor.qualifications" rows="2"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                        placeholder="MBBS, MD"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">About</label>
+                    <textarea [(ngModel)]="selectedDoctor.about" rows="3"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                        placeholder="Brief description about the doctor"></textarea>
+                </div>
+
+                <!-- Clinic Information -->
+                <div class="border-t pt-4 mt-4">
+                    <h4 class="font-bold text-slate-700 mb-4">Clinic Information</h4>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Clinic Name</label>
+                            <input type="text" [(ngModel)]="selectedDoctor.clinic_name"
+                                class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                                placeholder="HealthCare Clinic">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Clinic Address</label>
+                            <textarea [(ngModel)]="selectedDoctor.clinic_address" rows="2"
+                                class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                                placeholder="123 Main St, City"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Clinic Timings</label>
+                            <input type="text" [(ngModel)]="selectedDoctor.clinic_timings"
+                                class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                                placeholder="9 AM - 5 PM">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-slate-200 flex justify-end gap-3 sticky bottom-0 bg-white">
+                <button (click)="closeModal()"
+                    class="px-6 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium transition-colors">
+                    Cancel
+                </button>
+                <button (click)="save()"
+                    class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors">
+                    {{ modalMode === 'add' ? 'Add Doctor' : 'Save Changes' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

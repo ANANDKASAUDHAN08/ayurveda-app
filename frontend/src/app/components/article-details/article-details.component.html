@@ -1,0 +1,105 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
+    (click)="onClose()">
+
+    <!-- Modal Container -->
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto animate-scaleIn relative"
+        (click)="$event.stopPropagation()">
+
+        <!-- Close Button -->
+        <button (click)="onClose()"
+            class="absolute top-6 right-6 z-10 w-10 h-10 bg-black/20 hover:bg-black/40 text-white rounded-full flex items-center justify-center transition-all duration-300 hover:rotate-90">
+            <i class="fas fa-times text-lg"></i>
+        </button>
+
+        <!-- Hero Image -->
+        <div class="relative h-72 sm:h-96">
+            <img [src]="article.image_url" [alt]="article.title" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+
+            <!-- Title Overlay -->
+            <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-emerald-600 text-sm font-semibold mb-4 shadow-lg">
+                    {{article.category}}
+                </span>
+                <h2 class="text-3xl sm:text-5xl font-bold leading-tight mb-4 shadow-sm">
+                    {{article.title}}
+                </h2>
+                <div class="flex items-center gap-4 text-sm sm:text-base text-gray-200 font-medium">
+                    <span class="flex items-center gap-2">
+                        <i class="far fa-user-circle"></i> {{article.author}}
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <i class="far fa-calendar-alt"></i> {{article.created_at | date:'mediumDate'}}
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <i class="far fa-clock"></i> 5 min read
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-8 sm:p-12">
+            <!-- Author Bio / Intro -->
+            <div class="flex items-start gap-4 p-6 bg-emerald-50 rounded-2xl mb-10 border border-emerald-100">
+                <div
+                    class="w-12 h-12 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-700 text-xl font-bold flex-shrink-0">
+                    {{article.author.charAt(0)}}
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-1">About the Author</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        {{article.author}} is a specialist in {{article.category}} with over 10 years of experience
+                        helping patients achieve better health through Ayurvedic practices.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Article Text -->
+            <div class="prose prose-lg max-w-none text-gray-700 space-y-6 leading-relaxed">
+                <p class="text-xl font-medium text-gray-800 leading-8">
+                    {{article.excerpt}}
+                </p>
+
+                <p>
+                    Sleep is essential for our physical and mental well-being. In Ayurveda, sleep (Nidra) is considered
+                    one of the three pillars of life, alongside food (Ahara) and managed celibacy (Brahmacharya).
+                    Quality sleep regenerates our tissues and restores balance to our doshas.
+                </p>
+
+                <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Understanding Sleep Cycles</h3>
+                <p>
+                    Modern science tells us that while we sleep, our brains remain active, cycling through different
+                    stages including REM (rapid eye movement) and deep sleep. Ayurveda adds that the time we go to bed
+                    significantly impacts the quality of this restoration.
+                </p>
+
+                <blockquote
+                    class="border-l-4 border-emerald-500 pl-6 italic my-8 text-gray-600 bg-gray-50 py-4 rounded-r-lg">
+                    "Early to bed and early to rise makes a man healthy, wealthy, and wise." - This old adage aligns
+                    perfectly with Ayurvedic wisdom.
+                </blockquote>
+
+                <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Practical Tips for Better Rest</h3>
+                <ul class="space-y-4 list-none pl-0">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
+                        <span><strong>Stick to a schedule:</strong> Go to bed and wake up at the same time every day to
+                            regulate your internal clock.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
+                        <span><strong>Create a bedtime ritual:</strong> Warm milk with nutmeg, a foot massage, or gentle
+                            breathing exercises can signal your body it's time to rest.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
+                        <span><strong>Optimize your environment:</strong> Keep your bedroom dark, quiet, and cool.
+                            Consider using calming essential oils like lavender.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>

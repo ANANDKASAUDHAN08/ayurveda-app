@@ -1,0 +1,42 @@
+/* Carousel Wrapper */
+.carousel-wrapper {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 1.8rem;
+}
+
+/* Doctor Card (4 cols) */
+.doctor-card {
+    flex: 0 0 calc(25% - 1.6rem);
+    min-width: 250px;
+}
+
+@media (max-width: 1280px) {
+    .doctor-card {
+        flex: 0 0 calc(25% - 1.5rem);
+        /* 4 cols */
+    }
+}
+
+@media (max-width: 1024px) {
+    .doctor-card {
+        flex: 0 0 calc(33.333% - 1.5rem);
+        /* 3 cols */
+    }
+}
+
+@media (max-width: 768px) {
+    .doctor-card {
+        flex: 0 0 calc(100% - 1.5rem);
+        /* 1 col */
+    }
+}
+
+/* Utility Classes */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-clamp: 2;
+}

@@ -1,0 +1,14 @@
+:host {
+    display: block;
+}
+
+/* Smooth hover */
+.group:hover {
+    transform: scale(1.05);
+}
+
+/* Icon animation */
+.group:hover i {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}

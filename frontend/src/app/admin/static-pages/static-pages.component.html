@@ -1,0 +1,87 @@
+<div class="space-y-6">
+    <div>
+        <h1 class="text-3xl font-bold text-slate-800">Static Pages</h1>
+        <p class="text-slate-500 mt-1">Manage policy and informational pages</p>
+    </div>
+
+    <div *ngIf="loading" class="bg-white rounded-xl p-8 text-center">
+        <i class="fas fa-spinner fa-spin text-4xl text-slate-600 mb-4"></i>
+        <p class="text-slate-500">Loading pages...</p>
+    </div>
+
+    <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div *ngFor="let page of pages"
+            class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">{{ page.title }}</h3>
+                    <p class="text-sm text-slate-500">/{{ page.slug }}</p>
+                </div>
+                <button (click)="openEditModal(page)"
+                    class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors text-sm font-medium">
+                    <i class="fas fa-edit mr-2"></i>Edit
+                </button>
+            </div>
+
+            <p class="text-slate-600 text-sm line-clamp-2">{{ page.meta_description }}</p>
+
+            <div class="mt-4 pt-4 border-t border-slate-100">
+                <span class="text-xs text-slate-500">Last updated: {{ page.updated_at | date }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div *ngIf="showModal"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl my-8">
+            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                <h3 class="text-xl font-bold text-slate-800">Edit {{ selectedPage.title }}</h3>
+                <button (click)="closeModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Title</label>
+                    <input type="text" [(ngModel)]="selectedPage.title"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Slug (URL)</label>
+                    <input type="text" [(ngModel)]="selectedPage.slug" readonly
+                        class="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-500 cursor-not-allowed">
+                    <p class="text-xs text-slate-500 mt-1">URL cannot be changed</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Meta Description</label>
+                    <textarea [(ngModel)]="selectedPage.meta_description" rows="2"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 outline-none resize-none"
+                        placeholder="SEO description..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Content (HTML)</label>
+                    <textarea [(ngModel)]="selectedPage.content" rows="15"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 outline-none resize-none font-mono text-sm"
+                        placeholder="<h1>Title</h1><p>Content...</p>"></textarea>
+                    <p class="text-xs text-slate-500 mt-1">Write HTML content for the page. Use standard HTML tags.</p>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-slate-200 flex justify-end gap-3">
+                <button (click)="closeModal()"
+                    class="px-6 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium">
+                    Cancel
+                </button>
+                <button (click)="save()"
+                    class="px-6 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-medium">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

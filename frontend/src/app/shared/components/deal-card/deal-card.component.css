@@ -1,0 +1,58 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Image zoom on hover */
+img {
+    transition: transform 0.3s ease;
+}
+
+/* Smooth state transitions */
+button {
+    transition: all 0.3s ease;
+}
+
+/* Quantity control animations */
+.bg-emerald-50 {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Active state for controls */
+button:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+/* Mobile touch targets */
+@media (max-width: 640px) {
+    button {
+        min-height: 44px;
+    }
+}

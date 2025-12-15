@@ -1,0 +1,101 @@
+<!-- Modern Sidebar (Matching Admin Design) -->
+<aside *ngIf="false" #sidebarElement [class]="sidebarExpanded ? 'w-64' : 'w-20'"
+    class="bg-slate-50 border-r border-slate-200 text-slate-700 flex flex-col fixed h-screen transition-all duration-300 z-30 shadow-sm">
+
+    <!-- Spacer to align with top navbar -->
+    <div class="h-16 border-b border-slate-200"></div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <!-- Home with Dropdown -->
+        <div>
+            <a [class.bg-emerald-50]="router.url === '/' || router.url.startsWith('/home')"
+                [class.text-emerald-700]="router.url === '/' || router.url.startsWith('/home')"
+                [class.border-l-4]="router.url === '/' || router.url.startsWith('/home')"
+                [class.border-emerald-600]="router.url === '/' || router.url.startsWith('/home')"
+                [title]="!sidebarExpanded ? 'Home' : ''"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer">
+                <i class="fas fa-home"></i>
+                <span *ngIf="sidebarExpanded" class="flex-1">Home</span>
+                <!-- <i *ngIf="sidebarExpanded"
+                    [class]="homeDropdownOpen ? 'fas fa-chevron-up text-xs' : 'fas fa-chevron-down text-xs'"></i> -->
+            </a>
+
+            <!-- Dropdown Menu -->
+            <div class="ml-4 mt-1 space-y-1">
+                <!-- Top Rated Doctors -->
+                <a (click)="scrollToSection('topDoctors')" [class.bg-emerald-50]="isScrollSectionActive('topDoctors')"
+                    [class.text-emerald-700]="isScrollSectionActive('topDoctors')"
+                    [class.border-l-4]="isScrollSectionActive('topDoctors')"
+                    [class.border-emerald-600]="isScrollSectionActive('topDoctors')"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-600 transition-all cursor-pointer group">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <span *ngIf="sidebarExpanded" class="text-sm">Top Rated Doctors</span>
+                </a>
+                <!-- Health Articles -->
+                <a (click)="scrollToSection('articles')" [class.bg-emerald-50]="isScrollSectionActive('articles')"
+                    [class.text-emerald-700]="isScrollSectionActive('articles')"
+                    [class.border-l-4]="isScrollSectionActive('articles')"
+                    [class.border-emerald-600]="isScrollSectionActive('articles')"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-600 transition-all cursor-pointer group">
+                    <i class="fas fa-newspaper text-blue-400"></i>
+                    <span *ngIf="sidebarExpanded" class="text-sm flex-1">Health Articles</span>
+                    <span *ngIf="sidebarExpanded && newArticlesCount > 0"
+                        class="bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
+                        {{newArticlesCount}}
+                    </span>
+                </a>
+                <!-- How Can We Help You? -->
+                <a (click)="scrollToSection('services')" [class.bg-emerald-50]="isScrollSectionActive('services')"
+                    [class.text-emerald-700]="isScrollSectionActive('services')"
+                    [class.border-l-4]="isScrollSectionActive('services')"
+                    [class.border-emerald-600]="isScrollSectionActive('services')"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-600 transition-all cursor-pointer group">
+                    <i class="fas fa-question-circle text-purple-400"></i>
+                    <span *ngIf="sidebarExpanded" class="text-sm">How Can We Help You?</span>
+                </a>
+                <!-- What Our Patients Say -->
+                <a (click)="scrollToSection('testimonials')"
+                    [class.bg-emerald-50]="isScrollSectionActive('testimonials')"
+                    [class.text-emerald-700]="isScrollSectionActive('testimonials')"
+                    [class.border-l-4]="isScrollSectionActive('testimonials')"
+                    [class.border-emerald-600]="isScrollSectionActive('testimonials')"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-600 transition-all cursor-pointer group">
+                    <i class="fas fa-comments text-pink-400"></i>
+                    <span *ngIf="sidebarExpanded" class="text-sm">What Our Patients Say</span>
+                </a>
+            </div>
+        </div>
+
+        <a *ngIf="shouldShowFindDoctors()" routerLink="/user/find-doctors"
+            routerLinkActive="bg-emerald-50 text-emerald-700 border-l-4 border-emerald-600"
+            [title]="!sidebarExpanded ? 'Find Doctors' : ''"
+            class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer">
+            <i class="fas fa-search"></i>
+            <span *ngIf="sidebarExpanded">Find Doctors</span>
+        </a>
+
+        <a routerLink="/hospitals" routerLinkActive="bg-emerald-50 text-emerald-700 border-l-4 border-emerald-600"
+            [title]="!sidebarExpanded ? 'Hospitals' : ''"
+            class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer">
+            <i class="fas fa-hospital"></i>
+            <span *ngIf="sidebarExpanded">Hospitals</span>
+        </a>
+
+        <a routerLink="/pharmacies" routerLinkActive="bg-emerald-50 text-emerald-700 border-l-4 border-emerald-600"
+            [title]="!sidebarExpanded ? 'Pharmacies' : ''"
+            class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer">
+            <i class="fas fa-pills"></i>
+            <span *ngIf="sidebarExpanded">Pharmacies</span>
+        </a>
+    </nav>
+
+    <!-- Collapse Toggle Button -->
+    <div class="p-4 border-t border-slate-200">
+        <button (click)="toggleSidebar(); $event.stopPropagation()"
+            class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors">
+            <i [class]="sidebarExpanded ? 'fas fa-chevron-left' : 'fas fa-chevron-right'"></i>
+            <span *ngIf="sidebarExpanded" class="text-sm">Collapse</span>
+        </button>
+    </div>
+</aside>

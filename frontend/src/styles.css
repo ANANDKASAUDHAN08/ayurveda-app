@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f3f4f6;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #10b981;
+  /* Emerald-500 */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #059669;
+  /* Emerald-600 */
+}
+
+/* ===================================
+   SIMPLE STANDARD TOOLTIPS
+   =================================== */
+
+/* Tooltip container */
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+/* Tooltip bubble */
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+
+  /* Simple Styling */
+  background-color: #333333;
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  max-width: 250px;
+  text-align: center;
+  z-index: 1000;
+
+  /* Simple Visibility */
+  display: none;
+  pointer-events: none;
+}
+
+/* Tooltip arrow */
+[data-tooltip]::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 3px;
+
+  border: 5px solid transparent;
+  border-top-color: #333333;
+
+  display: none;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Show tooltip on hover */
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+  display: block;
+}
+
+/* Position Variants (Simple) */
+
+/* Bottom */
+[data-tooltip-position="bottom"]::before {
+  bottom: auto;
+  top: 100%;
+  margin-bottom: 0;
+  margin-top: 8px;
+}
+
+[data-tooltip-position="bottom"]::after {
+  bottom: auto;
+  top: 100%;
+  margin-bottom: 0;
+  margin-top: -2px;
+  /* Pull arrow up slightly */
+  border-top-color: transparent;
+  border-bottom-color: #333333;
+}
+
+/* Left */
+[data-tooltip-position="left"]::before {
+  bottom: auto;
+  top: 50%;
+  left: auto;
+  right: 100%;
+  transform: translateY(-50%);
+  margin-bottom: 0;
+  margin-right: 8px;
+}
+
+[data-tooltip-position="left"]::after {
+  bottom: auto;
+  top: 50%;
+  left: auto;
+  right: 100%;
+  transform: translateY(-50%);
+  margin-bottom: 0;
+  margin-right: -2px;
+  border-top-color: transparent;
+  border-left-color: #333333;
+}
+
+/* Right */
+[data-tooltip-position="right"]::before {
+  bottom: auto;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-bottom: 0;
+  margin-left: 8px;
+}
+
+[data-tooltip-position="right"]::after {
+  bottom: auto;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-bottom: 0;
+  margin-left: -2px;
+  border-top-color: transparent;
+  border-right-color: #333333;
+}
+
+[data-tooltip-multiline]::before {
+  white-space: normal;
+}

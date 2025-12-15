@@ -1,0 +1,136 @@
+<div class="space-y-6">
+    <div
+        class="sticky top-0 z-10 bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-5 -mx-5 px-6 -mt-6 shadow-md flex items-center justify-between rounded-2xl">
+        <div>
+            <h1 class="text-3xl font-bold">Featured Doctors</h1>
+            <p class="text-emerald-100 mt-1">Manage doctors featured on the home page</p>
+        </div>
+        <button (click)="openAddModal()"
+            class="px-6 py-3 bg-white text-emerald-600 hover:bg-emerald-50 rounded-lg font-semibold shadow-lg transition-colors flex items-center gap-2">
+            <i class="fas fa-plus"></i>
+            Add Featured Doctor
+        </button>
+    </div>
+
+    <div *ngIf="loading" class="bg-white rounded-xl p-8 text-center">
+        <i class="fas fa-spinner fa-spin text-4xl text-emerald-600 mb-4"></i>
+        <p class="text-slate-500">Loading featured doctors...</p>
+    </div>
+
+    <!-- Table -->
+    <div *ngIf="!loading" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Doctor
+                        </th>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                            Specialization</th>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                            Experience</th>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Order
+                        </th>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Status
+                        </th>
+                        <th class="text-right px-6 py-4 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr *ngFor="let doctor of featuredDoctors" class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="font-semibold text-slate-800">{{ doctor.doctor_name }}</div>
+                        </td>
+                        <td class="px-6 py-4 text-slate-600">{{ doctor.specialization }}</td>
+                        <td class="px-6 py-4 text-slate-600">{{ doctor.experience }} years</td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm font-medium">
+                                {{ doctor.display_order }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button (click)="toggleActive(doctor)"
+                                [class]="doctor.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'"
+                                class="px-3 py-1 rounded-full text-sm font-medium hover:opacity-80 transition-opacity">
+                                {{ doctor.is_active ? 'Active' : 'Inactive' }}
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 text-right space-x-2">
+                            <button (click)="openEditModal(doctor)"
+                                class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button (click)="delete(doctor.id)"
+                                class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Empty State -->
+            <div *ngIf="featuredDoctors.length === 0" class="p-12 text-center">
+                <i class="fas fa-user-md text-6xl text-slate-300 mb-4"></i>
+                <p class="text-slate-500 text-lg mb-4">No featured doctors yet</p>
+                <button (click)="openAddModal()"
+                    class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium">
+                    Add First Doctor
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div *ngIf="showModal"
+            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-slate-800">
+                        {{ modalMode === 'add' ? 'Add Featured Doctor' : 'Edit Featured Doctor' }}
+                    </h3>
+                    <button (click)="closeModal()" class="text-slate-400 hover:text-slate-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Select Doctor</label>
+                        <select [(ngModel)]="selectedDoctor.doctor_id"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <option value="0">-- Select a doctor --</option>
+                            <option *ngFor="let doctor of allDoctors" [value]="doctor.id">
+                                {{ doctor.name }} - {{ doctor.specialization }}
+                            </option>
+                        </select>
+                        <p class="text-xs text-slate-500 mt-1">Choose a doctor to feature on the home page</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Display Order</label>
+                        <input type="number" [(ngModel)]="selectedDoctor.display_order"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                            placeholder="1">
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" [(ngModel)]="selectedDoctor.is_active"
+                            class="h-5 w-5 text-emerald-600 rounded border-slate-300">
+                        <label class="text-sm font-medium text-slate-700">Active (Show on home page)</label>
+                    </div>
+                </div>
+
+                <div class="px-6 py-4 border-t border-slate-200 flex justify-end gap-3">
+                    <button (click)="closeModal()"
+                        class="px-6 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium transition-colors">
+                        Cancel
+                    </button>
+                    <button (click)="save()"
+                        class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors">
+                        {{ modalMode === 'add' ? 'Add Doctor' : 'Save Changes' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,394 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <!-- Hero Section - 2 Column Layout -->
+    <div class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-72 h-72 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="max-w-full mx-auto relative z-10">
+            <div class="grid md:grid-cols-2 gap-0">
+                <!-- Left Column - Main Content -->
+                <div class="px-8 py-12 flex flex-col justify-center">
+                    <h1 class="text-5xl font-extrabold tracking-tight mb-4 
+                               bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200">
+                        Find Pharmacies Near You
+                    </h1>
+                    <p class="text-xl text-emerald-50 mb-8 leading-relaxed">
+                        Discover trusted pharmacies with genuine medicines and fast home delivery. Quality healthcare
+                        products at your doorstep.
+                    </p>
+
+                    <!-- Features Grid -->
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                                <i class="fas fa-pills text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-lg">{{pharmacies.length}}+</p>
+                                <p class="text-sm text-emerald-100">Pharmacies</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                                <i class="fas fa-truck text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-lg">Fast</p>
+                                <p class="text-sm text-emerald-100">Delivery</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                                <i class="fas fa-clock text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-lg">24/7</p>
+                                <p class="text-sm text-emerald-100">Available</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-lg">Verified</p>
+                                <p class="text-sm text-emerald-100">Genuine</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Search Section -->
+                <div class="px-8 py-12 flex flex-col justify-center">
+                    <h2 class="text-2xl font-bold mb-4">Search for Medicines</h2>
+                    <p class="text-emerald-50 mb-6">Find trusted pharmacies in your area</p>
+
+                    <!-- Enhanced Search Bar -->
+                    <div class="flex gap-4 mb-6">
+                        <div class="flex-1 relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i
+                                    class="fas fa-search text-gray-400 group-focus-within:text-emerald-600 transition-colors"></i>
+                            </div>
+                            <input type="text" [(ngModel)]="searchTerm" (input)="searchPharmacies()" class="block w-full pl-12 pr-12 py-4 border-0 rounded-xl leading-5 
+                                          bg-white/95 backdrop-blur-sm text-gray-900 placeholder-gray-500 
+                                          shadow-2xl shadow-emerald-900/20
+                                          focus:outline-none focus:ring-4 focus:ring-emerald-300/50
+                                          transition-all duration-300 text-base"
+                                placeholder="Search by name, city, state...">
+                            <button *ngIf="searchTerm" (click)="clearSearch()"
+                                class="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer group/clear">
+                                <i class="fas fa-times-circle text-gray-400 hover:text-red-500 transition-colors"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="mt-6 text-sm text-emerald-100 flex items-center gap-2">
+                        <i class="fas fa-info-circle"></i>
+                        Search updates automatically as you type
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pharmacies Grid - Full Width, 4 Columns -->
+    <div class="w-full px-8 py-12">
+        <!-- Results Header -->
+        <div class="mb-8 flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">Available Pharmacies</h2>
+                <p class="text-gray-600 mt-1">
+                    Showing <span class="font-semibold text-emerald-600">{{filteredPharmacies.length}}</span>
+                    of <span class="font-semibold">{{pharmacies.length}}</span> pharmacies
+                </p>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div *ngFor="let i of [1,2,3,4,5,6,7,8]"
+                class="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
+                <div class="h-56 bg-gradient-to-br from-gray-200 to-gray-300"></div>
+                <div class="p-6 space-y-4">
+                    <div class="h-6 bg-gray-200 rounded w-3/4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div class="space-y-2">
+                        <div class="h-3 bg-gray-200 rounded"></div>
+                        <div class="h-3 bg-gray-200 rounded w-5/6"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pharmacy Cards - 4 Columns Grid -->
+        <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div *ngFor="let pharmacy of filteredPharmacies" class="group bg-white rounded-2xl shadow-lg overflow-hidden 
+                        hover:shadow-2xl hover:-translate-y-2 
+                        transition-all duration-500 cursor-pointer
+                        border-2 border-transparent hover:border-emerald-400">
+
+                <!-- Pharmacy Image with Gradient Overlay -->
+                <div class="relative h-56 overflow-hidden bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500">
+                    <img *ngIf="pharmacy.image_url" [src]="pharmacy.image_url" [alt]="pharmacy.name || 'Pharmacy'"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+
+                    <!-- Placeholder if no image -->
+                    <div *ngIf="!pharmacy.image_url"
+                        class="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500">
+                        <i class="fas fa-pills text-white text-6xl opacity-30"></i>
+                    </div>
+
+                    <!-- Gradient Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+
+                    <!-- Rating Badge -->
+                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-xl 
+                                flex items-center gap-2 group-hover:scale-110 transition-transform duration-300"
+                        [attr.data-tooltip]="'Average rating: ' + (pharmacy.rating || 'N/A') + ' out of 5'"
+                        data-tooltip-position="bottom">
+                        <i class="fas fa-star text-amber-400 animate-pulse"></i>
+                        <span class="text-sm font-bold text-gray-900">{{pharmacy.rating || 'N/A'}}</span>
+                    </div>
+
+                    <!-- Service Badges -->
+                    <div class="absolute top-4 left-4 flex flex-col gap-2">
+                        <span *ngIf="pharmacy.is_24x7"
+                            class="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg"
+                            data-tooltip="Open 24 hours a day" data-tooltip-position="right" data-tooltip-type="info">
+                            24×7
+                        </span>
+                        <span *ngIf="pharmacy.delivery_available"
+                            class="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg"
+                            data-tooltip="Home delivery available" data-tooltip-position="right">
+                            <i class="fas fa-truck text-xs mr-1"></i> Delivery
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Pharmacy Info -->
+                <div class="p-6 space-y-4">
+                    <!-- Name -->
+                    <h3 class="text-xl font-bold text-gray-900 group-hover:text-emerald-600 transition-colors line-clamp-2"
+                        [attr.data-tooltip]="pharmacy.name || 'Unnamed Pharmacy'" data-tooltip-position="bottom">
+                        {{pharmacy.name || 'Unnamed Pharmacy'}}
+                    </h3>
+
+                    <!-- Location -->
+                    <div class="flex items-start gap-2 text-gray-600"
+                        [attr.data-tooltip]="(pharmacy.address || 'Address not available') + ', ' + (pharmacy.city || '') + ', ' + (pharmacy.state || '')"
+                        data-tooltip-position="bottom" data-tooltip-multiline>
+                        <i class="fas fa-map-marker-alt text-emerald-600 mt-1 flex-shrink-0"></i>
+                        <span class="text-sm line-clamp-2">
+                            {{pharmacy.city || 'N/A'}}, {{pharmacy.state || 'N/A'}}
+                            <span *ngIf="pharmacy.pincode" class="text-gray-400">- {{pharmacy.pincode}}</span>
+                        </span>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="space-y-2">
+                        <!-- Phone -->
+                        <div *ngIf="pharmacy.phone" class="flex items-center gap-2 text-sm group/phone"
+                            [attr.data-tooltip]="'Click to call: ' + pharmacy.phone" data-tooltip-position="bottom">
+                            <i class="fas fa-phone text-emerald-600"></i>
+                            <a [href]="'tel:' + pharmacy.phone"
+                                class="text-gray-700 hover:text-emerald-600 transition-colors">
+                                {{pharmacy.phone}}
+                            </a>
+                        </div>
+
+                        <!-- Email -->
+                        <div *ngIf="pharmacy.email" class="flex items-center gap-2 text-sm group/email"
+                            [attr.data-tooltip]="'Click to email: ' + pharmacy.email" data-tooltip-position="bottom">
+                            <i class="fas fa-envelope text-emerald-600"></i>
+                            <a [href]="'mailto:' + pharmacy.email"
+                                class="text-gray-700 hover:text-emerald-600 transition-colors truncate">
+                                {{pharmacy.email}}
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- View Details Button -->
+                    <button (click)="openDetails(pharmacy)" class="w-full mt-6 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 
+                                   hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl 
+                                   shadow-lg shadow-emerald-600/30 hover:shadow-2xl hover:shadow-emerald-600/50
+                                   transition-all duration-300 transform hover:-translate-y-1
+                                   flex items-center justify-center gap-2 group/btn">
+                        <span>View Details</span>
+                        <i class="fas fa-arrow-right group-hover/btn:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results -->
+        <div *ngIf="!loading && filteredPharmacies.length === 0"
+            class="text-center py-20 bg-white rounded-2xl shadow-lg">
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gray-100 mb-6">
+                <i class="fas fa-pills text-gray-400 text-5xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">No pharmacies found</h3>
+            <p class="text-gray-500 mb-6">Try adjusting your search criteria</p>
+            <button (click)="clearSearch()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg 
+                           transition-colors shadow-lg">
+                Clear Search
+            </button>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div *ngIf="showModal && selectedPharmacy" (click)="closeModal()" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md
+                animate-fadeIn">
+        <div (click)="$event.stopPropagation()" class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden
+                    animate-scaleIn">
+
+            <!-- Modal Header with Image -->
+            <div class="relative h-64 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500">
+                <img *ngIf="selectedPharmacy.image_url" [src]="selectedPharmacy.image_url" [alt]="selectedPharmacy.name"
+                    class="w-full h-full object-cover">
+
+                <div *ngIf="!selectedPharmacy.image_url" class="w-full h-full flex items-center justify-center">
+                    <i class="fas fa-pills text-white text-8xl opacity-30"></i>
+                </div>
+
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+
+                <!-- Close Button -->
+                <button (click)="closeModal()" class="absolute top-4 right-4 w-12 h-12 bg-white/20 backdrop-blur-sm hover:bg-white/30 
+                               rounded-full flex items-center justify-center text-white
+                               transition-all duration-300 hover:rotate-90 group">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+
+                <!-- Pharmacy Name & Rating -->
+                <div class="absolute bottom-0 left-0 right-0 p-8">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h2 class="text-4xl font-bold text-white mb-2">
+                                {{selectedPharmacy.name || 'Unnamed Pharmacy'}}
+                            </h2>
+                            <div class="flex items-center gap-2 text-emerald-100">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>{{selectedPharmacy.city}}, {{selectedPharmacy.state}}</span>
+                            </div>
+                            <!-- Service Badges -->
+                            <div class="flex gap-2 mt-3">
+                                <span *ngIf="selectedPharmacy.is_24x7"
+                                    class="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                                    24×7 Open
+                                </span>
+                                <span *ngIf="selectedPharmacy.delivery_available"
+                                    class="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                                    <i class="fas fa-truck text-xs mr-1"></i> Home Delivery
+                                </span>
+                            </div>
+                        </div>
+                        <div class="bg-white/95 backdrop-blur-sm px-6 py-3 rounded-2xl shadow-xl">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-star text-amber-400 text-xl"></i>
+                                <span class="text-3xl font-bold text-gray-900">{{selectedPharmacy.rating ||
+                                    'N/A'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="max-h-[calc(90vh-16rem)] overflow-y-auto p-8">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Contact Information -->
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                <i class="fas fa-info-circle text-emerald-600"></i>
+                                Contact Information
+                            </h3>
+                            <div class="space-y-3 bg-gray-50 rounded-xl p-4">
+                                <div class="flex items-start gap-3">
+                                    <i class="fas fa-map-marker-alt text-emerald-600 mt-1"></i>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Address</p>
+                                        <p class="font-medium text-gray-900">
+                                            {{selectedPharmacy.address || 'N/A'}}<br>
+                                            {{selectedPharmacy.city}}, {{selectedPharmacy.state}}
+                                            {{selectedPharmacy.pincode}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div *ngIf="selectedPharmacy.phone" class="flex items-center gap-3">
+                                    <i class="fas fa-phone text-emerald-600"></i>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Phone</p>
+                                        <a [href]="'tel:' + selectedPharmacy.phone"
+                                            class="font-medium text-emerald-600 hover:text-emerald-700">
+                                            {{selectedPharmacy.phone}}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div *ngIf="selectedPharmacy.email" class="flex items-center gap-3">
+                                    <i class="fas fa-envelope text-emerald-600"></i>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Email</p>
+                                        <a [href]="'mailto:' + selectedPharmacy.email"
+                                            class="font-medium text-emerald-600 hover:text-emerald-700 break-all">
+                                            {{selectedPharmacy.email}}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Services & Features -->
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <i class="fas fa-concierge-bell text-emerald-600"></i>
+                            Services Available
+                        </h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl">
+                                <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center">
+                                    <i class="fas fa-pills text-white"></i>
+                                </div>
+                                <span class="font-medium text-gray-900">Prescription Medicines</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl">
+                                <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center">
+                                    <i class="fas fa-heartbeat text-white"></i>
+                                </div>
+                                <span class="font-medium text-gray-900">OTC Medicines</span>
+                            </div>
+                            <div *ngIf="selectedPharmacy.is_24x7"
+                                class="flex items-center gap-3 p-4 bg-blue-50 rounded-xl">
+                                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+                                    <i class="fas fa-clock text-white"></i>
+                                </div>
+                                <span class="font-medium text-gray-900">24×7 Service</span>
+                            </div>
+                            <div *ngIf="selectedPharmacy.delivery_available"
+                                class="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl">
+                                <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center">
+                                    <i class="fas fa-shipping-fast text-white"></i>
+                                </div>
+                                <span class="font-medium text-gray-900">Home Delivery Available</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="border-t border-gray-200 p-6 bg-gray-50">
+                <button (click)="closeModal()" class="w-full px-6 py-4 bg-gradient-to-r from-gray-600 to-gray-700 
+                               hover:from-gray-700 hover:to-gray-800 text-white font-bold rounded-xl 
+                               shadow-lg transition-all duration-300 transform hover:scale-105">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

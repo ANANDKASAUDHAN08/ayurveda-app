@@ -1,0 +1,69 @@
+<div (click)="navigate()"
+    class="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-200 relative">
+
+    <!-- Discount Badge -->
+    <div class="absolute top-2 left-2 z-10 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+        {{ deal.discount }}% OFF
+    </div>
+
+    <!-- Badge -->
+    <div *ngIf="deal.badge"
+        class="absolute top-2 right-2 z-10 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+        {{ deal.badge }}
+    </div>
+
+    <!-- Image -->
+    <div class="relative h-48 bg-slate-100 overflow-hidden">
+        <img [src]="deal.image" [alt]="deal.title"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+    </div>
+
+    <!-- Content -->
+    <div class="p-4">
+        <h3 class="font-bold text-slate-900 mb-1 line-clamp-2">{{ deal.title }}</h3>
+        <p class="text-sm text-slate-600 mb-3 line-clamp-1">{{ deal.description }}</p>
+
+        <!-- Pricing -->
+        <div class="flex items-center gap-2 mb-3">
+            <span class="text-2xl font-bold text-emerald-600">₹{{ deal.price }}</span>
+            <span class="text-sm text-slate-500 line-through">₹{{ deal.mrp }}</span>
+            <span class="text-xs text-emerald-600 font-semibold">Save ₹{{ savings }}</span>
+        </div>
+
+        <!-- Smart Add to Cart / Quantity Control -->
+        <div class="mt-4">
+            <!-- Show "Add to Cart" when not in cart -->
+            <button *ngIf="cartQuantity === 0" (click)="addToCart($event)" [disabled]="isAdding"
+                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50">
+                <i *ngIf="!isAdding" class="fas fa-shopping-cart"></i>
+                <i *ngIf="isAdding" class="fas fa-spinner fa-spin"></i>
+                <span>{{ isAdding ? 'Adding...' : 'Add to Cart' }}</span>
+            </button>
+            <!-- Show Quantity Controls when in cart -->
+            <div *ngIf="cartQuantity > 0"
+                class="flex items-center justify-between bg-emerald-50 border-2 border-emerald-600 rounded-lg p-2">
+
+                <!-- Decrease Button -->
+                <button (click)="decreaseQuantity($event)" [disabled]="isUpdating"
+                    class="w-10 h-10 bg-white hover:bg-emerald-100 rounded-lg flex items-center justify-center disabled:opacity-50 transition-colors">
+                    <i *ngIf="!isUpdating" class="fas fa-minus text-emerald-600"></i>
+                    <i *ngIf="isUpdating" class="fas fa-spinner fa-spin text-emerald-600"></i>
+                </button>
+
+                <!-- Quantity Display -->
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-shopping-cart text-emerald-600"></i>
+                    <span class="font-bold text-lg text-emerald-700">{{ cartQuantity }}</span>
+                    <span class="text-sm text-emerald-600">in cart</span>
+                </div>
+
+                <!-- Increase Button -->
+                <button (click)="increaseQuantity($event)" [disabled]="cartQuantity >= 10 || isUpdating"
+                    class="w-10 h-10 bg-white hover:bg-emerald-100 rounded-lg flex items-center justify-center disabled:opacity-50 transition-colors">
+                    <i *ngIf="!isUpdating" class="fas fa-plus text-emerald-600"></i>
+                    <i *ngIf="isUpdating" class="fas fa-spinner fa-spin text-emerald-600"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

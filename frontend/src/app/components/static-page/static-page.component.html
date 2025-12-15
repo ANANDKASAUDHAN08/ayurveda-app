@@ -1,0 +1,155 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="w-full px-4 py-20">
+        <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-12 text-center">
+            <i class="fas fa-spinner fa-spin text-5xl text-emerald-600 mb-6"></i>
+            <p class="text-slate-600 text-lg">Loading page...</p>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="w-full px-4 py-20">
+        <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-12 text-center">
+            <i class="fas fa-exclamation-triangle text-5xl text-amber-500 mb-6"></i>
+            <h2 class="text-3xl font-bold text-slate-800 mb-4">Page Not Found</h2>
+            <p class="text-slate-600 mb-6">The page you're looking for doesn't exist or hasn't been created yet.</p>
+            <a routerLink="/"
+                class="inline-block px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors">
+                <i class="fas fa-home mr-2"></i>Go to Home
+            </a>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="page && !loading" class="w-full">
+        <!-- Hero Header -->
+        <div class="w-full bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-4 py-16 md:py-24">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center gap-3 mb-4">
+                    <i class="fas fa-file-alt text-3xl text-white"></i>
+                    <span class="px-4 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm text-white font-medium">
+                        Legal Document
+                    </span>
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                    {{ page.title }}
+                </h1>
+                <p *ngIf="page.meta_description" class="text-xl text-emerald-50 mb-6 max-w-3xl">
+                    {{ page.meta_description }}
+                </p>
+                <div class="flex flex-wrap items-center gap-6 text-emerald-100">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="text-sm">Last updated: {{ page.updated_at | date:'longDate' }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-shield-alt"></i>
+                        <span class="text-sm">HealthConnect Legal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="w-full px-4 py-12">
+            <div class="max-w-6xl mx-auto">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <!-- Table of Contents (if sections exist) -->
+                    <div *ngIf="page.sections && page.sections.length > 0"
+                        class="border-b border-slate-200 bg-slate-50 px-8 py-6">
+                        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-list text-emerald-600"></i>
+                            Table of Contents
+                        </h2>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <li *ngFor="let section of page.sections; let i = index" class="flex items-start gap-2">
+                                <span
+                                    class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold flex items-center justify-center">
+                                    {{ i + 1 }}
+                                </span>
+                                <a (click)="scrollToSection(section.id)"
+                                    class="text-slate-700 hover:text-emerald-600 transition-colors cursor-pointer">
+                                    {{ section.title }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Page Content -->
+                    <div class="px-8 md:px-12 py-12">
+                        <!-- Rich HTML Content from Backend -->
+                        <div class="prose prose-slate prose-lg max-w-none
+                                    prose-headings:text-slate-800 prose-headings:font-bold
+                                    prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-slate-200
+                                    prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
+                                    prose-h4:text-xl prose-h4:mt-6 prose-h4:mb-3
+                                    prose-p:text-slate-600 prose-p:leading-relaxed prose-p:mb-4
+                                    prose-a:text-emerald-600 prose-a:no-underline hover:prose-a:underline
+                                    prose-strong:text-slate-800 prose-strong:font-semibold
+                                    prose-ul:my-6 prose-li:text-slate-600
+                                    prose-ol:my-6
+                                    prose-blockquote:border-l-4 prose-blockquote:border-emerald-500 prose-blockquote:bg-emerald-50 prose-blockquote:py-3 prose-blockquote:px-6 prose-blockquote:italic"
+                            [innerHTML]="page.content">
+                        </div>
+
+                        <!-- Sections (if structured content) -->
+                        <div *ngIf="page.sections && page.sections.length > 0" class="mt-8 space-y-8">
+                            <div *ngFor="let section of page.sections; let i = index" [id]="section.id"
+                                class="scroll-mt-24">
+                                <h2
+                                    class="text-3xl font-bold text-slate-800 mb-6 pb-3 border-b border-slate-200 flex items-center gap-3">
+                                    <span
+                                        class="flex-shrink-0 w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center">
+                                        {{ i + 1 }}
+                                    </span>
+                                    {{ section.title }}
+                                </h2>
+                                <div class="prose prose-slate prose-lg max-w-none" [innerHTML]="section.content"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact/Support Section -->
+                    <div class="border-t border-slate-200 bg-gradient-to-r from-slate-50 to-gray-50 px-8 md:px-12 py-8">
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                            <div class="flex-1">
+                                <h3 class="text-lg font-semibold text-slate-800 mb-2 flex items-center gap-2">
+                                    <i class="fas fa-question-circle text-emerald-600"></i>
+                                    Questions about this policy?
+                                </h3>
+                                <p class="text-slate-600">
+                                    If you have any questions or concerns, please don't hesitate to contact us.
+                                </p>
+                            </div>
+                            <a routerLink="/home" fragment="contact"
+                                class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors font-medium flex items-center gap-2">
+                                <i class="fas fa-envelope"></i>
+                                Contact Us
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Effective Date & Version (if available) -->
+                    <div class="border-t border-slate-200 px-8 md:px-12 py-6 bg-slate-50">
+                        <div class="flex flex-wrap items-center justify-between gap-4 text-sm text-slate-500">
+                            <div class="flex items-center gap-4">
+                                <span *ngIf="page.effective_date">
+                                    <i class="fas fa-calendar-check mr-2"></i>
+                                    Effective: {{ page.effective_date | date:'longDate' }}
+                                </span>
+                                <span *ngIf="page.version">
+                                    <i class="fas fa-code-branch mr-2"></i>
+                                    Version {{ page.version }}
+                                </span>
+                            </div>
+                            <div>
+                                <i class="fas fa-clock mr-2"></i>
+                                Last reviewed: {{ page.updated_at | date:'longDate' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

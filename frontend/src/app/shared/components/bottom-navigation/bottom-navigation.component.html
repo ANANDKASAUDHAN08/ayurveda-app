@@ -1,0 +1,21 @@
+<!-- Only show on mobile/tablet -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-50 md:hidden safe-area-bottom">
+    <div class="flex justify-around items-center h-16 px-2">
+        <a *ngFor="let item of navItems" [routerLink]="item.route" [class.text-emerald-600]="isActive(item.route)"
+            [class.text-slate-600]="!isActive(item.route)"
+            class="flex flex-col items-center justify-center flex-1 py-2 relative transition-colors">
+
+            <!-- Icon -->
+            <i [class]="item.icon + ' text-xl'"></i>
+
+            <!-- Label -->
+            <span class="text-xs mt-1 font-medium">{{item.label}}</span>
+
+            <!-- Badge (for cart, notifications, etc) -->
+            <span *ngIf="item.badge && item.badge > 0"
+                class="absolute top-0 right-1/4 bg-red-500 text-white rounded-full min-w-[16px] h-4 flex items-center justify-center text-xs px-1">
+                {{item.badge > 99 ? '99+' : item.badge}}
+            </span>
+        </a>
+    </div>
+</nav>

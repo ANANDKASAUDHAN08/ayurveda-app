@@ -1,0 +1,344 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
+    <div class="w-full px-4 sm:px-6 lg:px-8">
+        <!-- Header Section -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Configure Your Availability</h1>
+            <p class="text-gray-600">Set your weekly schedule and appointment slot preferences. Patients will be able to
+                book appointments based on your availability.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <!-- Global Settings Card -->
+            <div class="bg-gradient-to-r from-emerald-600 to-emerald-500 px-8 py-6">
+                <h2 class="text-xl font-bold text-white mb-1">Appointment Settings</h2>
+                <p class="text-emerald-50 text-sm">Configure your slot duration and booking window</p>
+            </div>
+
+            <div class="p-8">
+                <!-- Settings Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <!-- Slot Duration -->
+                    <div class="group">
+                        <label class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                            <svg class="w-5 h-5 mr-2 text-emerald-600" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Slot Duration
+                        </label>
+                        <select [(ngModel)]="slotDuration"
+                            class="block w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-900 shadow-sm transition-all duration-200 hover:border-emerald-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:outline-none cursor-pointer">
+                            <option [value]="15">15 minutes</option>
+                            <option [value]="30">30 minutes</option>
+                            <option [value]="45">45 minutes</option>
+                            <option [value]="60">60 minutes (1 hour)</option>
+                        </select>
+                        <p class="mt-2 text-xs text-gray-500">Duration of each appointment slot</p>
+                    </div>
+
+                    <!-- Generate Days -->
+                    <div class="group">
+                        <label class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                            <svg class="w-5 h-5 mr-2 text-emerald-600" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Booking Window
+                        </label>
+                        <select [(ngModel)]="generateDays"
+                            class="block w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-900 shadow-sm transition-all duration-200 hover:border-emerald-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:outline-none cursor-pointer">
+                            <option [value]="7">Next 7 days</option>
+                            <option [value]="14">Next 2 weeks</option>
+                            <option [value]="30">Next 30 days</option>
+                            <option [value]="60">Next 60 days</option>
+                            <option [value]="90">Next 90 days</option>
+                        </select>
+                        <p class="mt-2 text-xs text-gray-500">How far ahead patients can book</p>
+                    </div>
+                </div>
+
+                <!-- Weekly Schedule Section -->
+                <div class="border-t border-gray-200 pt-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-emerald-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        Weekly Schedule
+                    </h3>
+                    <p class="text-gray-600 mb-6">Select your working days and set your availability hours</p>
+
+                    <!-- Days Grid - 2 Columns on Large Screens -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                        <div *ngFor="let day of days"
+                            class="relative group rounded-lg transition-all duration-300 overflow-hidden" [ngClass]="{
+                                'bg-gradient-to-r from-emerald-50 to-emerald-50': day.selected,
+                                'bg-gray-50 hover:bg-gray-100': !day.selected
+                            }">
+
+                            <!-- Selection Indicator -->
+                            <div *ngIf="day.selected"
+                                class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-emerald-500 to-green-500">
+                            </div>
+
+                            <div class="flex flex-col md:flex-row md:items-center p-3 gap-3 pl-4">
+                                <!-- Checkbox & Day Name -->
+                                <div class="flex items-center space-x-3 md:w-40">
+                                    <div class="relative">
+                                        <input type="checkbox" [(ngModel)]="day.selected"
+                                            class="peer h-5 w-5 rounded border-2 border-gray-300 text-emerald-600 transition-all duration-200 cursor-pointer focus:ring-2 focus:ring-emerald-500/20 checked:border-emerald-500 checked:bg-emerald-600">
+                                        <svg class="absolute top-0.5 left-0.5 w-4 h-4 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-gray-900">{{day.name}}</div>
+                                        <div *ngIf="day.selected" class="text-xs text-emerald-600 font-medium">Available
+                                        </div>
+                                        <div *ngIf="!day.selected" class="text-xs text-gray-400">Unavailable</div>
+                                    </div>
+                                </div>
+
+                                <!-- Time Inputs -->
+                                <div class="flex-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all duration-300"
+                                    [ngClass]="{
+                                        'opacity-100': day.selected,
+                                        'opacity-40 pointer-events-none': !day.selected
+                                    }">
+
+                                    <!-- Start Time -->
+                                    <div class="flex-1 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="text-sm font-medium text-gray-600 whitespace-nowrap">From</span>
+                                        <input type="time" [(ngModel)]="day.start"
+                                            class="flex-1 bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 min-w-0 transition-all">
+                                    </div>
+
+                                    <!-- Arrow -->
+                                    <div class="hidden sm:flex items-center justify-center px-1">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                        </svg>
+                                    </div>
+
+                                    <!-- End Time -->
+                                    <div class="flex-1 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="text-sm font-medium text-gray-600 whitespace-nowrap">To</span>
+                                        <input type="time" [(ngModel)]="day.end"
+                                            class="flex-1 bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 min-w-0 transition-all">
+                                    </div>
+
+                                    <!-- Active Badge -->
+                                    <div *ngIf="day.selected"
+                                        class="hidden xl:flex items-center px-2 py-1 bg-emerald-100 rounded-md">
+                                        <svg class="w-3.5 h-3.5 text-emerald-600 mr-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                        <span class="text-xs font-semibold text-emerald-700">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Date-Specific Exceptions Section -->
+                <div class="border-t border-gray-200 pt-8 mt-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-emerald-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Date-Specific Exceptions
+                    </h3>
+                    <p class="text-gray-600 mb-6">Add specific dates with custom hours or mark as unavailable (holidays,
+                        vacations, etc.)</p>
+
+                    <!-- Add Exception Form -->
+                    <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <!-- Date Picker -->
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Date</label>
+                                <input type="date" [(ngModel)]="newException.date"
+                                    class="block w-full px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-gray-900 shadow-sm transition-all duration-200 hover:border-emerald-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:outline-none">
+                            </div>
+
+                            <!-- Exception Type -->
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Type</label>
+                                <select [(ngModel)]="newException.type"
+                                    class="block w-full px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-gray-900 shadow-sm transition-all duration-200 hover:border-emerald-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:outline-none cursor-pointer">
+                                    <option value="unavailable">Unavailable</option>
+                                    <option value="custom">Custom Hours</option>
+                                </select>
+                            </div>
+
+                            <!-- Start Time (shown only for custom) -->
+                            <div *ngIf="newException.type === 'custom'">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Start Time</label>
+                                <input type="time" [(ngModel)]="newException.startTime"
+                                    class="block w-full px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-gray-900 shadow-sm transition-all duration-200 hover:border-emerald-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:outline-none">
+                            </div>
+
+                            <!-- End Time (shown only for custom) -->
+                            <div *ngIf="newException.type === 'custom'">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">End Time</label>
+                                <input type="time" [(ngModel)]="newException.endTime"
+                                    class="block w-full px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-gray-900 shadow-sm transition-all duration-200 hover:border-emerald-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:outline-none">
+                            </div>
+
+                            <!-- Add Button -->
+                            <div class="flex items-end">
+                                <button (click)="addException()"
+                                    class="w-full px-4 py-2 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-500/50 transition-all duration-200 shadow-md hover:shadow-lg">
+                                    <svg class="w-5 h-5 inline-block mr-1" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    Add Exception
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exceptions List -->
+                    <div *ngIf="dateExceptions.length > 0" class="space-y-2">
+                        <h4 class="text-sm font-semibold text-gray-700 mb-3">Current Exceptions:</h4>
+                        <div *ngFor="let exception of dateExceptions"
+                            class="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-lg hover:shadow-md transition-all duration-200">
+                            <div class="flex items-center space-x-4">
+                                <!-- Icon -->
+                                <div class="flex-shrink-0">
+                                    <div *ngIf="!exception.is_available && !exception.isAvailable"
+                                        class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </div>
+                                    <div *ngIf="exception.is_available || exception.isAvailable"
+                                        class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <!-- Exception Details -->
+                                <div>
+                                    <div class="font-bold text-gray-900">{{ formatDate(exception.exception_date ||
+                                        exception.date || '') }}</div>
+                                    <div class="text-sm text-gray-600">
+                                        <span *ngIf="!exception.is_available && !exception.isAvailable"
+                                            class="text-red-600 font-medium">Unavailable</span>
+                                        <span *ngIf="exception.is_available || exception.isAvailable"
+                                            class="text-blue-600 font-medium">
+                                            Custom: {{ (exception.start_time || exception.startTime || '').substring(0,
+                                            5) }} - {{ (exception.end_time || exception.endTime || '').substring(0, 5)
+                                            }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Delete Button -->
+                            <button (click)="deleteException(exception.exception_date || exception.date || '')"
+                                class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div *ngIf="dateExceptions.length === 0"
+                        class="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                        <svg class="w-12 h-12 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <p class="text-gray-500 text-sm">No date exceptions yet. Add specific dates above.</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-end pt-6 border-t border-gray-200">
+                    <button type="button" routerLink="/doctor/dashboard"
+                        class="px-6 py-3 border-2 border-gray-300 rounded-xl text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-500/20 transition-all duration-200 shadow-sm">
+                        <span class="flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Cancel
+                        </span>
+                    </button>
+                    <button (click)="saveAvailability()" [disabled]="loading"
+                        class="px-8 py-3 border-2 border-transparent rounded-xl text-sm font-bold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <span class="flex items-center justify-center">
+                            <svg *ngIf="!loading" class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            <svg *ngIf="loading" class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            {{loading ? 'Saving & Generating Slots...' : 'Save & Generate Slots'}}
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Info Banner -->
+                <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                    <div class="flex">
+                        <svg class="w-5 h-5 text-blue-600 mr-3 flex-shrink-0 mt-0.5" fill="currentColor"
+                            viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <div>
+                            <h4 class="text-sm font-semibold text-blue-900 mb-1">How it works</h4>
+                            <p class="text-xs text-blue-700">After saving, appointment slots will be automatically
+                                generated based on your availability. Patients will be able to book these slots through
+                                your profile page. You can always come back and update your schedule.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

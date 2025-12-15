@@ -1,0 +1,9 @@
+/* Smooth backdrop animation */
+:host {
+    display: contents;
+}
+
+/* Prevent body scroll when modal is open */
+:host-context(body.modal-open) {
+    overflow: hidden;
+}

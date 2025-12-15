@@ -1,0 +1,25 @@
+<div (click)="navigate()"
+    class="group cursor-pointer bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-slate-200">
+
+    <!-- Icon -->
+    <div
+        [class]="'w-16 h-16 rounded-lg flex items-center justify-center text-white text-3xl mb-4 bg-gradient-to-br ' + service.gradient">
+        <i [class]="service.icon"></i>
+    </div>
+
+    <!-- Content -->
+    <h3 class="text-lg font-bold text-slate-900 mb-2">{{ service.title }}</h3>
+    <p class="text-sm text-slate-600 mb-4">{{ service.description }}</p>
+
+    <!-- Badge -->
+    <div *ngIf="service.badge"
+        class="inline-flex items-center px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-semibold">
+        {{ service.badge }}
+    </div>
+
+    <!-- Arrow -->
+    <div class="mt-4 text-emerald-600 group-hover:translate-x-1 transition-transform inline-flex items-center gap-2">
+        <span class="text-sm font-medium">Learn More</span>
+        <i class="fas fa-arrow-right"></i>
+    </div>
+</div>

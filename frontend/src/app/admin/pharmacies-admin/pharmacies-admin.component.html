@@ -1,0 +1,188 @@
+<div class="space-y-6">
+    <div
+        class="sticky top-0 z-10 bg-gradient-to-r from-amber-500 to-orange-500 text-white py-5 -mx-5 px-6 -mt-6 shadow-md flex items-center justify-between rounded-2xl">
+        <div>
+            <h1 class="text-3xl font-bold">Pharmacies</h1>
+            <p class="text-amber-100 mt-1">Manage pharmacy directory</p>
+        </div>
+        <button (click)="openAddModal()"
+            class="px-6 py-3 bg-white text-amber-600 hover:bg-amber-50 rounded-lg font-semibold shadow-lg transition-colors flex items-center gap-2">
+            <i class="fas fa-plus"></i>
+            Add Pharmacy
+        </button>
+    </div>
+
+    <div *ngIf="loading" class="bg-white rounded-xl p-8 text-center">
+        <i class="fas fa-spinner fa-spin text-4xl text-amber-600 mb-4"></i>
+        <p class="text-slate-500">Loading pharmacies...</p>
+    </div>
+
+    <div *ngIf="!loading" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase">Name</th>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase">City</th>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase">Services</th>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase">Rating</th>
+                        <th class="text-left px-6 py-4 text-xs font-bold text-slate-600 uppercase">Status</th>
+                        <th class="text-right px-6 py-4 text-xs font-bold text-slate-600 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    <tr *ngFor="let pharmacy of pharmacies" class="hover:bg-slate-50">
+                        <td class="px-6 py-4">
+                            <div class="font-semibold text-slate-800">{{ pharmacy.name }}</div>
+                            <div class="text-sm text-slate-500">{{ pharmacy.phone }}</div>
+                        </td>
+                        <td class="px-6 py-4 text-slate-600">{{ pharmacy.city }}</td>
+                        <td class="px-6 py-4">
+                            <div class="flex gap-2">
+                                <span *ngIf="pharmacy.is_24x7"
+                                    class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-xs">24x7</span>
+                                <span *ngIf="pharmacy.delivery_available"
+                                    class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Delivery</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-star text-amber-500"></i>
+                                <span class="text-slate-700 font-medium">{{ pharmacy.rating }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button (click)="toggleActive(pharmacy)"
+                                [class]="pharmacy.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'"
+                                class="px-3 py-1 rounded-full text-sm font-medium hover:opacity-80">
+                                {{ pharmacy.is_active ? 'Active' : 'Inactive' }}
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 text-right space-x-2">
+                            <button (click)="openEditModal(pharmacy)"
+                                class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 text-sm font-medium">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button (click)="delete(pharmacy.id)"
+                                class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 text-sm font-medium">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div *ngIf="pharmacies.length === 0" class="p-12 text-center">
+                <i class="fas fa-pills text-6xl text-slate-300 mb-4"></i>
+                <p class="text-slate-500 text-lg mb-4">No pharmacies yet</p>
+                <button (click)="openAddModal()"
+                    class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium">
+                    Add First Pharmacy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div *ngIf="showModal"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl my-8">
+            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                <h3 class="text-xl font-bold text-slate-800">
+                    {{ modalMode === 'add' ? 'Add Pharmacy' : 'Edit Pharmacy' }}
+                </h3>
+                <button (click)="closeModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-2">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Pharmacy Name *</label>
+                        <input type="text" [(ngModel)]="selectedPharmacy.name"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Address *</label>
+                        <input type="text" [(ngModel)]="selectedPharmacy.address"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">City *</label>
+                        <input type="text" [(ngModel)]="selectedPharmacy.city"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">State *</label>
+                        <input type="text" [(ngModel)]="selectedPharmacy.state"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Pincode</label>
+                        <input type="text" [(ngModel)]="selectedPharmacy.pincode"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Phone</label>
+                        <input type="tel" [(ngModel)]="selectedPharmacy.phone"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Email</label>
+                        <input type="email" [(ngModel)]="selectedPharmacy.email"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Rating</label>
+                        <input type="number" step="0.1" max="5" [(ngModel)]="selectedPharmacy.rating"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Image URL</label>
+                        <input type="text" [(ngModel)]="selectedPharmacy.image_url"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+
+                    <div class="col-span-2 space-y-3">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" [(ngModel)]="selectedPharmacy.is_24x7"
+                                class="h-5 w-5 text-amber-600 rounded border-slate-300">
+                            <label class="text-sm font-medium text-slate-700">Open 24x7</label>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" [(ngModel)]="selectedPharmacy.delivery_available"
+                                class="h-5 w-5 text-amber-600 rounded border-slate-300">
+                            <label class="text-sm font-medium text-slate-700">Home Delivery Available</label>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" [(ngModel)]="selectedPharmacy.is_active"
+                                class="h-5 w-5 text-amber-600 rounded border-slate-300">
+                            <label class="text-sm font-medium text-slate-700">Active (Show on website)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-slate-200 flex justify-end gap-3">
+                <button (click)="closeModal()"
+                    class="px-6 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium">
+                    Cancel
+                </button>
+                <button (click)="save()"
+                    class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium">
+                    {{ modalMode === 'add' ? 'Add Pharmacy' : 'Save Changes' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

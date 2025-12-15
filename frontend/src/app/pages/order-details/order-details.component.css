@@ -1,0 +1,28 @@
+/* Order details page styles */
+
+/* Timeline styles */
+.timeline-step {
+    transition: all 0.3s ease;
+}
+
+/* Smooth animations */
+button {
+    transition: all 0.3s ease;
+}
+
+/* Status badge animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.status-badge {
+    animation: fadeIn 0.3s ease;
+}

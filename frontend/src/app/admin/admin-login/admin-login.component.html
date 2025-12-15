@@ -1,0 +1,172 @@
+<div class="min-h-screen flex relative overflow-hidden bg-slate-900">
+    <!-- Background Image (Full Screen) -->
+    <div class="absolute inset-0 z-0">
+        <img src="assets/images/admin-login-bg.png" alt="Admin Background"
+            class="w-full h-full object-cover opacity-40">
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-emerald-900/80"></div>
+    </div>
+
+    <!-- Content Container -->
+    <div class="relative z-10 w-full flex min-h-screen">
+        <!-- Left Column: Welcome Content (Wider) -->
+        <div class="hidden lg:flex lg:w-3/5 p-16 flex-col justify-between text-white">
+            <div>
+                <div
+                    class="inline-flex items-center justify-center w-20 h-20 bg-emerald-500/20 backdrop-blur-sm rounded-2xl mb-8 border border-emerald-500/30">
+                    <i class="fas fa-shield-alt text-emerald-400 text-4xl"></i>
+                </div>
+                <h1 class="text-6xl font-bold mb-6 leading-tight">Secure Admin<br>Portal Access</h1>
+                <p class="text-slate-300 text-xl max-w-lg">Manage doctors, appointments, and content for the
+                    HealthConnect platform securely and efficiently.</p>
+            </div>
+
+            <div class="space-y-8">
+                <div class="flex items-center gap-6">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center text-emerald-400 border border-white/10">
+                        <i class="fas fa-user-md text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl">Doctor Management</h3>
+                        <p class="text-slate-400">Verify and manage medical professionals</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center text-blue-400 border border-white/10">
+                        <i class="fas fa-newspaper text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl">Content Control</h3>
+                        <p class="text-slate-400">Publish health articles and updates</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-slate-500 font-medium">
+                &copy; 2024 HealthConnect. All rights reserved.
+            </div>
+        </div>
+
+        <!-- Right Column: Login Form (Narrower) -->
+        <div class="w-full lg:w-2/5 flex items-center justify-center p-8 lg:p-12">
+            <div class="w-full max-w-md space-y-8 bg-white/5 backdrop-blur-md p-10 rounded-3xl shadow-2xl">
+                <div class="text-center lg:text-left">
+                    <h2 class="text-3xl font-bold text-white">Welcome Back</h2>
+                    <p class="text-slate-400 mt-2">Please enter your credentials to access the dashboard.</p>
+                </div>
+
+                <form (ngSubmit)="login()" class="space-y-6">
+                    <!-- Validation Error Message -->
+                    <div *ngIf="errorMessage"
+                        class="bg-red-500/10 border border-red-500/20 text-red-200 p-3 rounded-xl flex items-center gap-3 text-sm animate-fadeIn">
+                        <i class="fas fa-exclamation-circle text-red-400"></i>
+                        <span>{{ errorMessage }}</span>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-slate-300">Email Address</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-slate-500"></i>
+                            </div>
+                            <input type="email" [(ngModel)]="email" name="email" [disabled]="loading"
+                                (input)="validateEmail()"
+                                class="w-full pl-11 pr-10 py-3.5 bg-slate-900/50 border border-white/10 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all outline-none text-white placeholder-slate-600"
+                                [class.border-red-500]="!isEmailValid" placeholder="admin@healthconnect.com" required>
+
+                            <!-- Clear Email Icon -->
+                            <div *ngIf="email"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-slate-500 hover:text-slate-300 transition-colors"
+                                (click)="clearEmail()">
+                                <i class="fas fa-times"></i>
+                            </div>
+                        </div>
+                        <p *ngIf="!isEmailValid" class="text-xs text-red-400 mt-1 ml-1 animate-fadeIn">Please enter a
+                            valid email address</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-slate-300">Password</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-slate-500"></i>
+                            </div>
+                            <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password"
+                                [disabled]="loading" (input)="validateConfirmPassword()"
+                                class="w-full pl-11 pr-20 py-3.5 bg-slate-900/50 border border-white/10 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all outline-none text-white placeholder-slate-600"
+                                placeholder="••••••••" required>
+
+                            <!-- Icons Container -->
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center gap-2">
+                                <!-- Clear Password Icon -->
+                                <div *ngIf="password"
+                                    class="cursor-pointer text-slate-500 hover:text-slate-300 transition-colors"
+                                    (click)="clearPassword()">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                                <!-- Show/Hide Password Icon -->
+                                <div class="cursor-pointer text-slate-500 hover:text-emerald-400 transition-colors"
+                                    (click)="togglePassword()">
+                                    <i class="fas" [class.fa-eye]="!showPassword"
+                                        [class.fa-eye-slash]="showPassword"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-slate-300">Confirm Password</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fas fa-check-double transition-colors duration-300"
+                                    [class.text-emerald-500]="confirmPassword && isPasswordMatch"
+                                    [class.text-slate-500]="!confirmPassword || !isPasswordMatch"></i>
+                            </div>
+                            <input [type]="showConfirmPassword ? 'text' : 'password'" [(ngModel)]="confirmPassword"
+                                name="confirmPassword" [disabled]="loading" (input)="validateConfirmPassword()"
+                                (paste)="$event.preventDefault()"
+                                class="w-full pl-11 pr-10 py-3.5 bg-slate-900/50 border border-white/10 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all outline-none text-white placeholder-slate-600"
+                                [class.border-red-500]="!isPasswordMatch && confirmPassword" placeholder="••••••••"
+                                required>
+
+                            <!-- Show/Hide Confirm Password Icon -->
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-slate-500 hover:text-emerald-400 transition-colors"
+                                (click)="toggleConfirmPassword()">
+                                <i class="fas" [class.fa-eye]="!showConfirmPassword"
+                                    [class.fa-eye-slash]="showConfirmPassword"></i>
+                            </div>
+                        </div>
+                        <p *ngIf="!isPasswordMatch && confirmPassword"
+                            class="text-xs text-red-400 mt-1 ml-1 animate-fadeIn">Passwords do not match</p>
+                    </div>
+
+                    <div class="flex items-center justify-between text-sm">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox"
+                                class="w-4 h-4 rounded border-slate-600 bg-slate-900/50 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-900">
+                            <span class="text-slate-400">Remember me</span>
+                        </label>
+                        <a href="#" class="text-emerald-400 hover:text-emerald-300 font-medium">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" [disabled]="loading || !isFormValid"
+                        class="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-900/20 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2">
+                        <i *ngIf="loading" class="fas fa-spinner fa-spin"></i>
+                        <span>{{ loading ? 'Authenticating...' : 'Sign In' }}</span>
+                        <i *ngIf="!loading" class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </form>
+
+                <div class="pt-6 text-center border-t border-white/10 cursor-pointer">
+                    <a routerLink="/home"
+                        class="inline-flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-sm font-medium">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Home Page
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
