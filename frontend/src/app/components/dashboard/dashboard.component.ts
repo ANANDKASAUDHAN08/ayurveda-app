@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AppointmentService } from '../../services/appointment.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { AppointmentService } from '../../shared/services/appointment.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Component({
   selector: 'app-dashboard',

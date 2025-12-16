@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DoctorService } from '../../services/doctor.service';
-import { AuthService } from '../../services/auth.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { DoctorService } from '../../shared/services/doctor.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 import { DoctorCardComponent } from '../doctor-card/doctor-card.component';
 import { BookingModalComponent } from '../booking-modal/booking-modal.component';
 import { DoctorDetailModalComponent } from '../doctor-detail-modal/doctor-detail-modal.component';

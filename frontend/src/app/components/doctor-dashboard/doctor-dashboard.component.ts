@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { AppointmentService } from '../../services/appointment.service';
+import { AppointmentService } from '../../shared/services/appointment.service';
 
 @Component({
   selector: 'app-doctor-dashboard',
@@ -60,11 +60,8 @@ export class DoctorDashboardComponent implements OnInit {
   fetchAppointments() {
     this.appointmentService.getDoctorAppointments().subscribe({
       next: (data) => {
-        console.log('✅ Fetched appointments:', data);
         this.appointments = data;
-        console.log('📊 Appointments array:', this.appointments);
         this.calculateStats();
-        console.log('📈 Stats calculated - Upcoming:', this.upcomingAppointmentsCount, 'Patients:', this.totalPatientsCount);
       },
       error: (err) => {
         console.error('❌ Failed to fetch appointments', err);

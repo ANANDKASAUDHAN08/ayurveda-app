@@ -1,11 +1,12 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { LocationSelectorComponent } from '../location-selector/location-selector.component';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { CartService } from 'src/app/services/cart.service';
+import { CartService } from 'src/app/shared/services/cart.service';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-top-navbar',
@@ -28,6 +29,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   userName: string = '';
   userRole: string = '';
   userInitials: string = '';
+  showMobileSearch = false;
 
   profileMenuOpen: boolean = false;
 
@@ -36,10 +38,18 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   private cartSubscription?: Subscription;
   private authSubscription?: Subscription;
 
+  // Search autocomplete
+  showSuggestions = false;
+  suggestions: any[] = [];
+  searchHistory: string[] = [];
+  popularSearches: string[] = [];
+  private suggestionTimeout: any;
+
   constructor(
     public router: Router,
     public authService: AuthService,
-    private cartService: CartService
+    private cartService: CartService,
+    private searchService: SearchService
   ) { }
 
   ngOnInit() {
@@ -58,6 +68,9 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
         }
       }
     );
+
+    // Load search data
+    this.loadSearchData();
   }
 
   ngOnDestroy() {
@@ -112,6 +125,138 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     if (this.searchQuery.trim()) {
       this.router.navigate(['/search'], { queryParams: { q: this.searchQuery } });
     }
+  }
+
+  // Load search history and popular searches
+  loadSearchData() {
+    this.searchHistory = this.searchService.getSearchHistory();
+
+    this.searchService.getPopularSearches().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.popularSearches = response.data;
+        }
+      },
+      error: (err) => console.error('Failed to load popular searches:', err)
+    });
+  }
+
+  onSearchInput() {
+    // Clear previous timeout
+    if (this.suggestionTimeout) {
+      clearTimeout(this.suggestionTimeout);
+    }
+
+    // Hide suggestions if query is too short
+    if (this.searchQuery.length < 2) {
+      this.suggestions = [];
+      this.showSuggestions = false;
+      return;
+    }
+
+    // Debounce - wait 300ms after user stops typing
+    this.suggestionTimeout = setTimeout(() => {
+      this.searchService.getSuggestions(this.searchQuery).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.suggestions = response.data;
+            this.showSuggestions = true;
+          }
+        },
+        error: (err) => {
+          console.error('Suggestions error:', err);
+          this.suggestions = [];
+        }
+      });
+    }, 300);
+  }
+
+  // Show dropdown when focused
+  onFocusSearch() {
+    this.searchHistory = this.searchService.getSearchHistory();
+    if (this.searchQuery.length === 0) {
+      this.showSuggestions = true;
+    } else if (this.searchQuery.length >= 2) {
+      this.onSearchInput();
+    }
+  }
+
+  // Hide dropdown when clicked outside
+  onBlurSearch() {
+    // Delay to allow click on suggestion
+    setTimeout(() => {
+      this.showSuggestions = false;
+    }, 200);
+  }
+
+  // Select a suggestion
+  selectSuggestion(suggestion: any) {
+    this.searchQuery = suggestion.name;
+    this.showSuggestions = false;
+    this.onSearch();
+  }
+
+  // Search from history
+  searchFromHistory(term: string) {
+    this.searchQuery = term;
+    this.showSuggestions = false;
+    this.onSearch();
+  }
+
+  // Search popular term
+  searchPopular(term: string) {
+    this.searchQuery = term;
+    this.showSuggestions = false;
+    this.onSearch();
+  }
+
+  // Clear search history
+  clearHistory() {
+    this.searchService.clearSearchHistory();
+    this.searchHistory = [];
+  }
+
+  navigateToSearch() {
+    this.router.navigate(['/search']);
+  }
+
+  // Toggle mobile search overlay
+  toggleMobileSearch() {
+    this.showMobileSearch = !this.showMobileSearch;
+
+    // Reset suggestions when closing
+    if (!this.showMobileSearch) {
+      this.suggestions = [];
+    }
+  }
+
+  // Perform search from mobile overlay
+  performMobileSearch() {
+    if (this.searchQuery.trim()) {
+      this.showMobileSearch = false;
+      this.onSearch();
+    }
+  }
+
+  // Select suggestion on mobile
+  selectSuggestionMobile(suggestion: any) {
+    this.searchQuery = suggestion.name;
+    this.showMobileSearch = false;
+    this.onSearch();
+  }
+
+  // Search from history on mobile
+  searchFromHistoryMobile(term: string) {
+    this.searchQuery = term;
+    this.showMobileSearch = false;
+    this.onSearch();
+  }
+
+  // Search popular term on mobile
+  searchPopularMobile(term: string) {
+    this.searchQuery = term;
+    this.showMobileSearch = false;
+    this.onSearch();
   }
 
   navigateToOrders() {

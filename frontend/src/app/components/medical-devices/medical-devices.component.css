@@ -1,0 +1,91 @@
+/* Container styles */
+.container {
+    max-width: 1400px;
+}
+
+/* Card hover effects */
+.bg-white.hover\:shadow-lg {
+    transition: all 0.3s ease;
+}
+
+.bg-white:hover {
+    transform: translateY(-2px);
+}
+
+/* Image container */
+.h-40 {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Smooth icon scale on hover */
+.h-40:hover i {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+/* Line clamp for consistent card heights */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Button animations */
+button {
+    transition: all 0.2s ease;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .text-3xl {
+        font-size: 1.5rem;
+    }
+
+    .h-40 {
+        height: 120px;
+    }
+
+    .text-2xl {
+        font-size: 1.25rem;
+    }
+}
+
+/* Loading animation */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Grid enhancements */
+.grid {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

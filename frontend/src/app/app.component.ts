@@ -6,7 +6,7 @@ import { TopNavbarComponent } from './shared/components/top-navbar/top-navbar.co
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { SnackbarComponent } from './shared/components/snackbar/snackbar.component';
 import { filter, Subscription } from 'rxjs';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './shared/services/auth.service';
 import { HamburgerMenuComponent } from './shared/components/hamburger-menu/hamburger-menu.component';
 import { BottomNavigationComponent } from './shared/components/bottom-navigation/bottom-navigation.component';
 import { ScrollToTopComponent } from './shared/components/scroll-to-top/scroll-to-top.component';

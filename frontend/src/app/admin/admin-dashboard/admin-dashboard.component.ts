@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AdminService } from '../../services/admin.service';
+import { AdminService } from '../../shared/services/admin.service';
 import { forkJoin } from 'rxjs';
 
 @Component({

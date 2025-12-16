@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
-import { ContentService } from '../../services/content.service';
+import { ContentService } from '../../shared/services/content.service';
 import { filter } from 'rxjs/operators';
 
 @Component({

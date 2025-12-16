@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SnackbarService, SnackbarData } from '../../../services/snackbar.service';
+import { SnackbarService, SnackbarData } from '../../services/snackbar.service';
 import { Subscription } from 'rxjs';
 
 @Component({

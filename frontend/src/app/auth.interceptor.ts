@@ -2,7 +2,7 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
-import { SnackbarService } from './services/snackbar.service';
+import { SnackbarService } from './shared/services/snackbar.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const token = localStorage.getItem('auth_token');

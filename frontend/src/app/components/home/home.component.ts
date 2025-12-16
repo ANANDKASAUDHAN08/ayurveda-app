@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
-import { ContentService } from '../../services/content.service';
+import { ContentService } from '../../shared/services/content.service';
 
 import { ArticleDetailsComponent } from '../article-details/article-details.component';
 import { TopRatedDoctorsCarouselComponent } from './top-rated-doctors-carousel/top-rated-doctors-carousel.component';
@@ -16,6 +16,7 @@ import { TrustBadgeComponent, TrustBadgeData } from 'src/app/shared/components/t
 import { FormsModule } from '@angular/forms';
 import { SkeletonLoaderComponent } from 'src/app/shared/components/skeleton-loader/skeleton-loader.component';
 import { EmptyStateComponent } from 'src/app/shared/components/empty-state/empty-state.component';
+import { SearchService } from 'src/app/shared/services/search.service';
 
 @Component({
   selector: 'app-home',
@@ -52,24 +53,21 @@ export class HomeComponent implements OnInit {
   selectedArticle: any = null;
   showArticleModal = false;
 
-  // services = [
-  //   { icon: 'fas fa-user-md', title: 'Find Doctors', description: 'Connect with top specialists', link: '/user/find-doctors', queryParams: {} },
-  //   { icon: 'fas fa-hospital', title: 'Hospitals', description: 'Locate nearby hospitals', link: '/hospitals', queryParams: {} },
-  //   { icon: 'fas fa-pills', title: 'Pharmacies', description: 'Get medicines delivered', link: '/pharmacies', queryParams: {} },
-  //   { icon: 'fas fa-file-medical-alt', title: 'Health Articles', description: 'Read expert health tips', fragment: 'articles' },
-  //   { icon: 'fas fa-question-circle', title: 'Ask Questions', description: 'Get answers from experts', fragment: 'contact' },
-  //   { icon: 'fas fa-ambulance', title: 'Emergency', description: '24/7 emergency services', link: '/user/find-doctors', queryParams: { type: 'emergency' } },
-  //   { icon: 'fas fa-heartbeat', title: 'Health Checkups', description: 'Book preventive checkups', link: '/user/find-doctors', queryParams: { type: 'checkup' } },
-  //   { icon: 'fas fa-brain', title: 'Mental Health', description: 'Therapists and counselors', link: '/user/find-doctors', queryParams: { specialty: 'psychiatrist' } }
-  // ];
-
   topDoctors: any[] = [];
   articles: any[] = [];
+
+  // Search autocomplete
+  searchQuery = '';
+  showSuggestions = false;
+  suggestions: any[] = [];
+  searchHistory: string[] = [];
+  popularSearches: string[] = [];
+  private suggestionTimeout: any;
 
   constructor(
     private router: Router,
     private contentService: ContentService,
-    private route: ActivatedRoute
+    private searchService: SearchService
   ) { }
 
   ngOnInit() {
@@ -82,6 +80,9 @@ export class HomeComponent implements OnInit {
     setTimeout(() => {
       this.loadingServices = false;
     }, 1000);
+
+    // Load search data
+    this.loadSearchData();
   }
 
   loadFeaturedDoctors() {
@@ -221,7 +222,7 @@ export class HomeComponent implements OnInit {
       title: 'Order Medicine',
       description: 'Get medicines delivered to your doorstep',
       badge: '15% OFF',
-      route: '/medicine',
+      route: '/medicines',
       gradient: 'from-blue-500 to-blue-600'
     },
     {
@@ -237,7 +238,7 @@ export class HomeComponent implements OnInit {
       title: 'Consult Doctor',
       description: 'Video consultation with top doctors',
       badge: '₹200 Only',
-      route: '/consult',
+      route: '/find-doctors',
       gradient: 'from-emerald-500 to-emerald-600'
     },
     {
@@ -249,6 +250,7 @@ export class HomeComponent implements OnInit {
       gradient: 'from-pink-500 to-pink-600'
     }
   ];
+
   // Category Cards Data  
   categories: CategoryCardData[] = [
     { icon: 'fas fa-pills', title: 'Medicines', count: 5000, route: '/category/medicines', color: 'bg-blue-100', iconColor: 'text-blue-600' },
@@ -264,6 +266,7 @@ export class HomeComponent implements OnInit {
     { icon: 'fas fa-hospital', title: 'Hospital', count: 100, route: '/hospitals', color: 'bg-gray-100', iconColor: 'text-gray-600' },
     { icon: 'fas fa-plus-circle', title: 'More', route: '/categories', color: 'bg-slate-100', iconColor: 'text-slate-600' }
   ];
+
   // Deals Data
   deals: DealCardData[] = [
     {
@@ -313,6 +316,7 @@ export class HomeComponent implements OnInit {
       route: '/product/protein'
     }
   ];
+
   // Trust Badges Data
   trustBadges: TrustBadgeData[] = [
     { icon: 'fas fa-user-md', number: '5000+', label: 'Verified Doctors', subtext: 'Across specialties', color: 'text-emerald-600' },
@@ -320,11 +324,92 @@ export class HomeComponent implements OnInit {
     { icon: 'fas fa-headset', number: '24/7', label: 'Customer Support', subtext: 'Always available', color: 'text-purple-600' },
     { icon: 'fas fa-star', number: '4.8⭐', label: 'User Rating', subtext: '10k+ happy users', color: 'text-yellow-600' }
   ];
-  searchQuery: string = '';
-  // Search method
+
+  // Navigate to Search Results
   onSearch() {
     if (this.searchQuery.trim()) {
       this.router.navigate(['/search'], { queryParams: { q: this.searchQuery } });
     }
   }
+
+  // Load search data
+  loadSearchData() {
+    this.searchHistory = this.searchService.getSearchHistory();
+
+    this.searchService.getPopularSearches().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.popularSearches = response.data;
+        }
+      },
+      error: (err) => console.error('Failed to load popular searches:', err)
+    });
+  }
+
+  // Handle search input with autocomplete
+  onSearchInput() {
+    if (this.suggestionTimeout) {
+      clearTimeout(this.suggestionTimeout);
+    }
+
+    if (this.searchQuery.length < 2) {
+      this.suggestions = [];
+      this.showSuggestions = false;
+      return;
+    }
+
+    this.suggestionTimeout = setTimeout(() => {
+      this.searchService.getSuggestions(this.searchQuery).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.suggestions = response.data;
+            this.showSuggestions = true;
+          }
+        },
+        error: (err) => {
+          console.error('Suggestions error:', err);
+          this.suggestions = [];
+        }
+      });
+    }, 300);
+  }
+
+  onFocusSearch() {
+    this.searchHistory = this.searchService.getSearchHistory();
+    if (this.searchQuery.length === 0) {
+      this.showSuggestions = true;
+    } else if (this.searchQuery.length >= 2) {
+      this.onSearchInput();
+    }
+  }
+
+  onBlurSearch() {
+    setTimeout(() => {
+      this.showSuggestions = false;
+    }, 200);
+  }
+
+  selectSuggestion(suggestion: any) {
+    this.searchQuery = suggestion.name;
+    this.showSuggestions = false;
+    this.onSearch();
+  }
+
+  searchFromHistory(term: string) {
+    this.searchQuery = term;
+    this.showSuggestions = false;
+    this.onSearch();
+  }
+
+  searchPopular(term: string) {
+    this.searchQuery = term;
+    this.showSuggestions = false;
+    this.onSearch();
+  }
+
+  clearHistory() {
+    this.searchService.clearSearchHistory();
+    this.searchHistory = [];
+  }
+
 }

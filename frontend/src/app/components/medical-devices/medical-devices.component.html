@@ -1,0 +1,124 @@
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="container mx-auto px-4">
+        <!-- Header -->
+        <div class="mb-6">
+            <div class="flex items-center gap-3 mb-2">
+                <i class="fas fa-stethoscope text-4xl text-emerald-600"></i>
+                <h1 class="text-3xl font-bold text-gray-900">Medical Devices</h1>
+            </div>
+            <p class="text-gray-600">Browse and shop for medical equipment and devices</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Search -->
+                <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="applyFilters()"
+                    placeholder="Search medical devices..."
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+
+                <!-- Category -->
+                <select [(ngModel)]="selectedCategory" (change)="applyFilters()"
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                    <option value="">All Categories</option>
+                    <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                </select>
+
+                <!-- Sort -->
+                <select [(ngModel)]="sortBy" (change)="applyFilters()"
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                    <option *ngFor="let option of sortOptions" [value]="option.value">
+                        {{ option.label }}
+                    </option>
+                </select>
+
+                <!-- Clear Button -->
+                <button (click)="clearFilters()"
+                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                    <i class="fas fa-times mr-2"></i>
+                    Clear Filters
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Count -->
+        <div *ngIf="!loading && devices.length > 0" class="mb-4">
+            <p class="text-gray-600">
+                Showing <span class="font-semibold">{{ devices.length }}</span> medical devices
+            </p>
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="loading" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div *ngFor="let i of [1,2,3,4,5,6,7,8]" class="bg-white rounded-lg shadow-sm p-4 animate-pulse">
+                <div class="bg-gray-200 h-40 rounded-lg mb-4"></div>
+                <div class="h-4 bg-gray-200 rounded mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded w-2/3 mb-3"></div>
+                <div class="h-8 bg-gray-200 rounded"></div>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div *ngIf="!loading && devices.length > 0"
+            class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div *ngFor="let device of devices"
+                class="bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow p-4 flex flex-col h-full">
+                <!-- Image -->
+                <div class="h-40 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg flex items-center justify-center mb-4 cursor-pointer"
+                    (click)="openDetails(device)">
+                    <i class="fas fa-stethoscope text-6xl text-blue-600 opacity-20"></i>
+                </div>
+
+                <!-- Info -->
+                <div class="flex-1 flex flex-col">
+                    <h3 class="font-semibold text-gray-900 mb-1 line-clamp-2 cursor-pointer hover:text-emerald-600"
+                        (click)="openDetails(device)">
+                        {{ device.name }}
+                    </h3>
+                    <p *ngIf="device.description" class="text-sm text-gray-500 mb-2 line-clamp-2">
+                        {{ device.description }}
+                    </p>
+                    <p *ngIf="device.category" class="text-xs text-gray-400 mb-3">
+                        {{ device.category }}
+                    </p>
+
+                    <!-- Price -->
+                    <div class="text-2xl font-bold text-emerald-600 mb-3 mt-auto">
+                        ₹{{ device.price }}
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <button (click)="addToCart(device)" [disabled]="addingToCart['device-' + device.id]"
+                            class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors disabled:bg-gray-300 text-sm">
+                            <i class="fas fa-shopping-cart mr-1"></i>
+                            {{ addingToCart['device-' + device.id] ? 'Adding...' : 'Add' }}
+                        </button>
+                        <button (click)="openDetails(device)"
+                            class="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors text-sm">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!loading && devices.length === 0" class="text-center py-16">
+            <i class="fas fa-stethoscope text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">No medical devices found</h3>
+            <p class="text-gray-500 mb-6">Try adjusting your search or filters</p>
+            <button (click)="clearFilters()"
+                class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
+                <i class="fas fa-times mr-2"></i>
+                Clear Filters
+            </button>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <app-product-detail-modal *ngIf="selectedProduct" [product]="selectedProduct" (close)="closeDetails()"
+        (addToCart)="addToCartFromModal($event)">
+    </app-product-detail-modal>
+</div>

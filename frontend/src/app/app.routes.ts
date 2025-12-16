@@ -27,6 +27,9 @@ import { CartComponent } from './pages/cart/cart.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { OrdersComponent } from './pages/orders/orders.component';
 import { OrderDetailsComponent } from './pages/order-details/order-details.component';
+import { SearchResultsComponent } from './pages/search-results/search-results.component';
+import { MedicalDevicesComponent } from './components/medical-devices/medical-devices.component';
+import { MedicinesComponent } from './components/medicines/medicines.component';
 
 export const routes: Routes = [
     // Public routes
@@ -36,6 +39,8 @@ export const routes: Routes = [
     { path: 'hospitals', component: HospitalsComponent, canActivate: [StrictLogoutGuard] },
     { path: 'pharmacies', component: PharmaciesComponent, canActivate: [StrictLogoutGuard] },
     { path: 'find-doctors', component: DoctorListComponent, canActivate: [StrictLogoutGuard] },
+    { path: 'medicines', component: MedicinesComponent, canActivate: [StrictLogoutGuard] },
+    { path: 'medical-devices', component: MedicalDevicesComponent, canActivate: [StrictLogoutGuard] },
 
     // Static Pages
     { path: 'privacy-policy', component: StaticPageComponent },
@@ -63,6 +68,11 @@ export const routes: Routes = [
         path: 'orders/:id',
         component: OrderDetailsComponent,
         canActivate: [authGuard]
+    },
+
+    {
+        path: 'search',
+        component: SearchResultsComponent
     },
 
     // Admin routes

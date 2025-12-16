@@ -8,6 +8,7 @@ const adminRoutes = require('./routes/admin');
 const contentRoutes = require('./routes/content');
 const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/orders');
+const searchRoutes = require('./routes/search');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,6 +24,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/search', searchRoutes);
 
 // Test route
 app.get('/', (req, res) => {
