@@ -171,32 +171,106 @@ Scroll to Top Button
             <!-- Search Bar -->
             <div class="max-w-2xl mx-auto mb-6">
                 <div class="relative">
-                    <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()"
-                        placeholder="Search for doctors, medicines, or lab tests..."
-                        class="w-full px-6 py-4 pl-14 pr-32 rounded-full border-2 border-slate-200 focus:border-emerald-500 focus:outline-none text-lg shadow-lg">
-                    <i class="fas fa-search absolute left-5 top-5 text-slate-400 text-xl"></i>
-                    <button (click)="onSearch()"
-                        class="absolute right-2 top-2 px-8 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full font-medium transition-colors">
+                    <div class="relative w-full">
+                        <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()" (focus)="onFocusSearch()"
+                            (blur)="onBlurSearch()" (keyup.enter)="onSearch()"
+                            placeholder="Search doctors, medicines, tests..."
+                            class="w-full px-6 py-4 pl-14 rounded-full border-2 border-gray-200 focus:border-emerald-500 focus:outline-none text-lg">
+                        <i class="fas fa-search absolute left-5 top-5 text-gray-400 text-xl"></i>
+
+                        <!-- Autocomplete Dropdown -->
+                        <div *ngIf="showSuggestions"
+                            class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-96 overflow-y-auto">
+
+                            <!-- Suggestions (when typing) -->
+                            <div *ngIf="searchQuery.length >= 2 && suggestions.length > 0">
+                                <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50">
+                                    Suggestions
+                                </div>
+                                <div *ngFor="let suggestion of suggestions" (mousedown)="selectSuggestion(suggestion)"
+                                    class="px-4 py-3 hover:bg-emerald-50 cursor-pointer flex justify-between items-center border-b last:border-b-0">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-search text-gray-400"></i>
+                                        <div>
+                                            <span class="font-medium text-gray-900">{{ suggestion.name }}</span>
+                                            <span *ngIf="suggestion.category" class="text-xs text-gray-500 ml-2">{{
+                                                suggestion.category }}</span>
+                                        </div>
+                                    </div>
+                                    <span *ngIf="suggestion.price" class="text-emerald-600 font-semibold">
+                                        ₹{{ suggestion.price }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Recent Searches (when empty) -->
+                            <div *ngIf="searchQuery.length === 0 && searchHistory.length > 0">
+                                <div
+                                    class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50 flex justify-between items-center">
+                                    <span>Recent Searches</span>
+                                    <button (mousedown)="clearHistory()"
+                                        class="text-red-500 hover:text-red-700 text-xs normal-case font-normal">
+                                        Clear
+                                    </button>
+                                </div>
+                                <div *ngFor="let term of searchHistory" (mousedown)="searchFromHistory(term)"
+                                    class="px-4 py-3 hover:bg-emerald-50 cursor-pointer flex items-center gap-3 border-b last:border-b-0">
+                                    <i class="fas fa-history text-gray-400"></i>
+                                    <span class="text-gray-900">{{ term }}</span>
+                                </div>
+                            </div>
+
+                            <!-- No results -->
+                            <div *ngIf="searchQuery.length >= 2 && suggestions.length === 0">
+                                <div class="px-4 py-6 text-center text-gray-500">
+                                    <i class="fas fa-search text-3xl mb-2"></i>
+                                    <p class="text-sm">No suggestions found</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clear Button (X icon) -->
+                    <button *ngIf="searchQuery.length > 0"
+                        (click)="searchQuery = ''; suggestions = []; showSuggestions = false"
+                        class="absolute right-28 top-4 text-gray-400 hover:text-gray-600 transition-colors"
+                        title="Clear search">
+                        <i class="fas fa-times-circle text-xl"></i>
+                    </button>
+
+                    <!-- Search Button -->
+                    <button (click)="onSearch()" [disabled]="searchQuery.trim().length === 0"
+                        class="absolute right-2 top-2 px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-full transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed">
                         Search
                     </button>
                 </div>
             </div>
 
-            <!-- Popular Searches -->
-            <div class="flex flex-wrap items-center justify-center gap-2 text-sm">
-                <span class="text-slate-500">Popular:</span>
-                <a routerLink="/search" [queryParams]="{q: 'Cardiologist'}"
-                    class="px-3 py-1 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors">
-                    Cardiologist
-                </a>
-                <a routerLink="/search" [queryParams]="{q: 'Dentist'}"
-                    class="px-3 py-1 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors">
-                    Dentist
-                </a>
-                <a routerLink="/search" [queryParams]="{q: 'CBC Test'}"
-                    class="px-3 py-1 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors">
-                    CBC Test
-                </a>
+            <!-- Dynamic Popular Searches with Clickable Buttons -->
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
+                <span class="text-slate-500 flex items-center gap-2">
+                    <i class="fas fa-fire text-orange-500"></i>
+                    Popular:
+                </span>
+                <button *ngFor="let term of popularSearches" (click)="searchPopular(term)"
+                    class="px-3 py-1 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors shadow-sm border border-gray-200">
+                    {{ term }}
+                </button>
+                <!-- Fallback if no data from backend -->
+                <ng-container *ngIf="popularSearches.length === 0">
+                    <button (click)="searchQuery = 'Paracetamol'; onSearch()"
+                        class="px-3 py-1 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors shadow-sm border border-gray-200">
+                        Paracetamol
+                    </button>
+                    <button (click)="searchQuery = 'Thermometer'; onSearch()"
+                        class="px-3 py-1 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors shadow-sm border border-gray-200">
+                        Thermometer
+                    </button>
+                    <button (click)="searchQuery = 'Vitamin C'; onSearch()"
+                        class="px-3 py-1 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors shadow-sm border border-gray-200">
+                        Vitamin C
+                    </button>
+                </ng-container>
             </div>
         </div>
     </div>
@@ -212,7 +286,7 @@ Scroll to Top Button
 
         <!-- Show skeleton while loading -->
         <div *ngIf="loadingServices" class="service-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <app-skeleton-loader type="card" [count]="4"></app-skeleton-loader>
+            <app-skeleton-loader *ngFor="let i of [1,2,3,4]" type="card" [count]="1"></app-skeleton-loader>
         </div>
 
         <!-- Show actual content when loaded -->

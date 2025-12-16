@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { OrderService, Order } from '../../services/order.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { OrderService, Order } from '../../shared/services/order.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Component({
   selector: 'app-order-details',

@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BookingModalComponent } from '../booking-modal/booking-modal.component';
-import { SnackbarService } from 'src/app/services/snackbar.service';
-import { AuthService } from 'src/app/services/auth.service';
+import { SnackbarService } from 'src/app/shared/services/snackbar.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-doctor-detail-modal',

@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AppointmentService, TimeSlot } from '../../services/appointment.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { AppointmentService, TimeSlot } from '../../shared/services/appointment.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 interface CalendarDay {
   date: Date;

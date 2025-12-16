@@ -18,3 +18,26 @@
 .nav-link:hover::before {
     width: 100%;
 }
+
+/* Autocomplete dropdown animations */
+.autocomplete-dropdown {
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Suggestion hover effect */
+.suggestion-item:hover {
+    background-color: #f3f4f6;
+    transition: background-color 0.15s ease;
+}

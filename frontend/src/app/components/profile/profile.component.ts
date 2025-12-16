@@ -1,9 +1,9 @@
 import { Component, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { SnackbarService } from '../../services/snackbar.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 import { HttpClient } from '@angular/common/http';
-import { ProfileService } from '../../services/profile.service';
+import { ProfileService } from '../../shared/services/profile.service';
 
 interface ActivityItem {
   type: 'appointment' | 'profile_update' | 'account';

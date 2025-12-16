@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AdminService } from '../../services/admin.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { AdminService } from '../../shared/services/admin.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Component({
     selector: 'app-hospitals-admin',

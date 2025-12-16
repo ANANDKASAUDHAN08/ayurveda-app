@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AppointmentService, DateException } from '../../services/appointment.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { AppointmentService, DateException } from '../../shared/services/appointment.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Component({
     selector: 'app-slot-configuration',

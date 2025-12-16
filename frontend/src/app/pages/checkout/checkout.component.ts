@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CartService, Cart } from '../../services/cart.service';
-import { OrderService } from '../../services/order.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { CartService, Cart } from '../../shared/services/cart.service';
+import { OrderService } from '../../shared/services/order.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Component({
   selector: 'app-checkout',

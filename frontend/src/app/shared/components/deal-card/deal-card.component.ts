@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { CartService } from 'src/app/services/cart.service';
-import { SnackbarService } from 'src/app/services/snackbar.service';
-import { AuthService } from 'src/app/services/auth.service';
+import { CartService } from 'src/app/shared/services/cart.service';
+import { SnackbarService } from 'src/app/shared/services/snackbar.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { Subscription } from 'rxjs';
 
 export interface DealCardData {

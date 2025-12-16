@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, HostListener, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { filter } from 'rxjs/operators';
-import { ContentService } from 'src/app/services/content.service';
+import { ContentService } from 'src/app/shared/services/content.service';
 
 @Component({
   selector: 'app-navbar',

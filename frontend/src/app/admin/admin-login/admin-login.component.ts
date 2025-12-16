@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 import { SnackbarComponent } from '../../shared/components/snackbar/snackbar.component';
 
 @Component({

@@ -1,0 +1,495 @@
+<!-- Full Width Container -->
+<div class="min-h-screen bg-gray-50">
+    <!-- Top Bar with Search Info & View Toggle -->
+    <div class="bg-white shadow-sm sticky top-24 z-40 border-b">
+        <div class="w-full px-4 lg:px-8 py-4">
+            <!-- <div class="flex items-center justify-between gap-4 flex-wrap"> -->
+            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+                <!-- Search Query & Results Count -->
+                <div class="flex-1 min-w-0">
+                    <h1 class="text-2xl font-bold text-gray-900 truncate">
+                        {{ filters.q ? 'Search Results for "' + filters.q + '"' : 'All Products' }}
+                    </h1>
+                    <p class="text-sm text-gray-500 mt-1" *ngIf="!loading">
+                        Showing {{ (pagination.page - 1) * pagination.limit + 1 }} -
+                        {{ Math.min(pagination.page * pagination.limit, pagination.total) }}
+                        of {{ pagination.total }} results
+                    </p>
+                </div>
+                <!-- View Toggle & Sort (Desktop) -->
+                <!-- <div class="flex items-center gap-3"> -->
+                <div class="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
+                    <!-- Grid/List Toggle -->
+                    <div class="hidden sm:flex bg-gray-100 rounded-lg p-1">
+                        <button (click)="viewMode = 'grid'" [class.bg-white]="viewMode === 'grid'"
+                            [class.shadow-sm]="viewMode === 'grid'" class="px-3 py-2 rounded-md transition-all">
+                            <i class="fas fa-th text-gray-700"></i>
+                        </button>
+                        <button (click)="viewMode = 'list'" [class.bg-white]="viewMode === 'list'"
+                            [class.shadow-sm]="viewMode === 'list'" class="px-3 py-2 rounded-md transition-all">
+                            <i class="fas fa-list text-gray-700"></i>
+                        </button>
+                    </div>
+                    <!-- Sort Dropdown -->
+                    <select [(ngModel)]="filters.sortBy" (change)="applyFilters()"
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                        <option *ngFor="let option of sortOptions" [value]="option.value">
+                            {{ option.label }}
+                        </option>
+                    </select>
+                    <!-- Mobile Filter Button -->
+                    <button (click)="toggleMobileFilters()"
+                        class="lg:hidden px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 flex items-center gap-2">
+                        <i class="fas fa-filter"></i>
+                        Filters
+                        <span *ngIf="activeFilterCount > 0"
+                            class="bg-white text-emerald-600 rounded-full px-2 py-0.5 text-xs font-bold">
+                            {{ activeFilterCount }}
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Filters Chips -->
+            <div class="flex flex-wrap gap-2 mt-3" *ngIf="activeFilterCount > 0">
+                <span *ngIf="filters.type"
+                    class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm">
+                    {{ filters.type }}
+                    <button (click)="removeFilter('type')" class="hover:text-emerald-900">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </span>
+                <span *ngIf="filters.category"
+                    class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                    {{ filters.category }}
+                    <button (click)="removeFilter('category')" class="hover:text-blue-900">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </span>
+                <span *ngIf="filters.minPrice || filters.maxPrice"
+                    class="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+                    ₹{{ filters.minPrice || 0 }} - ₹{{ filters.maxPrice || 10000 }}
+                    <button (click)="removeFilter('price')" class="hover:text-purple-900">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </span>
+                <button (click)="clearFilters()" class="px-3 py-1 text-red-600 hover:text-red-700 text-sm font-medium">
+                    Clear All
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="w-full px-4 lg:px-8 py-6">
+        <div class="flex gap-6">
+            <!-- Filter Sidebar (Desktop) -->
+            <aside class="hidden lg:block w-64 flex-shrink-0">
+                <div class="bg-white rounded-lg shadow-sm p-6 sticky top-24">
+                    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-filter text-emerald-600"></i>
+                        Filters
+                    </h2>
+                    <!-- Product Type Filter -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Product Type</label>
+                        <select [(ngModel)]="filters.type" (change)="applyFilters()"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                            <option *ngFor="let type of productTypes" [value]="type.value">
+                                {{ type.label }}
+                            </option>
+                        </select>
+                    </div>
+                    <!-- Category Filter -->
+                    <div class="mb-6" *ngIf="categories.length > 0">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+                        <select [(ngModel)]="filters.category" (change)="applyFilters()"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                            <option value="">All Categories</option>
+                            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                        </select>
+                    </div>
+                    <!-- Price Range Filter -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Price Range</label>
+                        <div class="space-y-3">
+                            <input type="number" [(ngModel)]="filters.minPrice" placeholder="Min ₹"
+                                (keyup.enter)="applyFilters()"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                            <input type="number" [(ngModel)]="filters.maxPrice" placeholder="Max ₹"
+                                (keyup.enter)="applyFilters()"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                            <button (click)="applyFilters()"
+                                class="w-full px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Clear Filters -->
+                    <button (click)="clearFilters()" *ngIf="activeFilterCount > 0"
+                        class="w-full px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50">
+                        Clear All Filters
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Results Section -->
+            <main class="flex-1 min-w-0 overflow-y-auto" style="max-height: calc(100vh - 140px);">
+                <!-- Loading State -->
+                <div *ngIf="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div *ngFor="let i of Array(skeletonCount).fill(0); let idx = index"
+                        class="bg-white rounded-lg shadow-sm p-4 animate-pulse">
+                        <div class="bg-gray-200 h-48 rounded-lg mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-2/3 mb-3"></div>
+                        <div class="h-8 bg-gray-200 rounded"></div>
+                    </div>
+                </div>
+
+                <!-- Results Grid -->
+                <div *ngIf="!loading && hasResults">
+                    <!-- Grid View with Category Grouping (4 Columns) -->
+                    <div *ngIf="viewMode === 'grid'" class="space-y-12">
+                        <!-- Loop through each product type -->
+                        <div *ngFor="let type of Object.keys(groupedResults)">
+                            <!-- Category Header with Divider -->
+                            <div class="flex items-center gap-4 mb-6">
+                                <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                                    <i [class]="'fas ' + getTypeIcon(type) + ' text-emerald-600'"></i>
+                                    {{ getTypeLabel(type) }}
+                                </h2>
+                                <div
+                                    class="flex-1 h-0.5 bg-gradient-to-r from-emerald-300 via-emerald-200 to-transparent">
+                                </div>
+                                <span class="text-sm font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                                    {{ groupedResults[type].length }} {{ groupedResults[type].length === 1 ? 'item' :
+                                    'items' }}
+                                </span>
+                            </div>
+
+                            <!-- Grid for this category - 4 COLUMNS -->
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                <div *ngFor="let product of groupedResults[type]"
+                                    [class]="'bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden group flex flex-col h-full ' + 
+                                    (product.product_type === 'hospital' || product.product_type === 'pharmacy' ? 'min-h-[280px]' : 'min-h-[380px]')">
+                                    <!-- Product Image -->
+                                    <div
+                                        class="product-card-image relative h-40 bg-gradient-to-br from-emerald-50 to-blue-50 flex items-center justify-center overflow-hidden">
+                                        <i
+                                            [class]="'fas ' + getTypeIcon(product.product_type) + ' text-6xl text-emerald-600 opacity-20'"></i>
+                                        <!-- <div class="absolute top-2 left-2">
+                                            <span
+                                                class="px-2 py-1 bg-emerald-600 text-white text-xs font-semibold rounded-full">
+                                                {{ getTypeLabel(product.product_type) }}
+                                            </span>
+                                        </div> -->
+                                        <div *ngIf="product.stock_quantity && product.stock_quantity < 10"
+                                            class="absolute top-2 right-2">
+                                            <span
+                                                class="px-2 py-1 bg-orange-500 text-white text-xs font-semibold rounded-full">
+                                                Low Stock
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Product Info -->
+                                    <div class="p-4 flex flex-col flex-1">
+                                        <!-- For hospitals/pharmacies: button at bottom next to category -->
+                                        <ng-container
+                                            *ngIf="product.product_type === 'hospital' || product.product_type === 'pharmacy'">
+                                            <h3
+                                                class="product-card-title font-semibold text-gray-900 mb-1 line-clamp-2">
+                                                {{ product.name }}
+                                            </h3>
+                                            <p *ngIf="product.description"
+                                                class="text-sm text-gray-500 mb-3 line-clamp-2">
+                                                {{ product.description }}
+                                            </p>
+
+                                            <!-- Category and Button on same line at bottom -->
+                                            <div class="flex items-center justify-between gap-2">
+                                                <p *ngIf="product.category" class="text-xs text-gray-400">
+                                                    {{ product.category }}
+                                                </p>
+                                                <button (click)="viewDetails(product)"
+                                                    class="product-card-button px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors text-xs whitespace-nowrap">
+                                                    <i class="fas fa-info-circle mr-1"></i>
+                                                    Details
+                                                </button>
+                                            </div>
+                                        </ng-container>
+
+                                        <!-- For other products: normal layout -->
+                                        <ng-container
+                                            *ngIf="product.product_type !== 'hospital' && product.product_type !== 'pharmacy'">
+                                            <h3
+                                                class="product-card-title font-semibold text-gray-900 mb-1 line-clamp-2 group-hover:text-emerald-600 transition-colors">
+                                                {{ product.name }}
+                                            </h3>
+                                            <p *ngIf="product.description"
+                                                class="text-sm text-gray-500 mb-2 line-clamp-2">
+                                                {{ product.description }}
+                                            </p>
+                                            <p *ngIf="product.category" class="text-xs text-gray-400 mb-3">
+                                                {{ product.category }}
+                                            </p>
+
+                                            <!-- Price -->
+                                            <div class="mb-3" *ngIf="product.price">
+                                                <span class="product-card-price text-2xl font-bold text-emerald-600">₹{{
+                                                    product.price }}</span>
+                                            </div>
+
+                                            <!-- Action Buttons at Bottom -->
+                                            <div class="mt-auto pt-3">
+                                                <!-- Medicine/Device buttons -->
+                                                <div *ngIf="product.product_type === 'medicine' || product.product_type === 'device'"
+                                                    class="grid grid-cols-2 gap-2">
+                                                    <button (click)="addToCart(product)"
+                                                        [disabled]="addingToCart[product.product_type + '-' + product.id]"
+                                                        class="product-card-button px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors disabled:bg-gray-300 text-sm">
+                                                        <i class="fas fa-shopping-cart mr-1"></i>
+                                                        {{ addingToCart[product.product_type + '-' + product.id] ?
+                                                        'Adding...' : 'Add' }}
+                                                    </button>
+                                                    <button (click)="viewDetails(product)"
+                                                        class="product-card-button px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors text-sm">
+                                                        <i class="fas fa-info-circle mr-1"></i>
+                                                        Details
+                                                    </button>
+                                                </div>
+
+                                                <!-- Doctor buttons -->
+                                                <div *ngIf="product.product_type === 'doctor'"
+                                                    class="grid grid-cols-2 gap-2">
+                                                    <button (click)="bookAppointment(product)"
+                                                        class="product-card-button px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm">
+                                                        <i class="fas fa-calendar-check mr-1"></i>
+                                                        Book
+                                                    </button>
+                                                    <button (click)="viewDetails(product)"
+                                                        class="product-card-button px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors text-sm">
+                                                        <i class="fas fa-info-circle mr-1"></i>
+                                                        Details
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- List View with Category Grouping -->
+                    <div *ngIf="viewMode === 'list'" class="space-y-8">
+                        <!-- Loop through each product type -->
+                        <div *ngFor="let type of Object.keys(groupedResults)">
+                            <!-- Category Header with Divider -->
+                            <div class="flex items-center gap-4 mb-4">
+                                <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                    <i [class]="'fas ' + getTypeIcon(type) + ' text-emerald-600'"></i>
+                                    {{ getTypeLabel(type) }}
+                                </h2>
+                                <div
+                                    class="flex-1 h-0.5 bg-gradient-to-r from-emerald-300 via-emerald-200 to-transparent">
+                                </div>
+                                <span class="text-sm font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                                    {{ groupedResults[type].length }} {{ groupedResults[type].length === 1 ? 'item' :
+                                    'items' }}
+                                </span>
+                            </div>
+
+                            <!-- List for this category -->
+                            <div class="space-y-4">
+                                <div *ngFor="let product of groupedResults[type]"
+                                    class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 flex gap-4">
+                                    <!-- Image -->
+                                    <div
+                                        class="w-32 h-32 flex-shrink-0 bg-gradient-to-br from-emerald-50 to-blue-50 rounded-lg flex items-center justify-center">
+                                        <i
+                                            [class]="'fas ' + getTypeIcon(product.product_type) + ' text-4xl text-emerald-600 opacity-30'"></i>
+                                    </div>
+
+                                    <!-- Info -->
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-start justify-between gap-4">
+                                            <div class="flex-1">
+                                                <div class="flex items-center gap-2 mb-1">
+                                                    <h3 class="font-semibold text-lg text-gray-900">{{ product.name }}
+                                                    </h3>
+                                                    <span
+                                                        class="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded-full">
+                                                        {{ getTypeLabel(product.product_type) }}
+                                                    </span>
+                                                </div>
+                                                <p *ngIf="product.description" class="text-gray-600 text-sm mb-2">
+                                                    {{ product.description }}
+                                                </p>
+                                                <p *ngIf="product.category" class="text-gray-400 text-xs">{{
+                                                    product.category }}</p>
+                                            </div>
+
+                                            <div class="text-right">
+                                                <div *ngIf="product.price"
+                                                    class="text-2xl font-bold text-emerald-600 mb-2">
+                                                    ₹{{ product.price }}
+                                                </div>
+
+                                                <!-- Action Buttons (grouped by type) -->
+                                                <!-- Medicine/Device: Add + Details -->
+                                                <div *ngIf="product.product_type === 'medicine' || product.product_type === 'device'"
+                                                    class="flex gap-2">
+                                                    <button (click)="addToCart(product)"
+                                                        [disabled]="addingToCart[product.product_type + '-' + product.id]"
+                                                        class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors disabled:bg-gray-300">
+                                                        <i class="fas fa-shopping-cart mr-1"></i>
+                                                        {{ addingToCart[product.product_type + '-' + product.id] ?
+                                                        'Adding...' : 'Add' }}
+                                                    </button>
+                                                    <button (click)="viewDetails(product)"
+                                                        class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors">
+                                                        <i class="fas fa-info-circle mr-1"></i>
+                                                        Details
+                                                    </button>
+                                                </div>
+
+                                                <!-- Doctor: Book + Details -->
+                                                <div *ngIf="product.product_type === 'doctor'" class="flex gap-2">
+                                                    <button (click)="bookAppointment(product)"
+                                                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+                                                        <i class="fas fa-calendar-check mr-1"></i>
+                                                        Book
+                                                    </button>
+                                                    <button (click)="viewDetails(product)"
+                                                        class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors">
+                                                        <i class="fas fa-info-circle mr-1"></i>
+                                                        Details
+                                                    </button>
+                                                </div>
+
+                                                <!-- Hospital/Pharmacy: Details only -->
+                                                <button
+                                                    *ngIf="product.product_type === 'hospital' || product.product_type === 'pharmacy'"
+                                                    (click)="viewDetails(product)"
+                                                    class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors">
+                                                    <i class="fas fa-info-circle mr-2"></i>
+                                                    View Details
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div *ngIf="!loading && !hasResults" class="text-center py-16">
+                    <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">No results found</h3>
+                    <p class="text-gray-500 mb-6">Try adjusting your filters or search query</p>
+                    <button (click)="clearFilters()"
+                        class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
+                        Clear Filters
+                    </button>
+                </div>
+
+                <!-- Pagination -->
+                <div *ngIf="!loading && hasResults && pagination.totalPages > 1" class="mt-8 flex justify-center">
+                    <div class="flex items-center gap-2">
+                        <button (click)="changePage((filters.page || 1) - 1)" [disabled]="(filters.page || 1) === 1"
+                            class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button *ngFor="let page of [].constructor(pagination.totalPages); let i = index"
+                            (click)="changePage(i + 1)" [class.bg-emerald-600]="(filters.page || 1) === i + 1"
+                            [class.text-white]="(filters.page || 1) === i + 1"
+                            [class.border-emerald-600]="(filters.page || 1) === i + 1"
+                            class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                            {{ i + 1 }}
+                        </button>
+                        <button (click)="changePage((filters.page || 1) + 1)"
+                            [disabled]="(filters.page || 1) === pagination.totalPages"
+                            class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Filter Sheet -->
+    <div *ngIf="showMobileFilters" class="fixed inset-0 z-50 lg:hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black bg-opacity-50" (click)="toggleMobileFilters()"></div>
+        <!-- Sheet -->
+        <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl max-h-[80vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-gray-900">Filters</h2>
+                    <button (click)="toggleMobileFilters()" class="p-2 hover:bg-gray-100 rounded-full">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <!-- Same filters as sidebar -->
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Product Type</label>
+                        <select [(ngModel)]="filters.type" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            <option *ngFor="let type of productTypes" [value]="type.value">{{ type.label }}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="categories.length > 0">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+                        <select [(ngModel)]="filters.category"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            <option value="">All Categories</option>
+                            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Price Range</label>
+                        <div class="space-y-3">
+                            <input type="number" [(ngModel)]="filters.minPrice" placeholder="Min ₹"
+                                (keyup.enter)="applyFilters()"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            <input type="number" [(ngModel)]="filters.maxPrice" placeholder="Max ₹"
+                                (keyup.enter)="applyFilters()"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="flex gap-3 mt-6">
+                    <button (click)="clearFilters(); toggleMobileFilters()"
+                        class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                        Clear All
+                    </button>
+                    <button (click)="applyFilters(); toggleMobileFilters()"
+                        class="flex-1 px-4 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doctor Detail Modal -->
+    <app-doctor-detail-modal *ngIf="selectedDoctorForDetails" [doctor]="selectedDoctorForDetails"
+        (close)="closeDoctorDetails()" (book)="openBookingFromDetails($event)">
+    </app-doctor-detail-modal>
+
+    <!-- Booking Modal -->
+    <app-booking-modal *ngIf="selectedDoctor" [doctor]="selectedDoctor" [isOpen]="true" (close)="closeBooking()"
+        (bookingConfirmed)="onBookingConfirmed($event)">
+    </app-booking-modal>
+
+    <!-- Product Detail Modal -->
+    <app-product-detail-modal *ngIf="selectedProduct" [product]="selectedProduct" (close)="closeProductDetails()"
+        (addToCart)="addToCartFromModal($event)">
+    </app-product-detail-modal>
+
+</div>

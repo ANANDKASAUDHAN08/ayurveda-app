@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ContentService } from '../../services/content.service';
+import { ContentService } from '../../shared/services/content.service';
 
 @Component({
     selector: 'app-hospitals',
