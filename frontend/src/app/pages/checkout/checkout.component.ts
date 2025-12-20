@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { CartService, Cart } from '../../shared/services/cart.service';
 import { OrderService } from '../../shared/services/order.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
@@ -13,11 +14,12 @@ import { SnackbarService } from '../../shared/services/snackbar.service';
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css'
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent implements OnInit, OnDestroy {
   checkoutForm!: FormGroup;
   cart: Cart | null = null;
   loading = false;
   submitting = false;
+  private cartSubscription?: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +32,7 @@ export class CheckoutComponent implements OnInit {
   ngOnInit() {
     // Load cart
     this.loading = true;
-    this.cartService.cart$.subscribe(cart => {
+    this.cartSubscription = this.cartService.cart$.subscribe(cart => {
       this.cart = cart;
       this.loading = false;
 
@@ -53,6 +55,12 @@ export class CheckoutComponent implements OnInit {
       payment_method: ['COD', Validators.required],
       notes: ['']
     });
+  }
+
+  ngOnDestroy() {
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
   }
 
   get subtotal(): number {
@@ -84,8 +92,13 @@ export class CheckoutComponent implements OnInit {
 
     this.orderService.placeOrder(this.checkoutForm.value).subscribe({
       next: (response) => {
-        this.submitting = false;
         this.snackbarService.show('✓ Order placed successfully!', 'success');
+        this.submitting = false;
+
+        // Unsubscribe from cart to prevent redirect
+        if (this.cartSubscription) {
+          this.cartSubscription.unsubscribe();
+        }
 
         // Navigate to order details
         this.router.navigate([`/orders/${response.data.order_id}`]);

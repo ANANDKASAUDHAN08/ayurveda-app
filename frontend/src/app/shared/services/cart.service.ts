@@ -16,6 +16,7 @@ export interface CartItem {
     image?: string;
     description?: string;
 }
+
 export interface Cart {
     items: CartItem[];
     total_items: number;
@@ -23,12 +24,14 @@ export interface Cart {
     tax: number;
     total: number;
 }
+
 export interface AddToCartRequest {
     product_id: number;
     product_type: string;
     quantity?: number;
     price?: number; // Optional price (for testing without product tables)
 }
+
 @Injectable({
     providedIn: 'root'
 })
@@ -96,7 +99,6 @@ export class CartService {
                     }
                 },
                 error: (error) => {
-                    console.error('Error loading cart:', error);
                     // Silently fail - user might not be logged in
                     this.clearCartState();
                 }

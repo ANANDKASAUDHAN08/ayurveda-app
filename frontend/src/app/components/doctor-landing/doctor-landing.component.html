@@ -1,72 +1,69 @@
 <div class="bg-white min-h-screen">
     <!-- Hero Section with Auth Card -->
-    <div class="relative bg-slate-900 overflow-hidden min-h-screen flex items-center">
-        <div class="absolute inset-0">
-            <img class="w-full h-full object-cover opacity-10"
-                src="https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-                alt="Medical background">
-            <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900/50"></div>
-        </div>
+    <div
+        class="relative bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-100 overflow-hidden min-h-screen flex items-center">
 
         <div class="relative max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12">
             <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
                 <!-- Left Side: Hero Content -->
                 <main class="-mt-8 sm:-mt-4 md:-mt-2 lg:-mt-8 xl:-mt-12">
                     <div class="lg:text-left">
-                        <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl mb-6">
-                            Elevate Your Medical Practice with <span class="text-emerald-400">Digital Excellence</span>
+                        <h1
+                            class="text-3xl tracking-tight font-extrabold text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6">
+                            Elevate Your Medical Practice with <span class="text-emerald-600">Digital Excellence</span>
                         </h1>
-                        <p class="mt-4 text-xl text-slate-300 max-w-3xl">
+                        <p class="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-slate-700 max-w-3xl">
                             Join the premier network of healthcare professionals. Streamline appointments, manage
                             patient
                             records securely, and grow your practice with our comprehensive digital ecosystem.
                         </p>
 
                         <!-- Stats Banner -->
-                        <div class="mt-12 grid grid-cols-2 gap-8 md:grid-cols-4 border-t border-slate-700 pt-8">
+                        <div
+                            class="mt-8 sm:mt-12 grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 md:grid-cols-4 border-t border-slate-300 pt-6 sm:pt-8">
                             <div>
-                                <div class="text-3xl font-bold text-white">500+</div>
-                                <div class="text-sm text-slate-400 mt-1">Verified Doctors</div>
+                                <div class="text-3xl font-bold text-slate-900">500+</div>
+                                <div class="text-sm text-slate-600 mt-1">Verified Doctors</div>
                             </div>
                             <div>
-                                <div class="text-3xl font-bold text-white">10k+</div>
-                                <div class="text-sm text-slate-400 mt-1">Monthly Patients</div>
+                                <div class="text-3xl font-bold text-slate-900">10k+</div>
+                                <div class="text-sm text-slate-600 mt-1">Monthly Patients</div>
                             </div>
                             <div>
-                                <div class="text-3xl font-bold text-white">98%</div>
-                                <div class="text-sm text-slate-400 mt-1">Satisfaction Rate</div>
+                                <div class="text-3xl font-bold text-slate-900">98%</div>
+                                <div class="text-sm text-slate-600 mt-1">Satisfaction Rate</div>
                             </div>
                             <div>
-                                <div class="text-3xl font-bold text-white">24/7</div>
-                                <div class="text-sm text-slate-400 mt-1">Support Team</div>
+                                <div class="text-3xl font-bold text-slate-900">24/7</div>
+                                <div class="text-sm text-slate-600 mt-1">Support Team</div>
                             </div>
                         </div>
                     </div>
                 </main>
 
                 <!-- Right Side: Auth Card -->
-                <div class="mt-12 lg:mt-8 px-4 sm:px-6 lg:px-8 pb-8">
+                <div class="mt-8 lg:mt-8 px-4 sm:px-6 lg:px-8 pb-8">
                     <div class="w-full max-w-md mx-auto">
                         <!-- Tabs -->
-                        <div class="flex bg-transparent">
+                        <div class="flex gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                             <button (click)="switchTab('login')"
-                                class="flex-1 py-4 text-sm font-medium text-center focus:outline-none transition-all"
-                                [ngClass]="activeTab === 'login' ? 'text-emerald-400 bg-slate-800/40' : 'text-slate-400 hover:text-slate-200'">
+                                class="flex-1 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-center focus:outline-none transition-all rounded-lg sm:rounded-xl border"
+                                [ngClass]="activeTab === 'login' ? 'text-emerald-600 bg-white border-emerald-400 shadow-md shadow-emerald-500/20' : 'text-slate-600 hover:text-slate-900 bg-white/40 backdrop-blur-sm border-white/60 hover:border-white hover:shadow-sm'">
                                 Sign In
                             </button>
                             <button (click)="switchTab('register')"
-                                class="flex-1 py-4 text-sm font-medium text-center focus:outline-none transition-all"
-                                [ngClass]="activeTab === 'register' ? 'text-emerald-400 bg-slate-800/40' : 'text-slate-400 hover:text-slate-200'">
+                                class="flex-1 py-3 text-base font-semibold text-center focus:outline-none transition-all rounded-xl border"
+                                [ngClass]="activeTab === 'register' ? 'text-emerald-600 bg-white border-emerald-400 shadow-md shadow-emerald-500/20' : 'text-slate-600 hover:text-slate-900 bg-white/40 backdrop-blur-sm border-white/60 hover:border-white hover:shadow-sm'">
                                 Create Account
                             </button>
                         </div>
 
-                        <div class="p-8 min-h-[500px]">
+                        <div class="backdrop-blur-3xl rounded-2xl p-6 md:p-8 min-h-[500px]">
                             <!-- Login Form -->
                             <form *ngIf="activeTab === 'login'" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()"
                                 class="space-y-6">
                                 <div>
-                                    <label for="login-email" class="block text-sm font-medium text-slate-300">Email
+                                    <label for="login-email" class="block text-sm font-medium text-slate-900">Email
                                         Address</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <div
@@ -74,7 +71,8 @@
                                             <i class="fas fa-envelope text-slate-500"></i>
                                         </div>
                                         <input type="email" id="login-email" formControlName="email"
-                                            class="bg-slate-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-10 sm:text-sm border-slate-600 rounded-md py-3 text-white placeholder-slate-400"
+                                            [ngClass]="loginForm.get('email')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                            class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-10 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
                                             placeholder="doctor@example.com">
                                         <div *ngIf="loginForm.get('email')?.value"
                                             class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
@@ -88,7 +86,7 @@
 
                                 <div>
                                     <label for="login-password"
-                                        class="block text-sm font-medium text-slate-300">Password</label>
+                                        class="block text-sm font-medium text-slate-900">Password</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <div
                                             class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -96,7 +94,8 @@
                                         </div>
                                         <input [type]="showLoginPassword ? 'text' : 'password'" id="login-password"
                                             formControlName="password"
-                                            class="bg-slate-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-20 sm:text-sm border-slate-600 rounded-md py-3 text-white placeholder-slate-400"
+                                            [ngClass]="loginForm.get('password')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                            class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
                                             placeholder="••••••••">
                                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
                                             <i *ngIf="loginForm.get('password')?.value"
@@ -111,7 +110,7 @@
                                 </div>
 
                                 <button type="submit" [disabled]="loginForm.invalid || isLoading"
-                                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-900 bg-emerald-400 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                    class="w-full py-3.5 md:py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex justify-center">
                                     <span *ngIf="!isLoading">Sign In</span>
                                     <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin mr-2"></i> Signing
                                         in...</span>
@@ -122,7 +121,7 @@
                             <form *ngIf="activeTab === 'register'" [formGroup]="registerForm"
                                 (ngSubmit)="onRegisterSubmit()" class="space-y-4">
                                 <div>
-                                    <label for="reg-name" class="block text-sm font-medium text-slate-300">Full
+                                    <label for="reg-name" class="block text-sm font-medium text-slate-900">Full
                                         Name</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <div
@@ -130,7 +129,8 @@
                                             <i class="fas fa-user text-slate-500"></i>
                                         </div>
                                         <input type="text" id="reg-name" formControlName="name"
-                                            class="bg-slate-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-10 sm:text-sm border-slate-600 rounded-md py-3 text-white placeholder-slate-400"
+                                            [ngClass]="registerForm.get('name')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                            class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-10 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
                                             placeholder="Dr. John Doe">
                                         <div *ngIf="registerForm.get('name')?.value"
                                             class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
@@ -143,7 +143,7 @@
                                 </div>
 
                                 <div>
-                                    <label for="reg-email" class="block text-sm font-medium text-slate-300">Email
+                                    <label for="reg-email" class="block text-sm font-medium text-slate-900">Email
                                         Address</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <div
@@ -151,7 +151,8 @@
                                             <i class="fas fa-envelope text-slate-500"></i>
                                         </div>
                                         <input type="email" id="reg-email" formControlName="email"
-                                            class="bg-slate-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-10 sm:text-sm border-slate-600 rounded-md py-3 text-white placeholder-slate-400"
+                                            [ngClass]="registerForm.get('email')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                            class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-10 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
                                             placeholder="doctor@example.com">
                                         <div *ngIf="registerForm.get('email')?.value"
                                             class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
@@ -165,16 +166,18 @@
 
                                 <div>
                                     <label for="reg-password"
-                                        class="block text-sm font-medium text-slate-300">Password</label>
+                                        class="block text-sm font-medium text-slate-900">Password</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <div
                                             class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <i class="fas fa-lock text-slate-500"></i>
                                         </div>
                                         <input [type]="showRegisterPassword ? 'text' : 'password'" id="reg-password"
-                                            formControlName="password"
-                                            class="bg-slate-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-20 sm:text-sm border-slate-600 rounded-md py-3 text-white placeholder-slate-400"
-                                            placeholder="Min 6 chars">
+                                            formControlName="password" (focus)="isPasswordFocused = true"
+                                            (blur)="isPasswordFocused = false"
+                                            [ngClass]="registerForm.get('password')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                            class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
+                                            placeholder="Min 8 chars">
                                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
                                             <i *ngIf="registerForm.get('password')?.value"
                                                 class="fas fa-times-circle text-slate-500 hover:text-slate-300 cursor-pointer"
@@ -183,12 +186,18 @@
                                                 class="cursor-pointer" (click)="toggleRegisterPassword()"></i>
                                         </div>
                                     </div>
-                                    <p *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-                                        class="mt-1 text-xs text-red-400">Password is required (min 6 chars)</p>
+                                    <!-- Indicator -->
+                                    <div class="relative">
+                                        <app-password-strength-indicator
+                                            [password]="registerForm.get('password')?.value || ''"
+                                            [isFocused]="isPasswordFocused"
+                                            (validityChange)="onPasswordValidityChange($event)">
+                                        </app-password-strength-indicator>
+                                    </div>
                                 </div>
 
                                 <button type="submit" [disabled]="registerForm.invalid || isLoading"
-                                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-900 bg-emerald-400 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                    class="w-full py-3.5 md:py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex justify-center">
                                     <span *ngIf="!isLoading">Create Account</span>
                                     <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin mr-2"></i> Creating
                                         Account...</span>

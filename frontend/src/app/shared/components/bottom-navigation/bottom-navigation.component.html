@@ -1,21 +1,80 @@
 <!-- Only show on mobile/tablet -->
 <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-50 md:hidden safe-area-bottom">
     <div class="flex justify-around items-center h-16 px-2">
-        <a *ngFor="let item of navItems" [routerLink]="item.route" [class.text-emerald-600]="isActive(item.route)"
-            [class.text-slate-600]="!isActive(item.route)"
-            class="flex flex-col items-center justify-center flex-1 py-2 relative transition-colors">
-
+        <!-- Regular Nav Items -->
+        <a *ngFor="let item of navItems" [routerLink]="item.label !== 'Login' ? item.route : null"
+            (click)="item.label === 'Login' ? toggleLoginDropdown($event) : null"
+            [class.text-emerald-600]="isActive(item.route)" [class.text-slate-600]="!isActive(item.route)"
+            class="flex flex-col items-center justify-center flex-1 py-2 relative transition-colors cursor-pointer">
             <!-- Icon -->
             <i [class]="item.icon + ' text-xl'"></i>
-
             <!-- Label -->
             <span class="text-xs mt-1 font-medium">{{item.label}}</span>
-
             <!-- Badge (for cart, notifications, etc) -->
             <span *ngIf="item.badge && item.badge > 0"
                 class="absolute top-0 right-1/4 bg-red-500 text-white rounded-full min-w-[16px] h-4 flex items-center justify-center text-xs px-1">
                 {{item.badge > 99 ? '99+' : item.badge}}
             </span>
         </a>
+    </div>
+    <!-- Modern Login Dropdown (Opens Upward) -->
+    <div *ngIf="showLoginDropdown" class="fixed bottom-16 left-0 right-0 px-4 pb-2 z-50 animate-slide-up">
+
+        <!-- Backdrop blur overlay -->
+        <div (click)="showLoginDropdown = false" class="fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"></div>
+        <!-- Dropdown Card -->
+        <div
+            class="bg-gradient-to-br from-white/95 to-slate-50/95 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden max-w-sm mx-auto">
+
+            <!-- Header -->
+            <div class="px-4 py-3 bg-gradient-to-r from-emerald-500/10 to-blue-500/10">
+                <p class="text-xs font-semibold text-slate-600 text-center uppercase tracking-wider">
+                    Choose Login Type
+                </p>
+            </div>
+            <!-- Options Container -->
+            <div class="p-2">
+                <!-- User Login -->
+                <button (click)="navigateToLogin('user', $event)"
+                    class="w-full group mb-2 p-4 rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100/50 hover:from-emerald-100 hover:to-emerald-200/50 active:scale-[0.98] transition-all duration-200 flex items-center gap-4 shadow-sm hover:shadow-md">
+
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user text-white text-lg"></i>
+                    </div>
+
+                    <div class="flex-1 text-left">
+                        <h4 class="text-base font-bold text-slate-800">User Login</h4>
+                        <p class="text-xs text-slate-600 mt-0.5">For patients & customers</p>
+                    </div>
+
+                    <i
+                        class="fas fa-arrow-right text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                </button>
+                <!-- Doctor Login -->
+                <button (click)="navigateToLogin('doctor', $event)"
+                    class="w-full group p-4 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50 hover:from-blue-100 hover:to-blue-200/50 active:scale-[0.98] transition-all duration-200 flex items-center gap-4 shadow-sm hover:shadow-md">
+
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user-md text-white text-lg"></i>
+                    </div>
+
+                    <div class="flex-1 text-left">
+                        <h4 class="text-base font-bold text-slate-800">Doctor Login</h4>
+                        <p class="text-xs text-slate-600 mt-0.5">For healthcare providers</p>
+                    </div>
+
+                    <i
+                        class="fas fa-arrow-right text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                </button>
+            </div>
+            <!-- Footer Tip -->
+            <div class="px-4 py-2 bg-slate-50/50 border-t border-slate-100">
+                <p class="text-[10px] text-slate-500 text-center">
+                    Tap outside to close
+                </p>
+            </div>
+        </div>
     </div>
 </nav>

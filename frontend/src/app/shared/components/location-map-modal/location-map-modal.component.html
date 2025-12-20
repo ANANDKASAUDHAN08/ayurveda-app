@@ -1,0 +1,65 @@
+<!-- Modal Backdrop -->
+<div *ngIf="isOpen" class="fixed inset-0 z-50 overflow-y-auto">
+    <!-- Overlay -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" (click)="closeModal()"></div>
+
+    <!-- Modal Container - Made more compact -->
+    <div class="flex min-h-full items-center justify-center p-4">
+        <div class="relative w-full max-w-4xl bg-white rounded-lg shadow-xl max-h-[90vh] flex flex-col"
+            (click)="$event.stopPropagation()">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 flex-shrink-0">
+                <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2">
+                    <i class="fas fa-map-marked-alt text-emerald-600"></i>
+                    Select Your Location
+                </h3>
+                <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Map Container - Compact height -->
+            <div class="relative flex-shrink-0">
+                <div id="location-map" class="w-full h-[400px]"></div>
+
+                <!-- Detect Location Button Overlay -->
+                <button (click)="detectMyLocation()" [disabled]="isDetectingLocation"
+                    class="absolute top-3 right-3 bg-white hover:bg-gray-50 px-3 py-2 rounded-lg shadow-md border border-gray-200 text-xs font-medium text-gray-700 flex items-center gap-1.5 disabled:opacity-50">
+                    <i [class]="isDetectingLocation ? 'fas fa-spinner fa-spin' : 'fas fa-crosshairs'"
+                        class="text-emerald-600"></i>
+                    {{ isDetectingLocation ? 'Detecting...' : 'Use My Location' }}
+                </button>
+            </div>
+
+            <!-- Selected Location Info - More compact -->
+            <div class="px-4 py-2.5 border-t border-gray-200 bg-gray-50 flex-shrink-0">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-map-marker-alt text-emerald-600 text-sm"></i>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-medium text-gray-900 truncate" *ngIf="!isGeocoding">
+                            {{ selectedAddress }}
+                        </p>
+                        <p class="text-xs text-gray-500 italic" *ngIf="isGeocoding">
+                            <i class="fas fa-spinner fa-spin"></i> Getting address...
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Actions - More compact -->
+            <div class="flex items-center justify-end gap-2 px-4 py-3 border-t border-gray-200 flex-shrink-0">
+                <button (click)="closeModal()"
+                    class="px-4 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                    Cancel
+                </button>
+                <button (click)="confirmLocation()" [disabled]="isGeocoding"
+                    class="px-5 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
+                    <i class="fas fa-check"></i>
+                    Confirm Location
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -33,11 +33,15 @@ export class HospitalsComponent implements OnInit {
                 this.hospitals = response.hospitals || [];
                 this.filteredHospitals = [...this.hospitals];
                 this.calculatePopularSearches();
-                this.loading = false;
+                setTimeout(() => {
+                    this.loading = false;
+                }, 500);
             },
             error: (error) => {
                 console.error('Error loading hospitals:', error);
-                this.loading = false;
+                setTimeout(() => {
+                    this.loading = false;
+                }, 500);
             }
         });
     }

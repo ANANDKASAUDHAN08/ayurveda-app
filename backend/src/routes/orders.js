@@ -21,4 +21,10 @@ router.put('/:orderId/cancel', orderController.cancelOrder);
 // Update order status (admin only - future)
 router.put('/:orderId/status', orderController.updateOrderStatus);
 
+// Get order tracking info
+router.get('/:orderId/tracking', orderController.getOrderTracking);
+
+// Simulation route
+router.post('/:orderId/tracking/simulate', orderController.simulateDriverMovement);
+
 module.exports = router;

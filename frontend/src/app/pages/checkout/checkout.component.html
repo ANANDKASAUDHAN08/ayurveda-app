@@ -3,7 +3,7 @@
 
         <!-- Page Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Checkout</h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Checkout</h1>
             <p class="mt-2 text-sm text-gray-600">Complete your order</p>
         </div>
 
@@ -14,13 +14,14 @@
         </div>
 
         <!-- Checkout Form -->
-        <div *ngIf="!loading && cart" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div *ngIf="!loading && cart" class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
 
             <!-- Delivery Details Form -->
             <div class="lg:col-span-2">
-                <form [formGroup]="checkoutForm" (ngSubmit)="placeOrder()" class="bg-white rounded-lg shadow-sm p-6">
+                <form [formGroup]="checkoutForm" (ngSubmit)="placeOrder()"
+                    class="bg-white rounded-lg shadow-sm p-4 md:p-6">
 
-                    <h2 class="text-xl font-bold text-gray-900 mb-6">Delivery Details</h2>
+                    <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-4 md:mb-6">Delivery Details</h2>
 
                     <!-- Address -->
                     <div class="mb-4">
@@ -127,35 +128,35 @@
 
             <!-- Order Summary -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
+                <div class="bg-white rounded-lg shadow-sm p-3 md:p-6 md:sticky md:top-4">
+                    <h2 class="text-base md:text-xl font-bold text-gray-900 mb-3 md:mb-4">Order Summary</h2>
 
                     <!-- Items -->
                     <div class="space-y-3 mb-4">
-                        <div *ngFor="let item of cart.items" class="flex justify-between text-sm">
+                        <div *ngFor="let item of cart.items" class="flex justify-between text-xs md:text-sm">
                             <span class="text-gray-600">{{ item.product_name }} (×{{ item.quantity }})</span>
                             <span class="font-semibold">₹{{ item.total_price }}</span>
                         </div>
                     </div>
 
                     <div class="border-t border-gray-200 pt-4 space-y-2">
-                        <div class="flex justify-between text-sm">
+                        <div class="flex justify-between text-xs md:text-sm">
                             <span class="text-gray-600">Subtotal</span>
                             <span class="font-semibold">₹{{ subtotal.toFixed(2) }}</span>
                         </div>
-                        <div class="flex justify-between text-sm">
+                        <div class="flex justify-between text-xs md:text-sm">
                             <span class="text-gray-600">Tax (9%)</span>
                             <span class="font-semibold">₹{{ tax.toFixed(2) }}</span>
                         </div>
-                        <div class="flex justify-between text-sm">
+                        <div class="flex justify-between text-xs md:text-sm">
                             <span class="text-gray-600">Delivery Fee</span>
                             <span class="font-semibold" [class.text-green-600]="subtotal >= 500">
                                 {{ subtotal >= 500 ? 'FREE' : '₹50' }}
                             </span>
                         </div>
                         <div class="border-t border-gray-200 pt-2 flex justify-between">
-                            <span class="text-lg font-bold text-gray-900">Total</span>
-                            <span class="text-2xl font-bold text-emerald-600">₹{{ total.toFixed(2) }}</span>
+                            <span class="text-sm md:text-lg font-bold text-gray-900">Total</span>
+                            <span class="text-lg md:text-2xl font-bold text-emerald-600">₹{{ total.toFixed(2) }}</span>
                         </div>
                     </div>
 

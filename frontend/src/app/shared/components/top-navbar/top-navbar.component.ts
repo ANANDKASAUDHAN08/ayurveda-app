@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { SearchService } from '../../services/search.service';
+import { SnackbarService } from '../../services/snackbar.service';
 
 @Component({
   selector: 'app-top-navbar',
@@ -32,6 +33,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   showMobileSearch = false;
 
   profileMenuOpen: boolean = false;
+  loginDropdownOpen: boolean = false; // For login dropdown
 
   cartCount = 0;
   isLoggedIn = false;
@@ -49,7 +51,8 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     public router: Router,
     public authService: AuthService,
     private cartService: CartService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -121,6 +124,10 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     }
   }
 
+  toggleLoginDropdown() {
+    this.loginDropdownOpen = !this.loginDropdownOpen;
+  }
+
   onSearch() {
     if (this.searchQuery.trim()) {
       this.router.navigate(['/search'], { queryParams: { q: this.searchQuery } });
@@ -136,8 +143,9 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
         if (response.success) {
           this.popularSearches = response.data;
         }
-      },
-      error: (err) => console.error('Failed to load popular searches:', err)
+      }, error: (err) => {
+        this.snackbarService.show('Could not load popular searches', 'error');
+      }
     });
   }
 
@@ -164,7 +172,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          console.error('Suggestions error:', err);
+          // Silent failure - suggestions not critical
           this.suggestions = [];
         }
       });
@@ -284,10 +292,36 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     this.profileMenuOpen = false;
   }
 
+  navigateToSettings() {
+    const role = this.authService.getRole();
+    if (role === 'doctor') {
+      this.router.navigate(['/doctor/settings']);
+    } else {
+      this.router.navigate(['/user/settings']);
+    }
+    this.profileMenuOpen = false;
+  }
+
   logout() {
     this.authService.logout();
     this.clearUserData();
     this.profileMenuOpen = false;
     this.router.navigate(['/']);
+  }
+
+  // Close dropdowns when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+
+    // Close login dropdown if clicking outside
+    if (this.loginDropdownOpen && !target.closest('.login-dropdown-container')) {
+      this.loginDropdownOpen = false;
+    }
+
+    // Close profile menu if clicking outside  
+    if (this.profileMenuOpen && !target.closest('.profile-menu-container')) {
+      this.profileMenuOpen = false;
+    }
   }
 }

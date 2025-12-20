@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { LocationService } from './location.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthService {
     private authStatusSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
     public authStatus$ = this.authStatusSubject.asObservable();
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private locationService: LocationService) {
         // Listen for storage changes (manual token clearing or cross-tab logout)
         if (typeof window !== 'undefined') {
             window.addEventListener('storage', (event) => {
@@ -48,6 +49,9 @@ export class AuthService {
             tap((res: any) => {
                 this.setSession(res);
                 this.authStatusSubject.next(true);
+
+                // Auto-detect location on login
+                this.locationService.detectLocation();
             })
         );
     }
@@ -76,7 +80,6 @@ export class AuthService {
         try {
             return userStr ? JSON.parse(userStr) : null;
         } catch (e) {
-            console.error('Error parsing user from local storage', e);
             return null;
         }
     }

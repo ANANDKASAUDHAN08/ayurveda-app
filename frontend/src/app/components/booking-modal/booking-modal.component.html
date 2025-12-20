@@ -9,8 +9,8 @@
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" (click)="onClose()"></div>
 
         <!-- Modal -->
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-            <div class="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full"
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="relative bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all w-full max-w-md"
                 (click)="$event.stopPropagation()">
                 <ng-container *ngTemplateOutlet="modalContent"></ng-container>
             </div>
@@ -21,20 +21,24 @@
 <ng-template #modalContent>
     <div class="bg-white h-full flex flex-col">
         <!-- Header (Hidden in Inline Mode) -->
-        <div *ngIf="!isInline" class="bg-emerald-600 px-4 py-3 flex-shrink-0">
-            <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold text-white">
-                    Book Appointment
-                </h3>
-                <button (click)="onClose()" class="text-white hover:text-gray-200">
-                    <i class="fas fa-times text-lg"></i>
+        <div *ngIf="!isInline" class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-4 flex-shrink-0">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold text-white mb-1">
+                        Book Appointment
+                    </h3>
+                    <p class="text-emerald-100 text-sm">Dr. {{doctor?.name}}</p>
+                    <p class="text-emerald-200 text-xs mt-0.5">{{doctor?.specialty}}</p>
+                </div>
+                <button (click)="onClose()"
+                    class="ml-3 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times text-white text-sm"></i>
                 </button>
             </div>
-            <p class="text-emerald-100 text-xs mt-1">Dr. {{doctor?.name}} - {{doctor?.specialty}}</p>
         </div>
 
         <!-- Body -->
-        <div class="flex-1 overflow-y-auto" [class.px-4]="!isInline" [class.py-4]="!isInline">
+        <div class="flex-1 overflow-y-auto px-4 py-4 max-h-[65vh]">
             <!-- Error Message -->
             <div *ngIf="error" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                 <p class="text-red-700 text-xs">{{error}}</p>
@@ -44,18 +48,20 @@
             <div *ngIf="step === 'calendar'">
                 <div class="mb-4">
                     <!-- Month Navigation -->
-                    <div class="flex items-center justify-between mb-2">
-                        <button (click)="previousMonth()" class="p-1 hover:bg-gray-100 rounded-lg transition-colors">
-                            <i class="fas fa-chevron-left text-gray-600 text-sm"></i>
+                    <div class="flex items-center justify-between mb-3 bg-slate-50 rounded-xl p-2">
+                        <button (click)="previousMonth()"
+                            class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-lg transition-colors shadow-sm">
+                            <i class="fas fa-chevron-left text-emerald-600 text-sm"></i>
                         </button>
-                        <h4 class="text-sm font-semibold text-gray-900">{{currentMonthYear}}</h4>
-                        <button (click)="nextMonth()" class="p-1 hover:bg-gray-100 rounded-lg transition-colors">
-                            <i class="fas fa-chevron-right text-gray-600 text-sm"></i>
+                        <h4 class="text-sm font-bold text-slate-800">{{currentMonthYear}}</h4>
+                        <button (click)="nextMonth()"
+                            class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-lg transition-colors shadow-sm">
+                            <i class="fas fa-chevron-right text-emerald-600 text-sm"></i>
                         </button>
                     </div>
 
                     <!-- Calendar Grid -->
-                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <div class="border border-gray-200 rounded-xlg overflow-hidden shadow-sm">
                         <!-- Day Headers -->
                         <div class="grid grid-cols-7 bg-gray-50 border-b border-gray-200">
                             <div *ngFor="let dayName of dayNames"
@@ -68,13 +74,13 @@
                         <div class="grid grid-cols-7">
                             <button *ngFor="let day of calendarDays" (click)="selectDate(day)"
                                 [disabled]="day.isPast || !day.isCurrentMonth"
-                                class="h-10 w-full flex items-center justify-center border-r border-b border-gray-100 hover:bg-emerald-50 transition-colors relative"
-                                [class.bg-gray-50]="!day.isCurrentMonth"
-                                [class.text-gray-400]="!day.isCurrentMonth || day.isPast"
+                                class="h-11 w-full flex items-center justify-center border-r border-b border-slate-100 hover:bg-emerald-50 transition-all relative font-medium"
+                                [class.bg-slate-50]="!day.isCurrentMonth"
+                                [class.text-slate-400]="!day.isCurrentMonth || day.isPast"
                                 [class.cursor-not-allowed]="day.isPast || !day.isCurrentMonth"
                                 [class.bg-emerald-600]="day.isToday && day.isCurrentMonth && !day.isPast"
                                 [class.text-white]="day.isToday && day.isCurrentMonth && !day.isPast"
-                                [class.font-semibold]="day.isToday">
+                                [class.font-bold]="day.isToday" [class.shadow-inner]="day.isToday">
 
                                 <span class="text-sm">{{day.dayNumber}}</span>
 
@@ -114,15 +120,18 @@
                 </div>
 
                 <div *ngIf="!loading && availableSlots.length > 0"
-                    class="grid grid-cols-4 gap-2 max-h-80 overflow-y-auto">
+                    class="grid grid-cols-3 md:grid-cols-3 gap-3 max-h-[50vh] overflow-y-auto pr-1">
                     <button *ngFor="let slot of availableSlots" (click)="selectSlot(slot)"
-                        class="p-2 border-2 rounded transition-all hover:border-emerald-500 hover:bg-emerald-50 text-center"
+                        class="p-3 border-2 border-slate-200 rounded-xl transition-all hover:border-emerald-500 hover:bg-emerald-50 hover:shadow-md text-center active:scale-95"
                         [class.border-emerald-600]="selectedSlot?.id === slot.id"
-                        [class.bg-emerald-50]="selectedSlot?.id === slot.id">
-                        <div class="text-sm font-semibold text-gray-900">
+                        [class.bg-gradient-to-br]="selectedSlot?.id === slot.id"
+                        [class.from-emerald-50]="selectedSlot?.id === slot.id"
+                        [class.to-emerald-100]="selectedSlot?.id === slot.id"
+                        [class.shadow-md]="selectedSlot?.id === slot.id">
+                        <div class="text-sm font-bold text-slate-800">
                             {{formatTime(slot.start_time)}}
                         </div>
-                        <div class="text-xs text-gray-600 mt-1">
+                        <div class="text-xs text-slate-500 mt-0.5">
                             {{formatTime(slot.end_time)}}
                         </div>
                     </button>
@@ -174,7 +183,7 @@
                 </div>
 
                 <button (click)="confirmBooking()" [disabled]="loading"
-                    class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]">
                     <i *ngIf="loading" class="fas fa-spinner fa-spin mr-2"></i>
                     <i *ngIf="!loading" class="fas fa-check mr-2"></i>
                     {{loading ? 'Booking...' : 'Confirm Booking'}}

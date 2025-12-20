@@ -5,6 +5,7 @@ import { CartService, Cart, CartItem } from '../../shared/services/cart.service'
 import { Subscription } from 'rxjs';
 import { ConfirmationModalComponent } from '../../shared/components/confirmation-modal/confirmation-modal.component';
 import { SkeletonLoaderComponent } from '../../shared/components/skeleton-loader/skeleton-loader.component';
+import { SnackbarService } from 'src/app/shared/services/snackbar.service';
 
 @Component({
   selector: 'app-cart',
@@ -36,7 +37,8 @@ export class CartComponent implements OnInit, OnDestroy {
 
   constructor(
     private cartService: CartService,
-    private router: Router
+    private router: Router,
+    private snackbar: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -49,7 +51,7 @@ export class CartComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.error = 'Failed to load cart';
         this.loading = false;
-        console.error('Cart subscription error:', error);
+        this.snackbar.show('Failed to load cart', 'error');
       }
     });
 
@@ -74,7 +76,7 @@ export class CartComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.error = 'Failed to load cart';
         this.loading = false;
-        console.error('Cart error:', error);
+        this.snackbar.show('Failed to load cart', 'error');
       }
     });
   }
@@ -98,9 +100,10 @@ export class CartComponent implements OnInit, OnDestroy {
       next: () => {
         this.removingItemId = null;
         this.itemToRemove = null;
+        this.snackbar.show('Item removed from cart', 'success');
       },
       error: (error) => {
-        console.error('Remove error:', error);
+        this.snackbar.show('Failed to remove item', 'error');
         this.removingItemId = null;
         this.itemToRemove = null;
       }
@@ -129,9 +132,10 @@ export class CartComponent implements OnInit, OnDestroy {
     this.cartService.clearCart().subscribe({
       next: () => {
         this.clearingCart = false;
+        this.snackbar.show('Cart cleared successfully', 'success');
       },
       error: (error) => {
-        console.error('Clear error:', error);
+        this.snackbar.show('Failed to clear cart', 'error');
         this.clearingCart = false;
       }
     });
@@ -153,7 +157,7 @@ export class CartComponent implements OnInit, OnDestroy {
         this.updatingItemId = null;
       },
       error: (error) => {
-        console.error('Update error:', error);
+        this.snackbar.show('Failed to update quantity', 'error');
         this.updatingItemId = null;
       }
     });

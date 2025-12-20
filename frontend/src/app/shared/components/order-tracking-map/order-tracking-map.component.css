@@ -1,0 +1,12 @@
+@keyframes pulse-white {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+}
+
+.pulse-point {
+    animation: pulse-white 2s infinite;
+}
+
+#order-map canvas {
+    border-radius: 0.75rem;
+}

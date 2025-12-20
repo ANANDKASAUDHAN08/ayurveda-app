@@ -1,253 +1,461 @@
-<div class="fixed z-[60] inset-0 overflow-y-auto" aria-labelledby="modalTitle" role="dialog" aria-modal="true">
-    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm" aria-hidden="true"
-            (click)="onClose()"></div>
+<!-- Full-Width Modal Container -->
+<div class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-md animate-fadeIn" (click)="onClose()">
 
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+    <!-- DESKTOP: Split Screen Layout (100% width) -->
+    <div class="hidden md:flex h-full">
 
-        <!-- Modal Panel -->
-        <div
-            class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-7xl sm:w-full border border-white/20">
+        <!-- LEFT PANEL: Doctor Information (60%) -->
+        <div class="w-[60%] bg-white overflow-y-auto" (click)="$event.stopPropagation()">
 
-            <!-- Hero Header with Glass Effect -->
-            <div class="relative h-48 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600">
+            <!-- Hero Header -->
+            <div class="relative h-64 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600">
                 <div class="absolute inset-0 bg-pattern opacity-10"></div>
-                <!-- Close Button -->
-                <button (click)="onClose()"
-                    class="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-md border border-white/20 z-10">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+
+                <!-- Doctor Profile -->
+                <div class="absolute bottom-0 left-0 right-0 p-8">
+                    <div class="flex items-end gap-6">
+                        <!-- Profile Picture -->
+                        <div class="relative">
+                            <div
+                                class="w-32 h-32 rounded-2xl border-4 border-white shadow-2xl overflow-hidden bg-white">
+                                <img [src]="doctor.image || 'https://via.placeholder.com/150'" [alt]="doctor.name"
+                                    class="w-full h-full object-cover">
+                            </div>
+                            <!-- Verified Badge -->
+                            <div *ngIf="doctor.isVerified !== false" class="absolute -bottom-2 -right-2 w-10 h-10 bg-emerald-500 rounded-full 
+                                        flex items-center justify-center border-4 border-white shadow-lg">
+                                <i class="fas fa-check text-white text-sm"></i>
+                            </div>
+                        </div>
+
+                        <!-- Info -->
+                        <div class="flex-1 pb-2">
+                            <h1 class="text-3xl font-bold text-white mb-2">
+                                {{ doctor.name }}
+                            </h1>
+                            <p class="text-emerald-100 text-lg font-medium mb-3">
+                                {{ doctor.specialization }}
+                            </p>
+
+                            <!-- Quick Stats -->
+                            <div class="flex gap-4">
+                                <div class="flex items-center gap-2 text-white/90 text-sm">
+                                    <i class="fas fa-star text-amber-300"></i>
+                                    <span class="font-semibold">4.9</span>
+                                    <span class="text-white/70">(189 reviews)</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-white/90 text-sm">
+                                    <i class="fas fa-user-md"></i>
+                                    <span>{{ doctor.experience }}+ years</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-white/90 text-sm">
+                                    <i class="fas fa-users"></i>
+                                    <span>2000+ patients</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Content Container -->
-            <div class="px-6 sm:px-10 pb-10">
-                <!-- Profile Section (Overlap Hero) -->
-                <div class="relative -mt-20 flex flex-col md:flex-row md:items-end md:space-x-6 mb-8">
-                    <div class="relative group">
-                        <div
-                            class="h-32 w-32 md:h-40 md:w-40 rounded-2xl border-4 border-white shadow-xl overflow-hidden bg-white">
-                            <img [src]="doctor.image || 'https://via.placeholder.com/150'" alt="{{ doctor.name }}"
-                                class="h-full w-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <span *ngIf="doctor.isVerified !== false"
-                            class="absolute -bottom-2 -right-2 bg-emerald-500 text-white p-1.5 rounded-full border-4 border-white shadow-sm"
-                            title="Verified Doctor">
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                    d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                    </div>
+            <!-- Content Section -->
+            <div class="p-8 space-y-8">
 
-                    <div class="mt-4 md:mt-0 md:pb-2 flex-1">
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                <!-- Quick Actions Bar -->
+                <div class="flex gap-3 pb-6 border-b">
+                    <button
+                        class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-calendar-check"></i>
+                        Book Appointment
+                    </button>
+                    <button
+                        class="px-6 py-3 border-2 border-gray-200 hover:border-emerald-600 rounded-xl transition-all">
+                        <i class="far fa-heart text-rose-500"></i>
+                    </button>
+                    <button
+                        class="px-6 py-3 border-2 border-gray-200 hover:border-emerald-600 rounded-xl transition-all">
+                        <i class="fas fa-share-alt text-blue-500"></i>
+                    </button>
+                    <!-- FUTURE: Compare -->
+                    <button
+                        class="px-6 py-3 border-2 border-gray-200 hover:border-emerald-600 rounded-xl transition-all opacity-50 cursor-not-allowed"
+                        title="Coming Soon">
+                        <i class="fas fa-balance-scale text-purple-500"></i>
+                    </button>
+                </div>
+
+                <!-- About -->
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <div class="w-1 h-6 bg-emerald-500 rounded-full"></div>
+                        About the Doctor
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        {{ doctor.about || 'Dr. ' + doctor.name + ' is a highly experienced ' +
+                        doctor.specialization + ' specialist with over ' + doctor.experience +
+                        ' years of practice. Known for providing compassionate, personalized care with excellent patient
+                        outcomes.' }}
+                    </p>
+                </div>
+
+                <!-- Services & Specialties -->
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <div class="w-1 h-6 bg-blue-500 rounded-full"></div>
+                        Services & Specialties
+                    </h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex items-center gap-3 p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                            <i class="fas fa-video text-emerald-600 text-xl"></i>
                             <div>
-                                <h2 class="text-3xl font-bold text-gray-900">{{ doctor.name }}</h2>
-                                <p class="text-emerald-600 font-medium text-lg">{{ doctor.specialization }}</p>
+                                <p class="font-semibold text-sm">Video Consultation</p>
+                                <p class="text-xs text-gray-500">15-30 min session</p>
                             </div>
-                            <!-- Action Buttons -->
-                            <div class="mt-4 md:mt-0 flex space-x-3">
-                                <button
-                                    class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors shadow-sm flex items-center">
-                                    <i class="far fa-heart mr-2 text-rose-500"></i> Save
-                                </button>
-                                <button (click)="onBook()"
-                                    class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium transition-colors shadow-md transform hover:-translate-y-0.5">
-                                    Book Now
-                                </button>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl border border-blue-100">
+                            <i class="fas fa-hospital text-blue-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-sm">In-Clinic Visit</p>
+                                <p class="text-xs text-gray-500">Face-to-face</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Main Grid Layout -->
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-                    <!-- Left Column (Details) - Spans 8 cols -->
-                    <div class="md:col-span-8 space-y-8">
-
-                        <!-- Quick Stats Badges -->
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="bg-indigo-50 rounded-xl p-4 text-center border border-indigo-100">
-                                <div class="text-indigo-600 text-xl mb-1"><i class="fas fa-user-md"></i></div>
-                                <div class="font-bold text-gray-900">{{ doctor.experience }}+ Years</div>
-                                <div class="text-xs text-gray-500 uppercase tracking-wide">Experience</div>
+                <!-- Qualifications -->
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <div class="w-1 h-6 bg-amber-500 rounded-full"></div>
+                        Qualifications & Awards
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+                            <div
+                                class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-graduation-cap text-emerald-600"></i>
                             </div>
-                            <div class="bg-amber-50 rounded-xl p-4 text-center border border-amber-100">
-                                <div class="text-amber-500 text-xl mb-1"><i class="fas fa-star"></i></div>
-                                <div class="font-bold text-gray-900">4.9/5</div>
-                                <div class="text-xs text-gray-500 uppercase tracking-wide">Rating</div>
-                            </div>
-                            <div class="bg-rose-50 rounded-xl p-4 text-center border border-rose-100">
-                                <div class="text-rose-500 text-xl mb-1"><i class="fas fa-users"></i></div>
-                                <div class="font-bold text-gray-900">2000+</div>
-                                <div class="text-xs text-gray-500 uppercase tracking-wide">Patients</div>
+                            <div>
+                                <p class="font-semibold text-gray-900">{{ doctor.qualifications || 'BAMS - Ayurvedic
+                                    Medicine' }}</p>
+                                <p class="text-sm text-gray-500">Primary Degree</p>
                             </div>
                         </div>
-
-                        <!-- Info Grid (Video + About) -->
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <!-- Video Intro Stub -->
+                        <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
                             <div
-                                class="relative rounded-2xl overflow-hidden bg-gray-900 aspect-video group cursor-pointer h-full min-h-[200px]">
-                                <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
-                                    class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <div
-                                        class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/50 group-hover:scale-110 transition-transform">
-                                        <i class="fas fa-play text-white text-2xl ml-1"></i>
-                                    </div>
-                                </div>
-                                <div class="absolute bottom-4 left-4 text-white">
-                                    <p class="font-bold text-lg">Meet Dr. {{ doctor.name.split(' ')[1] }}</p>
-                                    <p class="text-sm opacity-80">Video Introduction • 1:30 min</p>
-                                </div>
-                                <div
-                                    class="absolute top-4 right-4 bg-black/50 backdrop-blur px-3 py-1 rounded-full text-white/90 text-xs font-bold uppercase tracking-wider">
-                                    Coming Soon
-                                </div>
+                                class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-award text-amber-600"></i>
                             </div>
-
-                            <!-- About Section -->
-                            <div class="flex flex-col h-full">
-                                <h3 class="text-lg font-bold text-gray-900 mb-3 border-l-4 border-emerald-500 pl-3">
-                                    About
-                                    the Doctor</h3>
-                                <p class="text-gray-600 leading-relaxed text-sm flex-1">
-                                    {{ doctor.about || 'Dr. ' + doctor.name + ' represents the pinnacle of ' +
-                                    doctor.specialization +
-                                    ' care. With over ' + doctor.experience + ' years of dedicated practice, they have
-                                    helped thousands of patients achieve better health through holistic and personalized
-                                    treatment plans.' }}
+                            <div>
+                                <p class="font-semibold text-gray-900">Best {{ doctor.specialization }} Specialist 2023
                                 </p>
+                                <p class="text-sm text-gray-500">City Health Awards</p>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Qualifications -->
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-900 mb-3 border-l-4 border-emerald-500 pl-3">
-                                Qualifications & Awards</h3>
-                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <li class="flex items-start">
-                                    <i class="fas fa-graduation-cap text-emerald-500 mt-1 mr-3"></i>
-                                    <span class="text-gray-700 text-sm">{{ doctor.qualifications || 'BAMS - Bachelor of
-                                        Ayurvedic Medicine and Surgery' }}</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-award text-amber-500 mt-1 mr-3"></i>
-                                    <span class="text-gray-700 text-sm">Best {{ doctor.specialization }} Specialist 2023
-                                        - City
-                                        Health Awards</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-certificate text-blue-500 mt-1 mr-3"></i>
-                                    <span class="text-gray-700 text-sm">Certified Holistic Practitioner - International
-                                        Board</span>
-                                </li>
-                            </ul>
+                <!-- Reviews Section -->
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <div class="w-1 h-6 bg-purple-500 rounded-full"></div>
+                        Patient Reviews
+                        <span class="ml-auto text-sm font-normal text-gray-500">4.9/5 • 189 reviews</span>
+                    </h2>
+
+                    <!-- Rating Bars -->
+                    <div class="bg-amber-50 rounded-2xl p-6 mb-4">
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm font-medium w-16">5 Stars</span>
+                                <div class="flex-1 h-3 bg-amber-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-amber-400 to-orange-400 w-[85%]"></div>
+                                </div>
+                                <span class="text-sm font-bold w-12 text-right">85%</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm font-medium w-16">4 Stars</span>
+                                <div class="flex-1 h-3 bg-amber-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-amber-400 to-orange-400 w-[10%]"></div>
+                                </div>
+                                <span class="text-sm font-bold w-12 text-right">10%</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Right Column (Sidebar) - Spans 4 cols -->
-                    <div class="md:col-span-4 space-y-6">
+                    <!-- FUTURE: Review Cards -->
+                    <div class="text-center py-8 border-2 border-dashed border-gray-200 rounded-xl">
+                        <i class="fas fa-comments text-4xl text-gray-300 mb-3"></i>
+                        <p class="text-gray-500 text-sm">Detailed reviews coming soon</p>
+                    </div>
+                </div>
 
-                        <!-- Default Sidebar Content (Fee, Languages, etc.) -->
-                        <div *ngIf="!showBooking" class="space-y-6 animate-fadeIn">
-                            <!-- Fee & Mode Card -->
-                            <div class="bg-gray-50 rounded-2xl p-6 border border-gray-200">
-                                <h4 class="font-bold text-gray-900 mb-4">Consultation Details</h4>
-                                <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
-                                    <span class="text-gray-600">Consultation Fee</span>
-                                    <span class="text-xl font-bold text-emerald-600">₹{{ doctor.consultationFee
-                                        }}</span>
-                                </div>
-                                <div class="space-y-3">
-                                    <div class="flex items-center text-sm text-gray-700">
-                                        <div
-                                            class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center mr-3 text-emerald-600">
-                                            <i class="fas fa-video"></i>
-                                        </div>
-                                        <span>Video Consultation</span>
-                                        <i class="fas fa-check-circle text-emerald-500 ml-auto"></i>
-                                    </div>
-                                    <div class="flex items-center text-sm text-gray-700">
-                                        <div
-                                            class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3 text-blue-600">
-                                            <i class="fas fa-hospital"></i>
-                                        </div>
-                                        <span>In-Clinic Visit</span>
-                                        <i class="fas fa-check-circle text-emerald-500 ml-auto"></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Languages -->
-                            <div>
-                                <h4 class="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">Languages
-                                    Spoken
-                                </h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <span *ngFor="let lang of getLanguages()"
-                                        class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm font-medium">
-                                        {{ lang }}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Reviews Stub -->
-                            <div class="bg-amber-50 rounded-2xl p-6 border border-amber-100">
-                                <div class="flex items-center justify-between mb-4">
-                                    <h4 class="font-bold text-gray-900">Patient Reviews</h4>
-                                    <span
-                                        class="bg-white px-2 py-1 rounded text-xs font-bold text-amber-500 shadow-sm">4.9</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex items-center text-xs">
-                                        <span class="w-12 text-gray-500">5 Star</span>
-                                        <div class="flex-1 h-2 bg-amber-100 rounded-full mx-2 overflow-hidden">
-                                            <div class="h-full bg-amber-400 w-[85%]"></div>
-                                        </div>
-                                        <span class="text-gray-700 font-medium">85%</span>
-                                    </div>
-                                    <div class="flex items-center text-xs">
-                                        <span class="w-12 text-gray-500">4 Star</span>
-                                        <div class="flex-1 h-2 bg-amber-100 rounded-full mx-2 overflow-hidden">
-                                            <div class="h-full bg-amber-400 w-[10%]"></div>
-                                        </div>
-                                        <span class="text-gray-700 font-medium">10%</span>
-                                    </div>
-                                </div>
-                                <button class="w-full mt-4 text-amber-600 text-sm font-bold hover:underline">Read All
-                                    Reviews</button>
-                            </div>
-                        </div>
-
-                        <!-- Embedded Booking View -->
-                        <div *ngIf="showBooking"
-                            class="bg-white rounded-2xl shadow-lg border border-emerald-100 overflow-hidden animate-fadeIn">
+                <!-- FUTURE: Video Introduction -->
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <div class="w-1 h-6 bg-red-500 rounded-full"></div>
+                        Video Introduction
+                    </h2>
+                    <div class="relative aspect-video bg-gray-900 rounded-2xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800"
+                            class="w-full h-full object-cover opacity-40">
+                        <div class="absolute inset-0 flex items-center justify-center">
                             <div
-                                class="p-4 bg-emerald-50 flex items-center justify-between border-b border-emerald-100">
-                                <h4 class="font-bold text-emerald-900 flex items-center">
-                                    <i class="fas fa-calendar-alt mr-2"></i> Book Appointment
-                                </h4>
-                                <button (click)="closeBooking()"
-                                    class="text-emerald-700 hover:text-emerald-900 text-sm font-medium">
-                                    <i class="fas fa-times"></i> Cancel
-                                </button>
-                            </div>
-                            <div class="p-4">
-                                <app-booking-modal [doctor]="doctor" [isOpen]="true" [isInline]="true"
-                                    (close)="closeBooking()" (bookingConfirmed)="closeBooking()">
-                                </app-booking-modal>
+                                class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-white text-2xl ml-1"></i>
                             </div>
                         </div>
-
+                        <div
+                            class="absolute top-4 right-4 px-3 py-1 bg-black/60 backdrop-blur-sm text-white text-xs font-bold rounded-full">
+                            Coming Soon
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- RIGHT PANEL: Booking Section (40%) -->
+        <div class="w-[40%] bg-gray-50 overflow-y-auto border-l border-gray-200" (click)="$event.stopPropagation()">
+
+            <!-- Sticky Header -->
+            <div class="sticky top-0 z-10 bg-white border-b border-gray-200 p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Consultation Fee</p>
+                        <p class="text-3xl font-bold text-emerald-600">₹{{ doctor.consultationFee }}</p>
+                    </div>
+                    <button (click)="onClose()"
+                        class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-all">
+                        <i class="fas fa-times text-gray-600"></i>
+                    </button>
+                </div>
+
+                <!-- Languages -->
+                <div class="flex flex-wrap gap-2">
+                    <span *ngFor="let lang of getLanguages()"
+                        class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                        {{ lang }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Booking Content -->
+            <div class="p-6 space-y-6">
+
+                <!-- FUTURE: Calendar Picker -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-4">Select Date & Time</h3>
+                    <div class="bg-white rounded-2xl p-6 border-2 border-dashed border-gray-200">
+                        <div class="text-center">
+                            <i class="fas fa-calendar-alt text-4xl text-gray-300 mb-3"></i>
+                            <p class="text-gray-500 text-sm">Interactive calendar</p>
+                            <p class="text-gray-400 text-xs">Coming soon</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Time Slots (Static for now) -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-3">Available Today</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button
+                            class="py-3 border-2 border-emerald-500 bg-emerald-50 text-emerald-700 rounded-xl font-semibold">
+                            10:00 AM
+                        </button>
+                        <button class="py-3 border border-gray-200 hover:border-emerald-500 rounded-xl">
+                            11:30 AM
+                        </button>
+                        <button class="py-3 border border-gray-200 hover:border-emerald-500 rounded-xl">
+                            02:00 PM
+                        </button>
+                        <button class="py-3 border border-gray-200 hover:border-emerald-500 rounded-xl">
+                            04:30 PM
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Consultation Type -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-3">Consultation Type</h3>
+                    <div class="space-y-2">
+                        <label
+                            class="flex items-center gap-3 p-4 border-2 border-emerald-500 bg-emerald-50 rounded-xl cursor-pointer">
+                            <input type="radio" name="consultation" checked class="w-5 h-5 text-emerald-600">
+                            <div class="flex-1">
+                                <p class="font-semibold text-emerald-900">Video Call</p>
+                                <p class="text-xs text-emerald-600">15-30 min session</p>
+                            </div>
+                            <i class="fas fa-video text-emerald-600"></i>
+                        </label>
+                        <label
+                            class="flex items-center gap-3 p-4 border border-gray-200 hover:border-blue-500 rounded-xl cursor-pointer">
+                            <input type="radio" name="consultation" class="w-5 h-5 text-blue-600">
+                            <div class="flex-1">
+                                <p class="font-semibold">In-Clinic Visit</p>
+                                <p class="text-xs text-gray-500">Face-to-face consultation</p>
+                            </div>
+                            <i class="fas fa-hospital text-blue-500"></i>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- FUTURE: Quick Chat -->
+                <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fas fa-comment-medical text-purple-600 text-xl"></i>
+                        <h4 class="font-bold text-purple-900">Quick Question?</h4>
+                    </div>
+                    <p class="text-sm text-purple-700 mb-3">Chat with doctor before booking</p>
+                    <button
+                        class="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold text-sm opacity-50 cursor-not-allowed">
+                        Start Chat (Coming Soon)
+                    </button>
+                </div>
+
+                <!-- CTA Button -->
+                <button (click)="onBook()" class="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 
+                               text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl 
+                               transform hover:scale-105 transition-all">
+                    Confirm Booking
+                </button>
+
+                <!-- Trust Indicators -->
+                <div class="text-center space-y-2 pt-4 border-t">
+                    <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                        <i class="fas fa-shield-alt text-emerald-600"></i>
+                        <span>100% Safe & Secure</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                        <i class="fas fa-undo text-blue-600"></i>
+                        <span>Free Cancellation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE: Clean Compact Bottom Sheet -->
+    <div class="md:hidden fixed inset-x-0 bottom-0 w-full max-h-[85vh] bg-white rounded-t-3xl shadow-2xl animate-slideUp overflow-y-auto"
+        (click)="$event.stopPropagation()">
+        <!-- Drag Handle -->
+        <div class="flex justify-center pt-2 pb-1">
+            <div class="w-10 h-1 bg-gray-300 rounded-full"></div>
+        </div>
+        <!-- Compact Header (Horizontal Layout) -->
+        <div class="px-4 py-3 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+                <button (click)="onClose()" class="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0">
+                    <i class="fas fa-chevron-down text-gray-600"></i>
+                </button>
+                <!-- Small Profile Image -->
+                <div class="w-12 h-12 rounded-xl overflow-hidden border border-gray-200 flex-shrink-0">
+                    <img [src]="doctor.image || 'https://via.placeholder.com/150'" [alt]="doctor.name"
+                        class="w-full h-full object-cover">
+                </div>
+                <!-- Compact Info -->
+                <div class="flex-1 min-w-0">
+                    <h2 class="text-sm font-bold text-gray-900 truncate leading-tight">{{ doctor.name }}</h2>
+                    <p class="text-xs text-gray-600 truncate">{{ doctor.specialization }}</p>
+                </div>
+                <!-- Fee (Right Aligned) -->
+                <div class="text-right flex-shrink-0">
+                    <p class="text-xs text-gray-500">Fee</p>
+                    <p class="text-lg font-bold text-emerald-600">₹{{ doctor.consultationFee }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Content - Compact Spacing -->
+        <div class="px-4 py-4 space-y-4 pb-24">
+            <!-- Inline Stats -->
+            <div class="flex items-center justify-between text-xs bg-gray-50 rounded-lg p-3">
+                <div class="flex items-center gap-1.5">
+                    <i class="fas fa-star text-amber-500"></i>
+                    <span class="font-semibold">4.9</span>
+                    <span class="text-gray-500">(189)</span>
+                </div>
+                <div class="h-4 w-px bg-gray-300"></div>
+                <div class="text-gray-600">{{ doctor.experience }}+ years</div>
+                <div class="h-4 w-px bg-gray-300"></div>
+                <div class="text-gray-600">2000+ patients</div>
+            </div>
+            <!-- Consultation Types (Compact Grid) -->
+            <div class="grid grid-cols-2 gap-2">
+                <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
+                    <i class="fas fa-video text-emerald-600 text-lg mb-1"></i>
+                    <p class="text-xs font-semibold text-gray-900">Video Call</p>
+                </div>
+                <div class="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <i class="fas fa-hospital text-blue-600 text-lg mb-1"></i>
+                    <p class="text-xs font-semibold text-gray-900">In-Clinic</p>
+                </div>
+            </div>
+            <!-- About (Collapsed by default) -->
+            <div>
+                <h3 class="text-sm font-bold text-gray-900 mb-2">About</h3>
+                <p class="text-xs text-gray-600 leading-relaxed line-clamp-3">
+                    {{ doctor.about || 'Dr. ' + doctor.name + ' is a highly experienced ' +
+                    doctor.specialization + ' specialist with ' + doctor.experience +
+                    '+ years of practice.' }}
+                </p>
+            </div>
+            <!-- Languages (Compact Pills) -->
+            <div>
+                <h3 class="text-sm font-bold text-gray-900 mb-2">Languages</h3>
+                <div class="flex flex-wrap gap-1.5">
+                    <span *ngFor="let lang of getLanguages()"
+                        class="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                        {{ lang }}
+                    </span>
+                </div>
+            </div>
+            <!-- Qualifications (Compact) -->
+            <div>
+                <h3 class="text-sm font-bold text-gray-900 mb-2">Qualifications</h3>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-xs">
+                        <div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-graduation-cap text-emerald-600 text-xs"></i>
+                        </div>
+                        <span class="text-gray-700">{{ doctor.qualifications || 'BAMS' }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs">
+                        <div class="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-award text-amber-600 text-xs"></i>
+                        </div>
+                        <span class="text-gray-700">Best Specialist 2023</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Reviews (Compact) -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-sm font-bold text-gray-900">Reviews</h3>
+                    <span class="text-amber-600 font-bold text-sm">4.9 ⭐</span>
+                </div>
+                <div class="bg-amber-50 rounded-lg p-3 space-y-1.5">
+                    <div class="flex items-center gap-2 text-xs">
+                        <span class="w-12 text-gray-600">5 Star</span>
+                        <div class="flex-1 h-1.5 bg-amber-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-amber-400 w-[85%]"></div>
+                        </div>
+                        <span class="w-8 text-right font-medium">85%</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs">
+                        <span class="w-12 text-gray-600">4 Star</span>
+                        <div class="flex-1 h-1.5 bg-amber-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-amber-400 w-[10%]"></div>
+                        </div>
+                        <span class="w-8 text-right font-medium">10%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Sticky Bottom CTA -->
+        <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-2xl md:hidden">
+            <button (click)="onBook()" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700
+                           text-white rounded-xl font-semibold shadow-lg transition-all">
+                <i class="fas fa-calendar-check mr-2"></i>
+                Book Appointment
+            </button>
         </div>
     </div>
 </div>

@@ -1,0 +1,136 @@
+<div class="min-h-screen bg-slate-50">
+    <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
+        <!-- Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16 md:mb-24">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6">Get in Touch</h1>
+            <p class="text-xl text-slate-600">
+                Have questions about our services? Our team is here to help you 24/7.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <!-- Contact Info -->
+            <div class="space-y-12">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div
+                        class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm transition-all hover:shadow-xl group">
+                        <div
+                            class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110">
+                            <i class="fas fa-envelope text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Email Us</h3>
+                        <p class="text-slate-500 text-sm mb-4">Our support team usually responds within 2 hours.</p>
+                        <a href="mailto:support@healthconnect.io"
+                            class="text-emerald-600 font-extrabold hover:underline">
+                            support&#64;healthconnect.io
+                        </a>
+                    </div>
+                    <div
+                        class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm transition-all hover:shadow-xl group">
+                        <div
+                            class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110">
+                            <i class="fas fa-phone-alt text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Call Us</h3>
+                        <p class="text-slate-500 text-sm mb-4">Speak directly with our healthcare consultants.</p>
+                        <a href="tel:+911800123456" class="text-blue-600 font-extrabold hover:underline">
+                            +91 1800 123 456
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-3xl p-8 md:p-12 text-white relative overflow-hidden">
+                    <div
+                        class="absolute bottom-0 right-0 w-64 h-64 bg-emerald-500 opacity-10 rounded-full blur-3xl -mr-32 -mb-32">
+                    </div>
+                    <h3 class="text-2xl font-bold mb-6">Regional Offices</h3>
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="text-emerald-400 font-bold mb-2">Bangalore (HQ)</h4>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                4th Floor, Tech Hub, Koramangala,<br>
+                                Bangalore, Karnataka - 560034
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="text-emerald-400 font-bold mb-2">Mumbai</h4>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                Suite 201, Marine Drive Plaza,<br>
+                                Mumbai, Maharashtra - 400020
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="bg-white p-8 md:p-12 rounded-[40px] border border-slate-200 shadow-2xl">
+                <h2 class="text-2xl font-bold text-slate-900 mb-8">Send us a Message</h2>
+
+                <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Your Name</label>
+                            <input type="text" formControlName="name"
+                                class="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 transition-all outline-none bg-slate-50 placeholder-slate-400"
+                                placeholder="Enter your full name">
+                            <div *ngIf="contactForm.get('name')?.touched && contactForm.get('name')?.invalid"
+                                class="text-red-500 text-xs font-bold mt-1 ml-1">
+                                Name is required
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
+                            <input type="email" formControlName="email"
+                                class="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 transition-all outline-none bg-slate-50 placeholder-slate-400"
+                                placeholder="name@example.com">
+                            <div *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.invalid"
+                                class="text-red-500 text-xs font-bold mt-1 ml-1">
+                                Valid email is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Subject</label>
+                        <select formControlName="subject"
+                            class="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 transition-all outline-none bg-slate-50 appearance-none">
+                            <option value="">Select a subject</option>
+                            <option value="General Inquiry">General Inquiry</option>
+                            <option value="Appointment Support">Appointment Support</option>
+                            <option value="Order Tracking">Order Tracking</option>
+                            <option value="Technical Issue">Technical Issue</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Message</label>
+                        <textarea formControlName="message" rows="5"
+                            class="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 transition-all outline-none bg-slate-50 placeholder-slate-400"
+                            placeholder="How can we help you?"></textarea>
+                        <div *ngIf="contactForm.get('message')?.touched && contactForm.get('message')?.invalid"
+                            class="text-red-500 text-xs font-bold mt-1 ml-1">
+                            Message must be at least 10 characters
+                        </div>
+                    </div>
+
+                    <button type="submit" [disabled]="contactForm.invalid || isSubmitting"
+                        class="w-full py-5 rounded-2xl font-extrabold text-white transition-all transform active:scale-[0.98] shadow-lg shadow-emerald-100 flex items-center justify-center gap-3"
+                        [class.bg-emerald-600]="contactForm.valid" [class.hover:bg-emerald-700]="contactForm.valid"
+                        [class.bg-slate-300]="contactForm.invalid" [class.cursor-not-allowed]="contactForm.invalid">
+                        <span *ngIf="!isSubmitting">Send Message</span>
+                        <i *ngIf="isSubmitting" class="fas fa-spinner fa-spin"></i>
+                        <i *ngIf="!isSubmitting" class="fas fa-paper-plane"></i>
+                    </button>
+
+                    <!-- Success Message -->
+                    <div *ngIf="submitSuccess"
+                        class="p-4 bg-emerald-100 text-emerald-700 rounded-2xl text-center font-bold animate-in fade-in slide-in-from-top-2">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Your message has been sent successfully!
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

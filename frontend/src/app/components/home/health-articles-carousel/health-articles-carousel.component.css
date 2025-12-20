@@ -33,3 +33,19 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+@media (max-width: 640px) {
+    .carousel-wrapper {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        transform: none !important;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+    }
+
+    .doctor-card,
+    .article-card {
+        scroll-snap-align: start;
+    }
+}

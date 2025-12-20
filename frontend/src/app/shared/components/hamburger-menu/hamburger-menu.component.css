@@ -12,3 +12,19 @@
 a:active {
     transform: scale(0.98);
 }
+
+/* Smooth rotation for chevron */
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+/* Smooth transitions */
+button {
+    transition: all 0.2s ease;
+}
+
+/* Prevent dropdown from going outside burger */
+.px-4 {
+    position: relative;
+    z-index: 1;
+}

@@ -1,0 +1,116 @@
+<div class="min-h-screen bg-white">
+    <!-- Hero Section -->
+    <section class="relative py-20 bg-slate-50 overflow-hidden">
+        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span
+                        class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 rounded-full text-sm font-bold mb-6">
+                        OUR STORY
+                    </span>
+                    <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+                        Revolutionizing <span class="text-emerald-600">Healthcare</span> Delivery in India
+                    </h1>
+                    <p class="text-xl text-slate-600 mb-8 leading-relaxed">
+                        HealthConnect is more than just an app. It's a comprehensive healthcare ecosystem designed to
+                        bridge the gap between patients and quality medical care.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div *ngFor="let stat of stats"
+                            class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex-1 min-w-[140px]">
+                            <div class="text-2xl font-extrabold text-emerald-600">{{ stat.value }}</div>
+                            <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">{{ stat.label }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute -inset-4 bg-emerald-500/10 rounded-full blur-3xl"></div>
+                    <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                        alt="Doctors collaborating"
+                        class="rounded-3xl shadow-2xl relative z-10 w-full h-[500px] object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision -->
+    <section class="py-24 bg-white">
+        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="max-w-3xl mx-auto mb-20">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Empowering Every Indian with Better
+                    Health</h2>
+                <div class="h-1.5 w-20 bg-emerald-500 mx-auto rounded-full mb-8"></div>
+                <p class="text-lg text-slate-600">
+                    Our mission is to build a reliable healthcare infrastructure that leverages technology to provide
+                    instant access to doctors, medicines, and diagnostics across every corner of the country.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div *ngFor="let val of values"
+                    class="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-xl transition-all">
+                    <div
+                        class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-md text-emerald-600">
+                        <i [class]="val.icon" class="text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">{{ val.title }}</h3>
+                    <p class="text-slate-600">{{ val.description }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-24 bg-slate-900 text-white overflow-hidden">
+        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16">Our Journey So Far</h2>
+
+            <div class="relative">
+                <!-- Vertical Line -->
+                <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 bg-emerald-500/30 hidden md:block">
+                </div>
+
+                <div class="space-y-12 relative">
+                    <div *ngFor="let item of milestones; let i = index"
+                        class="flex flex-col md:flex-row items-center gap-8 md:gap-0"
+                        [class.md:flex-row-reverse]="i % 2 !== 0">
+
+                        <!-- Content -->
+                        <div class="flex-1 md:w-1/2 px-4 md:px-12 text-center" [class.md:text-right]="i % 2 === 0"
+                            [class.md:text-left]="i % 2 !== 0">
+                            <span class="text-emerald-500 font-extrabold text-lg mb-2 block">{{ item.year }}</span>
+                            <h4 class="text-2xl font-bold mb-4">{{ item.title }}</h4>
+                            <p class="text-slate-400 leading-relaxed">{{ item.description }}</p>
+                        </div>
+
+                        <!-- Dot -->
+                        <div
+                            class="w-12 h-12 rounded-full bg-emerald-500 border-8 border-slate-900 z-10 hidden md:flex items-center justify-center">
+                            <i class="fas fa-check text-[10px] text-white"></i>
+                        </div>
+
+                        <!-- Spacer -->
+                        <div class="flex-1 md:w-1/2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team CTA -->
+    <section class="py-24 bg-emerald-50">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Inspired by our vision?</h2>
+            <p class="text-lg text-slate-600 mb-10">
+                We are always looking for passionate people who want to disrupt the healthcare space and make a
+                difference.
+            </p>
+            <a routerLink="/career"
+                class="inline-flex items-center gap-3 px-10 py-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-lg shadow-xl shadow-emerald-200 transition-all transform hover:-translate-y-1 active:scale-95">
+                Apply for Roles
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+</div>

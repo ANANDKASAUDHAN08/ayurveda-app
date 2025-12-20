@@ -1,38 +1,39 @@
 <div class="bg-gray-50 min-h-screen">
     <!-- Hero Section with Auth Card -->
     <div
-        class="relative overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 min-h-screen flex items-center">
+        class="relative overflow-hidden bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-100 min-h-screen flex items-center">
         <div class="max-w-7xl mx-auto w-full">
             <div class="relative py-12">
                 <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
                     <!-- Left Side: Hero Content -->
                     <main class="-mt-8 mx-auto max-w-7xl px-4 sm:-mt-4 sm:px-6 md:-mt-2 lg:-mt-8 lg:px-8 xl:-mt-12">
                         <div class="sm:text-center lg:text-left">
-                            <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
+                            <h1
+                                class="text-3xl tracking-tight font-extrabold text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
                                 <span class="block xl:inline">Your Health Journey</span>
-                                <span class="block text-emerald-400">Starts Here</span>
+                                <span class="block text-emerald-600">Starts Here</span>
                             </h1>
                             <p
-                                class="mt-3 text-base text-gray-300 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                                class="mt-3 text-sm text-slate-700 sm:mt-5 sm:text-base md:text-lg sm:max-w-xl sm:mx-auto md:mt-5 lg:text-xl lg:mx-0">
                                 Find the perfect doctor for your needs. Book appointments, consult online, and manage
                                 your health records - all in one place.
                             </p>
 
                             <!-- Popular Specialties -->
                             <div class="mt-8">
-                                <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">Popular
+                                <h3 class="text-sm font-semibold text-slate-600 tracking-wider uppercase mb-4">Popular
                                     Specialties</h3>
                                 <div class="flex flex-wrap gap-3">
                                     <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-900/30 text-emerald-400 border border-emerald-700/50">
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 text-emerald-700">
                                         <i class="fas fa-leaf mr-2"></i> Ayurveda
                                     </span>
                                     <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-900/30 text-red-400 border border-red-700/50">
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">
                                         <i class="fas fa-heartbeat mr-2"></i> Cardiology
                                     </span>
                                     <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-900/30 text-blue-400 border border-blue-700/50">
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">
                                         <i class="fas fa-user-md mr-2"></i> General
                                     </span>
                                 </div>
@@ -41,41 +42,42 @@
                     </main>
 
                     <!-- Right Side: Auth Card -->
-                    <div class="mt-12 lg:mt-8 px-4 sm:px-6 lg:px-8 pb-8">
+                    <div class="mt-8 lg:mt-8 px-4 sm:px-6 lg:px-8 pb-8">
                         <div class="w-full max-w-md mx-auto">
                             <!-- Tabs -->
-                            <div class="flex bg-transparent">
+                            <div class="flex gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                                 <button (click)="switchTab('login')"
-                                    class="flex-1 py-4 text-sm font-medium text-center focus:outline-none transition-all"
-                                    [ngClass]="activeTab === 'login' ? 'text-emerald-400 bg-gray-800/40' : 'text-gray-400 hover:text-gray-200'">
+                                    class="flex-1 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-center focus:outline-none transition-all rounded-lg sm:rounded-xl border"
+                                    [ngClass]="activeTab === 'login' ? 'text-emerald-600 bg-white border-emerald-400 shadow-md shadow-emerald-500/20' : 'text-slate-600 hover:text-slate-900 bg-white/40 backdrop-blur-sm border-white/60 hover:border-white hover:shadow-sm'">
                                     Sign In
                                 </button>
                                 <button (click)="switchTab('register')"
-                                    class="flex-1 py-4 text-sm font-medium text-center focus:outline-none transition-all"
-                                    [ngClass]="activeTab === 'register' ? 'text-emerald-400 bg-gray-800/40' : 'text-gray-400 hover:text-gray-200'">
+                                    class="flex-1 py-3 text-base font-semibold text-center focus:outline-none transition-all rounded-xl border"
+                                    [ngClass]="activeTab === 'register' ? 'text-emerald-600 bg-white border-emerald-400 shadow-md shadow-emerald-500/20' : 'text-slate-600 hover:text-slate-900 bg-white/40 backdrop-blur-sm border-white/60 hover:border-white hover:shadow-sm'">
                                     Create Account
                                 </button>
                             </div>
 
-                            <div class="p-8 min-h-[500px]">
+                            <div class="backdrop-blur-3xl rounded-2xl p-6 md:p-8 min-h-[500px]">
                                 <!-- Login Form -->
                                 <form *ngIf="activeTab === 'login'" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()"
                                     class="space-y-6">
                                     <div>
-                                        <label for="login-email" class="block text-sm font-medium text-gray-300">Email
+                                        <label for="login-email" class="block text-sm font-medium text-slate-900">Email
                                             Address</label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
                                             <div
                                                 class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-envelope text-gray-500"></i>
+                                                <i class="fas fa-envelope text-slate-500"></i>
                                             </div>
                                             <input type="email" id="login-email" formControlName="email" #emailInput
-                                                class="bg-gray-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-10 sm:text-sm border-gray-600 rounded-md py-3 text-white placeholder-gray-400"
+                                                [ngClass]="loginForm.get('email')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-10 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
                                                 placeholder="you@example.com">
                                             <div *ngIf="loginForm.get('email')?.value"
                                                 class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                                                 (click)="clearField(loginForm, 'email')">
-                                                <i class="fas fa-times-circle text-gray-500 hover:text-gray-300"></i>
+                                                <i class="fas fa-times-circle text-slate-400 hover:text-slate-600"></i>
                                             </div>
                                         </div>
                                         <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
@@ -84,15 +86,16 @@
 
                                     <div>
                                         <label for="login-password"
-                                            class="block text-sm font-medium text-gray-300">Password</label>
+                                            class="block text-sm font-medium text-slate-900">Password</label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
                                             <div
                                                 class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-lock text-gray-500"></i>
+                                                <i class="fas fa-lock text-slate-500"></i>
                                             </div>
                                             <input [type]="showLoginPassword ? 'text' : 'password'" id="login-password"
                                                 formControlName="password"
-                                                class="bg-gray-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-20 sm:text-sm border-gray-600 rounded-md py-3 text-white placeholder-gray-400"
+                                                [ngClass]="loginForm.get('password')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
                                                 placeholder="••••••••">
                                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
                                                 <i *ngIf="loginForm.get('password')?.value"
@@ -107,7 +110,7 @@
                                     </div>
 
                                     <button type="submit" [disabled]="loginForm.invalid || isLoading"
-                                        class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                        class="w-full py-3.5 md:py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
                                         <span *ngIf="!isLoading">Sign In</span>
                                         <span *ngIf="isLoading" class="flex items-center justify-center gap-2"><i
                                                 class="fas fa-spinner fa-spin"></i> Signing
@@ -119,20 +122,21 @@
                                 <form *ngIf="activeTab === 'register'" [formGroup]="registerForm"
                                     (ngSubmit)="onRegisterSubmit()" class="space-y-4">
                                     <div>
-                                        <label for="reg-name" class="block text-sm font-medium text-gray-300">Full
+                                        <label for="reg-name" class="block text-sm font-medium text-slate-900">Full
                                             Name</label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
                                             <div
                                                 class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-user text-gray-500"></i>
+                                                <i class="fas fa-user text-slate-500"></i>
                                             </div>
                                             <input type="text" id="reg-name" formControlName="name" #nameInput
-                                                class="bg-gray-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-10 sm:text-sm border-gray-600 rounded-md py-3 text-white placeholder-gray-400"
+                                                [ngClass]="registerForm.get('name')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
                                                 placeholder="John Doe">
                                             <div *ngIf="registerForm.get('name')?.value"
                                                 class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                                                 (click)="clearField(registerForm, 'name')">
-                                                <i class="fas fa-times-circle text-gray-500 hover:text-gray-300"></i>
+                                                <i class="fas fa-times-circle text-slate-400 hover:text-slate-600"></i>
                                             </div>
                                         </div>
                                         <p *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched"
@@ -140,20 +144,21 @@
                                     </div>
 
                                     <div>
-                                        <label for="reg-email" class="block text-sm font-medium text-gray-300">Email
+                                        <label for="reg-email" class="block text-sm font-medium text-slate-900">Email
                                             Address</label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
                                             <div
                                                 class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-envelope text-gray-500"></i>
+                                                <i class="fas fa-envelope text-slate-500"></i>
                                             </div>
                                             <input type="email" id="reg-email" formControlName="email"
-                                                class="bg-gray-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-10 sm:text-sm border-gray-600 rounded-md py-3 text-white placeholder-gray-400"
+                                                [ngClass]="registerForm.get('email')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
                                                 placeholder="you@example.com">
                                             <div *ngIf="registerForm.get('email')?.value"
                                                 class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                                                 (click)="clearField(registerForm, 'email')">
-                                                <i class="fas fa-times-circle text-gray-500 hover:text-gray-300"></i>
+                                                <i class="fas fa-times-circle text-slate-400 hover:text-slate-600"></i>
                                             </div>
                                         </div>
                                         <p *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
@@ -162,16 +167,18 @@
 
                                     <div>
                                         <label for="reg-password"
-                                            class="block text-sm font-medium text-gray-300">Password</label>
+                                            class="block text-sm font-medium text-slate-900">Password</label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
                                             <div
                                                 class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-lock text-gray-500"></i>
+                                                <i class="fas fa-lock text-slate-500"></i>
                                             </div>
                                             <input [type]="showRegisterPassword ? 'text' : 'password'" id="reg-password"
-                                                formControlName="password"
-                                                class="bg-gray-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-20 sm:text-sm border-gray-600 rounded-md py-3 text-white placeholder-gray-400"
-                                                placeholder="Min 6 chars">
+                                                formControlName="password" (focus)="isPasswordFocused = true"
+                                                (blur)="isPasswordFocused = false"
+                                                [ngClass]="registerForm.get('password')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
+                                                placeholder="Min 8 chars">
                                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
                                                 <i *ngIf="registerForm.get('password')?.value"
                                                     class="fas fa-times-circle text-gray-500 hover:text-gray-300 cursor-pointer"
@@ -180,21 +187,29 @@
                                                     class="cursor-pointer" (click)="toggleRegisterPassword()"></i>
                                             </div>
                                         </div>
-                                        <p *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-                                            class="mt-1 text-xs text-red-400">Min 6 characters required</p>
+                                        <!-- Wrapper with relative positioning -->
+                                        <div class="relative">
+                                            <app-password-strength-indicator
+                                                [password]="registerForm.get('password')?.value || ''"
+                                                [isFocused]="isPasswordFocused"
+                                                (validityChange)="onPasswordValidityChange($event)">
+                                            </app-password-strength-indicator>
+                                        </div>
                                     </div>
 
                                     <div>
-                                        <label for="reg-confirm" class="block text-sm font-medium text-gray-300">Confirm
+                                        <label for="reg-confirm"
+                                            class="block text-sm font-medium text-slate-900">Confirm
                                             Password</label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
                                             <div
                                                 class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-lock text-gray-500"></i>
+                                                <i class="fas fa-lock text-slate-500"></i>
                                             </div>
                                             <input [type]="showConfirmPassword ? 'text' : 'password'" id="reg-confirm"
                                                 formControlName="confirmPassword"
-                                                class="bg-gray-700/50 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 pr-20 sm:text-sm border-gray-600 rounded-md py-3 text-white placeholder-gray-400"
+                                                [ngClass]="registerForm.get('confirmPassword')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
                                                 placeholder="Confirm password">
                                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
                                                 <i *ngIf="registerForm.get('confirmPassword')?.value"
@@ -209,7 +224,7 @@
                                     </div>
 
                                     <button type="submit" [disabled]="registerForm.invalid || isLoading"
-                                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                        class="w-full py-3.5 md:py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
                                         <span *ngIf="!isLoading">Create Account</span>
                                         <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin mr-2"></i>
                                             Creating...</span>

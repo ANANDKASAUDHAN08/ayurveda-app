@@ -152,4 +152,20 @@ export class OrderService {
         };
         return icons[status] || 'fa-info-circle';
     }
+
+    /**
+     * Get real-time tracking info
+     */
+    getOrderTracking(orderId: number): Observable<{ success: boolean; data: any }> {
+        return this.http.get<{ success: boolean; data: any }>(
+            `${this.apiUrl}/${orderId}/tracking`
+        );
+    }
+
+    /**
+     * Simulate tracking update
+     */
+    simulateTracking(orderId: number, lat: number, lng: number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/${orderId}/tracking/simulate`, { lat, lng });
+    }
 }

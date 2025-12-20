@@ -31,11 +31,15 @@ export class PharmaciesComponent implements OnInit {
             next: (response) => {
                 this.pharmacies = response.pharmacies || [];
                 this.filteredPharmacies = [...this.pharmacies];
-                this.loading = false;
+                setTimeout(() => {
+                    this.loading = false;
+                }, 500);
             },
             error: (error) => {
                 console.error('Error loading pharmacies:', error);
-                this.loading = false;
+                setTimeout(() => {
+                    this.loading = false;
+                }, 500);
             }
         });
     }

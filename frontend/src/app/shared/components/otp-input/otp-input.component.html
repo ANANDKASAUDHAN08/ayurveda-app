@@ -1,0 +1,8 @@
+<div class="flex justify-center gap-2 sm:gap-3">
+    <input *ngFor="let digit of digits; let i = index" #otpInput type="text" maxlength="1" [(ngModel)]="digits[i]"
+        (input)="onInput($event, i)" (keydown)="onKeyDown($event, i)" (paste)="onPaste($event)" class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-center text-lg sm:text-xl md:text-2xl font-bold
+               border-2 border-gray-300 rounded-lg
+               focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none
+               transition-all duration-200
+               bg-white" [class.border-emerald-500]="digits[i]" />
+</div>

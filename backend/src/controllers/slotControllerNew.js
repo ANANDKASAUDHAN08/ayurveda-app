@@ -5,7 +5,6 @@ exports.getAvailableSlots = async (req, res) => {
     try {
         const { doctorId } = req.params;
         const { date } = req.query;
-        console.log(`[getAvailableSlots] Request for doctor ${doctorId} on date ${date}`);
 
         if (!date) {
             return res.status(400).json({ message: 'Date is required' });

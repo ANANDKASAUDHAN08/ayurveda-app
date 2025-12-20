@@ -96,7 +96,6 @@ export class SearchService {
         // Check cache first
         const cached = this.suggestionCache.get(cacheKey);
         if (cached) {
-            console.log('Using cached suggestions for:', query);
             return of({ success: true, data: cached });
         }
 
@@ -114,7 +113,6 @@ export class SearchService {
                     // Auto-clear cache after 5 minutes
                     setTimeout(() => {
                         this.suggestionCache.delete(cacheKey);
-                        console.log('Cache cleared for:', query);
                     }, this.CACHE_DURATION);
                 }
             })

@@ -1,9 +1,11 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { HttpClient } from '@angular/common/http';
 import { ProfileService } from '../../shared/services/profile.service';
+import { PhoneVerificationModalComponent } from '../phone-verification-modal/phone-verification-modal.component';
+import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
 
 interface ActivityItem {
   type: 'appointment' | 'profile_update' | 'account';
@@ -16,7 +18,13 @@ interface ActivityItem {
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    PhoneVerificationModalComponent,
+    PasswordStrengthIndicatorComponent
+  ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
@@ -27,6 +35,18 @@ export class ProfileComponent implements OnInit {
   profileForm: FormGroup;
   isLoading = false;
   isLoadingProfile = false;
+
+  showPasswordModal = false;
+  show2FAModal = false;
+  showDeleteModal = false;
+  newPassword = '';
+  isPasswordValid: boolean = false;
+  showPassword: boolean = false;
+
+  selectedFile: File | null = null;
+  imagePreview: string | null = null;
+
+  @ViewChild(PhoneVerificationModalComponent) phoneModal!: PhoneVerificationModalComponent;
 
   // Tab navigation
   activeTab: 'profile' | 'activity' | 'security' = 'profile';
@@ -228,8 +248,9 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  selectedFile: File | null = null;
-  imagePreview: string | null = null;
+  onPasswordValidityChange(isValid: boolean): void {
+    this.isPasswordValid = isValid;
+  }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
@@ -422,18 +443,10 @@ export class ProfileComponent implements OnInit {
   }
 
   // Change password
-  // Change password
-  // Modal states
-  showPasswordModal = false;
-  show2FAModal = false;
-  showDeleteModal = false;
-  newPassword = '';
-
-  // Change password
   changePassword() {
-    console.log('Change Password clicked');
     this.showPasswordModal = true;
     this.newPassword = '';
+    this.showPassword = false;
   }
 
   confirmChangePassword() {
@@ -531,5 +544,25 @@ export class ProfileComponent implements OnInit {
     const day = String(istDate.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
+  }
+
+  // Open phone verification modal
+  openPhoneVerification() {
+    this.phoneModal.open(this.user.id, this.user.name, this.user.phone);
+  }
+
+  // Handle successful phone verification
+  onPhoneVerified(phone: string) {
+    // Update local user data
+    this.user.phone = phone;
+    this.user.phone_verified = true;
+
+    // Update localStorage
+    localStorage.setItem('user', JSON.stringify(this.user));
+
+    // Show success message
+    this.snackbar.success('✅ Phone number verified successfully!');
+    this.loadUser();
+    this.calculateProfileCompletion();
   }
 }

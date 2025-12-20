@@ -1,5 +1,11 @@
-<button *ngIf="showButton" (click)="scrollToTop()" [@fadeInOut]
-    class="fixed bottom-24 md:bottom-6 right-6 z-40 p-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
-    aria-label="Scroll to top">
-    <i class="fas fa-arrow-up text-xl group-hover:transform group-hover:-translate-y-1 transition-transform"></i>
+<button *ngIf="showButton" [@fadeInOut] (click)="scrollToTop()" class="fixed bottom-20 md:bottom-8 right-4 md:right-8 z-50 
+           w-12 h-12 md:w-14 md:h-14 
+           bg-transparent
+           flex items-center justify-center 
+           transition-all duration-300 
+           hover:scale-110
+           border-0 outline-none focus:outline-none
+           group" aria-label="Scroll to top">
+    <i
+        class="fas fa-chevron-up text-2xl md:text-3xl text-emerald-600 group-hover:text-emerald-700 transition-colors"></i>
 </button>

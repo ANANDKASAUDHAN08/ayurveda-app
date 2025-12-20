@@ -1,0 +1,162 @@
+<div class="min-h-screen bg-slate-50">
+    <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 class="text-3xl font-bold text-slate-900 mb-8">Account Settings</h1>
+
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col md:flex-row">
+            <!-- Sidebar Navigation -->
+            <aside class="w-full md:w-64 bg-slate-50 border-r border-slate-200">
+                <nav class="p-4 space-y-1">
+                    <button (click)="activeTab = 'account'"
+                        class="w-full text-left px-4 py-3 rounded-xl transition-all font-bold flex items-center gap-3"
+                        [class.bg-white]="activeTab === 'account'" [class.text-emerald-600]="activeTab === 'account'"
+                        [class.shadow-sm]="activeTab === 'account'" [class.text-slate-600]="activeTab !== 'account'">
+                        <i class="fas fa-user-circle"></i>
+                        Account
+                    </button>
+                    <button (click)="activeTab = 'notifications'"
+                        class="w-full text-left px-4 py-3 rounded-xl transition-all font-bold flex items-center gap-3"
+                        [class.bg-white]="activeTab === 'notifications'"
+                        [class.text-emerald-600]="activeTab === 'notifications'"
+                        [class.shadow-sm]="activeTab === 'notifications'"
+                        [class.text-slate-600]="activeTab !== 'notifications'">
+                        <i class="fas fa-bell"></i>
+                        Notifications
+                    </button>
+                    <button (click)="activeTab = 'security'"
+                        class="w-full text-left px-4 py-3 rounded-xl transition-all font-bold flex items-center gap-3"
+                        [class.bg-white]="activeTab === 'security'" [class.text-emerald-600]="activeTab === 'security'"
+                        [class.shadow-sm]="activeTab === 'security'" [class.text-slate-600]="activeTab !== 'security'">
+                        <i class="fas fa-shield-alt"></i>
+                        Security & Privacy
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Settings Area -->
+            <main class="flex-1 p-8 md:p-12">
+                <!-- Account Tab -->
+                <div *ngIf="activeTab === 'account'"
+                    class="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 mb-2">Personal Information</h2>
+                        <p class="text-slate-500">Update your basic profile details.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Full Name</label>
+                            <input type="text" [(ngModel)]="user.name"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:outline-none bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
+                            <input type="email" [(ngModel)]="user.email" disabled
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Phone Number</label>
+                            <input type="tel" [(ngModel)]="user.phone"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:outline-none bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">User Role</label>
+                            <input type="text" [(ngModel)]="user.role" disabled
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 capitalize cursor-not-allowed">
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-slate-100">
+                        <button (click)="saveSettings()"
+                            class="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Notifications Tab -->
+                <div *ngIf="activeTab === 'notifications'"
+                    class="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 mb-2">Notification Preferences</h2>
+                        <p class="text-slate-500">Control how and when you receive updates from us.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div
+                            class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                            <div>
+                                <h4 class="font-bold text-slate-900">Email Notifications</h4>
+                                <p class="text-sm text-slate-500">Receive appointment and order updates via email.</p>
+                            </div>
+                            <input type="checkbox" [(ngModel)]="notifications.email"
+                                class="w-12 h-6 rounded-full appearance-none bg-slate-200 checked:bg-emerald-500 transition-all cursor-pointer relative before:content-[''] before:absolute before:w-4 before:h-4 before:bg-white before:rounded-full before:top-1 before:left-1 checked:before:left-7 before:transition-all">
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                            <div>
+                                <h4 class="font-bold text-slate-900">SMS Notifications</h4>
+                                <p class="text-sm text-slate-500">Receive critical alerts and OTPs on your phone.</p>
+                            </div>
+                            <input type="checkbox" [(ngModel)]="notifications.sms"
+                                class="w-12 h-6 rounded-full appearance-none bg-slate-200 checked:bg-emerald-500 transition-all cursor-pointer relative before:content-[''] before:absolute before:w-4 before:h-4 before:bg-white before:rounded-full before:top-1 before:left-1 checked:before:left-7 before:transition-all">
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                            <div>
+                                <h4 class="font-bold text-slate-900">Promotions & Offers</h4>
+                                <p class="text-sm text-slate-500">Stay updated on new features and seasonal discounts.
+                                </p>
+                            </div>
+                            <input type="checkbox" [(ngModel)]="notifications.promotions"
+                                class="w-12 h-6 rounded-full appearance-none bg-slate-200 checked:bg-emerald-500 transition-all cursor-pointer relative before:content-[''] before:absolute before:w-4 before:h-4 before:bg-white before:rounded-full before:top-1 before:left-1 checked:before:left-7 before:transition-all">
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-slate-100">
+                        <button (click)="saveSettings()"
+                            class="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all">
+                            Save Preferences
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Privacy/Security Tab -->
+                <div *ngIf="activeTab === 'security'"
+                    class="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 mb-2">Privacy & Security</h2>
+                        <p class="text-slate-500">Manage your account security and data privacy.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                            <h4 class="font-bold text-slate-900 mb-4">Two-Factor Authentication</h4>
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm text-slate-600 max-w-sm">Add an extra layer of security to your
+                                    account by requiring a code from your phone.</p>
+                                <button
+                                    class="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg text-sm font-bold hover:bg-emerald-200 transition-all">
+                                    {{ privacy.twoFactor ? 'Disable' : 'Enable' }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-6 bg-red-50 rounded-2xl border border-red-100">
+                            <h4 class="font-bold text-red-900 mb-4">Danger Zone</h4>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-red-700 font-bold">Delete Account</p>
+                                    <p class="text-xs text-red-600">This action is permanent and cannot be undone.</p>
+                                </div>
+                                <button
+                                    class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-200">
+                                    Deactivate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>

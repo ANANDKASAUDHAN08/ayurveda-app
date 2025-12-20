@@ -1,0 +1,267 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50">
+    <!-- Compact Hero -->
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                <div>
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">Book Lab Tests at Home</h1>
+                    <div class="flex flex-wrap gap-4 text-sm text-emerald-100">
+                        <span class="flex items-center gap-1">
+                            <i class="fas fa-certificate"></i> NABL Certified
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i class="fas fa-home"></i> Free Collection
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i class="fas fa-clock"></i> 24hr Reports
+                        </span>
+                    </div>
+                </div>
+                <div class="w-full lg:w-96 relative">
+                    <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onFilterChange()"
+                        placeholder="Search for tests..."
+                        class="w-full px-4 py-3 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-white shadow-lg pr-10">
+                    <i class="fas fa-search absolute right-4 top-4 text-slate-400"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full px-6 sm:px-8 lg:px-12 py-6">
+        <!-- Horizontal Filters Bar -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 lg:p-4 mb-6">
+            <!-- Category Chips -->
+            <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-4 sm:mb-6">
+                <span class="text-sm font-semibold text-slate-700 whitespace-nowrap">Categories:</span>
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide flex-1">
+                    <button *ngFor="let cat of categories" (click)="selectedCategory = cat; onFilterChange()"
+                        class="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all"
+                        [class.bg-emerald-600]="selectedCategory === cat" [class.text-white]="selectedCategory === cat"
+                        [class.shadow-md]="selectedCategory === cat" [class.bg-slate-100]="selectedCategory !== cat"
+                        [class.text-slate-700]="selectedCategory !== cat"
+                        [class.hover:bg-slate-200]="selectedCategory !== cat">
+                        {{ cat }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Secondary Filters Row -->
+            <div class="flex flex-col lg:grid lg:grid-cols-[auto_1fr_auto_auto] lg:items-center gap-4 text-sm">
+                <!-- Left Section: Price Range -->
+                <div class="flex items-center gap-3 bg-slate-50 px-4 py-1 rounded-xl w-full lg:w-auto">
+                    <i class="fas fa-rupee-sign text-emerald-600"></i>
+                    <input type="number" [(ngModel)]="minPrice" placeholder="Min ₹"
+                        class="w-24 px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                    <span class="text-slate-400">—</span>
+                    <input type="number" [(ngModel)]="maxPrice" placeholder="Max ₹"
+                        class="w-24 px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                    <button (click)="onFilterChange()"
+                        class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium">
+                        Apply
+                    </button>
+                </div>
+                <!-- Middle Section: Sort (takes remaining space) -->
+                <div class="flex items-center gap-3 justify-start w-full lg:w-auto">
+                    <label class="text-slate-600 font-medium whitespace-nowrap">Sort by:</label>
+                    <select [(ngModel)]="sortBy" (ngModelChange)="onFilterChange()"
+                        class="px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white w-full lg:w-auto lg:min-w-[180px]">
+                        <option *ngFor="let opt of sortOptions" [value]="opt.value">{{ opt.label }}</option>
+                    </select>
+                </div>
+                <!-- Right Section: Result Count -->
+                <div class="flex items-center gap-2 bg-emerald-50 px-4 py-2.5 rounded-xl">
+                    <i class="fas fa-vial text-emerald-600"></i>
+                    <span class="font-bold text-emerald-900">{{ totalTests }}</span>
+                    <span class="text-emerald-700">tests found</span>
+                </div>
+                <!-- Clear Filters Button -->
+                <button *ngIf="hasFilters" (click)="clearFilters()"
+                    class="px-4 py-2 border-2 border-red-300 text-red-600 rounded-lg hover:bg-red-50 font-medium transition-colors whitespace-nowrap">
+                    <i class="fas fa-times mr-2"></i> Clear Filters
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="loading"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6">
+            <div *ngFor="let i of [1,2,3,4,5,6,7,8]" class="bg-white rounded-xl p-4 animate-pulse">
+                <div class="bg-slate-200 h-4 rounded mb-3"></div>
+                <div class="bg-slate-200 h-3 rounded mb-2"></div>
+                <div class="bg-slate-200 h-3 rounded w-2/3 mb-3"></div>
+                <div class="bg-slate-200 h-8 rounded"></div>
+            </div>
+        </div>
+
+        <!-- Enhanced Test Cards Grid -->
+        <div *ngIf="!loading && tests.length > 0"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6">
+            <div *ngFor="let test of tests"
+                class="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
+
+                <!-- Card Header -->
+                <div class="p-4 border-b border-slate-100 bg-gradient-to-br from-white to-slate-50">
+                    <div class="flex items-start justify-between mb-2">
+                        <span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-xs font-bold">
+                            {{ test.category }}
+                        </span>
+                        <i *ngIf="test.is_popular" class="fas fa-fire text-orange-500 text-sm" title="Popular"></i>
+                    </div>
+
+                    <h3 class="text-base font-bold text-slate-900 mb-1 group-hover:text-emerald-600 transition-colors line-clamp-2"
+                        (click)="openDetails(test)">
+                        {{ test.name }}
+                    </h3>
+
+                    <p class="text-xs text-slate-500 line-clamp-2 mb-3">{{ test.description }}</p>
+
+                    <!-- Info Badges -->
+                    <div class="flex flex-wrap gap-1 mb-2">
+                        <span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">
+                            <i class="fas fa-vial"></i> {{ test.parameters_count }}
+                        </span>
+                        <span class="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-xs">
+                            <i class="fas fa-droplet"></i> {{ test.sample_type }}
+                        </span>
+                        <span *ngIf="test.fasting_required"
+                            class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-xs">
+                            <i class="fas fa-utensils"></i> Fasting
+                        </span>
+                    </div>
+                </div>
+                <!-- Card Footer -->
+                <div class="p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-xs text-slate-400 line-through">₹{{ test.price }}</span>
+                                <span class="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-xs font-bold">
+                                    {{ getDiscountPercentage(test) }}% OFF
+                                </span>
+                            </div>
+                            <div class="text-lg font-bold text-emerald-600">₹{{ test.discounted_price }}</div>
+                        </div>
+                        <button (click)="addToCart(test); $event.stopPropagation()" [disabled]="addingToCart[test.id]"
+                            class="w-10 h-10 flex items-center justify-center bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all disabled:bg-slate-300">
+                            <i class="fas" [class.fa-plus]="!addingToCart[test.id]"
+                                [class.fa-spinner]="addingToCart[test.id]" [class.fa-spin]="addingToCart[test.id]"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-1 text-xs text-slate-500">
+                        <i class="fas fa-clock"></i>
+                        <span>{{ test.report_time }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!loading && tests.length === 0" class="text-center py-16">
+            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-vial text-slate-400 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">No tests found</h3>
+            <p class="text-slate-500 mb-6">Try adjusting your filters</p>
+            <button (click)="clearFilters()"
+                class="px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700">
+                Clear All Filters
+            </button>
+        </div>
+
+        <!-- Pagination (Same as before) -->
+        <div *ngIf="!loading && tests.length > 0 && totalPages > 1" class="flex items-center justify-center mt-8">
+            <div
+                class="bg-white rounded-2xl shadow-sm border border-slate-200 px-4 sm:px-6 py-4 inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+                <!-- Left: Page Info -->
+                <div class="text-xs sm:text-sm font-medium text-slate-700 text-center sm:text-left">
+                    Showing {{ (currentPage - 1) * itemsPerPage + 1 }} - {{ Math.min(currentPage * itemsPerPage,
+                    totalTests)
+                    }} of {{ totalTests }}
+                </div>
+
+                <!-- Right: Controls -->
+                <div class="flex items-center gap-3">
+                    <button (click)="previousPage()" [disabled]="currentPage === 1"
+                        class="w-9 h-9 flex items-center justify-center border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50">
+                        <i class="fas fa-chevron-left text-sm"></i>
+                    </button>
+                    <div class="hidden sm:flex items-center gap-2">
+                        <button *ngFor="let page of pageNumbers.slice(0, 10)" (click)="goToPage(page)"
+                            [class.bg-emerald-600]="currentPage === page" [class.text-white]="currentPage === page"
+                            class="w-9 h-9 flex items-center justify-center border border-slate-200 rounded-lg hover:bg-slate-50 text-sm font-medium">
+                            {{ page }}
+                        </button>
+                    </div>
+                    <div class="sm:hidden px-3 py-1 border border-slate-200 rounded-lg text-sm">
+                        {{ currentPage }} / {{ totalPages }}
+                    </div>
+                    <button (click)="nextPage()" [disabled]="currentPage === totalPages"
+                        class="w-9 h-9 flex items-center justify-center border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50">
+                        <i class="fas fa-chevron-right text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Details Modal (Keep same as before) -->
+    <div *ngIf="selectedTest" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+        (click)="closeDetails()">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            (click)="$event.stopPropagation()">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">{{ selectedTest.name }}</h3>
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-sm font-bold">
+                            {{ selectedTest.category }}
+                        </span>
+                    </div>
+                    <button (click)="closeDetails()" class="p-2 hover:bg-slate-100 rounded-full">
+                        <i class="fas fa-times text-slate-600"></i>
+                    </button>
+                </div>
+                <p class="text-slate-600 mb-4">{{ selectedTest.description }}</p>
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="p-3 bg-slate-50 rounded-lg">
+                        <p class="text-xs text-slate-500">Parameters</p>
+                        <p class="font-bold text-slate-900">{{ selectedTest.parameters_count }}</p>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-lg">
+                        <p class="text-xs text-slate-500">Sample Type</p>
+                        <p class="font-bold text-slate-900">{{ selectedTest.sample_type }}</p>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-lg">
+                        <p class="text-xs text-slate-500">Report Time</p>
+                        <p class="font-bold text-slate-900">{{ selectedTest.report_time }}</p>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-lg">
+                        <p class="text-xs text-slate-500">Fasting</p>
+                        <p class="font-bold text-slate-900">{{ selectedTest.fasting_required ? 'Required' : 'Not
+                            Required' }}</p>
+                    </div>
+                </div>
+                <div class="p-3 bg-blue-50 rounded-lg mb-4">
+                    <p class="text-sm font-bold text-blue-900 mb-1">Includes:</p>
+                    <p class="text-sm text-blue-700">{{ selectedTest.includes }}</p>
+                </div>
+                <div class="flex items-center justify-between border-t pt-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-sm text-slate-400 line-through">₹{{ selectedTest.price }}</span>
+                            <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-bold">
+                                {{ getDiscountPercentage(selectedTest) }}% OFF
+                            </span>
+                        </div>
+                        <div class="text-2xl font-bold text-emerald-600">₹{{ selectedTest.discounted_price }}</div>
+                    </div>
+                    <button (click)="addToCart(selectedTest); closeDetails()"
+                        class="px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 font-medium">
+                        <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

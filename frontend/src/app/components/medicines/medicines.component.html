@@ -44,7 +44,9 @@
         <!-- Results Count -->
         <div *ngIf="!loading && medicines.length > 0" class="mb-4">
             <p class="text-gray-600">
-                Showing <span class="font-semibold">{{ medicines.length }}</span> medicines
+                Showing <span class="font-semibold">{{ (currentPage - 1) * itemsPerPage + 1 }} - {{ Math.min(currentPage
+                    * itemsPerPage, totalMedicines) }}</span> of <span class="font-semibold">{{ totalMedicines }}</span>
+                medicines
             </p>
         </div>
 
@@ -114,6 +116,52 @@
                 <i class="fas fa-times mr-2"></i>
                 Clear Filters
             </button>
+        </div>
+
+        <!-- Pagination -->
+        <div *ngIf="!loading && medicines.length > 0 && totalPages > 1"
+            class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-12 px-4 py-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+
+            <!-- Page Info -->
+            <div class="text-sm text-gray-600 font-medium order-2 sm:order-1">
+                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} -
+                {{ Math.min(currentPage * itemsPerPage, totalMedicines) }} of
+                <span class="font-bold text-gray-900">{{ totalMedicines }}</span> medicines
+            </div>
+
+            <!-- Page Controls -->
+            <div class="flex items-center gap-2 order-1 sm:order-2">
+                <!-- Previous Button -->
+                <button (click)="previousPage()" [disabled]="currentPage === 1" [class.opacity-50]="currentPage === 1"
+                    [class.cursor-not-allowed]="currentPage === 1"
+                    class="w-10 h-10 flex items-center justify-center border border-gray-200 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all disabled:hover:bg-white">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <!-- Page Numbers (show only on larger screens) -->
+                <div class="hidden sm:flex items-center gap-2">
+                    <button *ngFor="let page of pageNumbers.slice(0, 10)" (click)="goToPage(page)"
+                        [class.bg-emerald-600]="currentPage === page" [class.text-white]="currentPage === page"
+                        [class.border-emerald-600]="currentPage === page" [class.shadow-md]="currentPage === page"
+                        class="w-10 h-10 flex items-center justify-center border border-gray-200 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all">
+                        {{ page }}
+                    </button>
+                    <span *ngIf="totalPages > 10" class="px-2 text-gray-400">...</span>
+                </div>
+
+                <!-- Mobile Page Indicator -->
+                <div class="sm:hidden px-4 py-2 border border-gray-200 rounded-xl text-sm font-bold text-gray-700">
+                    {{ currentPage }} / {{ totalPages }}
+                </div>
+
+                <!-- Next Button -->
+                <button (click)="nextPage()" [disabled]="currentPage === totalPages"
+                    [class.opacity-50]="currentPage === totalPages"
+                    [class.cursor-not-allowed]="currentPage === totalPages"
+                    class="w-10 h-10 flex items-center justify-center border border-gray-200 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all disabled:hover:bg-white">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
     </div>
 

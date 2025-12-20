@@ -1,7 +1,27 @@
+/* Remove any default button styles */
 button {
-    backdrop-filter: blur(10px);
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    animation: gentle-bounce 3s ease-in-out infinite;
 }
 
-button:active {
-    transform: scale(0.95);
+button:hover {
+    animation: none;
+}
+
+button:focus {
+    outline: none !important;
+}
+
+@keyframes gentle-bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
 }

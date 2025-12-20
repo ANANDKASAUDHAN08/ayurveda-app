@@ -2,7 +2,6 @@ const db = require('./database');
 
 async function initDb() {
     try {
-        console.log('Initializing database tables...');
 
         // Users Table
         await db.execute(`
@@ -16,7 +15,6 @@ async function initDb() {
                 updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )
         `);
-        console.log('✅ Users table ready');
 
         // Doctors Table
         await db.execute(`
@@ -40,7 +38,6 @@ async function initDb() {
                 FOREIGN KEY (userId) REFERENCES users(id) ON DELETE SET NULL
             )
         `);
-        console.log('✅ Doctors table ready');
 
         // Slots Table
         await db.execute(`
@@ -57,7 +54,6 @@ async function initDb() {
                 FOREIGN KEY (doctorId) REFERENCES doctors(id) ON DELETE CASCADE
             )
         `);
-        console.log('✅ Slots table ready');
 
         // Appointments Table
         await db.execute(`
@@ -77,9 +73,7 @@ async function initDb() {
                 FOREIGN KEY (slotId) REFERENCES slots(id) ON DELETE CASCADE
             )
         `);
-        console.log('✅ Appointments table ready');
 
-        console.log('🎉 Database initialization complete!');
         process.exit(0);
     } catch (error) {
         console.error('❌ Database initialization failed:', error);

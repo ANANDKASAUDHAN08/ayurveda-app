@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BookingModalComponent } from '../booking-modal/booking-modal.component';
 import { SnackbarService } from 'src/app/shared/services/snackbar.service';
@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
   imports: [CommonModule, BookingModalComponent],
   templateUrl: './doctor-detail-modal.component.html'
 })
-export class DoctorDetailModalComponent {
+export class DoctorDetailModalComponent implements OnInit, OnDestroy {
   @Input() doctor: any;
   @Output() close = new EventEmitter<void>();
   @Output() book = new EventEmitter<any>();
@@ -21,6 +21,14 @@ export class DoctorDetailModalComponent {
     private authService: AuthService,
     private snackbar: SnackbarService
   ) { }
+
+  ngOnInit(): void {
+    document.body.style.overflow = 'hidden';
+  }
+
+  ngOnDestroy(): void {
+    document.body.style.overflow = '';
+  }
 
   onClose() {
     this.close.emit();

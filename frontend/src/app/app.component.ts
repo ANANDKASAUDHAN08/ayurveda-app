@@ -48,6 +48,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.routerSubscription = this.router.events.subscribe(() => {
       this.isAdminRoute = this.router.url.startsWith('/admin');
+      this.closeHamburgerMenu();
     });
 
 

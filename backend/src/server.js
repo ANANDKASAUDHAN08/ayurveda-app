@@ -9,6 +9,8 @@ const contentRoutes = require('./routes/content');
 const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/orders');
 const searchRoutes = require('./routes/search');
+const verificationRoutes = require('./routes/verification');
+const otpRoutes = require('./routes/otp');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +27,8 @@ app.use('/api/content', contentRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api', verificationRoutes);
+app.use('/api', otpRoutes);
 
 // Test route
 app.get('/', (req, res) => {

@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 
+const emailService = require('../../services/email.service');
+const { generateVerificationToken, getTokenExpiration } = require('../../utils/tokenGenerator');
+
 // Configure Multer for image upload (Same as userController)
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -30,6 +33,11 @@ exports.registerDoctor = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
+        // Validate email format
+        if (!emailService.validateEmail(email)) {
+            return res.status(400).json({ message: 'Invalid email format' });
+        }
+
         // Check if user exists
         const [users] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
         if (users.length > 0) {
@@ -39,10 +47,15 @@ exports.registerDoctor = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Create User
+        // Generate verification token
+        const verificationToken = generateVerificationToken();
+        const tokenExpiry = getTokenExpiration();
+
+        // Create User with verification token
         const [userResult] = await db.execute(
-            'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
-            [name, email, hashedPassword, 'doctor']
+            `INSERT INTO users (name, email, password, role, email_verified, email_verification_token, token_expires_at) 
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [name, email, hashedPassword, 'doctor', false, verificationToken, tokenExpiry]
         );
         const userId = userResult.insertId;
 
@@ -57,31 +70,51 @@ exports.registerDoctor = async (req, res) => {
         // Generate Token
         const token = jwt.sign({ id: userId, role: 'doctor' }, process.env.JWT_SECRET || 'supersecretkey', { expiresIn: '1h' });
 
+        // Send welcome email (non-blocking)
+        try {
+            await emailService.sendWelcomeEmail(email, name, 'doctor');
+        } catch (emailError) {
+            console.error(`❌ Welcome email failed for ${email}:`, emailError.message);
+        }
+
+        // Send verification email (non-blocking)
+        try {
+            await emailService.sendVerificationEmail(email, name, verificationToken, 'doctor');
+        } catch (emailError) {
+            console.error(`❌ Verification email failed for ${email}:`, emailError.message);
+        }
+
         res.json({
             token,
-            user: { id: userId, name, email, role: 'doctor' },
-            doctor: { id: doctorId, userId, name }
+            user: { id: userId, name, email, role: 'doctor', emailVerified: false },
+            doctor: { id: doctorId, userId, name },
+            message: 'Registration successful! Please check your email to verify your account.'
         });
 
     } catch (err) {
-        console.error(err);
+        console.error('Doctor registration error:', err);
         res.status(500).json({ message: 'Server error' });
     }
 };
 
 exports.getDoctors = async (req, res) => {
     try {
-        const { specialization, mode, search } = req.query;
+        const { specialization, mode, search, maxFee, minExperience } = req.query;
 
         let query = 'SELECT * FROM doctors WHERE 1=1';
         const params = [];
 
         if (specialization) {
-            query += ' AND specialization = ?';
-            params.push(specialization);
+            // Handle both string and array for specialization
+            const specialties = Array.isArray(specialization) ? specialization : specialization.split(',');
+            if (specialties.length > 0) {
+                const placeholders = specialties.map(() => '?').join(',');
+                query += ` AND specialization IN (${placeholders})`;
+                params.push(...specialties);
+            }
         }
 
-        if (mode) {
+        if (mode && mode !== 'both') {
             query += ' AND (mode = ? OR mode = "both")';
             params.push(mode);
         }
@@ -91,10 +124,20 @@ exports.getDoctors = async (req, res) => {
             params.push(`%${search}%`);
         }
 
+        if (maxFee) {
+            query += ' AND consultationFee <= ?';
+            params.push(parseInt(maxFee, 10));
+        }
+
+        if (minExperience) {
+            query += ' AND experience >= ?';
+            params.push(parseInt(minExperience, 10));
+        }
+
         const [doctors] = await db.execute(query, params);
         res.json(doctors);
     } catch (err) {
-        console.error(err);
+        console.error('getDoctors error:', err);
         res.status(500).json({ message: 'Server error' });
     }
 };

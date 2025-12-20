@@ -1,0 +1,50 @@
+<div class="relative bg-white rounded-xl overflow-hidden shadow-inner border border-slate-200">
+    <!-- Map Container -->
+    <div id="order-map" class="w-full h-[400px]"></div>
+
+    <!-- Loading Overlay -->
+    <div *ngIf="loading" 
+         class="absolute inset-0 bg-slate-50/80 backdrop-blur-sm flex items-center justify-center z-20">
+        <div class="flex flex-col items-center gap-3">
+            <i class="fas fa-spinner fa-spin text-emerald-600 text-3xl"></i>
+            <p class="text-slate-600 font-bold">Connecting to live tracking...</p>
+        </div>
+    </div>
+
+    <!-- Info Overlay -->
+    <div *ngIf="trackingData && !loading" 
+         class="absolute top-4 left-4 right-4 bg-white/95 backdrop-blur shadow-2xl rounded-2xl p-4 border border-white flex flex-col sm:flex-row items-center justify-between gap-4 z-10">
+        
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 border-2 border-white shadow-sm">
+                <i class="fas fa-motorcycle text-xl"></i>
+            </div>
+            <div>
+                <p class="text-xs font-black uppercase tracking-widest text-slate-400">Delivery Hero</p>
+                <h4 class="text-lg font-black text-slate-900 leading-tight">
+                    {{ trackingData.driver_name || 'Rahul Sharma' }}
+                </h4>
+                <p class="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                    <i class="fas fa-certificate"></i> Verified Partner
+                </p>
+            </div>
+        </div>
+
+        <div class="h-10 w-px bg-slate-200 hidden sm:block"></div>
+
+        <div class="flex flex-col items-end">
+            <p class="text-xs font-black uppercase tracking-widest text-slate-400">Estimated Arrival</p>
+            <div class="flex items-center gap-2">
+                <span class="text-2xl font-black text-emerald-600">~12 mins</span>
+                <i class="fas fa-clock text-slate-300"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Status Badge -->
+    <div *ngIf="!loading" 
+         class="absolute bottom-4 right-4 bg-red-600 text-white px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter flex items-center gap-2 animate-pulse shadow-lg z-10">
+        <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+        Live Tracking
+    </div>
+</div>

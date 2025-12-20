@@ -1,0 +1,153 @@
+<div class="min-h-screen bg-slate-50">
+    <!-- Hero Section -->
+    <section class="bg-slate-900 text-white py-20 md:py-32 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-500 opacity-10 rounded-full blur-3xl -mr-48 -mt-48">
+        </div>
+        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight">
+                Build the Future of <span class="text-emerald-500">Healthcare</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-10">
+                Join our mission to make high-quality healthcare accessible, affordable, and efficient for everyone in
+                India.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#jobs"
+                    class="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 rounded-2xl font-bold transition-all transform active:scale-95 shadow-xl shadow-emerald-900/20">
+                    View Openings
+                </a>
+                <a href="#culture"
+                    class="px-8 py-4 bg-slate-800 hover:bg-slate-700 rounded-2xl font-bold transition-all transform active:scale-95">
+                    Our Culture
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Join Us Section -->
+    <section id="culture" class="py-20 bg-white">
+        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Why Work With Us?</h2>
+                <div class="h-1.5 w-20 bg-emerald-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="text-center group">
+                    <div
+                        class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform group-hover:scale-110">
+                        <i class="fas fa-rocket text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Impact at Scale</h3>
+                    <p class="text-slate-600">Affect millions of lives by solving complex healthcare problems with
+                        technology.</p>
+                </div>
+                <div class="text-center group">
+                    <div
+                        class="w-16 h-16 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform group-hover:scale-110">
+                        <i class="fas fa-graduation-cap text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Growth & Learning</h3>
+                    <p class="text-slate-600">Work with the brightest minds and access generous learning budgets.</p>
+                </div>
+                <div class="text-center group">
+                    <div
+                        class="w-16 h-16 bg-purple-50 text-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform group-hover:scale-110">
+                        <i class="fas fa-heart text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Comprehensive Care</h3>
+                    <p class="text-slate-600">Premium health insurance for you and your family, plus mental wellness
+                        support.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Job Board -->
+    <section id="jobs" class="py-20">
+        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-2">Open Positions</h2>
+                    <p class="text-slate-600">Join our growing team across multiple departments.</p>
+                </div>
+
+                <!-- Department Filter -->
+                <div class="flex flex-wrap gap-2">
+                    <button *ngFor="let dept of departments" (click)="selectedDepartment = dept"
+                        class="px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                        [class.bg-slate-900]="selectedDepartment === dept"
+                        [class.text-white]="selectedDepartment === dept" [class.bg-white]="selectedDepartment !== dept"
+                        [class.text-slate-600]="selectedDepartment !== dept"
+                        [class.border]="selectedDepartment !== dept"
+                        [class.border-slate-200]="selectedDepartment !== dept">
+                        {{ dept }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div *ngFor="let job of filteredJobs"
+                    class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 hover:border-emerald-500 transition-all hover:shadow-xl group flex flex-col md:flex-row md:items-center justify-between gap-6 cursor-pointer"
+                    (click)="applyNow(job)">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span
+                                class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold uppercase">
+                                {{ job.department }}
+                            </span>
+                            <span class="text-slate-400 text-sm">•</span>
+                            <span class="text-slate-500 text-sm">{{ job.type }}</span>
+                        </div>
+                        <h4
+                            class="text-2xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                            {{ job.title }}
+                        </h4>
+                        <div class="flex flex-wrap gap-4 text-slate-500 text-sm">
+                            <span class="flex items-center gap-1">
+                                <i class="fas fa-map-marker-alt"></i>
+                                {{ job.location }}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i class="fas fa-briefcase"></i>
+                                {{ job.experience }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <button
+                            class="px-6 py-3 bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white rounded-2xl font-bold transition-all">
+                            Apply Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div *ngIf="filteredJobs.length === 0"
+                    class="text-center py-16 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                    <i class="fas fa-search-minus text-4xl text-slate-300 mb-4"></i>
+                    <h3 class="text-xl font-bold text-slate-900">No positions found</h3>
+                    <p class="text-slate-500">Check back later or try a different filter.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Banner -->
+    <section class="py-20 bg-emerald-600 text-white overflow-hidden relative">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10">
+        </div>
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Don't see a fit but still want to join?</h2>
+            <p class="text-xl text-emerald-100 mb-10">
+                We are always looking for passionate people to join us. Send your resume to <span
+                    class="font-bold border-b-2 border-emerald-300">careers&#64;healthconnect.io</span>
+            </p>
+            <a href="mailto:careers@healthconnect.io"
+                class="inline-flex items-center gap-3 px-8 py-4 bg-white text-emerald-600 rounded-2xl font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                <i class="fas fa-paper-plane"></i>
+                Send General Application
+            </a>
+        </div>
+    </section>
+</div>

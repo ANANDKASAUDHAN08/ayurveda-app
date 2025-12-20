@@ -13,19 +13,19 @@
     </div>
 
     <!-- Image -->
-    <div class="relative h-48 bg-slate-100 overflow-hidden">
+    <div class="relative h-40 md:h-48 bg-slate-100 overflow-hidden">
         <img [src]="deal.image" [alt]="deal.title"
             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
     </div>
 
     <!-- Content -->
-    <div class="p-4">
-        <h3 class="font-bold text-slate-900 mb-1 line-clamp-2">{{ deal.title }}</h3>
-        <p class="text-sm text-slate-600 mb-3 line-clamp-1">{{ deal.description }}</p>
+    <div class="p-3 md:p-4">
+        <h3 class="text-sm md:text-base font-bold text-slate-900 mb-1 line-clamp-2">{{ deal.title }}</h3>
+        <p class="text-xs md:text-sm text-slate-600 mb-2 md:mb-3 line-clamp-1">{{ deal.description }}</p>
 
         <!-- Pricing -->
         <div class="flex items-center gap-2 mb-3">
-            <span class="text-2xl font-bold text-emerald-600">₹{{ deal.price }}</span>
+            <span class="text-xl md:text-2xl font-bold text-emerald-600">₹{{ deal.price }}</span>
             <span class="text-sm text-slate-500 line-through">₹{{ deal.mrp }}</span>
             <span class="text-xs text-emerald-600 font-semibold">Save ₹{{ savings }}</span>
         </div>
@@ -34,7 +34,7 @@
         <div class="mt-4">
             <!-- Show "Add to Cart" when not in cart -->
             <button *ngIf="cartQuantity === 0" (click)="addToCart($event)" [disabled]="isAdding"
-                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50">
+                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 md:py-3 px-3 md:px-4 text-sm md:text-base min-h-[44px] rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50">
                 <i *ngIf="!isAdding" class="fas fa-shopping-cart"></i>
                 <i *ngIf="isAdding" class="fas fa-spinner fa-spin"></i>
                 <span>{{ isAdding ? 'Adding...' : 'Add to Cart' }}</span>

@@ -4,11 +4,17 @@ import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
+import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
 
 @Component({
   selector: 'app-user-landing',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    PasswordStrengthIndicatorComponent
+  ],
   templateUrl: './user-landing.component.html'
 })
 export class UserLandingComponent implements OnInit {
@@ -24,6 +30,8 @@ export class UserLandingComponent implements OnInit {
   showLoginPassword = false;
   showRegisterPassword = false;
   showConfirmPassword = false;
+  isPasswordValid: boolean = false;
+  isPasswordFocused: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -53,8 +61,8 @@ export class UserLandingComponent implements OnInit {
   switchTab(tab: 'login' | 'register') {
     this.activeTab = tab;
     // Reset forms when switching? Optional.
-    // this.loginForm.reset();
-    // this.registerForm.reset();
+    this.loginForm.reset();
+    this.registerForm.reset();
   }
 
   // --- Login Logic ---
@@ -139,5 +147,9 @@ export class UserLandingComponent implements OnInit {
   clearField(form: FormGroup, fieldName: string) {
     form.get(fieldName)?.setValue('');
     form.get(fieldName)?.markAsUntouched();
+  }
+
+  onPasswordValidityChange(isValid: boolean): void {
+    this.isPasswordValid = isValid;
   }
 }

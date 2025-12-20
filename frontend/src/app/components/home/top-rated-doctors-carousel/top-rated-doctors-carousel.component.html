@@ -1,138 +1,150 @@
 <!-- Loading State -->
-<div *ngIf="loading" id="topDoctors" class="py-16 bg-white">
+<div *ngIf="loading" class="py-12 md:py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-3xl font-extrabold text-gray-900 mb-12">Top Rated Doctors</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <!-- Skeleton Cards -->
-                <div *ngFor="let i of [1,2,3,4]" class="animate-pulse">
-                    <div class="bg-gray-200 h-48 rounded-2xl mb-4"></div>
-                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                    <div class="h-3 bg-gray-200 rounded w-1/2"></div>
-                </div>
+        <div class="mb-8">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">Top Rated Doctors</h2>
+            <p class="mt-2 text-gray-500">Loading...</p>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div *ngFor="let i of [1,2,3,4]" class="animate-pulse">
+                <div class="bg-gray-200 h-48 rounded-2xl mb-4"></div>
+                <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                <div class="h-3 bg-gray-200 rounded w-1/2"></div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Empty State -->
-<div *ngIf="!loading && showEmptyState" id="topDoctors" class="py-16 bg-white">
+<div *ngIf="!loading && showEmptyState" class="py-12 md:py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center py-12">
             <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <i class="fas fa-user-md text-5xl text-gray-300"></i>
             </div>
             <h3 class="text-2xl font-bold text-gray-900 mb-2">No Doctors Available</h3>
-            <p class="text-gray-500 mb-6">We're working on adding more doctors to our platform</p>
+            <p class="text-gray-500 mb-6">We're working on adding more doctors</p>
             <button (click)="searchClicked.emit()"
-                class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
+                class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
                 Search Doctors
             </button>
         </div>
     </div>
 </div>
 
-<!-- Actual Carousel -->
-<div *ngIf="!loading && !showEmptyState" id="topDoctors" class="py-16 bg-white relative">
-    <!-- Carousel Navigation - Minimal Design -->
-    <!-- Previous Button -->
-    <button (click)="prevCarousel()"
-        class="absolute left-16 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center transition-all duration-300 text-gray-400 hover:text-emerald-600 hover:scale-125">
-        <i class="fas fa-chevron-left text-2xl"></i>
-    </button>
-
-    <!-- Next Button -->
-    <button (click)="nextCarousel()"
-        class="absolute right-16 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center transition-all duration-300 text-gray-400 hover:text-emerald-600 hover:scale-125">
-        <i class="fas fa-chevron-right text-2xl"></i>
-    </button>
-
-    <!-- Heading & Grids-->
+<!-- Actual Content -->
+<div *ngIf="!loading && !showEmptyState" class="py-12 md:py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-end mb-12">
+
+        <!-- Header -->
+        <div class="flex justify-between items-end mb-8">
             <div>
-                <h2 class="text-3xl font-extrabold text-gray-900">Top Rated Doctors</h2>
-                <p class="mt-2 text-lg text-gray-500">Consult with highly rated specialists trusted by thousands</p>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">Top Rated Doctors</h2>
+                <p class="mt-2 text-sm md:text-base text-gray-500">Consult with highly rated specialists</p>
+            </div>
+
+            <!-- Navigation Arrows (Desktop Only) -->
+            <div class="hidden lg:flex gap-2">
+                <button (click)="prevCarousel()"
+                    class="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition-all">
+                    <i class="fas fa-chevron-left text-gray-600"></i>
+                </button>
+                <button (click)="nextCarousel()"
+                    class="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition-all">
+                    <i class="fas fa-chevron-right text-gray-600"></i>
+                </button>
             </div>
         </div>
-    </div>
+        <!-- MOBILE: Static Grid (2 columns, 4 doctors) -->
+        <div class="lg:hidden grid grid-cols-2 gap-4">
+            <div *ngFor="let doctor of doctors.slice(0, 4); trackBy: trackByDoctorId"
+                (click)="openDoctorDetails(doctor)"
+                class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all cursor-pointer border border-gray-100">
 
-    <!-- Carousel Container -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div class="relative">
-            <!-- Carousel Wrapper with Drag Support -->
-            <div class="overflow-hidden rounded-2xl">
-                <div class="carousel-wrapper" [style.transform]="getCarouselTransform()"
-                    (mousedown)="onDragStart($event)" (mousemove)="onDragMove($event)" (mouseup)="onDragEnd()"
-                    (mouseleave)="onDragEnd()">
+                <!-- Doctor Image -->
+                <div class="relative h-32 overflow-hidden bg-gray-200">
+                    <img *ngIf="doctor.profile_image" [src]="doctor.profile_image" [alt]="doctor.name"
+                        class="w-full h-full object-cover">
+                    <div *ngIf="!doctor.profile_image"
+                        class="w-full h-full bg-gradient-to-br from-emerald-100 to-teal-100"></div>
+
+                    <!-- Rating Badge -->
+                    <div
+                        class="absolute top-2 right-2 bg-white px-2 py-1 rounded-full shadow-md flex items-center gap-1">
+                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                        <span class="text-xs font-bold">{{doctor.rating || '4.8'}}</span>
+                    </div>
+                </div>
+                <!-- Doctor Info -->
+                <div class="p-3">
+                    <h3 class="text-sm font-bold text-emerald-600 mb-1 truncate">
+                        Dr. {{doctor.name}}
+                    </h3>
+                    <p class="text-xs text-gray-600 mb-2 truncate">
+                        {{doctor.specialty || 'General Physician'}}
+                    </p>
+                    <div class="flex items-center gap-1 text-xs text-gray-500">
+                        <i class="fas fa-map-marker-alt text-gray-400"></i>
+                        <span class="truncate">{{doctor.location || 'Available'}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- DESKTOP: Carousel (4+ doctors, horizontal scroll) -->
+        <div class="hidden lg:block relative">
+            <div class="overflow-hidden">
+                <div class="flex gap-6 transition-transform duration-300 ease-out"
+                    [style.transform]="'translateX(-' + (currentCarouselIndex * 25) + '%)'">
 
                     <div *ngFor="let doctor of doctors; trackBy: trackByDoctorId" (click)="openDoctorDetails(doctor)"
-                        class="doctor-card group bg-white rounded-2xl overflow-hidden 
-                        hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1">
+                        class="flex-none w-1/4 bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer border border-gray-100 hover:-translate-y-2">
 
                         <!-- Doctor Image -->
                         <div class="relative h-48 overflow-hidden bg-gray-200">
-                            <img *ngIf="doctor.profile_image" [src]="doctor.profile_image" loading="lazy"
-                                [alt]="doctor.name || 'Doctor'" class="w-full h-full object-cover">
-
-                            <!-- Blank placeholder if no image -->
+                            <img *ngIf="doctor.profile_image" [src]="doctor.profile_image" [alt]="doctor.name"
+                                class="w-full h-full object-cover">
                             <div *ngIf="!doctor.profile_image"
                                 class="w-full h-full bg-gradient-to-br from-emerald-100 to-teal-100"></div>
 
-                            <!-- Rating Badge - Top Right -->
+                            <!-- Rating Badge -->
                             <div class="absolute top-4 right-4 bg-white px-3 py-1.5 rounded-full shadow-md">
                                 <div class="flex items-center gap-1">
                                     <i class="fas fa-star text-yellow-400 text-sm"></i>
-                                    <span class="text-gray-900 font-bold text-sm">{{doctor.rating || '4.8'}}</span>
+                                    <span class="font-bold text-sm">{{doctor.rating || '4.8'}}</span>
                                 </div>
                             </div>
                         </div>
-
                         <!-- Doctor Info -->
-                        <div class="p-6 space-y-3">
-                            <!-- Name -->
-                            <h3 class="text-xl font-bold text-emerald-600">
-                                Dr. {{doctor.name || 'Unknown'}}
+                        <div class="p-5 space-y-3">
+                            <h3 class="text-lg font-bold text-emerald-600">
+                                Dr. {{doctor.name}}
                             </h3>
-
-                            <!-- Specialty -->
-                            <p class="text-emerald-600 font-medium text-base">
+                            <p class="text-emerald-600 font-medium text-sm">
                                 {{doctor.specialty || 'General Physician'}}
                             </p>
-
-                            <!-- Location -->
-                            <div class="flex items-center gap-2 text-gray-600">
-                                <i class="fas fa-map-marker-alt text-gray-400 text-sm"></i>
-                                <span class="text-sm">
-                                    {{doctor.location || 'Location not specified'}}
-                                </span>
+                            <div class="flex items-center gap-2 text-gray-600 text-sm">
+                                <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                <span class="truncate">{{doctor.location || 'Available'}}</span>
                             </div>
-
-                            <!-- Availability -->
-                            <div class="flex items-center gap-2 text-emerald-600">
-                                <i class="fas fa-clock text-sm"></i>
-                                <span class="text-sm font-medium">
-                                    Next Available: {{doctor.availability || 'Tomorrow'}}
-                                </span>
+                            <div class="flex items-center gap-2 text-emerald-600 text-sm">
+                                <i class="fas fa-clock"></i>
+                                <span>{{doctor.availability || 'Tomorrow'}}</span>
                             </div>
-
-                            <!-- Divider -->
-                            <div class="border-t border-gray-200 pt-4 mt-4">
-                                <div class="flex items-center justify-between text-gray-600">
-                                    <!-- Experience -->
-                                    <div class="text-sm">
-                                        <span class="font-semibold">{{doctor.experience || '12'}}+ years</span>
-                                    </div>
-                                    <!-- Reviews -->
-                                    <div class="text-sm">
-                                        <span class="font-semibold">{{doctor.totalReviews || '189'}} reviews</span>
-                                    </div>
-                                </div>
+                            <div class="border-t pt-3 flex justify-between text-xs text-gray-600">
+                                <span class="font-semibold">{{doctor.experience || '12'}}+ years</span>
+                                <span class="font-semibold">{{doctor.totalReviews || '189'}} reviews</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- View All Button (Mobile) -->
+        <div class="lg:hidden mt-6 text-center">
+            <button (click)="searchClicked.emit()"
+                class="px-6 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 text-sm font-medium">
+                View All Doctors
+            </button>
         </div>
     </div>
 </div>

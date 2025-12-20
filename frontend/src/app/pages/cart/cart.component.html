@@ -4,7 +4,7 @@
 
         <!-- Page Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Shopping Cart</h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Shopping Cart</h1>
             <p class="mt-2 text-sm text-gray-600">Review your items before checkout</p>
         </div>
 
@@ -36,7 +36,7 @@
         <div *ngIf="!loading && !error && cart && cart.items.length === 0"
             class="bg-white rounded-lg shadow-sm p-12 text-center">
             <i class="fas fa-shopping-cart text-gray-300 text-6xl mb-4"></i>
-            <h2 class="text-2xl font-semibold text-gray-900 mb-2">Your cart is empty</h2>
+            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 mb-2">Your cart is empty</h2>
             <p class="text-gray-600 mb-6">Add some items to get started!</p>
             <a routerLink="/"
                 class="inline-flex items-center px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
@@ -46,7 +46,8 @@
         </div>
 
         <!-- Cart Items -->
-        <div *ngIf="!loading && !error && cart && cart.items.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div *ngIf="!loading && !error && cart && cart.items.length > 0"
+            class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
 
             <!-- Items List -->
             <div class="lg:col-span-2">
@@ -142,60 +143,64 @@
                 </div>
             </div>
 
-            <!-- Order Summary -->
+            <!-- Order Summary - Compact Mobile -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
+                <div class="bg-white rounded-lg shadow-sm p-3 md:p-6 md:sticky md:top-4">
 
-                    <div class="space-y-3 mb-4">
-                        <div class="flex justify-between text-sm">
+                    <!-- Compact Header -->
+                    <h2 class="text-base md:text-xl font-bold text-gray-900 mb-2 md:mb-4">Order Summary</h2>
+                    <!-- Compact Pricing -->
+                    <div class="space-y-1.5 md:space-y-3 mb-3 md:mb-4">
+                        <!-- Items -->
+                        <div class="flex justify-between text-xs md:text-sm">
                             <span class="text-gray-600">Items ({{ cart.total_items }})</span>
-                            <span class="font-semibold">₹{{ cart.subtotal }}</span>
+                            <span class="font-semibold text-gray-900">₹{{ cart.subtotal }}</span>
                         </div>
-                        <div class="flex justify-between text-sm">
+
+                        <!-- Tax -->
+                        <div class="flex justify-between text-xs md:text-sm">
                             <span class="text-gray-600">Tax (9%)</span>
-                            <span class="font-semibold">₹{{ cart.tax }}</span>
+                            <span class="font-semibold text-gray-900">₹{{ cart.tax }}</span>
                         </div>
-                        <div class="border-t border-gray-200 pt-3">
-                            <div class="flex justify-between">
-                                <span class="text-lg font-bold text-gray-900">Total</span>
-                                <span class="text-2xl font-bold text-emerald-600">₹{{ cart.total }}</span>
+
+                        <!-- Total -->
+                        <div class="border-t border-gray-200 pt-1.5 md:pt-3">
+                            <div class="flex justify-between items-baseline">
+                                <span class="text-sm md:text-lg font-bold text-gray-900">Total</span>
+                                <span class="text-lg md:text-2xl font-bold text-emerald-600">₹{{ cart.total }}</span>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Checkout Button -->
-                    <button routerLink="/checkout"
-                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                    <!-- Compact Checkout Button -->
+                    <button routerLink="/checkout" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold 
+                               py-2.5 md:py-3 px-4 rounded-lg text-sm md:text-base
+                               transition-colors flex items-center justify-center gap-2">
                         Proceed to Checkout
-                        <i class="fas fa-arrow-right ml-2"></i>
+                        <i class="fas fa-arrow-right text-xs"></i>
                     </button>
-
                     <!-- Continue Shopping -->
                     <a routerLink="/"
-                        class="block text-center mt-4 text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+                        class="block text-center mt-3 md:mt-4 text-xs md:text-sm text-emerald-600 hover:text-emerald-700 font-medium">
                         <i class="fas fa-arrow-left mr-1"></i>
                         Continue Shopping
                     </a>
-
                     <!-- Trust Badges -->
-                    <div class="mt-6 pt-6 border-t border-gray-200 space-y-2">
-                        <div class="flex items-center gap-2 text-xs text-gray-600">
+                    <div class="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-gray-200 space-y-1.5 md:space-y-2">
+                        <div class="flex items-center gap-2 text-[10px] md:text-xs text-gray-600">
                             <i class="fas fa-shield-alt text-emerald-600"></i>
                             <span>Secure Checkout</span>
                         </div>
-                        <div class="flex items-center gap-2 text-xs text-gray-600">
+                        <div class="flex items-center gap-2 text-[10px] md:text-xs text-gray-600">
                             <i class="fas fa-truck text-emerald-600"></i>
                             <span>Free Delivery on Orders Above ₹500</span>
                         </div>
-                        <div class="flex items-center gap-2 text-xs text-gray-600">
+                        <div class="flex items-center gap-2 text-[10px] md:text-xs text-gray-600">
                             <i class="fas fa-undo text-emerald-600"></i>
                             <span>Easy Returns & Refunds</span>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
         <!-- Remove Item Confirmation Modal -->

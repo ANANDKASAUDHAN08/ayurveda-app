@@ -1,0 +1,113 @@
+<div class="min-h-screen bg-slate-50">
+    <!-- Header Section -->
+    <div class="bg-emerald-600 py-16 md:py-24 text-white text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-3xl md:text-5xl font-bold mb-6">How can we help you?</h1>
+            <div class="relative max-w-2xl mx-auto shadow-2xl rounded-2xl">
+                <input type="text" [(ngModel)]="searchQuery"
+                    placeholder="Search keywords (e.g., payment, booking, reports)"
+                    class="w-full px-8 py-5 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-4 focus:ring-emerald-400 placeholder-slate-400 text-lg pr-12">
+                <i class="fas fa-search absolute right-6 top-6 text-slate-400 text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex flex-col lg:flex-row gap-12">
+            <!-- FAQ Content -->
+            <div class="flex-1">
+                <!-- Categories -->
+                <div class="flex flex-wrap gap-2 mb-8">
+                    <button *ngFor="let cat of categories" (click)="selectedCategory = cat"
+                        class="px-6 py-2.5 rounded-full font-bold transition-all text-sm border"
+                        [class.bg-emerald-600]="selectedCategory === cat" [class.text-white]="selectedCategory === cat"
+                        [class.border-emerald-600]="selectedCategory === cat"
+                        [class.bg-white]="selectedCategory !== cat" [class.text-slate-600]="selectedCategory !== cat"
+                        [class.border-slate-200]="selectedCategory !== cat">
+                        {{ cat }}
+                    </button>
+                </div>
+
+                <!-- FAQ List -->
+                <div class="space-y-4">
+                    <div *ngFor="let faq of filteredFaqs; let i = index"
+                        class="bg-white rounded-2xl border border-slate-200 overflow-hidden transition-all hover:border-emerald-500">
+                        <button (click)="toggleFaq(i)"
+                            class="w-full text-left px-6 py-5 flex justify-between items-center transition-colors hover:bg-emerald-50/50">
+                            <span class="font-bold text-slate-900 pr-4">{{ faq.question }}</span>
+                            <i class="fas transition-transform duration-300 text-slate-400"
+                                [class.fa-chevron-up]="showAnswer[i]" [class.fa-chevron-down]="!showAnswer[i]"
+                                [class.rotate-180]="showAnswer[i]"></i>
+                        </button>
+                        <div [class.hidden]="!showAnswer[i]"
+                            class="px-6 pb-6 text-slate-600 leading-relaxed border-t border-slate-50 pt-4">
+                            {{ faq.answer }}
+                        </div>
+                    </div>
+
+                    <!-- No Results -->
+                    <div *ngIf="filteredFaqs.length === 0"
+                        class="text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                        <i class="fas fa-question-circle text-4xl text-slate-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-slate-900">No answers found</h3>
+                        <p class="text-slate-500">Try searching for different keywords or contact us directly.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Options -->
+            <aside class="w-full lg:w-80 shrink-0">
+                <div class="sticky top-28 space-y-6">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                        <h3 class="text-xl font-bold text-slate-900 mb-6">Contact Us</h3>
+                        <div class="space-y-6">
+                            <div class="flex gap-4">
+                                <div
+                                    class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 uppercase">Email Support</p>
+                                    <p class="text-sm font-bold text-slate-800">support&#64;healthconnect.io</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div
+                                    class="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 uppercase">Call Us</p>
+                                    <p class="text-sm font-bold text-slate-800">+91 1800-HEALTH-CONNECT</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div
+                                    class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 uppercase">Live Chat</p>
+                                    <p class="text-sm font-bold text-slate-800">Available 24/7</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button
+                            class="w-full mt-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all flex items-center justify-center gap-2">
+                            Start Chat
+                        </button>
+                    </div>
+
+                    <div class="bg-emerald-50 p-6 rounded-3xl border border-emerald-100 text-center">
+                        <h4 class="font-bold text-emerald-900 mb-2">Need a Doctor?</h4>
+                        <p class="text-sm text-emerald-700 mb-4">Book a consultation in under 2 minutes.</p>
+                        <a routerLink="/find-doctors"
+                            class="text-sm font-extrabold text-emerald-600 hover:text-emerald-700 underline">
+                            Find Doctors Now
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>

@@ -20,6 +20,14 @@ export class MedicinesComponent implements OnInit {
   addingToCart: { [key: string]: boolean } = {};
   selectedProduct: SearchResult | null = null;
 
+  // Expose Math for template
+  Math = Math;
+
+  // Pagination
+  currentPage = 1;
+  itemsPerPage = 20;
+  totalMedicines = 0;
+
   // Filters
   searchQuery = '';
   selectedCategory = '';
@@ -65,12 +73,13 @@ export class MedicinesComponent implements OnInit {
       type: 'medicine',
       category: this.selectedCategory,
       sortBy: this.sortBy,
-      page: 1,
-      limit: 100
+      page: this.currentPage,
+      limit: this.itemsPerPage
     }).subscribe({
       next: (response) => {
         if (response.success) {
           this.medicines = response.data.results;
+          this.totalMedicines = response.data.pagination.total;
         }
         this.loading = false;
       },
@@ -79,6 +88,18 @@ export class MedicinesComponent implements OnInit {
         this.snackbarService.show('Failed to load medicines', 'error');
       }
     });
+  }
+
+  get paginatedMedicines() {
+    return this.medicines;
+  }
+
+  get totalPages() {
+    return Math.ceil(this.totalMedicines / this.itemsPerPage);
+  }
+
+  get pageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
   addToCart(medicine: SearchResult) {
@@ -116,11 +137,13 @@ export class MedicinesComponent implements OnInit {
   }
 
   applyFilters() {
+    this.currentPage = 1; // Reset to first page when filters change
     this.router.navigate([], {
       queryParams: {
         q: this.searchQuery || null,
         category: this.selectedCategory || null,
-        sortBy: this.sortBy
+        sortBy: this.sortBy,
+        page: 1
       },
       queryParamsHandling: 'merge'
     });
@@ -130,6 +153,23 @@ export class MedicinesComponent implements OnInit {
     this.searchQuery = '';
     this.selectedCategory = '';
     this.sortBy = 'name_asc';
+    this.currentPage = 1;
     this.loadMedicines();
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadMedicines();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  nextPage() {
+    this.goToPage(this.currentPage + 1);
+  }
+
+  previousPage() {
+    this.goToPage(this.currentPage - 1);
   }
 }

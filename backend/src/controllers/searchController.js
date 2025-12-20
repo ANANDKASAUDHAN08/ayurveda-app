@@ -20,7 +20,8 @@ exports.searchProducts = async (req, res) => {
         if (!type || type === 'medicine' || type === 'all') {
             let medicineQuery = `
                 SELECT 
-                    id, name, description, price, category, stock,
+                    id, name, description, price, mrp, category, stock, 
+                    image_url, manufacturer, pack_size, composition,
                     'medicine' as product_type
                 FROM medicines
                 WHERE 1=1
@@ -44,9 +45,16 @@ exports.searchProducts = async (req, res) => {
                 medicineParams.push(maxPrice);
             }
 
+            // Limit results to prevent memory issues with 250k+ medicines
+            medicineQuery += ` LIMIT 500`;
+
             try {
                 const [rows] = await db.execute(medicineQuery, medicineParams);
-                allResults.push(...rows.map(r => ({ ...r, stock_quantity: r.stock })));
+                // Use simple loop instead of spread+map to prevent stack overflow
+                for (const row of rows) {
+                    row.stock_quantity = row.stock;
+                    allResults.push(row);
+                }
             } catch (error) {
                 console.log('Medicines table query failed:', error.message);
             }

@@ -1,155 +1,6 @@
-<!-- Hero Section Component
-<app-hero-section (searchRequested)="handleSearch($event)"></app-hero-section>
-
-Services Section
-<div id="services" class="py-16 bg-gradient-to-b from-white to-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                How Can We Help You?
-            </h2>
-            <p class="mt-4 text-xl text-gray-500">
-                Explore our comprehensive healthcare services designed to meet all your medical needs
-            </p>
-        </div>
-    </div>
-</div>
-
-Why Choose Us Section
-<div class="py-16 bg-emerald-600">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-extrabold text-white">Why Choose HealthConnect?</h2>
-            <p class="mt-4 text-xl text-emerald-100">Your health, our priority</p>
-        </div>
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="text-center transform hover:scale-105 transition-transform duration-300">
-                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-shield-alt text-3xl text-white"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">100% Secure</h3>
-                <p class="text-emerald-100">Your data is encrypted and protected</p>
-            </div>
-            <div class="text-center transform hover:scale-105 transition-transform duration-300">
-                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-clock text-3xl text-white"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">24/7 Support</h3>
-                <p class="text-emerald-100">Round-the-clock assistance available</p>
-            </div>
-            <div class="text-center transform hover:scale-105 transition-transform duration-300">
-                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-certificate text-3xl text-white"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">Verified Doctors</h3>
-                <p class="text-emerald-100">All doctors are thoroughly verified</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-Top Rated Doctors Carousel Component
-<div id="topDoctors">
-    <app-top-rated-doctors-carousel [doctors]="topDoctors" [loading]="loadingDoctors"
-        [showEmptyState]="!loadingDoctors && topDoctors.length === 0" (doctorSelected)="openDoctorDetails($event)"
-        (searchClicked)="search()">
-    </app-top-rated-doctors-carousel>
-</div>
-
-Doctor Details Modal
-<app-doctor-detail-modal *ngIf="showDoctorModal && selectedDoctor" [doctor]="selectedDoctor"
-    (close)="closeDoctorModal()">
-</app-doctor-detail-modal>
-
-<div id="articles">
-    Health Articles Carousel Component
-    <app-health-articles-carousel [articles]="articles" [loading]="loadingArticles"
-        [showEmptyState]="!loadingArticles && articles.length === 0" (articleSelected)="openArticle($event)">
-    </app-health-articles-carousel>
-</div>
-
-Article Details Component
-<app-article-details *ngIf="showArticleModal && selectedArticle" [article]="selectedArticle" (close)="closeArticle()">
-</app-article-details>
-
-Patient Testimonials
-<div id="testimonials" class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-extrabold text-gray-900">What Our Patients Say</h2>
-            <p class="mt-4 text-xl text-gray-500">Real experiences from real people</p>
-        </div>
-        <div class="grid md:grid-cols-3 gap-6 max-w-7xl mx-auto px-6">
-            Testimonial Card 1
-            <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
-                        <span class="text-emerald-600 font-bold">SK</span>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-slate-900">Sarah Kumar</h4>
-                        <div class="flex text-yellow-400">
-                            ⭐⭐⭐⭐⭐
-                        </div>
-                    </div>
-                </div>
-                <p class="text-slate-600 italic">
-                    "Excellent service! Found the perfect specialist for my condition.
-                    The booking process was seamless."
-                </p>
-            </div>
-
-            Card 2 - Line 111-127
-            <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                        <span class="text-blue-600 font-bold">RP</span>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-slate-900">Raj Patel</h4>
-                        <div class="flex text-yellow-400">
-                            ⭐⭐⭐⭐⭐
-                        </div>
-                    </div>
-                </div>
-                <p class="text-slate-600 italic">
-                    "Quick and easy to book appointments. The doctors are professional and caring. Highly recommend!"
-                </p>
-            </div>
-            Card 3 - Add after Card 2
-            <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
-                        <span class="text-purple-600 font-bold">MP</span>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-slate-900">Maya Patel</h4>
-                        <div class="flex text-yellow-400">
-                            ⭐⭐⭐⭐⭐
-                        </div>
-                    </div>
-                </div>
-                <p class="text-slate-600 italic">
-                    "Love the platform! Found a great pediatrician for my kids. The whole experience was wonderful."
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
-
-Scroll to Top Button
-<button *ngIf="showScrollTop" (click)="scrollToTop()"
-    class="fixed bottom-8 right-8 z-50 w-12 h-12 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center hover:scale-110 hover:rotate-12">
-    <i class="fas fa-arrow-up"></i>
-</button> -->
-
-
-
-
-
-<!-- New Hero Section -->
-<section class="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 py-16 md:py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 pt-8 md:pt-20 pb-16 md:pb-24">
+    <div class="w-full px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto">
             <!-- Location hint -->
             <div class="flex items-center justify-center gap-2 text-sm text-slate-600 mb-4">
@@ -158,7 +9,7 @@ Scroll to Top Button
             </div>
 
             <!-- Main Heading -->
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6">
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 md:mb-6">
                 Find doctors, order medicines,<br class="hidden md:block">
                 & book lab tests
             </h1>
@@ -174,9 +25,10 @@ Scroll to Top Button
                     <div class="relative w-full">
                         <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()" (focus)="onFocusSearch()"
                             (blur)="onBlurSearch()" (keyup.enter)="onSearch()"
-                            placeholder="Search doctors, medicines, tests..."
-                            class="w-full px-6 py-4 pl-14 rounded-full border-2 border-gray-200 focus:border-emerald-500 focus:outline-none text-lg">
-                        <i class="fas fa-search absolute left-5 top-5 text-gray-400 text-xl"></i>
+                            placeholder="Search doctors, medicines..."
+                            class="w-full px-4 py-3 pl-12 md:px-6 md:py-4 md:pl-14 rounded-full border-2 border-gray-200 focus:border-emerald-500 focus:outline-none text-base md:text-lg">
+                        <i
+                            class="fas fa-search absolute left-3 top-3 md:left-5 md:top-5 text-gray-400 text-lg md:text-xl"></i>
 
                         <!-- Autocomplete Dropdown -->
                         <div *ngIf="showSuggestions"
@@ -233,15 +85,16 @@ Scroll to Top Button
                     <!-- Clear Button (X icon) -->
                     <button *ngIf="searchQuery.length > 0"
                         (click)="searchQuery = ''; suggestions = []; showSuggestions = false"
-                        class="absolute right-28 top-4 text-gray-400 hover:text-gray-600 transition-colors"
+                        class="absolute right-20 top-3 md:right-28 md:top-4 text-gray-400 hover:text-gray-600 transition-colors"
                         title="Clear search">
-                        <i class="fas fa-times-circle text-xl"></i>
+                        <i class="fas fa-times-circle text-lg md:text-xl"></i>
                     </button>
 
                     <!-- Search Button -->
                     <button (click)="onSearch()" [disabled]="searchQuery.trim().length === 0"
-                        class="absolute right-2 top-2 px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-full transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed">
-                        Search
+                        class="absolute right-2 top-2 px-3 py-2 md:px-6 bg-emerald-600 hover:bg-emerald-700 text-white text-sm md:text-base font-semibold rounded-full transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed min-h-[40px]">
+                        <span class="hidden sm:inline">Search</span>
+                        <i class="fas fa-search sm:hidden"></i>
                     </button>
                 </div>
             </div>
@@ -280,18 +133,20 @@ Scroll to Top Button
 <section class="py-12 md:py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Our Services</h2>
+            <h2 class="text-2xl md:text-4xl font-bold text-slate-900 mb-3 md:mb-4">Our Services</h2>
             <p class="text-lg text-slate-600">Everything you need for your health and wellness</p>
         </div>
 
         <!-- Show skeleton while loading -->
-        <div *ngIf="loadingServices" class="service-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div *ngIf="loadingServices"
+            class="service-grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             <app-skeleton-loader *ngFor="let i of [1,2,3,4]" type="card" [count]="1"></app-skeleton-loader>
         </div>
-
-        <!-- Show actual content when loaded -->
-        <div *ngIf="!loadingServices" class="service-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <app-service-card *ngFor="let service of services" [service]="service"></app-service-card>
+        <!-- Show actual services -->
+        <div *ngIf="!loadingServices"
+            class="service-grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <app-service-card *ngFor="let service of services; trackBy: trackByServiceId" [service]="service">
+            </app-service-card>
         </div>
     </div>
 </section>
@@ -300,7 +155,7 @@ Scroll to Top Button
 <section class="py-12 md:py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Shop by Category</h2>
+            <h2 class="text-2xl md:text-4xl font-bold text-slate-900 mb-3 md:mb-4">Shop by Category</h2>
             <p class="text-lg text-slate-600">Browse through our wide range of products</p>
         </div>
 
@@ -315,7 +170,9 @@ Scroll to Top Button
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Deals of the Day 🔥</h2>
+                <h2 class="text-2xl md:text-4xl font-bold text-slate-900 mb-2">
+                    Deals of the Day <span class="text-2xl md:text-4xl">🔥</span>
+                </h2>
                 <p class="text-lg text-slate-600">Limited time offers on popular products</p>
             </div>
             <a routerLink="/deals" class="hidden md:block text-emerald-600 hover:text-emerald-700 font-medium">
@@ -323,14 +180,11 @@ Scroll to Top Button
             </a>
         </div>
 
-        <div class="deal-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="deal-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             <app-deal-card *ngFor="let deal of deals" [deal]="deal"></app-deal-card>
         </div>
     </div>
 </section>
-
-<!-- Keep your existing sections here -->
-
 
 <!-- Top Rated Doctors Carousel Component -->
 <div id="topDoctors">
@@ -360,11 +214,11 @@ Scroll to Top Button
 <section class="py-12 md:py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Why Trust HealthConnect?</h2>
+            <h2 class="text-2xl md:text-4xl font-bold text-slate-900 mb-4">Why Trust HealthConnect?</h2>
             <p class="text-lg text-slate-600">Join thousands of satisfied customers</p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             <app-trust-badge *ngFor="let badge of trustBadges" [badge]="badge"></app-trust-badge>
         </div>
     </div>

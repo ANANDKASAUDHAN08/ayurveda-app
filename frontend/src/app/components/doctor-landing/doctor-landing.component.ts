@@ -5,11 +5,18 @@ import { Router, RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../shared/services/auth.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
+import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
 
 @Component({
   selector: 'app-doctor-landing',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, HttpClientModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    PasswordStrengthIndicatorComponent
+  ],
   templateUrl: './doctor-landing.component.html'
 })
 export class DoctorLandingComponent {
@@ -19,6 +26,8 @@ export class DoctorLandingComponent {
   isLoading = false;
   showLoginPassword = false;
   showRegisterPassword = false;
+  isPasswordValid: boolean = false;
+  isPasswordFocused: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -111,5 +120,9 @@ export class DoctorLandingComponent {
     } else {
       this.registerForm.markAllAsTouched();
     }
+  }
+
+  onPasswordValidityChange(isValid: boolean): void {
+    this.isPasswordValid = isValid;
   }
 }

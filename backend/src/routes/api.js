@@ -7,6 +7,7 @@ const slotController = require('../controllers/slotController');
 const appointmentController = require('../controllers/appointmentController');
 const slotControllerNew = require('../controllers/slotControllerNew');
 const appointmentControllerNew = require('../controllers/appointmentControllerNew');
+const labTestController = require('../controllers/labTestController');
 const auth = require('../middleware/auth');
 
 // Auth
@@ -55,5 +56,15 @@ router.post('/appointments/book', auth, appointmentControllerNew.bookAppointment
 router.get('/appointments/user', auth, appointmentControllerNew.getUserAppointments);
 router.get('/appointments/doctor', auth, appointmentControllerNew.getDoctorAppointments);
 router.put('/appointments/:id/cancel', auth, appointmentControllerNew.cancelAppointment);
+
+// Lab Tests
+router.get('/lab-tests', labTestController.getLabTests);
+router.get('/lab-tests/categories', labTestController.getCategories);
+
+// Nearby Services
+const nearbyController = require('../controllers/nearbyController');
+router.get('/nearby/hospitals', nearbyController.getNearbyHospitals);
+router.get('/nearby/pharmacies', nearbyController.getNearbyPharmacies);
+router.get('/nearby/doctors', nearbyController.getNearbyDoctors);
 
 module.exports = router;

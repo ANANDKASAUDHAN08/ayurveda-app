@@ -15,16 +15,24 @@ import { DoctorDetailModalComponent } from '../doctor-detail-modal/doctor-detail
   templateUrl: './doctor-list.component.html'
 })
 export class DoctorListComponent implements OnInit {
+
+  Math = Math;
   doctors: any[] = [];
   filteredDoctors: any[] = [];
   isLoading = true;
   error: string = '';
 
-  filters = {
+  filters: any = {
     search: '',
-    specialization: '',
-    mode: ''
+    specialization: [],
+    mode: '',
+    maxFee: null,
+    minExperience: null
   };
+
+  // Pagination
+  currentPage = 1;
+  itemsPerPage = 10;
 
   specializations = [
     'Cardiology', 'Orthopedics', 'Dermatology', 'Pediatrics', 'Neurology',
@@ -35,6 +43,8 @@ export class DoctorListComponent implements OnInit {
 
   selectedDoctor: any = null;
   selectedDoctorForDetails: any = null;
+  showMobileFilters = false;
+  isFilterCollapsed = false;
 
   constructor(
     private doctorService: DoctorService,
@@ -46,15 +56,26 @@ export class DoctorListComponent implements OnInit {
     this.loadDoctors();
   }
 
+  get paginatedDoctors() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.doctors.slice(start, end);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.doctors.length / this.itemsPerPage);
+  }
+
+  get pageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
   loadDoctors() {
     this.isLoading = true;
     this.error = '';
 
     this.doctorService.getDoctors(this.filters).subscribe({
       next: (data) => {
-        if (data.length > 0) {
-          console.log('First doctor sample:', data[0]);
-        }
         this.doctors = data;
         this.filteredDoctors = data;
         setTimeout(() => {
@@ -71,16 +92,59 @@ export class DoctorListComponent implements OnInit {
   }
 
   applyFilters() {
+    this.currentPage = 1;
     this.loadDoctors();
+  }
+
+  toggleSpecialization(spec: string) {
+    const index = this.filters.specialization.indexOf(spec);
+    if (index > -1) {
+      this.filters.specialization.splice(index, 1);
+    } else {
+      this.filters.specialization.push(spec);
+    }
+    this.applyFilters();
+  }
+
+  toggleMode(mode: string) {
+    if (this.filters.mode === mode) {
+      this.filters.mode = ''; // Deselect
+    } else {
+      this.filters.mode = mode;
+    }
+    this.applyFilters();
   }
 
   clearFilters() {
     this.filters = {
       search: '',
-      specialization: '',
-      mode: ''
+      specialization: [],
+      mode: '',
+      maxFee: null,
+      minExperience: null
     };
     this.loadDoctors();
+  }
+
+  toggleMobileFilters() {
+    this.showMobileFilters = !this.showMobileFilters;
+  }
+
+  toggleFilterSidebar() {
+    this.isFilterCollapsed = !this.isFilterCollapsed;
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+  nextPage() {
+    this.goToPage(this.currentPage + 1);
+  }
+  previousPage() {
+    this.goToPage(this.currentPage - 1);
   }
 
   openDetails(doctor: any) {

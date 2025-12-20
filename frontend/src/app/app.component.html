@@ -14,7 +14,7 @@
   <app-footer *ngIf="!isAdminRoute"></app-footer>
 
   <!-- Bottom Navigation (Mobile only) -->
-  <app-bottom-navigation></app-bottom-navigation>
+  <app-bottom-navigation (navItemClicked)="closeHamburgerMenu()"></app-bottom-navigation>
 
   <!-- Snackbar -->
   <app-snackbar></app-snackbar>

@@ -127,22 +127,16 @@ exports.getUserAppointments = async (req, res) => {
 // Get doctor's appointments
 exports.getDoctorAppointments = async (req, res) => {
     try {
-        console.log('🔵 getDoctorAppointments called');
         const userId = req.user.id;
-        console.log('👤 User ID from JWT:', userId);
         const { status, date } = req.query;
 
         // Get doctor ID from userId
-        console.log('🔍 Looking up doctor by userId...');
         const [doctors] = await db.query('SELECT id FROM doctors WHERE userId = ?', [userId]);
-        console.log('📋 Doctors found:', doctors);
 
         if (doctors.length === 0) {
-            console.log('⚠️ No doctor profile found for userId:', userId);
             return res.status(404).json({ message: 'Doctor profile not found' });
         }
         const doctorId = doctors[0].id;
-        console.log('✅ Doctor ID:', doctorId);
 
         let query = `
             SELECT 
@@ -176,12 +170,8 @@ exports.getDoctorAppointments = async (req, res) => {
 
         query += ' ORDER BY a.appointment_date ASC, a.start_time ASC';
 
-        console.log('🔍 SQL Query:', query.trim());
-        console.log('📝 Query Params:', queryParams);
-
         const [results] = await db.query(query, queryParams);
-        console.log('📋 Found appointments:', results.length);
-        console.log('📦 Results:', JSON.stringify(results, null, 2));
+
         res.json(results);
     } catch (error) {
         console.error('❌❌❌ Error in getDoctorAppointments:', error);

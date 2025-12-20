@@ -1,0 +1,99 @@
+<div class="min-h-screen bg-slate-50">
+    <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <!-- Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h1 class="text-3xl md:text-5xl font-bold text-slate-900 mb-6">Choose Your Health Plan</h1>
+            <p class="text-lg text-slate-600">
+                Premium healthcare subscriptions designed for individuals, families, and organizations.
+                Get the best medical care with predictable costs.
+            </p>
+        </div>
+
+        <!-- Pricing Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div *ngFor="let plan of plans"
+                class="relative bg-white rounded-3xl p-8 border border-slate-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group"
+                [class.border-emerald-500]="plan.popular" [class.ring-4]="plan.popular"
+                [class.ring-emerald-50]="plan.popular">
+
+                <!-- Popular Badge -->
+                <div *ngIf="plan.popular"
+                    class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-emerald-500 text-white text-sm font-bold rounded-full shadow-lg">
+                    MOST POPULAR
+                </div>
+
+                <!-- Icon & Title -->
+                <div class="mb-8">
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110"
+                        [ngClass]="{
+                            'bg-emerald-100 text-emerald-600': plan.color === 'emerald',
+                            'bg-teal-100 text-teal-600': plan.color === 'teal',
+                            'bg-cyan-100 text-cyan-600': plan.color === 'cyan'
+                        }">
+                        <i [class]="plan.icon" class="text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">{{ plan.name }}</h3>
+                    <p class="text-slate-500">{{ plan.description }}</p>
+                </div>
+
+                <!-- Price -->
+                <div class="mb-8">
+                    <div class="flex items-baseline gap-1" *ngIf="plan.price !== 'Custom'">
+                        <span class="text-4xl font-extrabold text-slate-900">₹{{ plan.price }}</span>
+                        <span class="text-slate-500">/{{ plan.period }}</span>
+                    </div>
+                    <div class="text-4xl font-extrabold text-slate-900" *ngIf="plan.price === 'Custom'">
+                        {{ plan.price }}
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <ul class="space-y-4 mb-8">
+                    <li *ngFor="let feature of plan.features" class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
+                        <span class="text-slate-700">{{ feature }}</span>
+                    </li>
+                </ul>
+
+                <!-- Action -->
+                <button
+                    class="w-full py-4 px-6 rounded-2xl font-bold transition-all duration-300 transform active:scale-95"
+                    [ngClass]="{
+                        'bg-slate-900 text-white hover:bg-slate-800': !plan.popular,
+                        'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-200': plan.popular
+                    }">
+                    Get Started Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Trust Section -->
+        <div
+            class="mt-20 p-8 md:p-12 rounded-3xl bg-emerald-900 text-white flex flex-col md:flex-row items-center gap-8 shadow-2xl overflow-hidden relative">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-800 rounded-full blur-3xl -mr-32 -mt-32"></div>
+            <div class="flex-1 z-10">
+                <h2 class="text-3xl font-bold mb-4">Dedicated to your health, every day.</h2>
+                <p class="text-emerald-100 text-lg">
+                    Join over 500,000+ people who trust HealthConnect for their medical needs. Our plans are backed by
+                    the best doctors in India.
+                </p>
+            </div>
+            <div class="flex gap-4 z-10">
+                <div class="text-center">
+                    <div class="text-3xl font-bold">100+</div>
+                    <div class="text-emerald-300 text-sm">Pharmacies</div>
+                </div>
+                <div class="h-12 w-px bg-emerald-700 hidden md:block"></div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold">500+</div>
+                    <div class="text-emerald-300 text-sm">Hospitals</div>
+                </div>
+                <div class="h-12 w-px bg-emerald-700 hidden md:block"></div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold">10k+</div>
+                    <div class="text-emerald-300 text-sm">Doctors</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

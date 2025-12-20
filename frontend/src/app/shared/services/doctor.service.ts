@@ -13,9 +13,21 @@ export class DoctorService {
 
     getDoctors(filters: any): Observable<any[]> {
         let params = new HttpParams();
-        if (filters.specialization) params = params.set('specialization', filters.specialization);
-        if (filters.mode) params = params.set('mode', filters.mode);
+
+        if (filters.specialization) {
+            if (Array.isArray(filters.specialization)) {
+                filters.specialization.forEach((spec: string) => {
+                    params = params.append('specialization', spec);
+                });
+            } else {
+                params = params.set('specialization', filters.specialization);
+            }
+        }
+
+        if (filters.mode && filters.mode !== 'both') params = params.set('mode', filters.mode);
         if (filters.search) params = params.set('search', filters.search);
+        if (filters.maxFee) params = params.set('maxFee', filters.maxFee.toString());
+        if (filters.minExperience) params = params.set('minExperience', filters.minExperience.toString());
 
         return this.http.get<any[]>(this.apiUrl, { params });
     }

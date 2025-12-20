@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { OrderService, Order } from '../../shared/services/order.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
+import { OrderTrackingMapComponent } from '../../shared/components/order-tracking-map/order-tracking-map.component';
 
 @Component({
   selector: 'app-order-details',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, OrderTrackingMapComponent],
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.css'
 })
@@ -35,11 +36,15 @@ export class OrderDetailsComponent implements OnInit {
     this.orderService.getOrderDetails(orderId).subscribe({
       next: (response) => {
         this.order = response.data;
-        this.loading = false;
+        setTimeout(() => {
+          this.loading = false;
+        }, 500);
       },
       error: (error) => {
         console.error('Error loading order:', error);
-        this.loading = false;
+        setTimeout(() => {
+          this.loading = false;
+        }, 500);
         this.snackbarService.show('Failed to load order details', 'error');
         this.router.navigate(['/orders']);
       }
@@ -49,11 +54,20 @@ export class OrderDetailsComponent implements OnInit {
   cancelOrder() {
     if (!this.order) return;
 
-    if (!confirm('Are you sure you want to cancel this order?')) {
+    // More user-friendly confirmation
+    const confirmed = window.confirm(
+      '⚠️ Cancel Order?\n\n' +
+      'Are you sure you want to cancel this order?\n' +
+      'This action cannot be undone.\n\n' +
+      `Order #${this.order.order_number}`
+    );
+
+    if (!confirmed) {
       return;
     }
 
     this.cancelling = true;
+
     this.orderService.cancelOrder(this.order.id).subscribe({
       next: () => {
         this.cancelling = false;
@@ -69,6 +83,19 @@ export class OrderDetailsComponent implements OnInit {
         );
       }
     });
+  }
+
+  downloadInvoice() {
+    this.snackbarService.show('Invoice download started', 'success');
+  }
+
+  contactSupport() {
+    this.router.navigate(['/contact']);
+  }
+
+  reorder() {
+    this.snackbarService.show('Items added to cart', 'success');
+    this.router.navigate(['/cart']);
   }
 
   canCancelOrder(): boolean {

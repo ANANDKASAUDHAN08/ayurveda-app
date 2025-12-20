@@ -21,6 +21,7 @@ import { StaticPagesComponent } from './admin/static-pages/static-pages.componen
 import { StaticPageComponent } from './components/static-page/static-page.component';
 import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
 import { DoctorsAdminComponent } from './admin/admin-doctors/doctors-admin.component';
+import { NearbyServicesComponent } from './pages/nearby-services/nearby-services.component';
 
 import { StrictLogoutGuard } from './guards/strict-logout.guard';
 import { CartComponent } from './pages/cart/cart.component';
@@ -30,6 +31,14 @@ import { OrderDetailsComponent } from './pages/order-details/order-details.compo
 import { SearchResultsComponent } from './pages/search-results/search-results.component';
 import { MedicalDevicesComponent } from './components/medical-devices/medical-devices.component';
 import { MedicinesComponent } from './components/medicines/medicines.component';
+import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
+import { HealthPlansComponent } from './components/health-plans/health-plans.component';
+import { LabTestsComponent } from './components/lab-tests/lab-tests.component';
+import { CareerComponent } from './components/career/career.component';
+import { AboutUsComponent } from './components/about-us/about-us.component';
+import { HelpSupportComponent } from './components/help-support/help-support.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { ContactComponent } from './components/contact/contact.component';
 
 export const routes: Routes = [
     // Public routes
@@ -41,6 +50,15 @@ export const routes: Routes = [
     { path: 'find-doctors', component: DoctorListComponent, canActivate: [StrictLogoutGuard] },
     { path: 'medicines', component: MedicinesComponent, canActivate: [StrictLogoutGuard] },
     { path: 'medical-devices', component: MedicalDevicesComponent, canActivate: [StrictLogoutGuard] },
+    { path: 'health-plans', component: HealthPlansComponent, canActivate: [StrictLogoutGuard] },
+    { path: 'lab-tests', component: LabTestsComponent, canActivate: [StrictLogoutGuard] },
+    { path: 'career', component: CareerComponent, canActivate: [StrictLogoutGuard] },
+    { path: 'about-us', component: AboutUsComponent, canActivate: [StrictLogoutGuard] },
+    { path: 'help-support', component: HelpSupportComponent, canActivate: [StrictLogoutGuard] },
+    { path: 'contact', component: ContactComponent, canActivate: [StrictLogoutGuard] },
+
+    // Email verification (public - no auth required)
+    { path: 'verify-email', component: VerifyEmailComponent },
 
     // Static Pages
     { path: 'privacy-policy', component: StaticPageComponent },
@@ -149,6 +167,12 @@ export const routes: Routes = [
         data: { role: 'user' }
     },
     {
+        path: 'user/settings',
+        component: SettingsComponent,
+        canActivate: [authGuard],
+        data: { role: 'user' }
+    },
+    {
         path: 'user/find-doctors',
         component: DoctorListComponent,
         canActivate: [],
@@ -174,6 +198,12 @@ export const routes: Routes = [
         canActivate: [authGuard],
         data: { role: 'doctor' }
     },
+    {
+        path: 'doctor/settings',
+        component: SettingsComponent,
+        canActivate: [authGuard],
+        data: { role: 'doctor' }
+    },
 
     // Backward compatibility
     {
@@ -192,6 +222,7 @@ export const routes: Routes = [
         pathMatch: 'full'
     },
 
+    { path: 'nearby-services', component: NearbyServicesComponent },
     // Default routes
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: '**', redirectTo: 'home' }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { OrderService, Order } from '../../shared/services/order.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Component({
   selector: 'app-orders',
@@ -26,7 +27,8 @@ export class OrdersComponent implements OnInit {
   ];
 
   constructor(
-    private orderService: OrderService
+    private orderService: OrderService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -42,7 +44,7 @@ export class OrdersComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading orders:', error);
+        this.snackbarService.show('Failed to load orders', 'error');
         this.loading = false;
       }
     });

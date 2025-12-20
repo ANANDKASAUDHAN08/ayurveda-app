@@ -1,0 +1,16 @@
+/* Map Modal Styles */
+#location-map {
+    border-radius: 0;
+}
+
+/* Ensure map controls are visible */
+:host ::ng-deep .maplibregl-ctrl-group {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+:host ::ng-deep .maplibregl-ctrl-group button {
+    width: 30px;
+    height: 30px;
+}
+
+/* Custom marker color handled in TS */

@@ -71,18 +71,17 @@ exports.placeOrder = async (req, res) => {
         // Generate order number
         const order_number = generateOrderNumber();
 
-        // Create full address string
-        const shipping_address = `${delivery_address}, ${delivery_city}, ${delivery_state} - ${delivery_pincode}`;
-
-        // Create order
+        // Create order with separate delivery fields
         const [orderResult] = await connection.execute(`
             INSERT INTO orders (
                 user_id, order_number, total_amount, tax_amount, delivery_fee,
-                final_amount, payment_method, shipping_address, notes, status, payment_status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending')
+                final_amount, payment_method, notes, status, payment_status,
+                delivery_address, delivery_city, delivery_state, delivery_pincode, delivery_phone
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending', ?, ?, ?, ?, ?)
         `, [
             userId, order_number, subtotal, tax_amount, delivery_fee,
-            final_amount, payment_method || 'COD', shipping_address, notes || null
+            final_amount, payment_method || 'COD', notes || null,
+            delivery_address, delivery_city, delivery_state, delivery_pincode, delivery_phone
         ]);
 
         const orderId = orderResult.insertId;
@@ -368,5 +367,55 @@ exports.updateOrderStatus = async (req, res) => {
         });
     } finally {
         connection.release();
+    }
+};
+
+// Get tracking info for an order
+exports.getOrderTracking = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const userId = req.user.id;
+
+        const [orders] = await db.execute(`
+            SELECT id, status, driver_name, driver_phone, driver_lat, driver_lng, customer_lat, customer_lng, estimated_delivery_time
+            FROM orders 
+            WHERE id = ? AND user_id = ?
+        `, [orderId, userId]);
+
+        if (orders.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Order tracking info not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            data: orders[0]
+        });
+    } catch (error) {
+        console.error('Get order tracking error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching tracking info'
+        });
+    }
+};
+
+// Simulation: Update driver location (Internal Use / Demo)
+exports.simulateDriverMovement = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const { lat, lng } = req.body;
+
+        await db.execute(`
+            UPDATE orders 
+            SET driver_lat = ?, driver_lng = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `, [lat, lng, orderId]);
+
+        res.json({ success: true, message: 'Driver location updated' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
     }
 };

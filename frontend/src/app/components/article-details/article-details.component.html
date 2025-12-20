@@ -1,105 +1,224 @@
-<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
-    (click)="onClose()">
+<!-- Full Screen Overlay - Fixed for mobile scroll and desktop click -->
+<div class="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm animate-fadeIn" (click)="onClose()">
 
-    <!-- Modal Container -->
-    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto animate-scaleIn relative"
-        (click)="$event.stopPropagation()">
+    <!-- Scrollable Container -->
+    <div class="h-full overflow-y-auto">
 
-        <!-- Close Button -->
-        <button (click)="onClose()"
-            class="absolute top-6 right-6 z-10 w-10 h-10 bg-black/20 hover:bg-black/40 text-white rounded-full flex items-center justify-center transition-all duration-300 hover:rotate-90">
-            <i class="fas fa-times text-lg"></i>
-        </button>
+        <!-- Centered Wrapper -->
+        <div class="min-h-full md:min-h-0 flex items-center justify-center p-0 md:p-8">
 
-        <!-- Hero Image -->
-        <div class="relative h-72 sm:h-96">
-            <img [src]="article.image_url" [alt]="article.title" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <!-- Article Card - Compact Desktop -->
+            <div class="w-full md:max-w-5xl bg-white md:rounded-3xl shadow-2xl overflow-hidden animate-scaleUp"
+                (click)="$event.stopPropagation()">
 
-            <!-- Title Overlay -->
-            <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
-                <span class="inline-block px-4 py-1.5 rounded-full bg-emerald-600 text-sm font-semibold mb-4 shadow-lg">
-                    {{article.category}}
-                </span>
-                <h2 class="text-3xl sm:text-5xl font-bold leading-tight mb-4 shadow-sm">
-                    {{article.title}}
-                </h2>
-                <div class="flex items-center gap-4 text-sm sm:text-base text-gray-200 font-medium">
-                    <span class="flex items-center gap-2">
-                        <i class="far fa-user-circle"></i> {{article.author}}
-                    </span>
-                    <span class="flex items-center gap-2">
-                        <i class="far fa-calendar-alt"></i> {{article.created_at | date:'mediumDate'}}
-                    </span>
-                    <span class="flex items-center gap-2">
-                        <i class="far fa-clock"></i> 5 min read
-                    </span>
+                <!-- Close Button - Floating -->
+                <button (click)="onClose()" class="fixed md:absolute top-4 right-4 z-20
+                           w-11 h-11 bg-black/70 hover:bg-black/90 backdrop-blur-xl
+                           text-white rounded-full
+                           flex items-center justify-center
+                           transition-all duration-300 hover:rotate-90
+                           border border-white/20 shadow-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+
+                <!-- Hero Image Section - More Compact -->
+                <div class="relative h-[40vh] md:h-[45vh] overflow-hidden">
+                    <img [src]="article.image_url" [alt]="article.title" class="w-full h-full object-cover">
+
+                    <!-- Beautiful Gradient Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+
+                    <!-- Floating Content -->
+                    <div class="absolute inset-0 flex flex-col justify-end p-6 md:p-10">
+                        <!-- Category Badge -->
+                        <div class="mb-4">
+                            <span class="inline-block px-4 py-2 rounded-full 
+                                   bg-white/20 backdrop-blur-xl border border-white/30
+                                   text-white text-xs font-bold uppercase tracking-wider">
+                                {{article.category}}
+                            </span>
+                        </div>
+
+                        <!-- Title -->
+                        <h1 class="text-3xl md:text-5xl font-bold text-white leading-tight mb-4 
+                              drop-shadow-2xl">
+                            {{article.title}}
+                        </h1>
+
+                        <!-- Meta Info -->
+                        <div class="flex flex-wrap items-center gap-4 text-white/90 text-sm">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 
+                                       flex items-center justify-center text-white font-bold text-xs shadow-lg">
+                                    {{article.author.charAt(0)}}
+                                </div>
+                                <span class="font-semibold">{{article.author}}</span>
+                            </div>
+                            <span class="text-white/60">•</span>
+                            <span>{{article.created_at | date:'MMM d, yyyy'}}</span>
+                            <span class="text-white/60">•</span>
+                            <span class="flex items-center gap-1">
+                                <i class="far fa-clock"></i>
+                                5 min read
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article Content -->
+                <div class="bg-white">
+                    <!-- Reading Progress Bar -->
+                    <div class="sticky top-0 z-10 h-1 bg-gray-100">
+                        <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 w-0" id="reading-progress">
+                        </div>
+                    </div>
+
+                    <!-- Content Wrapper - More Compact Padding -->
+                    <article class="px-6 md:px-12 py-8 md:py-12 pb-24 md:pb-12 max-w-3xl mx-auto">
+
+                        <!-- Lead Paragraph -->
+                        <p
+                            class="text-xl md:text-2xl font-serif text-gray-800 leading-relaxed mb-10 first-letter:text-6xl first-letter:font-bold first-letter:text-emerald-600 first-letter:float-left first-letter:mr-3 first-letter:mt-1">
+                            {{article.excerpt}}
+                        </p>
+
+                        <!-- Divider -->
+                        <div class="flex items-center gap-4 my-10">
+                            <div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent">
+                            </div>
+                            <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                            <div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent">
+                            </div>
+                        </div>
+
+                        <!-- Body Content -->
+                        <div class="prose prose-lg max-w-none">
+                            <p class="text-gray-700 leading-relaxed mb-6">
+                                Sleep is essential for our physical and mental well-being. In Ayurveda,
+                                sleep (Nidra) is considered one of the three pillars of life, alongside
+                                food (Ahara) and managed celibacy (Brahmacharya).
+                            </p>
+
+                            <!-- Section Heading -->
+                            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mt-12 mb-6 
+                                  flex items-center gap-3">
+                                <span class="w-2 h-8 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full"></span>
+                                Understanding Sleep Cycles
+                            </h2>
+
+                            <p class="text-gray-700 leading-relaxed mb-6">
+                                Modern science tells us that while we sleep, our brains remain active,
+                                cycling through different stages including REM and deep sleep.
+                            </p>
+
+                            <!-- Quote Block -->
+                            <div class="relative my-10 pl-8 pr-6 py-6 bg-gradient-to-r from-emerald-50 to-teal-50 
+                                   rounded-2xl border-l-4 border-emerald-500">
+                                <i class="fas fa-quote-left absolute top-6 left-4 text-2xl text-emerald-300"></i>
+                                <p class="text-gray-700 italic text-lg leading-relaxed">
+                                    "Early to bed and early to rise makes a man healthy, wealthy, and wise."
+                                    This aligns perfectly with Ayurvedic wisdom.
+                                </p>
+                            </div>
+
+                            <!-- Tips Section -->
+                            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mt-12 mb-6 
+                                  flex items-center gap-3">
+                                <span class="w-2 h-8 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full"></span>
+                                Practical Tips
+                            </h2>
+
+                            <!-- Tips Cards -->
+                            <div class="space-y-4 my-8">
+                                <div class="group bg-white border-2 border-gray-100 rounded-2xl p-5 
+                                       hover:border-emerald-200 hover:shadow-lg transition-all">
+                                    <div class="flex items-start gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 
+                                               flex items-center justify-center flex-shrink-0 shadow-lg
+                                               group-hover:scale-110 transition-transform">
+                                            <i class="fas fa-clock text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900 mb-2">Stick to a Schedule</h4>
+                                            <p class="text-gray-600 text-sm leading-relaxed">
+                                                Go to bed and wake up at the same time every day to regulate your
+                                                internal
+                                                clock.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="group bg-white border-2 border-gray-100 rounded-2xl p-5 
+                                       hover:border-purple-200 hover:shadow-lg transition-all">
+                                    <div class="flex items-start gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 
+                                               flex items-center justify-center flex-shrink-0 shadow-lg
+                                               group-hover:scale-110 transition-transform">
+                                            <i class="fas fa-spa text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900 mb-2">Bedtime Ritual</h4>
+                                            <p class="text-gray-600 text-sm leading-relaxed">
+                                                Warm milk with nutmeg, foot massage, or gentle breathing exercises.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="group bg-white border-2 border-gray-100 rounded-2xl p-5 
+                                       hover:border-blue-200 hover:shadow-lg transition-all">
+                                    <div class="flex items-start gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 
+                                               flex items-center justify-center flex-shrink-0 shadow-lg
+                                               group-hover:scale-110 transition-transform">
+                                            <i class="fas fa-moon text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900 mb-2">Optimize Environment</h4>
+                                            <p class="text-gray-600 text-sm leading-relaxed">
+                                                Keep bedroom dark, quiet, and cool. Use calming oils like lavender.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Article Footer -->
+                        <div class="mt-16 pt-8 border-t-2 border-gray-100">
+                            <div class="flex items-center justify-between flex-wrap gap-4">
+                                <!-- Author Info -->
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 
+                                           flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                                        {{article.author.charAt(0)}}
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-900">{{article.author}}</p>
+                                        <p class="text-xs text-gray-500">{{article.category}} Specialist</p>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="flex gap-2">
+                                    <button class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-xl 
+                                              text-gray-700 font-semibold transition-all flex items-center gap-2">
+                                        <i class="far fa-heart"></i>
+                                        Like
+                                    </button>
+                                    <button class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 
+                                              hover:from-emerald-700 hover:to-teal-700
+                                              text-white rounded-xl font-semibold shadow-lg
+                                              transition-all flex items-center gap-2">
+                                        <i class="fas fa-share-alt"></i>
+                                        Share
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
                 </div>
             </div>
         </div>
-
-        <!-- Content -->
-        <div class="p-8 sm:p-12">
-            <!-- Author Bio / Intro -->
-            <div class="flex items-start gap-4 p-6 bg-emerald-50 rounded-2xl mb-10 border border-emerald-100">
-                <div
-                    class="w-12 h-12 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-700 text-xl font-bold flex-shrink-0">
-                    {{article.author.charAt(0)}}
-                </div>
-                <div>
-                    <h4 class="font-bold text-gray-900 mb-1">About the Author</h4>
-                    <p class="text-gray-600 text-sm leading-relaxed">
-                        {{article.author}} is a specialist in {{article.category}} with over 10 years of experience
-                        helping patients achieve better health through Ayurvedic practices.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Article Text -->
-            <div class="prose prose-lg max-w-none text-gray-700 space-y-6 leading-relaxed">
-                <p class="text-xl font-medium text-gray-800 leading-8">
-                    {{article.excerpt}}
-                </p>
-
-                <p>
-                    Sleep is essential for our physical and mental well-being. In Ayurveda, sleep (Nidra) is considered
-                    one of the three pillars of life, alongside food (Ahara) and managed celibacy (Brahmacharya).
-                    Quality sleep regenerates our tissues and restores balance to our doshas.
-                </p>
-
-                <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Understanding Sleep Cycles</h3>
-                <p>
-                    Modern science tells us that while we sleep, our brains remain active, cycling through different
-                    stages including REM (rapid eye movement) and deep sleep. Ayurveda adds that the time we go to bed
-                    significantly impacts the quality of this restoration.
-                </p>
-
-                <blockquote
-                    class="border-l-4 border-emerald-500 pl-6 italic my-8 text-gray-600 bg-gray-50 py-4 rounded-r-lg">
-                    "Early to bed and early to rise makes a man healthy, wealthy, and wise." - This old adage aligns
-                    perfectly with Ayurvedic wisdom.
-                </blockquote>
-
-                <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Practical Tips for Better Rest</h3>
-                <ul class="space-y-4 list-none pl-0">
-                    <li class="flex items-start gap-3">
-                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
-                        <span><strong>Stick to a schedule:</strong> Go to bed and wake up at the same time every day to
-                            regulate your internal clock.</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
-                        <span><strong>Create a bedtime ritual:</strong> Warm milk with nutmeg, a foot massage, or gentle
-                            breathing exercises can signal your body it's time to rest.</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
-                        <span><strong>Optimize your environment:</strong> Keep your bedroom dark, quiet, and cool.
-                            Consider using calming essential oils like lavender.</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
     </div>
-</div>
