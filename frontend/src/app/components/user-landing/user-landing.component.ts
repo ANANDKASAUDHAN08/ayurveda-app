@@ -55,12 +55,17 @@ export class UserLandingComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Optional: Check for query params to switch tab if needed
+    // No OAuth handling needed - backend redirects to /home
+  }
+
+  signInWithGoogle() {
+    // Redirect to backend OAuth endpoint
+    window.location.href = 'http://localhost:3000/api/auth/google/user';
   }
 
   switchTab(tab: 'login' | 'register') {
     this.activeTab = tab;
-    // Reset forms when switching? Optional.
+    // Reset forms when switching
     this.loginForm.reset();
     this.registerForm.reset();
   }

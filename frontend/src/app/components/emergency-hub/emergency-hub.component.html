@@ -1,0 +1,377 @@
+<!-- Emergency Services Hub - Full Width -->
+<div class="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50/30">
+    <div class="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+
+        <!-- Compact Header -->
+        <div class="mb-4 sm:mb-6">
+            <!-- Top Badge Row with History Button -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div class="inline-flex items-center gap-2 bg-red-100 text-red-700 px-3 py-1.5 rounded-full">
+                    <i class="fas fa-ambulance text-sm"></i>
+                    <span class="text-xs sm:text-sm font-bold">24/7 Emergency Services</span>
+                </div>
+
+                <!-- History Button - Compact -->
+                <a *ngIf="isLoggedIn" routerLink="/emergency-history"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors text-xs sm:text-sm">
+                    <i class="fas fa-history"></i>
+                    <span class="hidden sm:inline">View Call History</span>
+                    <span class="sm:hidden">History</span>
+                </a>
+            </div>
+
+            <!-- Title & Description - More Compact -->
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">Emergency Hub</h1>
+            <p class="text-sm sm:text-base text-slate-600">Quick access to emergency services</p>
+        </div>
+
+        <!-- Guest User Banner -->
+        <div *ngIf="!isLoggedIn" class="mb-6 bg-blue-50 border-2 border-blue-200 rounded-2xl p-4">
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-info-circle text-white"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-bold text-blue-900 mb-1">Save Your Emergency Information</h3>
+                    <p class="text-sm text-blue-700 mb-3">Login to store emergency contacts and medical info for quick
+                        access during emergencies.</p>
+                    <a routerLink="/for-users"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-colors">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login Now
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CRITICAL: Big Ambulance Call Button - Compact Design -->
+        <div class="mb-6">
+            <button (click)="callAmbulance()"
+                class="w-full group relative overflow-hidden bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-2xl shadow-xl hover:shadow-red-500/30 transition-all transform hover:scale-[1.01] active:scale-[0.99] p-6">
+
+                <!-- Animated pulse background -->
+                <div class="absolute inset-0 bg-red-400 opacity-0 group-hover:opacity-20 animate-pulse"></div>
+
+                <div class="relative flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-ambulance text-2xl"></i>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-xl sm:text-2xl font-bold mb-1">CALL AMBULANCE</div>
+                            <div class="text-red-100 text-sm">Emergency Number: 108</div>
+                        </div>
+                    </div>
+                    <div class="hidden sm:block text-xs text-red-100 bg-red-800/30 px-3 py-1.5 rounded-full">
+                        <i class="fas fa-map-marker-alt mr-1"></i>
+                        <span *ngIf="currentLocation">
+                            {{currentLocation.latitude.toFixed(4)}}, {{currentLocation.longitude.toFixed(4)}}
+                        </span>
+                        <span *ngIf="!currentLocation">Detecting...</span>
+                    </div>
+                </div>
+            </button>
+        </div>
+
+        <!-- Quick Actions Grid - Full Width -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+            <!-- Nearby Hospitals -->
+            <button (click)="showNearbyHospitals()"
+                class="p-4 sm:p-6 bg-white rounded-2xl border-2 border-slate-200 hover:border-blue-400 hover:shadow-lg transition-all text-center group">
+                <div
+                    class="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i class="fas fa-hospital text-white text-xl sm:text-2xl"></i>
+                </div>
+                <div class="text-sm sm:text-base font-bold text-slate-900">Nearby</div>
+                <div class="text-xs text-slate-500">Hospitals</div>
+            </button>
+
+            <!-- Emergency Contacts -->
+            <button (click)="showEmergencyContacts()"
+                class="p-4 sm:p-6 bg-white rounded-2xl border-2 border-slate-200 hover:border-emerald-400 hover:shadow-lg transition-all text-center group">
+                <div
+                    class="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i class="fas fa-phone-alt text-white text-xl sm:text-2xl"></i>
+                </div>
+                <div class="text-sm sm:text-base font-bold text-slate-900">My</div>
+                <div class="text-xs text-slate-500">Contacts</div>
+            </button>
+
+            <!-- First Aid -->
+            <button (click)="showFirstAid()"
+                class="p-4 sm:p-6 bg-white rounded-2xl border-2 border-slate-200 hover:border-purple-400 hover:shadow-lg transition-all text-center group">
+                <div
+                    class="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i class="fas fa-first-aid text-white text-xl sm:text-2xl"></i>
+                </div>
+                <div class="text-sm sm:text-base font-bold text-slate-900">First</div>
+                <div class="text-xs text-slate-500">Aid Guide</div>
+            </button>
+
+            <!-- Medical Info -->
+            <button (click)="showMedicalInfo()"
+                class="p-4 sm:p-6 bg-white rounded-2xl border-2 border-slate-200 hover:border-orange-400 hover:shadow-lg transition-all text-center group">
+                <div
+                    class="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i class="fas fa-notes-medical text-white text-xl sm:text-2xl"></i>
+                </div>
+                <div class="text-sm sm:text-base font-bold text-slate-900">Medical</div>
+                <div class="text-xs text-slate-500">Information</div>
+            </button>
+        </div>
+
+        <!-- Two Column Layout for Medical Info and Contacts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+
+            <!-- Left Column: Medical Information Card -->
+            <div id="medical-info-section">
+                <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fas fa-heartbeat text-red-600"></i>
+                            Medical Information
+                        </h3>
+                        <!-- Show Edit/Delete if Medical Info exists, otherwise show Add button -->
+                        <div class="flex items-center gap-2"
+                            *ngIf="medicalInfo && (medicalInfo.blood_type || medicalInfo.allergies.length > 0 || medicalInfo.medical_conditions.length > 0); else addMedicalBtn">
+                            <button (click)="editMedicalInfo()"
+                                class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-sm transition-all">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button (click)="deleteMedicalInfo()"
+                                class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold text-sm transition-all">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <ng-template #addMedicalBtn>
+                            <button (click)="editMedicalInfo()"
+                                class="text-emerald-600 hover:text-emerald-700 text-sm font-bold">
+                                <i class="fas fa-plus mr-1"></i>Add
+                            </button>
+                        </ng-template>
+                    </div>
+
+                    <div class="space-y-4"
+                        *ngIf="medicalInfo && (medicalInfo.blood_type || medicalInfo.allergies.length > 0 || medicalInfo.medical_conditions.length > 0); else noMedicalInfo">
+                        <!-- Blood Type -->
+                        <div class="flex items-start gap-3" *ngIf="medicalInfo.blood_type">
+                            <div
+                                class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-tint text-red-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-xs text-slate-500 font-bold mb-1">Blood Type</div>
+                                <div class="text-lg font-bold text-slate-900">{{medicalInfo.blood_type}}</div>
+                            </div>
+                        </div>
+
+                        <!-- Allergies -->
+                        <div class="flex items-start gap-3" *ngIf="medicalInfo.allergies.length > 0">
+                            <div
+                                class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-exclamation-triangle text-orange-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-xs text-slate-500 font-bold mb-1">Allergies</div>
+                                <div class="text-sm text-slate-900">{{medicalInfo.allergies.join(', ')}}</div>
+                            </div>
+                        </div>
+
+                        <!-- Medical Conditions -->
+                        <div class="flex items-start gap-3" *ngIf="medicalInfo.medical_conditions.length > 0">
+                            <div
+                                class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-file-medical text-blue-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-xs text-slate-500 font-bold mb-1">Conditions</div>
+                                <div class="text-sm text-slate-900">{{medicalInfo.medical_conditions.join(', ')}}</div>
+                            </div>
+                        </div>
+
+                        <!-- Primary Doctor -->
+                        <div class="flex items-start gap-3" *ngIf="medicalInfo.primary_doctor_name">
+                            <div
+                                class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-user-md text-emerald-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-xs text-slate-500 font-bold mb-1">Primary Doctor</div>
+                                <div class="text-sm font-bold text-slate-900">{{medicalInfo.primary_doctor_name}}</div>
+                                <a *ngIf="medicalInfo.primary_doctor_phone"
+                                    [href]="'tel:' + medicalInfo.primary_doctor_phone"
+                                    class="text-xs text-emerald-600 hover:text-emerald-700">
+                                    {{medicalInfo.primary_doctor_phone}}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-template #noMedicalInfo>
+                        <div class="text-center py-6">
+                            <i class="fas fa-info-circle text-slate-300 text-4xl mb-3"></i>
+                            <p class="text-slate-500 mb-4">No medical information added yet</p>
+                            <button (click)="editMedicalInfo()"
+                                class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-all">
+                                <i class="fas fa-plus mr-2"></i>Add Medical Info
+                            </button>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!-- Right Column: Emergency Contacts List -->
+            <div id="contacts-section">
+                <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fas fa-phone-volume text-emerald-600"></i>
+                            Emergency Contacts
+                        </h3>
+                        <button (click)="addContact()"
+                            class="text-emerald-600 hover:text-emerald-700 text-sm font-bold">
+                            <i class="fas fa-plus mr-1"></i>Add
+                        </button>
+                    </div>
+
+                    <!-- Group Actions -->
+                    <div *ngIf="emergencyContacts.length > 1" class="flex gap-3 mb-4">
+                        <button (click)="callAllContacts()"
+                            class="flex-1 px-4 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white rounded-xl font-bold text-sm transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                            <i class="fas fa-phone-volume"></i>
+                            <span>Call All ({{emergencyContacts.length}})</span>
+                        </button>
+                        <button (click)="sendSOSToAll()"
+                            class="flex-1 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl font-bold text-sm transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>SOS to All</span>
+                        </button>
+                    </div>
+
+                    <div class="space-y-3" *ngIf="emergencyContacts.length > 0; else noContacts" cdkDropList
+                        (cdkDropListDropped)="dropContact($event)">
+                        <div *ngFor="let contact of emergencyContacts" cdkDrag
+                            class="flex flex-col sm:flex-row sm:items-center gap-3 p-3 sm:p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all border border-slate-100">
+
+                            <!-- Main Row: Drag + Info -->
+                            <div class="flex items-center gap-3 flex-1 min-w-0">
+                                <!-- Drag Handle -->
+                                <div cdkDragHandle class="cursor-move text-slate-400 hover:text-slate-600">
+                                    <i class="fas fa-grip-vertical text-sm"></i>
+                                </div>
+
+                                <!-- Avatar & Info -->
+                                <div class="flex items-center gap-3 flex-1 min-w-0">
+                                    <div
+                                        class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base flex-shrink-0">
+                                        {{contact.name.charAt(0).toUpperCase()}}
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="font-bold text-slate-900 text-sm sm:text-base truncate">
+                                            {{contact.name}}</div>
+                                        <div class="text-xs text-slate-500 truncate">
+                                            {{contact.relationship || 'Contact'}} • {{contact.phone_number}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons - Compact & Responsive -->
+                            <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                                <!-- Call Button -->
+                                <a [href]="'tel:' + contact.phone_number"
+                                    class="p-2 sm:px-3 sm:py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-xs sm:text-sm transition-all flex items-center justify-center"
+                                    title="Call">
+                                    <i class="fas fa-phone text-sm"></i>
+                                </a>
+
+                                <!-- Share Location Button -->
+                                <button (click)="shareLocation(contact)"
+                                    class="p-2 sm:px-3 sm:py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-bold text-xs sm:text-sm transition-all"
+                                    title="Share My Location">
+                                    <i class="fas fa-map-marker-alt text-sm"></i>
+                                </button>
+
+                                <!-- Edit Button -->
+                                <button (click)="editContact(contact)"
+                                    class="p-2 sm:px-3 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-xs sm:text-sm transition-all"
+                                    title="Edit">
+                                    <i class="fas fa-edit text-sm"></i>
+                                </button>
+
+                                <!-- Delete Button -->
+                                <button (click)="deleteContact(contact.id!)"
+                                    class="p-2 sm:px-3 sm:py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold text-xs sm:text-sm transition-all"
+                                    title="Delete">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </button>
+                            </div>
+
+                            <!-- Drag Preview (what user sees while dragging) -->
+                            <div *cdkDragPreview
+                                class="flex items-center gap-3 p-4 bg-white rounded-xl shadow-2xl border-2 border-emerald-500">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    {{contact.name.charAt(0).toUpperCase()}}
+                                </div>
+                                <div>
+                                    <div class="font-bold text-slate-900">{{contact.name}}</div>
+                                    <div class="text-xs text-slate-500">{{contact.relationship || 'Contact'}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-template #noContacts>
+                        <div class="text-center py-6">
+                            <i class="fas fa-address-book text-slate-300 text-4xl mb-3"></i>
+                            <p class="text-slate-500 mb-4">No emergency contacts added yet</p>
+                            <button (click)="addContact()"
+                                class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-all">
+                                <i class="fas fa-plus mr-2"></i>Add Contact
+                            </button>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Tips - Full Width at Bottom -->
+        <div class="mt-8 bg-blue-50 border border-blue-200 rounded-2xl p-6">
+            <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                <i class="fas fa-shield-alt"></i>
+                Safety Tips
+            </h4>
+            <ul class="space-y-2 text-sm text-blue-800">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                    <span>Keep your medical information up to date</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                    <span>Add at least 2-3 emergency contacts</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                    <span>Enable location services for faster emergency response</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                    <span>In case of emergency, call 108 for ambulance services</span>
+                </li>
+            </ul>
+        </div>
+
+
+        <!-- Emergency Contact Modal -->
+        <app-emergency-contact-modal *ngIf="showContactModal" [contact]="editingContact" (save)="saveContact($event)"
+            (close)="closeContactModal()">
+        </app-emergency-contact-modal>
+
+        <!-- Medical Info Modal -->
+        <app-medical-info-modal *ngIf="showMedicalModal" [medicalInfo]="medicalInfo" (save)="saveMedicalInfo($event)"
+            (close)="closeMedicalModal()">
+        </app-medical-info-modal>
+
+    </div>
+</div>

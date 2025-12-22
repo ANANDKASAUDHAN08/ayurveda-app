@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { SkeletonLoaderComponent } from 'src/app/shared/components/skeleton-loader/skeleton-loader.component';
 import { EmptyStateComponent } from 'src/app/shared/components/empty-state/empty-state.component';
 import { SearchService } from 'src/app/shared/services/search.service';
+import { SnackbarService } from 'src/app/shared/services/snackbar.service';
 
 @Component({
   selector: 'app-home',
@@ -67,10 +68,62 @@ export class HomeComponent implements OnInit {
   constructor(
     private router: Router,
     private contentService: ContentService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private snackbar: SnackbarService
   ) { }
 
   ngOnInit() {
+    // Check for OAuth success flag (after page reload)
+    const oauthLoginSuccess = sessionStorage.getItem('oauth_login_success');
+    const isNewUser = sessionStorage.getItem('oauth_new_user');
+
+    if (oauthLoginSuccess) {
+      sessionStorage.removeItem('oauth_login_success');
+      sessionStorage.removeItem('oauth_new_user');
+
+      if (isNewUser === 'true') {
+        this.snackbar.success('Registered successfully with Google!');
+      } else {
+        this.snackbar.success('Signed in with Google successfully!');
+      }
+    }
+
+    // Handle OAuth callback if redirected from Google
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const oauthSuccess = urlParams.get('oauth');
+    const newUser = urlParams.get('newUser');
+
+    if (token && oauthSuccess === 'success') {
+      // Store token in localStorage
+      localStorage.setItem('token', token);
+
+      // Decode JWT to get user data
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const user = {
+          id: payload.id,
+          email: payload.email,
+          role: payload.role,
+          name: payload.name || payload.email.split('@')[0]
+        };
+        localStorage.setItem('user', JSON.stringify(user));
+      } catch (e) {
+        console.error('Failed to decode token:', e);
+      }
+
+      // Set flags to show snackbar after reload
+      sessionStorage.setItem('oauth_login_success', 'true');
+      sessionStorage.setItem('oauth_new_user', newUser || 'false');
+
+      // Clean URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+
+      // Reload to update UI state
+      window.location.reload();
+      return;
+    }
+
     this.loadFeaturedDoctors();
     this.loadHealthArticles();
 

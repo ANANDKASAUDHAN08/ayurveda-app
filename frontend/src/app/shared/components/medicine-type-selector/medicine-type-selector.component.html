@@ -1,0 +1,44 @@
+<!-- Medicine Type Selector - Horizontal Pills -->
+<div class="medicine-type-selector sticky top-16 z-30 bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-3">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-semibold text-gray-700">
+                <i class="fas fa-filter mr-2"></i>
+                Filter by Medicine Type
+            </h3>
+            <button *ngIf="activeMedicineTypeId" (click)="clearFilter()"
+                class="text-xs text-emerald-600 hover:text-emerald-700 font-medium transition-colors">
+                <i class="fas fa-times mr-1"></i>
+                Clear Filter
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="flex gap-3 overflow-x-auto pb-2">
+            <div class="pill-skeleton" *ngFor="let i of [1,2,3]"></div>
+        </div>
+
+        <!-- Medicine Type Pills -->
+        <div *ngIf="!isLoading" class="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
+            <!-- All / Clear Filter Pill -->
+            <button (click)="clearFilter()" [class]="activeMedicineTypeId === null ? 'pill active-pill' : 'pill'"
+                class="flex-shrink-0">
+                <i class="fas fa-th mr-2"></i>
+                <span>All</span>
+            </button>
+
+            <!-- Individual Medicine Type Pills -->
+            <button *ngFor="let type of medicineTypes" (click)="selectMedicineType(type.id)"
+                [class]="isActive(type.id) ? 'pill active-pill' : 'pill'"
+                [style.backgroundColor]="isActive(type.id) ? type.color : ''"
+                [style.color]="isActive(type.id) ? '#ffffff' : '#374151'" class="flex-shrink-0">
+                <i [class]="type.icon + ' mr-2'"></i>
+                <span>{{ type.name }}</span>
+                <span class="pill-badge" *ngIf="isActive(type.id)">
+                    <i class="fas fa-check text-xs"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+</div>

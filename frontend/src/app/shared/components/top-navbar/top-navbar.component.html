@@ -200,6 +200,9 @@
                         </span>
                     </button>
 
+                    <!-- Notification Bell (Desktop & Mobile) -->
+                    <app-notification-bell *ngIf="isLoggedIn" class="flex"></app-notification-bell>
+
                     <!-- User Menu -->
                     <div class="hidden sm:block">
                         <!-- Not Logged In - Login Dropdown -->
@@ -301,37 +304,125 @@
         </div>
     </div>
 
-    <!-- Row 2: Categories (Desktop Only) -->
+    <!-- Row 2: Clean Navigation with Dropdowns (Desktop Only) -->
     <div class="hidden md:block bg-white border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center h-12 space-x-8">
-                <a routerLink="/medicines" routerLinkActive="text-emerald-600 font-semibold"
-                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer">
-                    Medicine
-                </a>
-                <a routerLink="/lab-tests" routerLinkActive="text-emerald-600 font-semibold"
-                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer">
-                    Lab Tests
-                </a>
-                <a routerLink="/find-doctors" routerLinkActive="text-emerald-600 font-semibold"
-                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer">
-                    Consult Doctor
-                </a>
+            <div class="flex items-center h-12 gap-6">
+
+                <!-- Shop Dropdown -->
+                <div class="relative shop-dropdown-container">
+                    <button (click)="toggleShopDropdown()"
+                        class="text-sm font-medium text-slate-700 hover:text-emerald-600 transition-colors flex items-center gap-1">
+                        <i class="fas fa-shopping-cart"></i>
+                        Shop
+                        <i [class]="shopDropdownOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'" class="text-xs"></i>
+                    </button>
+
+                    <!-- Shop Dropdown Menu -->
+                    <div *ngIf="shopDropdownOpen"
+                        class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-slate-200 py-2 z-50">
+                        <a routerLink="/medicines" (click)="shopDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 transition-colors">
+                            <i class="fas fa-pills text-teal-600 w-5"></i>
+                            <span class="text-slate-700">Medicines</span>
+                        </a>
+                        <a routerLink="/medical-devices" (click)="shopDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 transition-colors">
+                            <i class="fas fa-heartbeat text-pink-600 w-5"></i>
+                            <span class="text-slate-700">Medical Devices</span>
+                        </a>
+                        <a routerLink="/lab-tests" (click)="shopDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 transition-colors">
+                            <i class="fas fa-flask text-indigo-600 w-5"></i>
+                            <span class="text-slate-700">Lab Tests</span>
+                        </a>
+                        <a routerLink="/health-plans" (click)="shopDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 transition-colors">
+                            <i class="fas fa-shield-alt text-blue-600 w-5"></i>
+                            <span class="text-slate-700">Health Plans</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Find Care Dropdown (was just "Doctors") -->
+                <div class="relative care-dropdown-container">
+                    <button (click)="toggleCareDropdown()"
+                        class="text-sm font-medium text-slate-700 hover:text-emerald-600 transition-colors flex items-center gap-1">
+                        <i class="fas fa-hospital-user"></i>
+                        Find Care
+                        <i [class]="careDropdownOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'" class="text-xs"></i>
+                    </button>
+
+                    <!-- Find Care Dropdown Menu -->
+                    <div *ngIf="careDropdownOpen"
+                        class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-slate-200 py-2 z-50">
+                        <a routerLink="/find-doctors" (click)="careDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 transition-colors">
+                            <i class="fas fa-user-md text-blue-600 w-5"></i>
+                            <span class="text-slate-700">Find Doctors</span>
+                        </a>
+                        <a routerLink="/hospitals" (click)="careDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 transition-colors">
+                            <i class="fas fa-hospital text-red-600 w-5"></i>
+                            <span class="text-slate-700">Hospitals</span>
+                        </a>
+                        <a routerLink="/pharmacies" (click)="careDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 transition-colors">
+                            <i class="fas fa-pills text-green-600 w-5"></i>
+                            <span class="text-slate-700">Pharmacies</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- My Health Dropdown (Logged In Only) -->
+                <div *ngIf="isLoggedIn" class="relative my-health-dropdown-container">
+                    <button (click)="toggleMyHealthDropdown()"
+                        class="text-sm font-medium text-slate-700 hover:text-emerald-600 transition-colors flex items-center gap-1">
+                        <i class="fas fa-heart-pulse"></i>
+                        My Health
+                        <i [class]="myHealthDropdownOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
+                            class="text-xs"></i>
+                    </button>
+
+                    <!-- My Health Dropdown Menu -->
+                    <div *ngIf="myHealthDropdownOpen"
+                        class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-slate-200 py-2 z-50">
+                        <a (click)="navigateToDashboard(); myHealthDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 transition-colors cursor-pointer">
+                            <i class="fas fa-th-large text-emerald-600 w-5"></i>
+                            <span class="text-slate-700">Dashboard</span>
+                        </a>
+                        <a routerLink="/user/profile" (click)="myHealthDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 transition-colors">
+                            <i class="fas fa-user-circle text-purple-600 w-5"></i>
+                            <span class="text-slate-700">My Profile</span>
+                        </a>
+                        <a (click)="navigateToOrders(); myHealthDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 transition-colors cursor-pointer">
+                            <i class="fas fa-shopping-bag text-orange-600 w-5"></i>
+                            <span class="text-slate-700">My Orders</span>
+                        </a>
+                        <div class="border-t border-slate-200 my-1"></div>
+                        <a (click)="navigateToSettings(); myHealthDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 transition-colors cursor-pointer">
+                            <i class="fas fa-cog text-slate-600 w-5"></i>
+                            <span class="text-slate-700">Settings</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Nearby Services -->
                 <a routerLink="/nearby-services" routerLinkActive="text-emerald-600 font-semibold"
-                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer text-emerald-700 font-bold">
-                    <i class="fas fa-location-dot mr-1"></i> Nearby Care
+                    class="text-sm font-medium text-slate-700 hover:text-emerald-600 transition-colors">
+                    <i class="fas fa-location-dot mr-1"></i>
+                    Nearby Care
                 </a>
-                <a routerLink="/health-plans" routerLinkActive="text-emerald-600 font-semibold"
-                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer">
-                    Health Plans
-                </a>
-                <a routerLink="/pharmacies" routerLinkActive="text-emerald-600 font-semibold"
-                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer">
-                    Pharmacies
-                </a>
-                <a routerLink="/hospitals" routerLinkActive="text-emerald-600 font-semibold"
-                    class="text-sm hover:text-emerald-600 transition-colors cursor-pointer">
-                    Hospitals
+
+                <!-- Emergency SOS (Right-aligned, Prominent - ALWAYS RED) -->
+                <a routerLink="/emergency"
+                    class="ml-auto text-sm font-bold text-red-600 hover:text-red-700 transition-colors">
+                    <i class="fas fa-ambulance mr-1 animate-pulse"></i>
+                    Emergency SOS
                 </a>
             </div>
         </div>

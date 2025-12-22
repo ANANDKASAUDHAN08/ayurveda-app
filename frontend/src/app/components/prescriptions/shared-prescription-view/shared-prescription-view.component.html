@@ -1,0 +1,155 @@
+<div class="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex items-center justify-center min-h-screen">
+        <div class="text-center">
+            <i class="fa-solid fa-spinner fa-spin text-4xl text-emerald-600 mb-4"></i>
+            <p class="text-gray-600">Loading prescription...</p>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!loading && error" class="flex items-center justify-center min-h-screen p-4">
+        <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+            <div class="mb-6">
+                <i class="fa-solid text-6xl mb-4" [class.fa-clock]="expired" [class.fa-exclamation-triangle]="!expired"
+                    [class.text-amber-500]="expired" [class.text-red-500]="!expired"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">
+                {{ expired ? 'Link Expired' : 'Access Denied' }}
+            </h1>
+            <p class="text-gray-600 mb-6">{{ error }}</p>
+            <button (click)="goToHome()"
+                class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors">
+                Go to Home
+            </button>
+        </div>
+    </div>
+
+    <!-- Success State -->
+    <div *ngIf="!loading && prescription" class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 py-12">
+        <!-- Header -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 mb-6">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-prescription text-emerald-600 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Shared Prescription</h1>
+                    <p class="text-sm text-gray-600">Securely shared with you</p>
+                </div>
+            </div>
+
+            <!-- Share Info -->
+            <div *ngIf="shareInfo" class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-info-circle text-blue-600 text-lg mt-0.5"></i>
+                    <div class="text-sm">
+                        <p class="text-blue-900">
+                            <strong>Shared by:</strong> {{ shareInfo?.shared_by || 'Healthcare Provider' }}
+                        </p>
+                        <p class="text-blue-700" *ngIf="shareInfo?.recipient_name">
+                            <strong>To:</strong> {{ shareInfo.recipient_name }}
+                        </p>
+                        <p class="text-blue-700" *ngIf="shareInfo?.expires_at">
+                            <strong>Expires:</strong> {{ shareInfo.expires_at | date:'medium' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prescription Details -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+            <!-- Patient Info -->
+            <div class="mb-6 pb-6 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Patient Information</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-600">Patient Name</p>
+                        <p class="font-medium text-gray-900">{{ prescription?.patient_name || 'N/A' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Prescription Date</p>
+                        <p class="font-medium text-gray-900">{{ prescription?.created_at | date:'mediumDate' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Doctor</p>
+                        <p class="font-medium text-gray-900">{{ prescription?.doctor_name || 'N/A' }}</p>
+                    </div>
+                    <div *ngIf="prescription?.diagnosis">
+                        <p class="text-sm text-gray-600">Diagnosis</p>
+                        <p class="font-medium text-gray-900">{{ prescription.diagnosis }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medicines -->
+            <div class="mb-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Prescribed Medicines</h2>
+                <div *ngIf="!prescription?.medicines || prescription.medicines.length === 0"
+                    class="text-gray-600 text-sm">
+                    No medicines prescribed
+                </div>
+                <div class="space-y-3" *ngIf="prescription?.medicines && prescription.medicines.length > 0">
+                    <div *ngFor="let med of prescription?.medicines"
+                        class="border border-gray-200 rounded-xl p-4 hover:border-emerald-300 transition-colors">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-900 mb-1">{{ med.name }}</h3>
+                                <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600">
+                                    <span class="flex items-center gap-1">
+                                        <i class="fa-solid fa-pills text-emerald-600"></i>
+                                        {{ med.dosage }}
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i class="fa-solid fa-clock text-blue-600"></i>
+                                        {{ med.frequency }}
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i class="fa-solid fa-calendar text-purple-600"></i>
+                                        {{ med.duration }}
+                                    </span>
+                                </div>
+                                <p *ngIf="med.instructions" class="text-sm text-gray-600 mt-2">
+                                    <i class="fa-solid fa-info-circle text-amber-600"></i>
+                                    {{ med.instructions }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div *ngIf="prescription.notes" class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                <h3 class="font-semibold text-amber-900 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-note-sticky"></i>
+                    Additional Notes
+                </h3>
+                <p class="text-sm text-amber-800">{{ prescription.notes }}</p>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-shield-halved text-gray-600 text-lg"></i>
+                        <div class="text-sm text-gray-700">
+                            <strong>Privacy Notice:</strong> This prescription has been securely shared with you.
+                            Please do not share this link with others. This link will expire automatically.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="mt-6 text-center">
+            <button (click)="goToHome()"
+                class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
+                <i class="fa-solid fa-home mr-2"></i>
+                Go to Home
+            </button>
+        </div>
+    </div>
+</div>

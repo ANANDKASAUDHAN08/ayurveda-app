@@ -1,123 +1,302 @@
-<div class="min-h-screen bg-gradient-to-br from-emeral
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 pt-16 md:pt-20 pb-12 md:pb-16">
+    <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
 
-d-50 via-white to-teal-50 pt-20 pb-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Header -->
-        <div class="mb-6 sm:mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">My Appointments</h1>
-            <p class="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">Manage and track your medical consultations</p>
+        <!-- Welcome Header - MOBILE OPTIMIZED -->
+        <div class="mb-4 md:mb-6">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-1">
+                Welcome, {{userName}}! 👋
+            </h1>
+            <p class="text-sm md:text-base text-slate-600">Your health command center - everything in one place</p>
         </div>
 
-        <!-- Filter Tabs -->
-        <div class="mb-6 sm:mb-8 bg-white rounded-xl shadow-sm p-1.5 flex flex-wrap gap-1">
-            <button (click)="setFilter('all')"
-                [class]="filter === 'all' ? 'bg-emerald-600 text-white shadow-md' : 'text-gray-700 hover:bg-gray-50'"
-                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex-shrink-0">
-                All
-            </button>
-            <button (click)="setFilter('upcoming')"
-                [class]="filter === 'upcoming' ? 'bg-emerald-600 text-white shadow-md' : 'text-gray-700 hover:bg-gray-50'"
-                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex-shrink-0">
-                Upcoming
-            </button>
-            <button (click)="setFilter('completed')"
-                [class]="filter === 'completed' ? 'bg-emerald-600 text-white shadow-md' : 'text-gray-700 hover:bg-gray-50'"
-                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex-shrink-0">
-                Completed
-            </button>
-            <button (click)="setFilter('cancelled')"
-                [class]="filter === 'cancelled' ? 'bg-emerald-600 text-white shadow-md' : 'text-gray-700 hover:bg-gray-50'"
-                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex-shrink-0">
-                Cancelled
-            </button>
-        </div>
-
-        <!-- Loading State -->
-        <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div *ngFor="let i of [1,2,3,4]" class="bg-white rounded-2xl p-6 shadow-lg animate-pulse">
-                <div class="flex items-center space-x-4 mb-4">
-                    <div class="w-16 h-16 bg-gray-200 rounded-full"></div>
-                    <div class="flex-1 space-y-2">
-                        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
-                        <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+        <!-- Quick Stats - COMPACT MOBILE -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
+            <!-- Next Appointment - COMPACT -->
+            <div
+                class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
+                <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                    <div
+                        class="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg md:rounded-xl flex items-center justify-center">
+                        <i class="fas fa-calendar-check text-lg md:text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-xs md:text-sm opacity-90">Next Appointment</h3>
                     </div>
                 </div>
-                <div class="space-y-2">
-                    <div class="h-3 bg-gray-200 rounded"></div>
-                    <div class="h-3 bg-gray-200 rounded w-5/6"></div>
+                <div *ngIf="nextAppointment; else noAppointment">
+                    <p class="text-xl md:text-2xl font-bold mb-1">{{nextAppointment.appointment_date | date:'MMM d'}}
+                    </p>
+                    <p class="text-xs md:text-sm opacity-90 truncate">{{nextAppointment.start_time}} with Dr.
+                        {{nextAppointment.doctor_name}}</p>
+                </div>
+                <ng-template #noAppointment>
+                    <p class="text-base md:text-lg font-semibold">No upcoming appointments</p>
+                    <a routerLink="/find-doctors"
+                        class="text-xs md:text-sm opacity-90 hover:opacity-100 no-underline">Book now →</a>
+                </ng-template>
+            </div>
+
+            <!-- Orders Count - COMPACT -->
+            <div
+                class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
+                <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                    <div
+                        class="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg md:rounded-xl flex items-center justify-center">
+                        <i class="fas fa-shopping-bag text-lg md:text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-xs md:text-sm opacity-90">Active Orders</h3>
+                    </div>
+                </div>
+                <p class="text-2xl md:text-3xl font-bold mb-1">{{ordersCount}}</p>
+                <a routerLink="/orders" class="text-xs md:text-sm opacity-90 hover:opacity-100 no-underline">View Orders
+                    →</a>
+            </div>
+
+            <!-- Emergency Access - COMPACT -->
+            <div
+                class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg hover:shadow-xl transition-shadow sm:col-span-2 lg:col-span-1">
+                <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                    <div
+                        class="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg md:rounded-xl flex items-center justify-center">
+                        <i class="fas fa-ambulance text-lg md:text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-xs md:text-sm opacity-90">Emergency Services</h3>
+                    </div>
+                </div>
+                <p class="text-base md:text-lg font-semibold mb-1">Quick Access Available</p>
+                <a routerLink="/emergency" class="text-xs md:text-sm opacity-90 hover:opacity-100 no-underline">Open
+                    Emergency Hub →</a>
+            </div>
+        </div>
+
+        <!-- Services Grid - MOBILE 2 COLUMNS -->
+        <div class="mb-8 md:mb-12">
+            <h2 class="text-xl md:text-2xl font-bold text-slate-900 mb-4 md:mb-6">All Services</h2>
+
+            <!-- Care Services -->
+            <div class="mb-6 md:mb-8">
+                <h3 class="text-base md:text-lg font-bold text-emerald-700 mb-3 md:mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    Care
+                </h3>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                    <app-service-card *ngFor="let card of careServices" [card]="card"></app-service-card>
+                </div>
+            </div>
+
+            <!-- Shop Services -->
+            <div class="mb-6 md:mb-8">
+                <h3 class="text-base md:text-lg font-bold text-blue-700 mb-3 md:mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-shopping-cart"></i>
+                    Shop
+                </h3>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                    <app-service-card *ngFor="let card of shopServices" [card]="card"></app-service-card>
+                </div>
+            </div>
+
+            <!-- Emergency Services -->
+            <div class="mb-6 md:mb-8">
+                <h3 class="text-base md:text-lg font-bold text-red-700 mb-3 md:mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Emergency
+                </h3>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                    <app-service-card *ngFor="let card of emergencyServices" [card]="card"></app-service-card>
+                </div>
+            </div>
+
+            <!-- Other Services -->
+            <div>
+                <h3 class="text-base md:text-lg font-bold text-slate-700 mb-3 md:mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-ellipsis"></i>
+                    Other
+                </h3>
+                <div class="grid grid-cols-2 lg:grid-cols-2 gap-3 md:gap-4">
+                    <app-service-card *ngFor="let card of otherServices" [card]="card"></app-service-card>
                 </div>
             </div>
         </div>
 
-        <!-- Appointment List -->
-        <div *ngIf="!loading && filteredAppointments.length > 0"
-            class="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <div *ngFor="let appointment of filteredAppointments"
-                class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border border-gray-100">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-3 sm:mb-4">
-                        <div class="flex-1 min-w-0 pr-2">
-                            <h3 class="text-base sm:text-lg font-semibold text-gray-900 truncate">{{
-                                appointment.doctor_name }}</h3>
-                            <p class="text-xs sm:text-sm text-emerald-600 font-medium truncate">{{ appointment.specialty
-                                }}</p>
-                        </div>
-                        <span [ngClass]="{
-                            'bg-emerald-100 text-emerald-800': appointment.status === 'confirmed',
-                            'bg-red-100 text-red-800': appointment.status === 'cancelled',
-                            'bg-blue-100 text-blue-800': appointment.status === 'completed'
-                        }" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize">
-                            {{ appointment.status }}
-                        </span>
+        <!-- Recent Activity - MOBILE OPTIMIZED -->
+        <div class="bg-white rounded-xl md:rounded-2xl border border-slate-200 shadow-sm p-4 md:p-6 mb-6 md:mb-8">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+                <h3 class="text-base md:text-lg font-bold text-slate-900">Recent Activity</h3>
+                <button (click)="openAppointmentsModal()"
+                    class="text-sm text-blue-600 hover:text-blue-700 font-semibold no-underline cursor-pointer">View All
+                    →</button>
+            </div>
+
+            <!-- Recent appointments preview -->
+            <div *ngIf="filteredAppointments.length > 0; else noActivity" class="space-y-3">
+                <div *ngFor="let appointment of filteredAppointments.slice(0, 3)"
+                    class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                    <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-calendar text-emerald-600"></i>
                     </div>
-
-                    <div class="space-y-3">
-                        <div class="flex items-center text-sm text-gray-600">
-                            <i class="fas fa-calendar-alt w-5 text-emerald-500/70"></i>
-                            <span>{{ appointment.appointment_date | date:'mediumDate' }}</span>
-                        </div>
-                        <div class="flex items-center text-sm text-gray-600">
-                            <i class="fas fa-clock w-5 text-emerald-500/70"></i>
-                            <span>{{ appointment.start_time }} - {{ appointment.end_time }}</span>
-                        </div>
-                        <div class="flex items-center text-sm text-gray-600" *ngIf="appointment.clinic_name">
-                            <i class="fas fa-map-marker-alt w-5 text-emerald-500/70"></i>
-                            <span class="truncate">{{ appointment.clinic_name }}</span>
-                        </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-semibold text-slate-900 truncate">
+                            Appointment with Dr. {{appointment.doctor_name}}
+                        </p>
+                        <p class="text-xs text-slate-600">
+                            {{appointment.appointment_date | date:'MMM d, y'}} at {{appointment.start_time}}
+                        </p>
                     </div>
+                    <span [ngClass]="{
+                        'bg-emerald-100 text-emerald-800': appointment.status === 'confirmed',
+                        'bg-red-100 text-red-800': appointment.status === 'cancelled',
+                        'bg-blue-100 text-blue-800': appointment.status === 'completed'
+                    }" class="px-2 py-1 rounded-full text-xs font-medium capitalize flex-shrink-0">
+                        {{appointment.status}}
+                    </span>
                 </div>
+            </div>
 
-                <div class="bg-gray-50 px-6 py-4 flex justify-between items-center border-t border-gray-100">
-                    <span class="text-xs text-gray-500">Booked {{ appointment.created_at | date:'MMM d' }}</span>
-
-                    <button *ngIf="appointment.status === 'confirmed'" (click)="cancel(appointment.id)"
-                        class="text-sm text-red-600 hover:text-red-700 font-medium transition-colors focus:outline-none">
-                        Cancel
-                    </button>
+            <ng-template #noActivity>
+                <div class="text-center py-8 text-slate-500">
+                    <i class="fa-solid fa-inbox text-4xl mb-2 opacity-50"></i>
+                    <p class="text-sm">No recent activity</p>
                 </div>
+            </ng-template>
+        </div>
+
+    </div>
+</div>
+
+<!-- Appointments Modal - MOBILE FRIENDLY -->
+<div *ngIf="showAppointmentsModal"
+    class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-0 md:p-4"
+    (click)="closeAppointmentsModal()">
+    <div (click)="$event.stopPropagation()"
+        class="bg-white w-full h-full md:h-auto md:rounded-2xl shadow-2xl md:max-w-7xl max-h-screen md:max-h-[90vh] overflow-hidden flex flex-col">
+
+        <!-- Modal Header - MOBILE OPTIMIZED -->
+        <div
+            class="bg-gradient-to-r from-emerald-600 to-emerald-700 p-4 md:p-6 text-white flex items-center justify-between sticky top-0 z-10">
+            <div>
+                <h2 class="text-xl md:text-2xl font-bold">All Appointments</h2>
+                <p class="text-xs md:text-sm opacity-90">View and manage your appointments</p>
+            </div>
+            <button (click)="closeAppointmentsModal()"
+                class="w-10 h-10 rounded-full hover:bg-white/20 transition-colors flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Filter Tabs - MOBILE SCROLLABLE -->
+        <div class="bg-slate-50 px-3 md:px-6 py-2 border-b-2 border-slate-200 overflow-x-auto">
+            <div class="flex gap-2 min-w-max md:min-w-0">
+                <button (click)="setFilter('all')" [class.bg-emerald-600]="filter === 'all'"
+                    [class.text-white]="filter === 'all'" [class.bg-white]="filter !== 'all'"
+                    [class.text-slate-700]="filter !== 'all'"
+                    class="px-6 py-2 rounded-lg font-semibold text-sm hover:bg-emerald-500 hover:text-white transition-all whitespace-nowrap shadow-sm border border-slate-200">
+                    All ({{appointments.length}})
+                </button>
+                <button (click)="setFilter('upcoming')" [class.bg-emerald-600]="filter === 'upcoming'"
+                    [class.text-white]="filter === 'upcoming'" [class.bg-white]="filter !== 'upcoming'"
+                    [class.text-slate-700]="filter !== 'upcoming'"
+                    class="px-6 py-2 rounded-lg font-semibold text-sm hover:bg-emerald-500 hover:text-white transition-all whitespace-nowrap shadow-sm border border-slate-200">
+                    Upcoming
+                </button>
+                <button (click)="setFilter('confirmed')" [class.bg-emerald-600]="filter === 'confirmed'"
+                    [class.text-white]="filter === 'confirmed'" [class.bg-white]="filter !== 'confirmed'"
+                    [class.text-slate-700]="filter !== 'confirmed'"
+                    class="px-6 py-2 rounded-lg font-semibold text-sm hover:bg-emerald-500 hover:text-white transition-all whitespace-nowrap shadow-sm border border-slate-200">
+                    Confirmed
+                </button>
+                <button (click)="setFilter('completed')" [class.bg-emerald-600]="filter === 'completed'"
+                    [class.text-white]="filter === 'completed'" [class.bg-white]="filter !== 'completed'"
+                    [class.text-slate-700]="filter !== 'completed'"
+                    class="px-6 py-2 rounded-lg font-semibold text-sm hover:bg-emerald-500 hover:text-white transition-all whitespace-nowrap shadow-sm border border-slate-200">
+                    Completed
+                </button>
+                <button (click)="setFilter('cancelled')" [class.bg-emerald-600]="filter === 'cancelled'"
+                    [class.text-white]="filter === 'cancelled'" [class.bg-white]="filter !== 'cancelled'"
+                    [class.text-slate-700]="filter !== 'cancelled'"
+                    class="px-6 py-2 rounded-lg font-semibold text-sm hover:bg-emerald-500 hover:text-white transition-all whitespace-nowrap shadow-sm border border-slate-200">
+                    Cancelled
+                </button>
             </div>
         </div>
 
-        <!-- Empty State -->
-        <div *ngIf="!loading && filteredAppointments.length === 0" class="text-center py-20">
-            <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
-                <svg class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+        <!-- Appointments List - 2 COLUMN GRID - MOBILE FRIENDLY -->
+        <div class="flex-1 overflow-y-auto p-3 md:p-6 bg-slate-50">
+            <div *ngIf="loading" class="flex items-center justify-center py-12">
+                <i class="fa-solid fa-spinner fa-spin text-4xl text-emerald-600"></i>
             </div>
-            <h3 class="text-xl font-medium text-gray-900 mb-2">No appointments found</h3>
-            <p class="text-gray-500 mb-6">{{ filter === 'all' ? 'You haven\'t booked any appointments yet.' :
-                'No ' +
-                filter + ' appointments.' }}</p>
-            <a routerLink="/find-doctors"
-                class="inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
-                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                Find a Doctor
+
+            <!-- 2 COLUMN GRID (1 col mobile, 2 cols desktop) -->
+            <div *ngIf="!loading && filteredAppointments.length > 0"
+                class="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
+                <div *ngFor="let appointment of filteredAppointments"
+                    class="bg-white border border-slate-200 rounded-xl p-3 md:p-4 hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-3 md:gap-4">
+                        <!-- Date Box - SMALLER ON MOBILE -->
+                        <div
+                            class="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 bg-emerald-50 rounded-xl flex flex-col items-center justify-center">
+                            <span class="text-xl md:text-2xl font-bold text-emerald-600">{{appointment.appointment_date
+                                | date:'d'}}</span>
+                            <span class="text-xs font-medium text-emerald-700">{{appointment.appointment_date |
+                                date:'MMM'}}</span>
+                        </div>
+
+                        <!-- Appointment Details -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-2 mb-2">
+                                <h3 class="font-bold text-slate-900 text-base md:text-lg truncate">Dr.
+                                    {{appointment.doctor_name}}</h3>
+                                <span [ngClass]="{
+                                    'bg-emerald-100 text-emerald-800': appointment.status === 'confirmed',
+                                    'bg-red-100 text-red-800': appointment.status === 'cancelled',
+                                    'bg-blue-100 text-blue-800': appointment.status === 'completed'
+                                }" class="px-2 md:px-3 py-1 rounded-full text-xs font-bold capitalize flex-shrink-0">
+                                    {{appointment.status}}
+                                </span>
+                            </div>
+
+                            <div class="space-y-1 text-xs md:text-sm text-slate-600">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-clock w-4"></i>
+                                    <span>{{appointment.start_time}} - {{appointment.end_time}}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-calendar w-4"></i>
+                                    <span class="truncate">{{appointment.appointment_date | date:'EEEE, MMM d,
+                                        y'}}</span>
+                                </div>
+                                <div *ngIf="appointment.reason" class="flex items-center gap-2">
+                                    <i class="fa-solid fa-note-medical w-4"></i>
+                                    <span class="truncate">{{appointment.reason}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="!loading && filteredAppointments.length === 0" class="text-center py-12">
+                <i class="fa-solid fa-calendar-xmark text-5xl md:text-6xl text-slate-300 mb-4"></i>
+                <h3 class="text-base md:text-lg font-semibold text-slate-700 mb-2">No {{filter === 'all' ? '' : filter}}
+                    appointments</h3>
+                <p class="text-xs md:text-sm text-slate-500">You don't have any {{filter === 'all' ? '' : filter}}
+                    appointments at the moment.</p>
+            </div>
+        </div>
+
+        <!-- Modal Footer - MOBILE STACKED -->
+        <div
+            class="border-t border-slate-200 p-3 md:p-4 bg-slate-50 flex flex-col-reverse md:flex-row justify-end gap-2 md:gap-3 sticky bottom-0">
+            <button (click)="closeAppointmentsModal()"
+                class="w-full md:w-auto px-6 py-2.5 md:py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-medium transition-colors">
+                Close
+            </button>
+            <a routerLink="/find-doctors" (click)="closeAppointmentsModal()"
+                class="w-full md:w-auto px-6 py-2.5 md:py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors text-center">
+                Book New Appointment
             </a>
         </div>
+
     </div>
 </div>

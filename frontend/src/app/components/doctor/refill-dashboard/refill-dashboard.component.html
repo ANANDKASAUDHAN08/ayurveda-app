@@ -1,0 +1,279 @@
+<!-- Dashboard Container -->
+<div class="min-h-screen bg-gray-50 py-6 px-4">
+    <div class="max-w-7xl mx-auto">
+
+        <!-- Header -->
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Refill Requests Dashboard</h1>
+            <p class="text-gray-600">Review and manage prescription refill requests</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <!-- Pending Card -->
+            <div
+                class="bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 rounded-xl p-4 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-yellow-700 mb-1">Pending</p>
+                        <p class="text-2xl font-bold text-yellow-900">{{ stats.pending_count }}</p>
+                    </div>
+                    <div class="w-12 h-12 bg-yellow-200 rounded-lg flex items-center justify-center">
+                        <i class="fa-solid fa-clock text-yellow-700 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approved Today Card -->
+            <div class="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-4 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-green-700 mb-1">Approved Today</p>
+                        <p class="text-2xl font-bold text-green-900">{{ stats.approved_today }}</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-200 rounded-lg flex items-center justify-center">
+                        <i class="fa-solid fa-check-circle text-green-700 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rejected Today Card -->
+            <div class="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-xl p-4 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-red-700 mb-1">Rejected Today</p>
+                        <p class="text-2xl font-bold text-red-900">{{ stats.rejected_today }}</p>
+                    </div>
+                    <div class="w-12 h-12 bg-red-200 rounded-lg flex items-center justify-center">
+                        <i class="fa-solid fa-times-circle text-red-700 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Urgent Card -->
+            <div
+                class="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-4 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-orange-700 mb-1">Urgent (>24h)</p>
+                        <p class="text-2xl font-bold text-orange-900">{{ stats.urgent_count }}</p>
+                    </div>
+                    <div class="w-12 h-12 bg-orange-200 rounded-lg flex items-center justify-center">
+                        <i class="fa-solid fa-exclamation-triangle text-orange-700 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters & Search -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Status Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <select [(ngModel)]="statusFilter" (change)="onFilterChange()"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+
+                <!-- Patient Search -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Search Patient</label>
+                    <input type="text" [(ngModel)]="patientSearch" (ngModelChange)="onSearchChange()"
+                        placeholder="Enter patient name..."
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                </div>
+
+                <!-- Sort -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                    <select [(ngModel)]="sortBy" (change)="onFilterChange()"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                        <option value="requested_at">Date Requested</option>
+                        <option value="patient_name">Patient Name</option>
+                        <option value="status">Status</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Actions Toolbar -->
+        <div *ngIf="selectedCount > 0" class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-check-square text-emerald-600 text-xl"></i>
+                    <span class="font-semibold text-emerald-900">{{ selectedCount }} selected</span>
+                </div>
+                <div class="flex gap-2">
+                    <button (click)="openBulkApprove()"
+                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-check"></i>
+                        Approve Selected
+                    </button>
+                    <button (click)="openBulkReject()"
+                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-times"></i>
+                        Reject Selected
+                    </button>
+                    <button (click)="selectedRefills.clear()"
+                        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors">
+                        Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Refills List -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <!-- List Header -->
+            <div class="border-b border-gray-200 p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" [checked]="isAllSelected" (change)="toggleSelectAll()"
+                        class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
+                    <h3 class="font-semibold text-gray-900">Refill Requests</h3>
+                    <span class="text-sm text-gray-500">({{ total }} total)</span>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div *ngIf="loading" class="p-8 text-center">
+                <i class="fa-solid fa-spinner fa-spin text-4xl text-emerald-600 mb-3"></i>
+                <p class="text-gray-600">Loading refills...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="!loading && refills.length === 0" class="p-8 text-center">
+                <i class="fa-solid fa-inbox text-6xl text-gray-300 mb-3"></i>
+                <p class="text-gray-600 font-medium">No refill requests found</p>
+                <p class="text-sm text-gray-500 mt-1">Try changing your filters</p>
+            </div>
+
+            <!-- Refills -->
+            <div *ngIf="!loading && refills.length > 0" class="divide-y divide-gray-200">
+                <div *ngFor="let refill of refills" class="p-4 hover:bg-gray-50 transition-colors"
+                    [class.bg-yellow-50]="selectedRefills.has(refill.id)">
+
+                    <div class="flex items-start gap-4">
+                        <!-- Checkbox -->
+                        <input type="checkbox" [checked]="selectedRefills.has(refill.id)"
+                            (change)="toggleSelection(refill.id)"
+                            class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500 mt-1">
+
+                        <!-- Content -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-900">{{ refill.patient_name }}</h4>
+                                    <p class="text-sm text-gray-600">{{ refill.patient_email }}</p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        [class]="'text-xs px-2 py-1 rounded-full font-medium ' + getStatusBadgeClass(refill.status)">
+                                        {{ refill.status | titlecase }}
+                                    </span>
+                                    <span class="text-xs text-gray-500">{{ getTimeAgo(refill.requested_at) }}</span>
+                                </div>
+                            </div>
+
+                            <div class="text-sm text-gray-700 mb-2">
+                                <span class="font-medium">Reason:</span> {{ refill.reason }}
+                            </div>
+
+                            <div *ngIf="refill.medicines" class="text-xs text-gray-600 mb-2">
+                                <i class="fa-solid fa-pills text-emerald-600"></i>
+                                Medicines: {{ refill.medicines }}
+                            </div>
+
+                            <div *ngIf="refill.preferred_pharmacy" class="text-xs text-gray-600 mb-3">
+                                <i class="fa-solid fa-store text-emerald-600"></i>
+                                Pharmacy: {{ refill.preferred_pharmacy }}
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex gap-2">
+                                <button (click)="viewRefill(refill)"
+                                    class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-1">
+                                    <i class="fa-solid fa-eye"></i>
+                                    View Details
+                                </button>
+                                <button *ngIf="refill.status === 'pending'" (click)="quickApprove(refill)"
+                                    class="px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-1">
+                                    <i class="fa-solid fa-check"></i>
+                                    Quick Approve
+                                </button>
+                                <button *ngIf="refill.status === 'pending'" (click)="quickReject(refill)"
+                                    class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-1">
+                                    <i class="fa-solid fa-times"></i>
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bulk Approve Modal -->
+<div *ngIf="showBulkApproveForm" class="fixed inset-0 z-50 overflow-y-auto">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75" (click)="closeBulkForms()"></div>
+    <div class="flex min-h-full items-center justify-center p-4">
+        <div class="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6" (click)="$event.stopPropagation()">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Approve {{ selectedCount }} Refill(s)</h3>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Doctor's Notes (Optional)</label>
+                <textarea [(ngModel)]="bulkNotes" rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                    placeholder="Add any notes for patients..."></textarea>
+            </div>
+            <div class="flex gap-2">
+                <button (click)="confirmBulkApprove()"
+                    class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium">
+                    Approve All
+                </button>
+                <button (click)="closeBulkForms()"
+                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bulk Reject Modal -->
+<div *ngIf="showBulkRejectForm" class="fixed inset-0 z-50 overflow-y-auto">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75" (click)="closeBulkForms()"></div>
+    <div class="flex min-h-full items-center justify-center p-4">
+        <div class="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6" (click)="$event.stopPropagation()">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Reject {{ selectedCount }} Refill(s)</h3>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Rejection Reason *</label>
+                <textarea [(ngModel)]="bulkRejectionReason" rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                    placeholder="Please provide reason (minimum 10 characters)..."></textarea>
+                <p class="text-xs text-gray-500 mt-1">{{ bulkRejectionReason.length }} / 10 minimum</p>
+            </div>
+            <div class="flex gap-2">
+                <button (click)="confirmBulkReject()"
+                    class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium">
+                    Reject All
+                </button>
+                <button (click)="closeBulkForms()"
+                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Review Modal -->
+<app-refill-review-modal *ngIf="showReviewModal" [refill]="selectedRefill" (close)="closeReviewModal()"
+    (action)="onRefillAction()">
+</app-refill-review-modal>

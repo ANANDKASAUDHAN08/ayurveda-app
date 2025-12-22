@@ -1,0 +1,509 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 pt-2 md:pt-4 pb-12 md:pb-16">
+    <div class="max-w-full mx-auto px-3 sm:px-4 lg:px-8">
+
+        <!-- Breadcrumb Navigation - Hidden on Mobile -->
+        <nav class="hidden md:block mb-4 md:mb-6" aria-label="Breadcrumb">
+            <ol class="flex items-center gap-2 text-sm">
+                <li>
+                    <a routerLink="/user/dashboard" class="text-slate-600 hover:text-emerald-600 transition-colors">
+                        <i class="fa-solid fa-home"></i> Dashboard
+                    </a>
+                </li>
+                <li class="text-slate-400">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </li>
+                <li>
+                    <a routerLink="/user/prescriptions" class="text-slate-600 hover:text-emerald-600 transition-colors">
+                        Prescriptions
+                    </a>
+                </li>
+                <li class="text-slate-400">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </li>
+                <li class="text-emerald-600 font-medium">
+                    Prescription #{{prescriptionId}}
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="flex items-center justify-center py-12">
+            <i class="fa-solid fa-spinner fa-spin text-4xl text-emerald-600"></i>
+        </div>
+
+        <!-- 2-COLUMN LAYOUT -->
+        <div *ngIf="!loading && prescription" class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+
+            <!-- LEFT COLUMN -->
+            <div class="space-y-4 md:space-y-6">
+
+                <!-- Header Card - COMPACT 2-COLUMN GRID -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-lg p-4 md:p-6">
+                    <!-- Title Row -->
+                    <div class="flex items-start justify-between gap-4 mb-4 pb-4 border-b border-slate-200">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                <i class="fa-solid fa-file-prescription text-2xl text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <h1 class="text-xl md:text-2xl font-bold text-slate-900">Prescription
+                                    #{{prescription.id}}</h1>
+                                <p class="text-sm text-slate-500 capitalize">{{prescription.prescription_type}}
+                                    Prescription</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2 items-end">
+                            <span [ngClass]="{
+                                'bg-yellow-100 text-yellow-800': prescription.status === 'pending',
+                                'bg-blue-100 text-blue-800': prescription.status === 'verified',
+                                'bg-green-100 text-green-800': prescription.status === 'active',
+                                'bg-red-100 text-red-800': prescription.status === 'expired',
+                                'bg-gray-100 text-gray-800': prescription.status === 'cancelled'
+                            }" class="px-3 py-1.5 rounded-full text-sm font-bold capitalize">
+                                {{prescription.status}}
+                            </span>
+                            <span *ngIf="isExpiringSoon() && !isExpired()"
+                                class="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-semibold">
+                                <i class="fa-solid fa-exclamation-triangle"></i> Expiring Soon
+                            </span>
+                            <span *ngIf="isExpired()"
+                                class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">
+                                <i class="fa-solid fa-ban"></i> Expired
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 2-COLUMN DETAILS GRID -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+                        <!-- Doctor Information -->
+                        <div *ngIf="prescription.doctor_name"
+                            class="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-user-doctor text-emerald-600 text-lg mt-1"></i>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-xs text-emerald-700 font-semibold mb-1">Doctor</p>
+                                    <p class="font-bold text-slate-900 truncate">{{prescription.doctor_name}}</p>
+                                    <p *ngIf="prescription.doctor_specialization"
+                                        class="text-xs text-slate-600 truncate">{{prescription.doctor_specialization}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Issue Date -->
+                        <div class="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-calendar-plus text-blue-600 text-lg mt-1"></i>
+                                <div class="flex-1">
+                                    <p class="text-xs text-blue-700 font-semibold mb-1">Issue Date</p>
+                                    <p class="font-bold text-slate-900">{{prescription.issue_date | date:'MMM d, y'}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Expiry Date -->
+                        <div *ngIf="prescription.expiry_date" class="p-3 rounded-lg border"
+                            [class.bg-red-50]="isExpired()" [class.border-red-200]="isExpired()"
+                            [class.bg-orange-50]="isExpiringSoon() && !isExpired()"
+                            [class.border-orange-200]="isExpiringSoon() && !isExpired()"
+                            [class.bg-slate-50]="!isExpired() && !isExpiringSoon()"
+                            [class.border-slate-200]="!isExpired() && !isExpiringSoon()">
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-calendar-xmark text-lg mt-1" [class.text-red-600]="isExpired()"
+                                    [class.text-orange-600]="isExpiringSoon() && !isExpired()"
+                                    [class.text-slate-600]="!isExpired() && !isExpiringSoon()"></i>
+                                <div class="flex-1">
+                                    <p class="text-xs font-semibold mb-1" [class.text-red-700]="isExpired()"
+                                        [class.text-orange-700]="isExpiringSoon() && !isExpired()"
+                                        [class.text-slate-700]="!isExpired() && !isExpiringSoon()">Expiry Date</p>
+                                    <p class="font-bold" [class.text-red-900]="isExpired()"
+                                        [class.text-orange-900]="isExpiringSoon() && !isExpired()"
+                                        [class.text-slate-900]="!isExpired() && !isExpiringSoon()">
+                                        {{prescription.expiry_date | date:'MMM d, y'}}
+                                    </p>
+                                    <p *ngIf="!isExpired() && getDaysUntilExpiry() > 0" class="text-xs mt-0.5"
+                                        [class.text-orange-700]="isExpiringSoon()"
+                                        [class.text-slate-600]="!isExpiringSoon()">
+                                        <i class="fa-solid fa-clock"></i> {{getDaysUntilExpiry()}} days left
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Created At -->
+                        <div class="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-clock text-purple-600 text-lg mt-1"></i>
+                                <div class="flex-1">
+                                    <p class="text-xs text-purple-700 font-semibold mb-1">Created</p>
+                                    <p class="font-bold text-slate-900">{{prescription.created_at | date:'MMM d, y'}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Notes - Full Width -->
+                    <div *ngIf="prescription.notes" class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <div class="flex items-start gap-2">
+                            <i class="fa-solid fa-note-sticky text-blue-600 text-sm mt-0.5"></i>
+                            <div class="flex-1">
+                                <p class="text-xs font-semibold text-blue-900 mb-1">Notes:</p>
+                                <p class="text-sm text-blue-800">{{prescription.notes}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Uploaded Image -->
+                <div *ngIf="prescription.upload_file_path"
+                    class="bg-white rounded-xl border border-slate-200 shadow-lg p-4 md:p-6">
+                    <h2 class="text-base md:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-image text-emerald-600"></i>
+                        Prescription Image
+                    </h2>
+                    <img [src]="'http://localhost:3000/' + prescription.upload_file_path" alt="Prescription"
+                        class="w-full rounded-lg shadow-md border border-slate-200">
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-lg p-4 md:p-6">
+                    <h2 class="text-base md:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-emerald-600"></i>
+                        Quick Actions
+                    </h2>
+                    <div class="grid grid-cols-1 gap-3">
+                        <!-- Request Refill Button -->
+                        <button (click)="openRefillModal()"
+                            class="px-4 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:shadow-lg text-white rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-sm">
+                            <i class="fa-solid fa-prescription-bottle-medical"></i>
+                            Request Prescription Refill
+                        </button>
+
+                        <button
+                            class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm">
+                            <i class="fa-solid fa-shopping-cart"></i>
+                            Order Medicines
+                        </button>
+                        <button (click)="downloadPDF()" [disabled]="downloadingPDF"
+                            class="px-4 py-3 bg-slate-600 hover:bg-slate-700 disabled:bg-slate-400 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm">
+                            <i class="fa-solid" [class.fa-download]="!downloadingPDF"
+                                [class.fa-spinner]="downloadingPDF" [class.fa-spin]="downloadingPDF"></i>
+                            {{downloadingPDF ? 'Generating...' : 'Download PDF'}}
+                        </button>
+                        <button (click)="openShareModal()"
+                            class="px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm">
+                            <i class="fa-solid fa-share-nodes"></i>
+                            Share
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN - Medicines List -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-lg p-4 md:p-6 h-fit lg:sticky lg:top-24">
+                <h2 class="text-base md:text-lg font-bold text-slate-900 mb-4 flex items-center justify-between">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-pills text-emerald-600"></i>
+                        Prescribed Medicines
+                    </span>
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold">
+                        {{prescription.medicines?.length || 0}}
+                    </span>
+                </h2>
+
+                <div *ngIf="prescription.medicines && prescription.medicines.length > 0"
+                    class="space-y-3 max-h-[calc(100vh-16rem)] overflow-y-auto pr-2">
+                    <div *ngFor="let medicine of prescription.medicines; let i = index"
+                        class="border border-slate-200 rounded-lg p-3 hover:bg-slate-50 transition-colors">
+
+                        <!-- Medicine Header -->
+                        <div class="flex items-start gap-3 mb-3">
+                            <div
+                                class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <span class="font-bold text-emerald-700 text-sm">{{i + 1}}</span>
+                            </div>
+                            <h3 class="font-bold text-slate-900 flex-1">{{medicine.medicine_name}}</h3>
+                        </div>
+
+                        <!-- Medicine Details Grid -->
+                        <div class="grid grid-cols-2 gap-2 text-xs pl-11">
+                            <div *ngIf="medicine.dosage" class="flex flex-col">
+                                <span class="text-slate-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-prescription-bottle text-emerald-600"></i> Dosage
+                                </span>
+                                <span class="font-medium text-slate-900">{{medicine.dosage}}</span>
+                            </div>
+                            <div *ngIf="medicine.frequency" class="flex flex-col">
+                                <span class="text-slate-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-clock text-emerald-600"></i> Frequency
+                                </span>
+                                <span class="font-medium text-slate-900">{{medicine.frequency}}</span>
+                            </div>
+                            <div *ngIf="medicine.duration" class="flex flex-col">
+                                <span class="text-slate-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-calendar-days text-emerald-600"></i> Duration
+                                </span>
+                                <span class="font-medium text-slate-900">{{medicine.duration}}</span>
+                            </div>
+                            <div *ngIf="medicine.quantity" class="flex flex-col">
+                                <span class="text-slate-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-box text-emerald-600"></i> Quantity
+                                </span>
+                                <span class="font-medium text-slate-900">{{medicine.quantity}}</span>
+                            </div>
+                        </div>
+
+                        <!-- Instructions -->
+                        <div *ngIf="medicine.instructions" class="mt-3 pl-11">
+                            <div class="p-2 bg-amber-50 rounded-lg border border-amber-200">
+                                <p class="text-xs font-semibold text-amber-900 mb-1 flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-info"></i> Instructions:
+                                </p>
+                                <p class="text-xs text-amber-800">{{medicine.instructions}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div *ngIf="!prescription.medicines || prescription.medicines.length === 0"
+                    class="text-center py-12 text-slate-500">
+                    <i class="fa-solid fa-pills text-5xl mb-3 opacity-20"></i>
+                    <p class="font-medium">No medicines listed</p>
+                    <p class="text-xs mt-1">This prescription doesn't have any medicines yet</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- QR Code Section -->
+        <div *ngIf="!loading && prescription"
+            class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl shadow-lg p-6 mb-6 border border-purple-100">
+            <div class="flex items-center gap-3 mb-4">
+                <div
+                    class="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fa-solid fa-qrcode text-white text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-gray-900">Digital Prescription</h2>
+                    <p class="text-xs text-gray-600">QR code for pharmacy verification</p>
+                </div>
+            </div>
+
+            <app-qr-code-display [prescriptionId]="prescriptionId"></app-qr-code-display>
+        </div>
+
+        <!-- Share History Section -->
+        <div *ngIf="!loading && prescription && shares.length > 0" class="bg-white rounded-2xl shadow-lg p-4 mb-6">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fa-solid fa-share-nodes text-purple-600"></i>
+                    Share History
+                </h2>
+                <span class="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-full">{{ shares.length }}</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div *ngFor="let share of shares" class="border rounded-lg p-3"
+                    [class.border-gray-200]="share.is_active" [class.border-red-200]="!share.is_active"
+                    [class.bg-red-50]="!share.is_active">
+
+                    <!-- Share Header -->
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <span class="font-medium text-gray-900 text-sm truncate">
+                                    {{ share.recipient_name || 'Anonymous' }}
+                                </span>
+                                <span class="px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0"
+                                    [class.bg-emerald-100]="share.recipient_type === 'pharmacy'"
+                                    [class.text-emerald-700]="share.recipient_type === 'pharmacy'"
+                                    [class.bg-blue-100]="share.recipient_type === 'doctor'"
+                                    [class.text-blue-700]="share.recipient_type === 'doctor'"
+                                    [class.bg-purple-100]="share.recipient_type === 'family'"
+                                    [class.text-purple-700]="share.recipient_type === 'family'"
+                                    [class.bg-gray-100]="share.recipient_type === 'other'"
+                                    [class.text-gray-700]="share.recipient_type === 'other'">
+                                    {{ share.recipient_type }}
+                                </span>
+                            </div>
+                            <p *ngIf="share.recipient_email" class="text-xs text-gray-600 truncate">
+                                {{ share.recipient_email }}
+                            </p>
+                        </div>
+
+                        <!-- Status Badge -->
+                        <span class="px-2 py-0.5 rounded text-xs font-medium ml-2 flex-shrink-0"
+                            [class.bg-emerald-100]="share.is_active" [class.text-emerald-700]="share.is_active"
+                            [class.bg-red-100]="!share.is_active" [class.text-red-700]="!share.is_active">
+                            {{ share.is_active ? 'Active' : 'Revoked' }}
+                        </span>
+                    </div>
+
+                    <!-- Share Details Grid - 2 columns -->
+                    <div class="grid grid-cols-2 gap-2 mb-2 text-xs">
+                        <div>
+                            <p class="text-gray-500">Created</p>
+                            <p class="font-medium text-gray-900">{{ share.created_at | date:'short' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500">Expires</p>
+                            <p class="font-medium" [class.text-red-600]="isShareExpired(share.expires_at)"
+                                [class.text-gray-900]="!isShareExpired(share.expires_at)">
+                                {{ share.expires_at | date:'short' }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500">Access Count</p>
+                            <p class="font-medium text-gray-900">{{ share.access_count || 0 }} view(s)</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500">Last Access</p>
+                            <p class="font-medium text-gray-900">{{ share.last_accessed_at ? (share.last_accessed_at |
+                                date:'short') : 'Never' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex gap-2">
+                        <button *ngIf="share.is_active" (click)="copyShareLink(share.share_token)"
+                            class="flex-1 px-2 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded text-xs font-medium transition-colors">
+                            <i class="fa-solid fa-copy"></i> Copy
+                        </button>
+                        <button *ngIf="share.is_active" (click)="revokeShare(share.id)"
+                            class="px-2 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 rounded text-xs font-medium transition-colors">
+                            <i class="fa-solid fa-ban"></i> Revoke
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Refill History Section -->
+        <div *ngIf="!loading && prescription && refills.length > 0" class="bg-white rounded-2xl shadow-lg p-4 mb-6">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-emerald-600"></i>
+                    Refill History
+                </h2>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-full">{{ refills.length }}</span>
+                    <button (click)="loadRefillHistory()" [disabled]="loadingRefills"
+                        class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1">
+                        <i class="fa-solid fa-rotate" [class.fa-spin]="loadingRefills"></i>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <div *ngFor="let refill of refills" class="border rounded-lg p-3 hover:shadow-md transition-shadow"
+                    [class.border-yellow-200]="refill.status === 'pending'"
+                    [class.bg-yellow-50]="refill.status === 'pending'"
+                    [class.border-green-200]="refill.status === 'approved'"
+                    [class.bg-green-50]="refill.status === 'approved'"
+                    [class.border-red-200]="refill.status === 'rejected'"
+                    [class.bg-red-50]="refill.status === 'rejected'">
+
+                    <!-- Refill Header -->
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-xs font-bold text-gray-700">Refill Request #{{refill.id}}</span>
+                                <span class="text-xs px-2 py-0.5 rounded-full font-medium"
+                                    [class.bg-yellow-200]="refill.status === 'pending'"
+                                    [class.text-yellow-800]="refill.status === 'pending'"
+                                    [class.bg-green-200]="refill.status === 'approved'"
+                                    [class.text-green-800]="refill.status === 'approved'"
+                                    [class.bg-red-200]="refill.status === 'rejected'"
+                                    [class.text-red-800]="refill.status === 'rejected'"
+                                    [class.bg-blue-200]="refill.status === 'completed'"
+                                    [class.text-blue-800]="refill.status === 'completed'">
+                                    <i class="fa-solid fa-circle text-[6px]"></i>
+                                    {{ refill.status | titlecase }}
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-600">
+                                Requested {{ refill.requested_at | date:'MMM d, y h:mm a' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Reason -->
+                    <div class="mb-2" *ngIf="refill.reason">
+                        <p class="text-xs font-semibold text-gray-700 mb-0.5">Reason:</p>
+                        <p class="text-xs text-gray-600">{{ refill.reason }}</p>
+                    </div>
+
+                    <!-- Pharmacy -->
+                    <div class="mb-2" *ngIf="refill.preferred_pharmacy">
+                        <p class="text-xs font-semibold text-gray-700 mb-0.5">
+                            <i class="fa-solid fa-store text-emerald-600"></i>
+                            Preferred Pharmacy:
+                        </p>
+                        <p class="text-xs text-gray-600">{{ refill.preferred_pharmacy }}</p>
+                    </div>
+
+                    <!-- Doctor Notes (if approved) -->
+                    <div class="mb-2" *ngIf="refill.status === 'approved' && refill.doctor_notes">
+                        <p class="text-xs font-semibold text-green-700 mb-0.5">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            Doctor's Notes:
+                        </p>
+                        <p class="text-xs text-green-800">{{ refill.doctor_notes }}</p>
+                    </div>
+
+                    <!-- Rejection Reason -->
+                    <div class="mb-2" *ngIf="refill.status === 'rejected' && refill.rejected_reason">
+                        <p class="text-xs font-semibold text-red-700 mb-0.5">
+                            <i class="fa-solid fa-exclamation-circle"></i>
+                            Doctor's Response:
+                        </p>
+                        <p class="text-xs text-red-800">{{ refill.rejected_reason }}</p>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="flex gap-1.5 text-[10px] text-gray-500 pt-2 border-t border-gray-200">
+                        <span><i class="fa-solid fa-clock"></i> Requested: {{ refill.requested_at | date:'short'
+                            }}</span>
+                        <span *ngIf="refill.approved_at">
+                            | <i class="fa-solid fa-check"></i> Approved: {{ refill.approved_at | date:'short' }}
+                        </span>
+                        <span *ngIf="refill.rejected_at">
+                            | <i class="fa-solid fa-times"></i> Rejected: {{ refill.rejected_at | date:'short' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="!loading && !prescription" class="text-center py-16">
+            <i class="fa-solid fa-exclamation-triangle text-6xl text-red-500 mb-4"></i>
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Prescription Not Found</h2>
+            <p class="text-slate-600 mb-6">The prescription you're looking for doesn't exist or you don't have
+                permission to view it.</p>
+            <button routerLink="/user/prescriptions"
+                class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors">
+                Back to Prescriptions
+            </button>
+        </div>
+
+
+        <!-- Share Modal -->
+        <app-share-prescription-modal [isOpen]="showShareModal" [prescriptionId]="prescriptionId"
+            (closeModal)="closeShareModal()" (shareCreated)="onShareCreated()">
+        </app-share-prescription-modal>
+
+        <!-- Refill Request Modal -->
+        <app-refill-request-modal *ngIf="showRefillModal" [prescriptionId]="prescriptionId" (close)="closeRefillModal()"
+            (success)="onRefillSuccess()">
+        </app-refill-request-modal>
+    </div>
+</div>

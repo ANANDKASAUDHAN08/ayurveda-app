@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { SearchService } from '../../services/search.service';
 import { SnackbarService } from '../../services/snackbar.service';
+import { NotificationBellComponent } from '../../../components/shared/notification-bell/notification-bell.component';
 
 @Component({
   selector: 'app-top-navbar',
@@ -16,7 +17,8 @@ import { SnackbarService } from '../../services/snackbar.service';
     CommonModule,
     RouterModule,
     LocationSelectorComponent,
-    FormsModule
+    FormsModule,
+    NotificationBellComponent
   ],
   templateUrl: './top-navbar.component.html',
   styleUrl: './top-navbar.component.css'
@@ -34,6 +36,9 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
 
   profileMenuOpen: boolean = false;
   loginDropdownOpen: boolean = false; // For login dropdown
+  shopDropdownOpen: boolean = false; // NEW: For shop dropdown
+  myHealthDropdownOpen: boolean = false; // NEW: For my health dropdown
+  careDropdownOpen: boolean = false; // NEW: For find care dropdown
 
   cartCount = 0;
   isLoggedIn = false;
@@ -126,6 +131,40 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
 
   toggleLoginDropdown() {
     this.loginDropdownOpen = !this.loginDropdownOpen;
+    // Close other dropdowns
+    this.shopDropdownOpen = false;
+    this.myHealthDropdownOpen = false;
+    this.careDropdownOpen = false;
+  }
+
+  // NEW: Toggle shop dropdown
+  toggleShopDropdown() {
+    this.shopDropdownOpen = !this.shopDropdownOpen;
+    // Close other dropdowns
+    this.loginDropdownOpen = false;
+    this.myHealthDropdownOpen = false;
+    this.profileMenuOpen = false;
+    this.careDropdownOpen = false;
+  }
+
+  // NEW: Toggle my health dropdown
+  toggleMyHealthDropdown() {
+    this.myHealthDropdownOpen = !this.myHealthDropdownOpen;
+    // Close other dropdowns
+    this.loginDropdownOpen = false;
+    this.shopDropdownOpen = false;
+    this.profileMenuOpen = false;
+    this.careDropdownOpen = false;
+  }
+
+  // NEW: Toggle care dropdown
+  toggleCareDropdown() {
+    this.careDropdownOpen = !this.careDropdownOpen;
+    // Close other dropdowns
+    this.loginDropdownOpen = false;
+    this.shopDropdownOpen = false;
+    this.myHealthDropdownOpen = false;
+    this.profileMenuOpen = false;
   }
 
   onSearch() {
@@ -322,6 +361,21 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     // Close profile menu if clicking outside  
     if (this.profileMenuOpen && !target.closest('.profile-menu-container')) {
       this.profileMenuOpen = false;
+    }
+
+    // NEW: Close shop dropdown if clicking outside
+    if (this.shopDropdownOpen && !target.closest('.shop-dropdown-container')) {
+      this.shopDropdownOpen = false;
+    }
+
+    // NEW: Close my health dropdown if clicking outside
+    if (this.myHealthDropdownOpen && !target.closest('.my-health-dropdown-container')) {
+      this.myHealthDropdownOpen = false;
+    }
+
+    // NEW: Close care dropdown if clicking outside
+    if (this.careDropdownOpen && !target.closest('.care-dropdown-container')) {
+      this.careDropdownOpen = false;
     }
   }
 }

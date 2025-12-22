@@ -39,6 +39,10 @@ import { AboutUsComponent } from './components/about-us/about-us.component';
 import { HelpSupportComponent } from './components/help-support/help-support.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { EmergencyHubComponent } from './components/emergency-hub/emergency-hub.component';
+import { FirstAidGuideComponent } from './components/first-aid-guide/first-aid-guide.component';
+import { NearbyHospitalsComponent } from './components/nearby-hospitals/nearby-hospitals.component';
+import { EmergencyCallHistoryComponent } from './components/emergency-call-history/emergency-call-history.component';
 
 export const routes: Routes = [
     // Public routes
@@ -56,9 +60,19 @@ export const routes: Routes = [
     { path: 'about-us', component: AboutUsComponent, canActivate: [StrictLogoutGuard] },
     { path: 'help-support', component: HelpSupportComponent, canActivate: [StrictLogoutGuard] },
     { path: 'contact', component: ContactComponent, canActivate: [StrictLogoutGuard] },
+    { path: 'emergency', component: EmergencyHubComponent }, // Emergency services - no auth required for quick access
+    { path: 'first-aid', component: FirstAidGuideComponent }, // First Aid Guide - no auth required
+    { path: 'nearby-hospitals', component: NearbyHospitalsComponent }, // Nearby Hospitals - no auth required
+    { path: 'emergency-history', component: EmergencyCallHistoryComponent }, // Call History - requires auth
 
     // Email verification (public - no auth required)
     { path: 'verify-email', component: VerifyEmailComponent },
+
+    // Shared prescription view (public - no auth required)
+    {
+        path: 'share/rx/:token',
+        loadComponent: () => import('./components/prescriptions/shared-prescription-view/shared-prescription-view.component').then(m => m.SharedPrescriptionViewComponent)
+    },
 
     // Static Pages
     { path: 'privacy-policy', component: StaticPageComponent },
@@ -173,6 +187,18 @@ export const routes: Routes = [
         data: { role: 'user' }
     },
     {
+        path: 'user/prescriptions',
+        loadComponent: () => import('./components/prescriptions/prescriptions-list/prescriptions-list.component').then(m => m.PrescriptionsListComponent),
+        canActivate: [authGuard],
+        data: { role: 'user' }
+    },
+    {
+        path: 'user/prescriptions/:id',
+        loadComponent: () => import('./components/prescriptions/prescription-detail/prescription-detail.component').then(m => m.PrescriptionDetailComponent),
+        canActivate: [authGuard],
+        data: { role: 'user' }
+    },
+    {
         path: 'user/find-doctors',
         component: DoctorListComponent,
         canActivate: [],
@@ -207,9 +233,26 @@ export const routes: Routes = [
 
     // Backward compatibility
     {
-        path: 'dashboard',
+        path: 'doctor/dashboard',
         canActivate: [authGuard],
         children: []
+    },
+    {
+        path: 'doctor/refills',
+        loadComponent: () => import('./components/doctor/refill-dashboard/refill-dashboard.component').then(m => m.RefillDashboardComponent),
+        canActivate: [authGuard],
+        data: { role: 'doctor' }
+    },
+    {
+        path: 'doctor/verify-prescriptions',
+        loadComponent: () => import('./components/doctor/prescription-verification/prescription-verification.component').then(m => m.PrescriptionVerificationComponent),
+        canActivate: [authGuard],
+        data: { role: 'doctor' }
+    },
+    {
+        path: 'notifications',
+        loadComponent: () => import('./components/notifications/notifications-page/notifications-page.component').then(m => m.NotificationsPageComponent),
+        canActivate: [authGuard]
     },
     {
         path: 'profile',

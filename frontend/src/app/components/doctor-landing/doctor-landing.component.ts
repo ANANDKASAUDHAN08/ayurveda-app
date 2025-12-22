@@ -50,12 +50,25 @@ export class DoctorLandingComponent {
     });
   }
 
+  ngOnInit() {
+    // No OAuth handling needed - backend redirects to /home
+  }
+
   switchTab(tab: 'login' | 'register') {
     this.activeTab = tab;
+    // Reset forms when switching
+    this.loginForm.reset();
+    this.registerForm.reset();
   }
 
   clearField(form: FormGroup, fieldName: string) {
     form.get(fieldName)?.setValue('');
+    form.get(fieldName)?.markAsUntouched();
+  }
+
+  signInWithGoogle() {
+    // Redirect to backend OAuth endpoint for doctors
+    window.location.href = 'http://localhost:3000/api/auth/google/doctor';
   }
 
   toggleLoginPassword() {

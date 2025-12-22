@@ -1,0 +1,182 @@
+<!-- Nearby Hospitals - Full Width -->
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50/30">
+    <div class="w-full px-4 sm:px-6 lg:px-8 py-3 sm:py-5">
+
+        <!-- Header - Breadcrumb Style - Hidden on Mobile -->
+        <div class="hidden sm:flex items-center gap-2 text-sm mb-4">
+            <button (click)="goBackToEmergency()"
+                class="text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-2">
+                <span>Emergency Hub</span>
+            </button>
+            <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
+            <div class="flex items-center gap-2">
+                <h1 class="text-lg sm:text-xl font-bold text-slate-900">Nearby Hospitals</h1>
+            </div>
+        </div>
+
+        <!-- Filters & Controls -->
+        <div class="mb-6 bg-white rounded-2xl border border-slate-200 shadow-lg p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Type Filter -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Hospital Type</label>
+                    <div class="flex gap-2">
+                        <button (click)="filterByType('all')"
+                            [class]="selectedType === 'all' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
+                            class="flex-1 px-4 py-2 rounded-lg font-bold transition-all">
+                            All
+                        </button>
+                        <button (click)="filterByType('government')"
+                            [class]="selectedType === 'government' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
+                            class="flex-1 px-4 py-2 rounded-lg font-bold transition-all">
+                            <i class="fa-landmark mr-1"></i> Government
+                        </button>
+                        <button (click)="filterByType('private')"
+                            [class]="selectedType === 'private' ? 'bg-purple-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
+                            class="flex-1 px-4 py-2 rounded-lg font-bold transition-all">
+                            <i class="fa-building mr-1"></i> Private
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search Radius -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">
+                        Search Radius: {{searchRadius}} km
+                    </label>
+                    <input type="range" [(ngModel)]="searchRadius" (change)="updateRadius()" min="5" max="50" step="5"
+                        class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs text-slate-500 mt-1">
+                        <span>5 km</span>
+                        <span>50 km</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="text-center py-12">
+            <div
+                class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4">
+            </div>
+            <p class="text-slate-600 font-semibold">Finding nearby hospitals...</p>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="errorMessage && !loading" class="bg-red-50 border-2 border-red-200 rounded-2xl p-6 text-center">
+            <i class="fas fa-exclamation-circle text-red-600 text-4xl mb-3"></i>
+            <h3 class="text-lg font-bold text-red-900 mb-2">{{errorMessage}}</h3>
+            <button (click)="detectLocationAndLoadHospitals()"
+                class="mt-3 px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors">
+                Retry
+            </button>
+        </div>
+
+        <!-- Results Count -->
+        <div *ngIf="!loading && !errorMessage && filteredHospitals.length > 0" class="mb-4">
+            <p class="text-slate-600 font-semibold">
+                <i class="fas fa-map-marker-alt text-blue-600 mr-2"></i>
+                Found {{filteredHospitals.length}} hospital(s) within {{searchRadius}} km
+            </p>
+        </div>
+
+        <!-- Hospital Cards -->
+        <div *ngIf="!loading && !errorMessage" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div *ngFor="let hospital of filteredHospitals; let i = index"
+                class="bg-white rounded-2xl border-2 border-{{getTypeColor(hospital.type)}}-200 hover:border-{{getTypeColor(hospital.type)}}-400 hover:shadow-xl transition-all p-6">
+
+                <!-- Hospital Header -->
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span
+                                class="w-8 h-8 bg-gradient-to-br from-{{getTypeColor(hospital.type)}}-500 to-{{getTypeColor(hospital.type)}}-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                                {{i + 1}}
+                            </span>
+                            <h3 class="text-lg font-bold text-slate-900">{{hospital.name}}</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            <span
+                                class="inline-flex items-center gap-1 px-3 py-1 bg-{{getTypeColor(hospital.type)}}-100 text-{{getTypeColor(hospital.type)}}-700 text-xs font-bold rounded-full">
+                                <i class="fas {{getBadgeIcon(hospital.type)}}"></i>
+                                {{hospital.type | titlecase}}
+                            </span>
+                            <span *ngIf="hospital.distance"
+                                class="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">
+                                <i class="fas fa-location-arrow"></i>
+                                {{hospital.distance}} km
+                            </span>
+                        </div>
+                    </div>
+                    <div *ngIf="hospital.rating" class="flex items-center gap-1 bg-amber-100 px-3 py-1 rounded-full">
+                        <i class="fas fa-star text-amber-500 text-sm"></i>
+                        <span class="font-bold text-amber-700 text-sm">{{hospital.rating}}</span>
+                    </div>
+                </div>
+
+                <!-- Hospital Details -->
+                <div class="space-y-3 mb-4">
+                    <!-- Address -->
+                    <div class="flex items-start gap-2">
+                        <i class="fas fa-map-marker-alt text-slate-400 mt-1"></i>
+                        <p class="text-sm text-slate-600">{{hospital.address}}, {{hospital.city}}</p>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="flex flex-wrap gap-2">
+                        <span *ngIf="hospital.has_emergency"
+                            class="inline-flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded">
+                            <i class="fas fa-ambulance"></i> Emergency
+                        </span>
+                        <span *ngIf="hospital.has_ambulance"
+                            class="inline-flex items-center gap-1 px-2 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded">
+                            <i class="fas fa-truck-medical"></i> Ambulance
+                        </span>
+                        <span *ngIf="hospital.has_icu"
+                            class="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
+                            <i class="fas fa-hospital-user"></i> ICU
+                        </span>
+                        <span *ngIf="hospital.beds_available > 0"
+                            class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded">
+                            <i class="fas fa-bed"></i> {{hospital.beds_available}} Beds
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button (click)="callHospital(hospital.emergency_phone || hospital.phone)"
+                        class="w-full px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all">
+                        <i class="fas fa-phone-alt mr-2"></i> Call Now
+                    </button>
+                    <button (click)="getDirections(hospital)"
+                        class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all">
+                        <i class="fas fa-directions mr-2"></i> Directions
+                    </button>
+                </div>
+
+                <!-- Phone Numbers -->
+                <div class="mt-3 pt-3 border-t border-slate-200 text-xs text-slate-500 space-y-1">
+                    <div *ngIf="hospital.phone">
+                        <i class="fas fa-phone mr-1"></i> Main: {{hospital.phone}}
+                    </div>
+                    <div *ngIf="hospital.emergency_phone">
+                        <i class="fas fa-ambulance mr-1 text-red-600"></i> Emergency: {{hospital.emergency_phone}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results -->
+        <div *ngIf="!loading && !errorMessage && filteredHospitals.length === 0" class="text-center py-12">
+            <i class="fas fa-hospital text-slate-300 text-6xl mb-4"></i>
+            <h3 class="text-xl font-bold text-slate-600 mb-2">No hospitals found</h3>
+            <p class="text-slate-500 mb-4">Try increasing the search radius or changing filters</p>
+            <button (click)="searchRadius = searchRadius + 10; updateRadius()"
+                class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors">
+                Increase Radius
+            </button>
+        </div>
+
+    </div>
+</div>

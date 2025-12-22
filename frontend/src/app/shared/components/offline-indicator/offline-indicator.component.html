@@ -1,0 +1,28 @@
+<!-- Offline Banner (shown when offline) -->
+<div *ngIf="!isOnline"
+    class="fixed top-0 left-0 right-0 bg-gradient-to-r from-orange-600 to-orange-700 text-white px-4 py-3 shadow-lg z-[100] animate-slide-down">
+    <div class="max-w-7xl mx-auto flex items-center justify-center gap-3">
+        <i class="fas fa-wifi-slash text-xl"></i>
+        <span class="font-bold">📡 Offline Mode</span>
+        <span class="text-orange-100 text-sm">• Using cached emergency data</span>
+    </div>
+</div>
+
+<!-- Online/Offline Toast Notification -->
+<div *ngIf="showToast"
+    class="fixed top-20 right-4 bg-white rounded-xl shadow-2xl border-2 px-6 py-4 z-[100] animate-slide-in"
+    [ngClass]="isOnline ? 'border-emerald-500' : 'border-orange-500'">
+    <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center"
+            [ngClass]="isOnline ? 'bg-emerald-100' : 'bg-orange-100'">
+            <i class="fas text-lg"
+                [ngClass]="isOnline ? 'fa-wifi text-emerald-600' : 'fa-wifi-slash text-orange-600'"></i>
+        </div>
+        <div class="flex-1">
+            <p class="font-bold text-slate-900">{{toastMessage}}</p>
+        </div>
+        <button (click)="closeToast()" class="text-slate-400 hover:text-slate-600">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</div>

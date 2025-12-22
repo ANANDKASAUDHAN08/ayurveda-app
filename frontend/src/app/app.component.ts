@@ -10,6 +10,8 @@ import { AuthService } from './shared/services/auth.service';
 import { HamburgerMenuComponent } from './shared/components/hamburger-menu/hamburger-menu.component';
 import { BottomNavigationComponent } from './shared/components/bottom-navigation/bottom-navigation.component';
 import { ScrollToTopComponent } from './shared/components/scroll-to-top/scroll-to-top.component';
+import { OfflineIndicatorComponent } from './shared/components/offline-indicator/offline-indicator.component';
+import { MobileMenuComponent } from './shared/components/mobile-menu/mobile-menu.component';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +25,9 @@ import { ScrollToTopComponent } from './shared/components/scroll-to-top/scroll-t
     SnackbarComponent,
     HamburgerMenuComponent,
     BottomNavigationComponent,
-    ScrollToTopComponent
+    ScrollToTopComponent,
+    OfflineIndicatorComponent,
+    MobileMenuComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']

@@ -1,0 +1,177 @@
+<!-- Medical Information Modal -->
+<div class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4"
+    (click)="onBackdropClick($event)">
+    <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-full w-full sm:max-w-6xl max-h-[95vh] overflow-y-auto"
+        (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        <div class="sticky top-0 bg-gradient-to-r from-red-600 to-red-700 text-white p-6 rounded-t-3xl">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-heartbeat text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold">Medical Information</h2>
+                        <p class="text-red-100 text-sm">Your health details for emergencies</p>
+                    </div>
+                </div>
+                <button (click)="onClose()"
+                    class="w-10 h-10 rounded-full hover:bg-white/20 transition-colors flex items-center justify-center">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <form (ngSubmit)="onSave()" class="p-4 sm:p-6 space-y-6">
+
+            <!-- Blood Type (Full Width) -->
+            <div class="bg-red-50 rounded-2xl p-4">
+                <label class="block text-sm font-bold text-slate-700 mb-2">
+                    <i class="fas fa-tint text-red-600 mr-2"></i>Blood Type
+                </label>
+                <select [(ngModel)]="formData.blood_type" name="blood_type"
+                    class="w-full sm:w-1/2 px-4 py-3 border-2 border-red-200 rounded-xl focus:border-red-600 focus:outline-none transition-colors bg-white">
+                    <option value="">Select blood type</option>
+                    <option *ngFor="let type of bloodTypes" [value]="type">{{type}}</option>
+                </select>
+            </div>
+
+            <!-- Allergies, Conditions, Medications - 2 Column Grid on Large Screens -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- Allergies -->
+                <div class="bg-orange-50 rounded-2xl p-4">
+                    <label class="block text-sm font-bold text-slate-700 mb-3">
+                        <i class="fas fa-exclamation-triangle text-orange-600 mr-2"></i>Allergies
+                    </label>
+                    <div class="flex gap-2 mb-3">
+                        <input type="text" [(ngModel)]="newAllergy" name="newAllergy"
+                            (keyup.enter)="addAllergy(); $event.preventDefault()"
+                            class="flex-1 px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-600 focus:outline-none transition-colors bg-white"
+                            placeholder="e.g., Peanuts, Penicillin">
+                        <button type="button" (click)="addAllergy()"
+                            class="px-4 sm:px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl transition-colors flex items-center gap-2">
+                            <i class="fas fa-plus"></i>
+                            <span class="hidden sm:inline">Add</span>
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap gap-2 min-h-[2rem]">
+                        <div *ngFor="let allergy of formData.allergies; let i = index"
+                            class="flex items-center gap-2 px-3 py-2 bg-orange-100 text-orange-800 rounded-lg border border-orange-200">
+                            <span class="text-sm font-semibold">{{allergy}}</span>
+                            <button type="button" (click)="removeAllergy(i)"
+                                class="w-5 h-5 rounded-full bg-orange-200 hover:bg-orange-300 flex items-center justify-center transition-colors">
+                                <i class="fas fa-times text-xs"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="formData.allergies.length === 0" class="text-sm text-slate-400 italic py-2">
+                            No allergies added
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical Conditions -->
+                <div class="bg-blue-50 rounded-2xl p-4">
+                    <label class="block text-sm font-bold text-slate-700 mb-3">
+                        <i class="fas fa-file-medical text-blue-600 mr-2"></i>Medical Conditions
+                    </label>
+                    <div class="flex gap-2 mb-3">
+                        <input type="text" [(ngModel)]="newCondition" name="newCondition"
+                            (keyup.enter)="addCondition(); $event.preventDefault()"
+                            class="flex-1 px-4 py-3 border-2 border-blue-200 rounded-xl focus:border-blue-600 focus:outline-none transition-colors bg-white"
+                            placeholder="e.g., Diabetes, Hypertension">
+                        <button type="button" (click)="addCondition()"
+                            class="px-4 sm:px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors flex items-center gap-2">
+                            <i class="fas fa-plus"></i>
+                            <span class="hidden sm:inline">Add</span>
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap gap-2 min-h-[2rem]">
+                        <div *ngFor="let condition of formData.medical_conditions; let i = index"
+                            class="flex items-center gap-2 px-3 py-2 bg-blue-100 text-blue-800 rounded-lg border border-blue-200">
+                            <span class="text-sm font-semibold">{{condition}}</span>
+                            <button type="button" (click)="removeCondition(i)"
+                                class="w-5 h-5 rounded-full bg-blue-200 hover:bg-blue-300 flex items-center justify-center transition-colors">
+                                <i class="fas fa-times text-xs"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="formData.medical_conditions.length === 0"
+                            class="text-sm text-slate-400 italic py-2">
+                            No conditions added
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Medications (Full Width) -->
+            <div class="bg-purple-50 rounded-2xl p-4">
+                <label class="block text-sm font-bold text-slate-700 mb-3">
+                    <i class="fas fa-pills text-purple-600 mr-2"></i>Current Medications
+                </label>
+                <div class="flex gap-2 mb-3">
+                    <input type="text" [(ngModel)]="newMedication" name="newMedication"
+                        (keyup.enter)="addMedication(); $event.preventDefault()"
+                        class="flex-1 px-4 py-3 border-2 border-purple-200 rounded-xl focus:border-purple-600 focus:outline-none transition-colors bg-white"
+                        placeholder="e.g., Aspirin 100mg, Metformin 500mg">
+                    <button type="button" (click)="addMedication()"
+                        class="px-4 sm:px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition-colors flex items-center gap-2">
+                        <i class="fas fa-plus"></i>
+                        <span class="hidden sm:inline">Add</span>
+                    </button>
+                </div>
+                <div class="flex flex-wrap gap-2 min-h-[2rem]">
+                    <div *ngFor="let medication of formData.current_medications; let i = index"
+                        class="flex items-center gap-2 px-3 py-2 bg-purple-100 text-purple-800 rounded-lg border border-purple-200">
+                        <span class="text-sm font-semibold">{{medication}}</span>
+                        <button type="button" (click)="removeMedication(i)"
+                            class="w-5 h-5 rounded-full bg-purple-200 hover:bg-purple-300 flex items-center justify-center transition-colors">
+                            <i class="fas fa-times text-xs"></i>
+                        </button>
+                    </div>
+                    <div *ngIf="formData.current_medications.length === 0" class="text-sm text-slate-400 italic py-2">
+                        No medications added
+                    </div>
+                </div>
+            </div>
+
+            <!-- Primary Doctor -->
+            <div class="bg-emerald-50 rounded-2xl p-4 space-y-4">
+                <h3 class="font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fas fa-user-md text-emerald-600"></i>
+                    Primary Doctor (Optional)
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-2">Doctor Name</label>
+                        <input type="text" [(ngModel)]="formData.primary_doctor_name" name="doctor_name"
+                            class="w-full px-4 py-3 border-2 border-emerald-200 rounded-xl focus:border-emerald-500 focus:outline-none transition-colors"
+                            placeholder="Dr. John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-2">Doctor Phone</label>
+                        <input type="tel" [(ngModel)]="formData.primary_doctor_phone" name="doctor_phone"
+                            class="w-full px-4 py-3 border-2 border-emerald-200 rounded-xl focus:border-emerald-500 focus:outline-none transition-colors"
+                            placeholder="+91 98765 43210">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-3 pt-4">
+                <button type="button" (click)="onClose()"
+                    class="flex-1 px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02]">
+                    <i class="fas fa-save mr-2"></i>Save Information
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>

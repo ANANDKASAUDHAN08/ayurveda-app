@@ -1,4 +1,7 @@
 <div class="flex flex-col min-h-screen bg-gray-50">
+  <!-- Offline Indicator -->
+  <app-offline-indicator></app-offline-indicator>
+
   <!-- Top Navbar -->
   <app-top-navbar [onMenuToggle]="toggleHamburgerMenu"></app-top-navbar>
 
@@ -15,6 +18,9 @@
 
   <!-- Bottom Navigation (Mobile only) -->
   <app-bottom-navigation (navItemClicked)="closeHamburgerMenu()"></app-bottom-navigation>
+
+  <!-- NEW: Enhanced Mobile Menu with Bottom Nav + Slide-in Menu -->
+  <app-mobile-menu></app-mobile-menu>
 
   <!-- Snackbar -->
   <app-snackbar></app-snackbar>
