@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MedicineTypeService, MedicineType } from '../../services/medicine-type.service';
+import { MedicineTypeService, MedicineType, MedicineTypeInfo } from '../../services/medicine-type.service';
 
 @Component({
   selector: 'app-medicine-type-selector',
@@ -10,11 +10,11 @@ import { MedicineTypeService, MedicineType } from '../../services/medicine-type.
   styleUrl: './medicine-type-selector.component.css'
 })
 export class MedicineTypeSelectorComponent implements OnInit {
-  medicineTypes: MedicineType[] = [];
-  activeMedicineTypeId: number | null = null;
+  medicineTypes: MedicineTypeInfo[] = [];
+  activeMedicineType: MedicineType | 'all' = 'all';
   isLoading = false;
 
-  @Output() medicineTypeSelected = new EventEmitter<number | null>();
+  @Output() medicineTypeSelected = new EventEmitter<MedicineType | 'all'>();
 
   constructor(private medicineTypeService: MedicineTypeService) { }
 
@@ -22,43 +22,31 @@ export class MedicineTypeSelectorComponent implements OnInit {
     this.loadMedicineTypes();
 
     // Subscribe to active medicine type changes
-    this.medicineTypeService.activeMedicineType$.subscribe(typeId => {
-      this.activeMedicineTypeId = typeId;
+    this.medicineTypeService.getCurrentType().subscribe(type => {
+      this.activeMedicineType = type;
     });
   }
 
   loadMedicineTypes(): void {
-    this.isLoading = true;
-    this.medicineTypeService.getAllMedicineTypes().subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.medicineTypes = response.data;
-        }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading medicine types:', error);
-        this.isLoading = false;
-      }
-    });
+    this.medicineTypes = this.medicineTypeService.getAllTypes();
   }
 
-  selectMedicineType(typeId: number): void {
+  selectMedicineType(type: MedicineType | 'all'): void {
     // Toggle: if clicking the same type, clear filter
-    if (this.activeMedicineTypeId === typeId) {
+    if (this.activeMedicineType === type) {
       this.clearFilter();
     } else {
-      this.medicineTypeService.setActiveMedicineType(typeId);
-      this.medicineTypeSelected.emit(typeId);
+      this.medicineTypeService.setMedicineType(type);
+      this.medicineTypeSelected.emit(type);
     }
   }
 
   clearFilter(): void {
-    this.medicineTypeService.clearFilter();
-    this.medicineTypeSelected.emit(null);
+    this.medicineTypeService.setMedicineType('all');
+    this.medicineTypeSelected.emit('all');
   }
 
-  isActive(typeId: number): boolean {
-    return this.activeMedicineTypeId === typeId;
+  isActive(type: MedicineType | 'all'): boolean {
+    return this.activeMedicineType === type;
   }
 }

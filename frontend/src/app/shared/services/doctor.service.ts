@@ -14,6 +14,11 @@ export class DoctorService {
     getDoctors(filters: any): Observable<any[]> {
         let params = new HttpParams();
 
+        // NEW: Medicine type filter
+        if (filters.medicine_type && filters.medicine_type !== 'all') {
+            params = params.set('medicine_type', filters.medicine_type);
+        }
+
         if (filters.specialization) {
             if (Array.isArray(filters.specialization)) {
                 filters.specialization.forEach((spec: string) => {

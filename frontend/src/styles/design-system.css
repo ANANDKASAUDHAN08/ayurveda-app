@@ -1,0 +1,489 @@
+/* ===================================
+   DESIGN SYSTEM - Global Variables
+   Modern Healthcare App Redesign
+   =================================== */
+
+:root {
+    /* ===== Color System ===== */
+
+    /* Primary Gradients */
+    --gradient-healing: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+    --gradient-energy: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+    --gradient-calm: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+    --gradient-deep-teal: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+
+    /* Medicine Type Colors */
+    --ayurveda-primary: #10b981;
+    --ayurveda-secondary: #06b6d4;
+    --ayurveda-gradient: var(--gradient-healing);
+
+    --homeopathy-primary: #3b82f6;
+    --homeopathy-secondary: #8b5cf6;
+    --homeopathy-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+
+    --allopathy-primary: #f97316;
+    --allopathy-secondary: #ef4444;
+    --allopathy-gradient: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+
+    /* Neutrals */
+    --white: #ffffff;
+    --warm-white: #fafaf9;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --slate-900: #0f172a;
+    --slate-600: #475569;
+
+    /* Status Colors */
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+
+    /* ===== Typography ===== */
+
+    --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-accent: 'Crimson Pro', Georgia, serif;
+
+    /* Font Sizes */
+    --text-xs: 0.75rem;
+    /* 12px */
+    --text-sm: 0.875rem;
+    /* 14px */
+    --text-base: 1rem;
+    /* 16px */
+    --text-lg: 1.125rem;
+    /* 18px */
+    --text-xl: 1.25rem;
+    /* 20px */
+    --text-2xl: 1.5rem;
+    /* 24px */
+    --text-3xl: 1.875rem;
+    /* 30px */
+    --text-4xl: 2.25rem;
+    /* 36px */
+    --text-5xl: 3rem;
+    /* 48px */
+    --text-6xl: 3.75rem;
+    /* 60px */
+    --text-7xl: 4.5rem;
+    /* 72px */
+
+    /* ===== Spacing Scale ===== */
+
+    --space-1: 0.25rem;
+    /* 4px */
+    --space-2: 0.5rem;
+    /* 8px */
+    --space-3: 0.75rem;
+    /* 12px */
+    --space-4: 1rem;
+    /* 16px */
+    --space-5: 1.25rem;
+    /* 20px */
+    --space-6: 1.5rem;
+    /* 24px */
+    --space-8: 2rem;
+    /* 32px */
+    --space-10: 2.5rem;
+    /* 40px */
+    --space-12: 3rem;
+    /* 48px */
+    --space-16: 4rem;
+    /* 64px */
+    --space-20: 5rem;
+    /* 80px */
+    --space-24: 6rem;
+    /* 96px */
+
+    /* ===== Shadow System ===== */
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+    /* Colored Shadows */
+    --shadow-emerald: 0 10px 25px -5px rgba(16, 185, 129, 0.3);
+    --shadow-blue: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+    --shadow-orange: 0 10px 25px -5px rgba(249, 115, 22, 0.3);
+    --shadow-purple: 0 10px 25px -5px rgba(139, 92, 246, 0.3);
+
+    /* ===== Border Radius ===== */
+
+    --radius-sm: 0.375rem;
+    /* 6px */
+    --radius-base: 0.5rem;
+    /* 8px */
+    --radius-md: 0.75rem;
+    /* 12px */
+    --radius-lg: 1rem;
+    /* 16px */
+    --radius-xl: 1.5rem;
+    /* 24px */
+    --radius-2xl: 2rem;
+    /* 32px */
+    --radius-3xl: 3rem;
+    /* 48px */
+    --radius-full: 9999px;
+
+    /* ===== Z-Index Stack ===== */
+
+    --z-base: 0;
+    --z-dropdown: 10;
+    --z-sticky: 20;
+    --z-fixed: 30;
+    --z-modal-backdrop: 40;
+    --z-modal: 50;
+    --z-popover: 60;
+    --z-tooltip: 70;
+    --z-toast: 80;
+
+    /* ===== Transitions ===== */
+
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ===== Glassmorphism ===== */
+
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+
+    /* ===== Safe Areas (Mobile) ===== */
+
+    --safe-area-inset-top: env(safe-area-inset-top);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom);
+    --safe-area-inset-left: env(safe-area-inset-left);
+    --safe-area-inset-right: env(safe-area-inset-right);
+}
+
+/* ===================================
+   UTILITY CLASSES
+   =================================== */
+
+/* === Glassmorphism === */
+
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+
+.glass-strong {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid var(--glass-border);
+}
+
+.glass-subtle {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* === Gradient Text === */
+
+.gradient-text {
+    background: var(--gradient-healing);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-text-energy {
+    background: var(--gradient-energy);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-text-calm {
+    background: var(--gradient-calm);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* === Gradient Backgrounds === */
+
+.bg-gradient-healing {
+    background: var(--gradient-healing);
+}
+
+.bg-gradient-energy {
+    background: var(--gradient-energy);
+}
+
+.bg-gradient-calm {
+    background: var(--gradient-calm);
+}
+
+.bg-gradient-teal {
+    background: var(--gradient-deep-teal);
+}
+
+/* === Glow Effects === */
+
+.glow-emerald {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+.glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.glow-orange {
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+}
+
+.glow-purple {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+/* === Hover Glow (Interactive) === */
+
+.hover-glow-emerald:hover {
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
+    transition: box-shadow var(--transition-base);
+}
+
+.hover-glow-blue:hover {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+    transition: box-shadow var(--transition-base);
+}
+
+/* === Card Depth  === */
+
+.card-float {
+    transform: translateY(0);
+    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.card-float:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-2xl);
+}
+
+/* === Scrollbar Styling === */
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--gray-100);
+    border-radius: var(--radius-full);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--ayurveda-primary);
+    border-radius: var(--radius-full);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--ayurveda-secondary);
+}
+
+/* === Skeleton Loader === */
+
+.skeleton {
+    animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+    background-size: 200% 100%;
+    border-radius: var(--radius-md);
+}
+
+@keyframes skeleton-pulse {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* === Focus Visible (Accessibility) === */
+
+.focus-ring:focus-visible {
+    outline: 2px solid var(--ayurveda-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-base);
+}
+
+/* === Smooth Images === */
+
+.img-smooth {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* === Backdrop Blur Utilities === */
+
+.backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.backdrop-blur-md {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.backdrop-blur-lg {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.backdrop-blur-xl {
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+/* === Animated Gradient Background === */
+
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.bg-gradient-animate {
+    background: linear-gradient(-45deg, #10b981, #06b6d4, #8b5cf6, #3b82f6);
+    background-size: 400% 400%;
+    animation: gradient-animation 15s ease infinite;
+}
+
+/* === Floating Animation === */
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* === Pulse Animation === */
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.animate-pulse-ring {
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* === Spin Animation === */
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* === Fade In Up === */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* === Stagger Delay Utilities === */
+
+.stagger-1 {
+    animation-delay: 0.1s;
+}
+
+.stagger-2 {
+    animation-delay: 0.2s;
+}
+
+.stagger-3 {
+    animation-delay: 0.3s;
+}
+
+.stagger-4 {
+    animation-delay: 0.4s;
+}
+
+.stagger-5 {
+    animation-delay: 0.5s;
+}
+
+.stagger-6 {
+    animation-delay: 0.6s;
+}
+
+/* === Responsive Utilities === */
+
+@media (max-width: 640px) {
+    :root {
+        --text-5xl: 2.25rem;
+        /* 36px on mobile */
+        --text-6xl: 2.75rem;
+        /* 44px on mobile */
+        --text-7xl: 3.25rem;
+        /* 52px on mobile */
+    }
+}

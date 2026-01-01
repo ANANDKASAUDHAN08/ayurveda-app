@@ -88,6 +88,13 @@
             <i class="fas fa-pills"></i>
             <span *ngIf="sidebarExpanded">Pharmacies</span>
         </a>
+
+        <a routerLink="/favorites" routerLinkActive="bg-emerald-50 text-emerald-700 border-l-4 border-emerald-600"
+            [title]="!sidebarExpanded ? 'Favorites' : ''"
+            class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer">
+            <i class="fas fa-heart"></i>
+            <span *ngIf="sidebarExpanded">Favorites</span>
+        </a>
     </nav>
 
     <!-- Collapse Toggle Button -->

@@ -1,10 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FavoritesService } from '../../../shared/services/favorites.service';
 
 @Component({
   selector: 'app-health-articles-carousel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './health-articles-carousel.component.html',
   styleUrls: ['./health-articles-carousel.component.css']
 })
@@ -13,6 +15,8 @@ export class HealthArticlesCarouselComponent {
   @Input() loading: boolean = false;
   @Input() showEmptyState: boolean = false;
   @Output() articleSelected = new EventEmitter<any>();
+
+  constructor(private favoritesService: FavoritesService) { }
 
   // Article Carousel
   articleCarouselIndex = 0;
@@ -41,5 +45,14 @@ export class HealthArticlesCarouselComponent {
 
   openArticle(article: any) {
     this.articleSelected.emit(article);
+  }
+
+  toggleFavorite(event: Event, article: any) {
+    event.stopPropagation();
+    this.favoritesService.toggleFavorite(article.id, 'article').subscribe();
+  }
+
+  isFavorite(articleId: string | number): boolean {
+    return this.favoritesService.isFavorite(articleId, 'article');
   }
 }

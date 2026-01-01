@@ -1,17 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const medicineTypeController = require('../controllers/medicineTypeController');
+const auth = require('../middleware/auth');
 
-// Get all medicine types
-router.get('/', medicineTypeController.getAllMedicineTypes);
+// Get all medicine types (static information)
+router.get('/', medicineTypeController.getAllTypes);
 
 // Get statistics for all medicine types
-router.get('/stats', medicineTypeController.getMedicineTypeStats);
+router.get('/stats', medicineTypeController.getStats);
 
-// Get single medicine type by ID
-router.get('/:id', medicineTypeController.getMedicineTypeById);
+// User preference routes (require authentication)
+router.get('/preference', auth, medicineTypeController.getUserPreference);
+router.post('/preference', auth, medicineTypeController.setUserPreference);
 
-// Get doctors by medicine type
-router.get('/:id/doctors', medicineTypeController.getDoctorsByMedicineType);
+// Get type-specific content
+// Example: GET /api/medicine-types/ayurveda/content?featured=true&limit=5
+router.get('/:type/content', medicineTypeController.getContent);
+
+// Increment content view count
+router.post('/content/:id/view', medicineTypeController.incrementContentView);
 
 module.exports = router;

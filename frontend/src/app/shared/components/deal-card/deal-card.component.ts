@@ -17,6 +17,7 @@ export interface DealCardData {
   discount: number; // percentage
   badge?: string; // 'Hot Deal', 'Limited'
   route: string;
+  expiresAt?: Date; // Countdown timer end date
 }
 
 @Component({
@@ -34,6 +35,14 @@ export class DealCardComponent implements OnInit, OnDestroy {
   cartQuantity = 0; // Track quantity in cart
   private cartSubscription?: Subscription;
 
+  // Countdown timer
+  countdown = {
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  };
+  private countdownInterval?: any;
+
   constructor(
     private router: Router,
     private cartService: CartService,
@@ -44,21 +53,52 @@ export class DealCardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Subscribe to cart to get current quantity
-    this.cartSubscription = this.cartService.cart$.subscribe(cart => {
+    this.cartSubscription = this.cartService.getCart().subscribe(cart => {
       if (cart && cart.items) {
         const cartItem = cart.items.find(item =>
-          item.product_id === (this.deal.productId || 1) &&
-          item.product_type === (this.deal.productType || 'medicine')
+          item.id === String(this.deal.productId || 1) &&
+          item.type === (this.deal.productType || 'medicine')
         );
         this.cartQuantity = cartItem ? cartItem.quantity : 0;
       } else {
         this.cartQuantity = 0;
       }
     });
+
+    // Initialize countdown timer if expiresAt is provided
+    if (this.deal.expiresAt) {
+      this.updateCountdown();
+      this.countdownInterval = setInterval(() => this.updateCountdown(), 1000);
+    }
   }
 
   ngOnDestroy() {
     this.cartSubscription?.unsubscribe();
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+  }
+
+  private updateCountdown() {
+    if (!this.deal.expiresAt) return;
+
+    const now = new Date().getTime();
+    const expiresAt = new Date(this.deal.expiresAt).getTime();
+    const distance = expiresAt - now;
+
+    if (distance < 0) {
+      this.countdown = { hours: 0, minutes: 0, seconds: 0 };
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval);
+      }
+      return;
+    }
+
+    this.countdown = {
+      hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+      minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds: Math.floor((distance % (1000 * 60)) / 1000)
+    };
   }
 
   get savings(): number {
@@ -79,27 +119,19 @@ export class DealCardComponent implements OnInit, OnDestroy {
 
     this.isAdding = true;
 
-    this.cartService.addToCart({
-      product_id: this.deal.productId || 1, // Use real product ID or fallback
-      product_type: this.deal.productType || 'medicine', // Use real type or fallback
+    this.cartService.addItem({
+      id: String(this.deal.productId || 1),
+      name: this.deal.title,
+      type: (this.deal.productType || 'medicine') as 'medicine' | 'device' | 'wellness' | 'other',
+      price: this.deal.price,
       quantity: 1,
-      price: this.deal.price // Send the price from deal data
-    }).subscribe({
-      next: (response) => {
-        setTimeout(() => {
-          this.isAdding = false;
-        }, 500);
-        // Show success snackbar
-        this.snackbarService.show(`✓ ${this.deal.title} added to cart!`, 'success');
-      },
-      error: (error) => {
-        setTimeout(() => {
-          this.isAdding = false;
-        }, 500);
-        // Show error snackbar
-        this.snackbarService.show('Failed to add item to cart. Please try again.', 'error');
-      }
+      image: this.deal.image
     });
+
+    setTimeout(() => {
+      this.isAdding = false;
+      this.snackbarService.show(`✓ ${this.deal.title} added to cart!`, 'success');
+    }, 500);
   }
 
   // Increase quantity
@@ -108,20 +140,18 @@ export class DealCardComponent implements OnInit, OnDestroy {
     if (this.cartQuantity >= 10) return;
 
     this.isUpdating = true;
-    this.cartService.addToCart({
-      product_id: this.deal.productId || 1,
-      product_type: this.deal.productType || 'medicine',
+    this.cartService.addItem({
+      id: String(this.deal.productId || 1),
+      name: this.deal.title,
+      type: (this.deal.productType || 'medicine') as 'medicine' | 'device' | 'wellness' | 'other',
+      price: this.deal.price,
       quantity: 1,
-      price: this.deal.price
-    }).subscribe({
-      next: () => {
-        this.isUpdating = false;
-      },
-      error: (error) => {
-        console.error('Error updating cart:', error);
-        this.isUpdating = false;
-      }
+      image: this.deal.image
     });
+
+    setTimeout(() => {
+      this.isUpdating = false;
+    }, 300);
   }
 
   // Decrease quantity
@@ -131,40 +161,31 @@ export class DealCardComponent implements OnInit, OnDestroy {
 
     this.isUpdating = true;
 
-    // Find cart item ID
-    this.cartService.cart$.subscribe(cart => {
+    // Get current cart to find item ID
+    const subscription = this.cartService.getCart().subscribe(cart => {
       if (cart && cart.items) {
         const cartItem = cart.items.find(item =>
-          item.product_id === (this.deal.productId || 1) &&
-          item.product_type === (this.deal.productType || 'medicine')
+          item.id === String(this.deal.productId || 1) &&
+          item.type === (this.deal.productType || 'medicine')
         );
 
         if (cartItem) {
           if (this.cartQuantity === 1) {
             // Remove from cart
-            this.cartService.removeItem(cartItem.id).subscribe({
-              next: () => {
-                this.isUpdating = false;
-              },
-              error: (error) => {
-                console.error('Error removing from cart:', error);
-                this.isUpdating = false;
-              }
-            });
+            this.cartService.removeItem(cartItem.id);
           } else {
             // Decrease quantity
-            this.cartService.updateQuantity(cartItem.id, this.cartQuantity - 1).subscribe({
-              next: () => {
-                this.isUpdating = false;
-              },
-              error: (error) => {
-                console.error('Error updating cart:', error);
-                this.isUpdating = false;
-              }
-            });
+            this.cartService.updateQuantity(cartItem.id, this.cartQuantity - 1);
           }
         }
       }
-    }).unsubscribe(); // Unsubscribe immediately after getting data
+
+      setTimeout(() => {
+        this.isUpdating = false;
+      }, 300);
+    });
+
+    // Unsubscribe after getting data
+    subscription.unsubscribe();
   }
 }

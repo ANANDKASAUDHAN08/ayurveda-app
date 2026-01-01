@@ -1,0 +1,135 @@
+<div class="diagnostic-hub animate-in fade-in py-16 px-4 bg-[#f8fbff]">
+    <div class="max-w-7xl mx-auto space-y-16">
+
+        <!-- Interactive Header -->
+        <div class="flex flex-col md:flex-row justify-between items-end gap-6">
+            <div class="space-y-2">
+                <span class="text-blue-600 font-black uppercase tracking-[0.3em] text-[10px]">Clinical
+                    Laboratories</span>
+                <h2 class="text-4xl font-black text-slate-900 tracking-tighter">Diagnostic <span
+                        class="text-blue-600">Hub</span></h2>
+                <p class="text-slate-500 font-medium">Precision testing. Certified results. Fast turnaround.</p>
+            </div>
+            <div class="flex gap-4">
+                <div class="px-6 py-3 bg-white rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
+                    <i class="fas fa-map-marker-alt text-blue-500"></i>
+                    <span class="text-sm font-bold text-slate-700">Mumbai West Lab</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diagnostic Categories -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Popular Packages -->
+            <!-- Health Packages -->
+            <div class="lg:col-span-2 space-y-8">
+                <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Recommended Packages</h3>
+
+                <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div *ngFor="let i of [1,2]" class="h-64 bg-white rounded-[3rem] animate-pulse"></div>
+                </div>
+
+                <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div *ngFor="let pkg of packages"
+                        class="group bg-white p-8 rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/30 hover:shadow-2xl hover:border-blue-100 transition-all">
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span *ngFor="let tag of pkg.tags"
+                                class="px-3 py-1 bg-slate-50 text-[9px] font-black text-slate-400 uppercase tracking-widest rounded-full border border-slate-100 group-hover:bg-blue-50 group-hover:text-blue-500 transition-colors">{{tag}}</span>
+                        </div>
+                        <h4 class="text-xl font-black text-slate-900 mb-2">{{pkg.name}}</h4>
+                        <p class="text-xs text-slate-500 mb-6 leading-relaxed">{{pkg.description}}</p>
+                        <div class="flex items-center justify-between mt-auto">
+                            <div>
+                                <p class="text-[10px] text-slate-300 line-through font-bold">₹{{pkg.price}}</p>
+                                <p class="text-xl font-black text-blue-600">₹{{pkg.discounted_price}}</p>
+                            </div>
+                            <button
+                                class="px-6 py-3 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 transition-all">Select</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Individual Tests -->
+                <div class="space-y-6 pt-8">
+                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Individual Tests</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div *ngFor="let test of individualTests"
+                            class="p-5 bg-white border border-slate-100 rounded-3xl flex items-center justify-between group hover:border-blue-200 transition-all">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                    <i class="fas fa-microscope"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-black text-slate-800">{{test.name}}</p>
+                                    <p class="text-[10px] font-black text-slate-300 uppercase tracking-tighter">Results
+                                        in {{test.report_time}}</p>
+                                </div>
+                            </div>
+                            <p class="text-sm font-black text-blue-600">₹{{test.discounted_price}}</p>
+                        </div>
+                    </div>
+                    <button
+                        class="w-full py-4 text-[10px] font-black text-slate-400 border border-slate-100 rounded-2xl uppercase tracking-widest hover:bg-slate-50 transition-all">View
+                        200+ Other Tests</button>
+                </div>
+            </div>
+
+            <!-- Individual Tests -->
+            <div class="bg-white rounded-[3rem] border border-slate-100 p-8 shadow-2xl shadow-blue-900/5 space-y-8">
+                <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Radiology & Labs</h3>
+                <div class="space-y-4">
+                    <div *ngFor="let test of individualTests"
+                        class="p-4 rounded-2xl border border-slate-50 hover:bg-slate-50 transition-all cursor-pointer flex items-center justify-between group">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-sm group-hover:bg-white transition-colors">
+                                <i class="fas fa-vial"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-black text-slate-800">{{test.name}}</p>
+                                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{{test.time}}
+                                    Turnaround</p>
+                            </div>
+                        </div>
+                        <span class="text-sm font-black text-blue-600">₹{{test.price}}</span>
+                    </div>
+                </div>
+                <button
+                    class="w-full py-4 text-[10px] font-black text-blue-600 uppercase tracking-widest border-2 border-dashed border-blue-100 rounded-2xl hover:bg-blue-50 transition-all">Explore
+                    All Tests</button>
+            </div>
+
+        </div>
+
+        <!-- Lab Reports Portal Preview -->
+        <div class="p-10 bg-slate-900 rounded-[3.5rem] relative overflow-hidden text-center md:text-left">
+            <div class="absolute inset-0 medical-grid opacity-10"></div>
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+                <div class="space-y-4 max-w-lg">
+                    <h3 class="text-3xl font-black text-white leading-tight">Digital <span class="text-blue-400">Report
+                            Vault</span></h3>
+                    <p class="text-slate-400 font-medium leading-relaxed">Access your clinical reports, radiology scans,
+                        and pathology results securely from anywhere in the world.</p>
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <div class="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-xl">
+                            <i class="fas fa-file-pdf text-red-400"></i>
+                            <span class="text-[10px] font-black text-white uppercase tracking-widest">Auto-PDF
+                                Generation</span>
+                        </div>
+                        <div class="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-xl">
+                            <i class="fas fa-history text-emerald-400"></i>
+                            <span class="text-[10px] font-black text-white uppercase tracking-widest">Trend
+                                Analysis</span>
+                        </div>
+                    </div>
+                </div>
+                <button
+                    class="px-12 py-5 bg-blue-600 text-white rounded-2xl font-black shadow-2xl shadow-blue-500/40 hover:bg-blue-500 hover:scale-105 active:scale-95 transition-all text-xs uppercase tracking-[0.2em]">Open
+                    Vault Access</button>
+            </div>
+        </div>
+
+    </div>
+</div>

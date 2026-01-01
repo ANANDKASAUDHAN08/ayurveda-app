@@ -7,7 +7,7 @@
                 <i class="fas fa-filter mr-2"></i>
                 Filter by Medicine Type
             </h3>
-            <button *ngIf="activeMedicineTypeId" (click)="clearFilter()"
+            <button *ngIf="activeMedicineType !== 'all'" (click)="clearFilter()"
                 class="text-xs text-emerald-600 hover:text-emerald-700 font-medium transition-colors">
                 <i class="fas fa-times mr-1"></i>
                 Clear Filter
@@ -22,7 +22,7 @@
         <!-- Medicine Type Pills -->
         <div *ngIf="!isLoading" class="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
             <!-- All / Clear Filter Pill -->
-            <button (click)="clearFilter()" [class]="activeMedicineTypeId === null ? 'pill active-pill' : 'pill'"
+            <button (click)="clearFilter()" [class]="activeMedicineType === 'all' ? 'pill active-pill' : 'pill'"
                 class="flex-shrink-0">
                 <i class="fas fa-th mr-2"></i>
                 <span>All</span>
@@ -33,7 +33,7 @@
                 [class]="isActive(type.id) ? 'pill active-pill' : 'pill'"
                 [style.backgroundColor]="isActive(type.id) ? type.color : ''"
                 [style.color]="isActive(type.id) ? '#ffffff' : '#374151'" class="flex-shrink-0">
-                <i [class]="type.icon + ' mr-2'"></i>
+                <span class="mr-2">{{ type.icon }}</span>
                 <span>{{ type.name }}</span>
                 <span class="pill-badge" *ngIf="isActive(type.id)">
                     <i class="fas fa-check text-xs"></i>

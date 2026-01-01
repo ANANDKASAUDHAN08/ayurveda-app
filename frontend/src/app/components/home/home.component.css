@@ -1,30 +1,296 @@
-/* Scroll to top button only - hero animations moved to hero-section component */
-
-/* Stagger animation for service cards */
-.service-grid>* {
-    animation: fadeInUp 0.5s ease-out backwards;
+/* Animated gradient background */
+.bg-gradient-animate {
+    background: linear-gradient(-45deg,
+            #f0fdf4,
+            #faf5ff,
+            #eff6ff,
+            #fef3c7);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
 }
 
-.service-grid>*:nth-child(1) {
-    animation-delay: 0.1s;
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
-.service-grid>*:nth-child(2) {
-    animation-delay: 0.2s;
+/* Gradient text with shimmer */
+.gradient-text-premium {
+    background: linear-gradient(135deg, #10b981 0%, #a855f7 50%, #3b82f6 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmerGradient 3s ease-in-out infinite;
 }
 
-.service-grid>*:nth-child(3) {
-    animation-delay: 0.3s;
+@keyframes shimmerGradient {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
-.service-grid>*:nth-child(4) {
-    animation-delay: 0.4s;
+/* Typing Cursor Animation */
+.typing-cursor {
+    display: inline-block;
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+    font-weight: 300;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ===================================
+   PREMIUM MEDICINE TYPE CARDS
+   =================================== */
+
+.medicine-card {
+    position: relative;
+    background: white;
+    border-radius: 24px;
+    padding: 40px 32px;
+    min-height: 480px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.05),
+        0 10px 15px rgba(0, 0, 0, 0.03);
+}
+
+.medicine-card:hover {
+    transform: translateY(-16px) scale(1.02);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Gradients */
+.card-gradient {
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+    transition: opacity 0.4s;
+}
+
+.medicine-card:hover .card-gradient {
+    opacity: 0.15;
+}
+
+.ayurveda-gradient {
+    background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+}
+
+.homeopathy-gradient {
+    background: linear-gradient(135deg, #a855f7 0%, #9333ea 50%, #7e22ce 100%);
+}
+
+.allopathy-gradient {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+}
+
+/* Background Patterns */
+.card-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-size: 40px 40px;
+    transition: opacity 0.4s;
+}
+
+.medicine-card:hover .card-pattern {
+    opacity: 0.05;
+}
+
+.ayurveda-pattern {
+    background-image:
+        radial-gradient(circle, #10b981 1px, transparent 1px);
+}
+
+.homeopathy-pattern {
+    background-image:
+        radial-gradient(circle, #a855f7 1px, transparent 1px);
+}
+
+.allopathy-pattern {
+    background-image:
+        radial-gradient(circle, #3b82f6 1px, transparent 1px);
+}
+
+/* Card Content */
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: 100%;
+}
+
+/* Card Icon */
+.card-icon {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.ayurveda-icon {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+}
+
+.homeopathy-icon {
+    background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+}
+
+.allopathy-icon {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.icon-emoji {
+    font-size: 48px;
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-8px) rotate(5deg);
+    }
+}
+
+.medicine-card:hover .icon-emoji {
+    animation: bounceIcon 0.6s ease;
+}
+
+@keyframes bounceIcon {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2) rotate(5deg);
+    }
+}
+
+/* Icon Glow */
+.icon-glow {
+    position: absolute;
+    inset: -10px;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s;
+    filter: blur(20px);
+}
+
+.medicine-card:hover .icon-glow {
+    opacity: 0.6;
+}
+
+.ayurveda-glow {
+    background: radial-gradient(circle, #10b981 0%, transparent 70%);
+}
+
+.homeopathy-glow {
+    background: radial-gradient(circle, #a855f7 0%, transparent 70%);
+}
+
+.allopathy-glow {
+    background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+}
+
+
+/* Hover Shine Effect */
+.card-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 100%);
+    transform: skewX(-20deg);
+    transition: left 0.6s;
+    pointer-events: none;
+}
+
+.medicine-card:hover .card-shine {
+    left: 150%;
+}
+
+/* ===================================
+   UTILITY ANIMATIONS (GLOBAL)
+   =================================== */
+
+/* ===================================
+   MOBILE RESPONSIVE (TABLET & MOBILE)
+   =================================== */
+
+/* ===================================
+   UTILITY ANIMATIONS (GLOBAL)
+   =================================== */
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) translateX(0);
+    }
+
+    33% {
+        transform: translateY(-20px) translateX(10px);
+    }
+
+    66% {
+        transform: translateY(-10px) translateX(-10px);
+    }
 }
 
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
     }
 
     to {
@@ -33,76 +299,83 @@
     }
 }
 
-/* Category grid stagger */
+@keyframes revealFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.stagger-item {
+    opacity: 0;
+    animation: revealFromBottom 0.8s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+    animation-delay: var(--delay, 0s);
+}
+
+.service-grid {
+    perspective: 1000px;
+}
+
 .category-grid>* {
-    animation: fadeInUp 0.4s ease-out backwards;
+    opacity: 0;
+    animation: revealFromBottom 0.6s cubic-bezier(0.2, 1, 0.3, 1) forwards;
 }
 
-.category-grid>*:nth-child(1) {
-    animation-delay: 0.05s;
-}
-
-.category-grid>*:nth-child(2) {
-    animation-delay: 0.1s;
-}
-
-.category-grid>*:nth-child(3) {
-    animation-delay: 0.15s;
-}
-
-.category-grid>*:nth-child(4) {
-    animation-delay: 0.2s;
-}
-
-.category-grid>*:nth-child(5) {
-    animation-delay: 0.25s;
-}
-
-.category-grid>*:nth-child(6) {
-    animation-delay: 0.3s;
-}
-
-.category-grid>*:nth-child(7) {
-    animation-delay: 0.35s;
-}
-
-.category-grid>*:nth-child(8) {
-    animation-delay: 0.4s;
-}
-
-.category-grid>*:nth-child(9) {
-    animation-delay: 0.45s;
-}
-
-.category-grid>*:nth-child(10) {
-    animation-delay: 0.5s;
-}
-
-.category-grid>*:nth-child(11) {
-    animation-delay: 0.55s;
-}
-
-.category-grid>*:nth-child(12) {
-    animation-delay: 0.6s;
-}
-
-/* Deal cards stagger */
 .deal-grid>* {
-    animation: fadeInUp 0.5s ease-out backwards;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
 }
 
-.deal-grid>*:nth-child(1) {
-    animation-delay: 0.1s;
+.deal-grid>*:nth-child(n) {
+    animation-delay: calc(var(--index, 0) * 0.1s);
 }
 
-.deal-grid>*:nth-child(2) {
-    animation-delay: 0.2s;
+@media (max-width: 768px) {
+
+    /* Compact Medicine Cards for Mobile */
+    .medicine-card {
+        min-height: 420px !important;
+        /* Shorter card */
+        padding: 24px 20px !important;
+        border-radius: 20px !important;
+    }
+
+
+    /* Floating Header Gradient text adjustment */
+    .gradient-text-premium {
+        font-size: 1.1em;
+        /* Slight bump for visibility */
+    }
 }
 
-.deal-grid>*:nth-child(3) {
-    animation-delay: 0.3s;
+/* Snap Scroll Progress Dots (Add this to your HTML below cards if you want them) */
+.dots-indicator {
+    display: none;
 }
 
-.deal-grid>*:nth-child(4) {
-    animation-delay: 0.4s;
+@media (max-width: 768px) {
+    .dots-indicator {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 10px;
+    }
+
+    .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 3px;
+        background: #cbd5e1;
+        transition: all 0.3s;
+    }
+
+    .dot.active {
+        width: 18px;
+        background: #10b981;
+    }
 }

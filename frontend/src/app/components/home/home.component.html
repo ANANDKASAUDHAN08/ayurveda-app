@@ -1,161 +1,561 @@
-<!-- Hero Section -->
-<section class="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 pt-8 md:pt-20 pb-16 md:pb-24">
-    <div class="w-full px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto">
-            <!-- Location hint -->
-            <div class="flex items-center justify-center gap-2 text-sm text-slate-600 mb-4">
-                <i class="fas fa-map-marker-alt text-emerald-600"></i>
-                <span>Delivering healthcare services across India</span>
-            </div>
+<section class="block md:hidden bg-[#f8fafc] px-5 pb-10">
+    <!-- Location Bar -->
+    <div class="mb-6">
+        <app-mobile-location-bar></app-mobile-location-bar>
+    </div>
 
-            <!-- Main Heading -->
-            <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 md:mb-6">
-                Find doctors, order medicines,<br class="hidden md:block">
-                & book lab tests
-            </h1>
+    <!-- Greeting & Subgreeting -->
+    <div class="mb-6">
+        <h1 class="text-3xl font-black text-slate-900 mb-1">Hi {{userName}}! 👋</h1>
+        <p class="text-slate-500 font-medium text-sm">How can we help you today?</p>
+    </div>
 
-            <!-- Subheading -->
-            <p class="text-lg md:text-xl text-slate-600 mb-8">
-                Your complete healthcare solution in one platform
-            </p>
+    <!-- Mobile Search Bar -->
+    <div class="relative mb-6 group">
+        <div
+            class="absolute -inset-1.5 bg-gradient-to-r from-emerald-500/30 to-blue-500/30 rounded-2xl blur-lg opacity-40 group-focus-within:opacity-100 transition duration-500">
+        </div>
+        <div class="relative flex items-center shadow-[0_10px_30px_-10px_rgba(0,0,0,0.15)] rounded-2xl">
+            <i class="fas fa-search absolute left-6 text-emerald-500 text-lg"></i>
+            <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()"
+                class="w-full py-3.5 pl-14 pr-6 bg-white border border-slate-200 rounded-2xl focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 text-slate-800 placeholder-slate-400 font-bold text-base transition-all"
+                placeholder="Search doctors, medicines...">
+        </div>
+    </div>
 
-            <!-- Search Bar -->
-            <div class="max-w-2xl mx-auto mb-6">
-                <div class="relative">
-                    <div class="relative w-full">
-                        <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()" (focus)="onFocusSearch()"
-                            (blur)="onBlurSearch()" (keyup.enter)="onSearch()"
-                            placeholder="Search doctors, medicines..."
-                            class="w-full px-4 py-3 pl-12 md:px-6 md:py-4 md:pl-14 rounded-full border-2 border-gray-200 focus:border-emerald-500 focus:outline-none text-base md:text-lg">
-                        <i
-                            class="fas fa-search absolute left-3 top-3 md:left-5 md:top-5 text-gray-400 text-lg md:text-xl"></i>
+    <!-- Choose Your Healing Path Section -->
+    <div class="mb-4">
+        <h2 class="text-xl font-extrabold text-[#1e293b] mb-4">Choose Your Healing Path</h2>
 
-                        <!-- Autocomplete Dropdown -->
-                        <div *ngIf="showSuggestions"
-                            class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-96 overflow-y-auto">
+        <!-- Swipeable Cards Wrapper -->
+        <div (scroll)="onCardScroll($event)"
+            class="flex overflow-x-auto gap-4 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pb-4 px-1">
 
-                            <!-- Suggestions (when typing) -->
-                            <div *ngIf="searchQuery.length >= 2 && suggestions.length > 0">
-                                <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50">
-                                    Suggestions
-                                </div>
-                                <div *ngFor="let suggestion of suggestions" (mousedown)="selectSuggestion(suggestion)"
-                                    class="px-4 py-3 hover:bg-emerald-50 cursor-pointer flex justify-between items-center border-b last:border-b-0">
-                                    <div class="flex items-center gap-3">
-                                        <i class="fas fa-search text-gray-400"></i>
-                                        <div>
-                                            <span class="font-medium text-gray-900">{{ suggestion.name }}</span>
-                                            <span *ngIf="suggestion.category" class="text-xs text-gray-500 ml-2">{{
-                                                suggestion.category }}</span>
-                                        </div>
-                                    </div>
-                                    <span *ngIf="suggestion.price" class="text-emerald-600 font-semibold">
-                                        ₹{{ suggestion.price }}
-                                    </span>
-                                </div>
-                            </div>
+            <!-- Allopathy Card -->
+            <div (click)="selectSystem('allopathy')"
+                class="min-w-[310px] snap-center medicine-card allopathy-card group relative overflow-hidden transition-all">
+                <div class="card-gradient allopathy-gradient opacity-[0.15]"></div>
+                <div class="card-pattern allopathy-pattern opacity-[0.05]"></div>
 
-                            <!-- Recent Searches (when empty) -->
-                            <div *ngIf="searchQuery.length === 0 && searchHistory.length > 0">
-                                <div
-                                    class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50 flex justify-between items-center">
-                                    <span>Recent Searches</span>
-                                    <button (mousedown)="clearHistory()"
-                                        class="text-red-500 hover:text-red-700 text-xs normal-case font-normal">
-                                        Clear
-                                    </button>
-                                </div>
-                                <div *ngFor="let term of searchHistory" (mousedown)="searchFromHistory(term)"
-                                    class="px-4 py-3 hover:bg-emerald-50 cursor-pointer flex items-center gap-3 border-b last:border-b-0">
-                                    <i class="fas fa-history text-gray-400"></i>
-                                    <span class="text-gray-900">{{ term }}</span>
-                                </div>
-                            </div>
-
-                            <!-- No results -->
-                            <div *ngIf="searchQuery.length >= 2 && suggestions.length === 0">
-                                <div class="px-4 py-6 text-center text-gray-500">
-                                    <i class="fas fa-search text-3xl mb-2"></i>
-                                    <p class="text-sm">No suggestions found</p>
-                                </div>
-                            </div>
-                        </div>
+                <div class="relative z-10 flex flex-col h-full gap-4">
+                    <div class="card-icon allopathy-icon w-16 h-16 rounded-2xl flex items-center justify-center">
+                        <span class="icon-emoji text-3xl">⚕️</span>
+                        <div class="icon-glow allopathy-glow"></div>
                     </div>
 
-                    <!-- Clear Button (X icon) -->
-                    <button *ngIf="searchQuery.length > 0"
-                        (click)="searchQuery = ''; suggestions = []; showSuggestions = false"
-                        class="absolute right-20 top-3 md:right-28 md:top-4 text-gray-400 hover:text-gray-600 transition-colors"
-                        title="Clear search">
-                        <i class="fas fa-times-circle text-lg md:text-xl"></i>
-                    </button>
+                    <div class="card-header">
+                        <h2 class="card-title text-3xl font-black text-slate-800 mb-0.5">Allopathy</h2>
+                        <p class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Modern Science</p>
+                    </div>
 
-                    <!-- Search Button -->
-                    <button (click)="onSearch()" [disabled]="searchQuery.trim().length === 0"
-                        class="absolute right-2 top-2 px-3 py-2 md:px-6 bg-emerald-600 hover:bg-emerald-700 text-white text-sm md:text-base font-semibold rounded-full transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed min-h-[40px]">
-                        <span class="hidden sm:inline">Search</span>
-                        <i class="fas fa-search sm:hidden"></i>
+                    <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                        Evidence-based modern medicine with rapid response specialist care.
+                    </p>
+
+                    <ul class="space-y-2 flex-grow">
+                        <li class="flex items-center gap-2 text-[15px] font-bold text-slate-700">
+                            <i class="fas fa-check-circle text-blue-500"></i> 1000+ Specialists
+                        </li>
+                        <li class="flex items-center gap-2 text-[15px] font-bold text-slate-700">
+                            <i class="fas fa-check-circle text-blue-500"></i> 50+ Specialties
+                        </li>
+                    </ul>
+
+                    <button
+                        class="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5">
+                        <span>Explore Allopathy</span>
+                        <i class="fas fa-arrow-right button-arrow !text-xs"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Dynamic Popular Searches with Clickable Buttons -->
-            <div class="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
-                <span class="text-slate-500 flex items-center gap-2">
-                    <i class="fas fa-fire text-orange-500"></i>
-                    Popular:
-                </span>
-                <button *ngFor="let term of popularSearches" (click)="searchPopular(term)"
-                    class="px-3 py-1 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors shadow-sm border border-gray-200">
-                    {{ term }}
-                </button>
-                <!-- Fallback if no data from backend -->
-                <ng-container *ngIf="popularSearches.length === 0">
-                    <button (click)="searchQuery = 'Paracetamol'; onSearch()"
-                        class="px-3 py-1 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors shadow-sm border border-gray-200">
-                        Paracetamol
+            <!-- Ayurveda Card -->
+            <div (click)="selectSystem('ayurveda')"
+                class="min-w-[310px] snap-center medicine-card ayurveda-card group relative overflow-hidden transition-all">
+                <div class="card-gradient ayurveda-gradient opacity-[0.15]"></div>
+                <div class="card-pattern ayurveda-pattern opacity-[0.05]"></div>
+
+                <div class="relative z-10 flex flex-col h-full gap-4">
+                    <div class="card-icon ayurveda-icon w-16 h-16 rounded-2xl flex items-center justify-center">
+                        <span class="icon-emoji text-3xl">🌿</span>
+                        <div class="icon-glow ayurveda-glow"></div>
+                    </div>
+
+                    <div class="card-header">
+                        <h2 class="card-title text-3xl font-black text-slate-800 mb-0.5">Ayurveda</h2>
+                        <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Nature's Wisdom</p>
+                    </div>
+
+                    <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                        Ancient healing wisdom personalized for your unique constitution and balance.
+                    </p>
+
+                    <ul class="space-y-2 flex-grow">
+                        <li class="flex items-center gap-2 text-[15px] font-bold text-slate-700">
+                            <i class="fas fa-check-circle text-emerald-500"></i> 500+ Verified Practitioners
+                        </li>
+                        <li class="flex items-center gap-2 text-[15px] font-bold text-slate-700">
+                            <i class="fas fa-check-circle text-emerald-500"></i> 1000+ Herbal Medicines
+                        </li>
+                    </ul>
+
+                    <button
+                        class="w-full py-4 px-6 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-emerald-500/30 hover:-translate-y-0.5">
+                        <span>Explore Ayurveda</span>
+                        <i class="fas fa-arrow-right button-arrow !text-xs"></i>
                     </button>
-                    <button (click)="searchQuery = 'Thermometer'; onSearch()"
-                        class="px-3 py-1 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors shadow-sm border border-gray-200">
-                        Thermometer
+                </div>
+            </div>
+
+            <!-- Homeopathy Card -->
+            <div (click)="selectSystem('homeopathy')"
+                class="min-w-[310px] snap-center medicine-card homeopathy-card group relative overflow-hidden transition-all">
+                <div class="card-gradient homeopathy-gradient opacity-[0.15]"></div>
+                <div class="card-pattern homeopathy-pattern opacity-[0.05]"></div>
+
+                <div class="relative z-10 flex flex-col h-full gap-4">
+                    <div class="card-icon homeopathy-icon w-16 h-16 rounded-2xl flex items-center justify-center">
+                        <span class="icon-emoji text-3xl">💊</span>
+                        <div class="icon-glow homeopathy-glow"></div>
+                    </div>
+
+                    <div class="card-header">
+                        <h2 class="card-title text-3xl font-black text-slate-800 mb-0.5">Homeopathy</h2>
+                        <p class="text-[10px] font-bold text-purple-600 uppercase tracking-widest">Gentle Healing</p>
+                    </div>
+
+                    <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                        Natural, side-effect free treatments focusing on innate healing ability.
+                    </p>
+
+                    <ul class="space-y-2 flex-grow">
+                        <li class="flex items-center gap-2 text-[15px] font-bold text-slate-700">
+                            <i class="fas fa-check-circle text-purple-500"></i> Safe for All Ages
+                        </li>
+                        <li class="flex items-center gap-2 text-[15px] font-bold text-slate-700">
+                            <i class="fas fa-check-circle text-purple-500"></i> Individualized Approach
+                        </li>
+                    </ul>
+
+                    <button
+                        class="w-full py-4 px-6 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-purple-500/30 hover:-translate-y-0.5">
+                        <span>Explore Homeopathy</span>
+                        <i class="fas fa-arrow-right button-arrow !text-xs"></i>
                     </button>
-                    <button (click)="searchQuery = 'Vitamin C'; onSearch()"
-                        class="px-3 py-1 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors shadow-sm border border-gray-200">
-                        Vitamin C
-                    </button>
-                </ng-container>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dot Indicators -->
+        <div class="flex justify-center gap-2 mt-4">
+            <div *ngFor="let i of [0, 1, 2]" (click)="scrollToCard(i)"
+                class="h-2 rounded-full transition-all duration-300 cursor-pointer"
+                [ngClass]="currentCardIndex === i ? 'w-10 bg-emerald-500 shadow-lg shadow-emerald-200' : 'w-2 bg-slate-300 hover:bg-slate-400'">
             </div>
         </div>
     </div>
 </section>
 
-<!-- Service Cards Section -->
-<section class="py-12 md:py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-2xl md:text-4xl font-bold text-slate-900 mb-3 md:mb-4">Our Services</h2>
-            <p class="text-lg text-slate-600">Everything you need for your health and wellness</p>
+<!-- Hero Section with Animated Gradient Background -->
+<section class="relative pt-10 pb-20 hidden md:block overflow-hidden md:min-h-[70vh] md:flex md:items-center">
+    <!-- Animated Gradient Background -->
+    <div class="absolute inset-0 bg-gradient-animate"></div>
+
+    <!-- Floating Pattern Decorations (Hidden on mobile for performance) -->
+    <div
+        class="hidden md:block absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-emerald-400/20 to-transparent rounded-full blur-3xl animate-float">
+    </div>
+    <div class="hidden md:block absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-purple-400/20 to-transparent rounded-full blur-3xl animate-float"
+        style="animation-delay: 1s;"></div>
+    <div class="hidden md:block absolute top-40 right-1/4 w-64 h-64 bg-gradient-to-br from-blue-400/20 to-transparent rounded-full blur-3xl animate-float"
+        style="animation-delay: 2s;"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full mt-2">
+        <!-- Hero heading -->
+        <div class="text-center max-w-5xl mx-auto">
+            <h1
+                class="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4 leading-tight md:leading-[1.1] break-words">
+                Your Journey to
+                <span class="relative block md:inline mt-1 md:mt-0">
+                    <span class="gradient-text-premium whitespace-nowrap">{{ typedText }}<span
+                            class="typing-cursor">|</span></span>
+                    <svg class="hidden md:block absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 6 Q 150 12, 300 6" stroke="url(#gradient)" stroke-width="3" fill="none"
+                            stroke-linecap="round" />
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#10b981" />
+                                <stop offset="50%" style="stop-color:#a855f7" />
+                                <stop offset="100%" style="stop-color:#3b82f6" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </span>
+                <span class="block md:mt-4">Starts Here</span>
+            </h1>
+        </div>
+
+        <!-- Premium Search Bar - Widened & Polished -->
+        <div
+            class="max-w-3xl mx-auto hidden md:block mt-0 mb-4 px-4 relative z-50 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
+            <div class="relative group">
+                <!-- Premium Glow Effect -->
+                <div
+                    class="absolute -inset-2 bg-gradient-to-r from-emerald-500/10 via-blue-500/10 to-purple-500/10 rounded-[35px] blur-3xl opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition duration-1000">
+                </div>
+
+                <div
+                    class="relative flex items-center p-1.5 bg-white/70 backdrop-blur-3xl border border-white/50 rounded-[35px] shadow-[0_15px_45px_rgba(0,0,0,0.08)] group-focus-within:border-emerald-500/40 group-focus-within:bg-white/90 transition-all duration-500">
+                    <div class="flex-1 relative flex items-center">
+                        <div class="absolute left-6 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-emerald-500/70 text-lg"></i>
+                        </div>
+                        <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()" (focus)="onFocusSearch()"
+                            (blur)="onBlurSearch()" (keyup.enter)="onSearch()"
+                            placeholder="Search for doctors, medicines, or services..." autocomplete="off"
+                            class="w-full py-3.5 pl-16 pr-6 bg-transparent border-0 outline-none focus:outline-none focus:ring-0 text-slate-800 placeholder-slate-400 text-lg font-semibold selection:bg-emerald-100">
+                    </div>
+                    <button (click)="onSearch()"
+                        class="px-10 py-3 bg-slate-900 hover:bg-black text-white rounded-[28px] font-black transition-all duration-500 transform hover:scale-[1.02] active:scale-95 flex items-center gap-3 shadow-xl hover:shadow-emerald-900/20">
+                        <span>Find Care</span>
+                        <i class="fas fa-chevron-right text-xs opacity-70"></i>
+                    </button>
+
+                    <!-- Enhanced Search Suggestions -->
+                    <div *ngIf="showSuggestions && ( (searchQuery.length >= 2 && suggestions.length > 0) || (searchQuery.length === 0 && (searchHistory.length > 0 || popularSearches.length > 0)) || (searchQuery.length >= 2 && suggestions.length === 0) )"
+                        class="absolute top-[calc(100%+12px)] left-0 right-0 bg-white/95 backdrop-blur-2xl border border-white/30 rounded-[28px] p-2 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.25)] max-h-[450px] overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-300 z-50">
+
+                        <!-- Search Query Suggestions -->
+                        <div *ngIf="searchQuery.length >= 2 && suggestions.length > 0" class="p-2 space-y-1">
+                            <div class="px-3 py-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                Top Suggestions</div>
+                            <div class="flex items-center justify-between p-3.5 rounded-2xl hover:bg-slate-50 cursor-pointer transition-all group"
+                                *ngFor="let suggestion of suggestions" (mousedown)="selectSuggestion(suggestion)">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 transition-transform group-hover:scale-110">
+                                        <i class="fas fa-search text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-slate-800">{{ suggestion.name }}</p>
+                                        <p class="text-[10px] text-slate-400 uppercase font-bold">{{ suggestion.type
+                                            || 'Result' }}</p>
+                                    </div>
+                                </div>
+                                <i
+                                    class="fas fa-arrow-right text-slate-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all"></i>
+                            </div>
+                        </div>
+
+                        <!-- Initial State (History & Trending) -->
+                        <div *ngIf="searchQuery.length === 0" class="p-2">
+                            <div *ngIf="searchHistory.length > 0">
+                                <div
+                                    class="px-3 py-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                                    Recent Searches</div>
+                                <div class="flex flex-wrap gap-2 px-3 mb-4">
+                                    <button *ngFor="let term of searchHistory" (mousedown)="searchFromHistory(term)"
+                                        class="px-4 py-2 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 rounded-xl text-sm font-bold transition-all border border-slate-100">
+                                        {{ term }}
+                                    </button>
+                                </div>
+                            </div>
+                            <div *ngIf="popularSearches.length > 0">
+                                <div
+                                    class="px-3 py-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                                    Trending Now</div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button *ngFor="let term of popularSearches" (mousedown)="searchPopular(term)"
+                                        class="flex items-center gap-3 p-3 text-left hover:bg-slate-50 rounded-2xl transition-all">
+                                        <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                        <span class="text-sm font-bold text-slate-700">{{ term }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- No Results State -->
+                        <div *ngIf="searchQuery.length >= 2 && suggestions.length === 0" class="py-12 text-center">
+                            <div
+                                class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-search-minus text-2xl text-slate-300"></i>
+                            </div>
+                            <p class="text-slate-500 font-bold">No results found for "{{ searchQuery }}"</p>
+                            <p class="text-xs text-slate-400 mt-1">Try searching for something else</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p
+            class="text-sm md:text-2xl text-slate-600 font-medium mb-5 leading-relaxed mx-auto max-w-md md:max-w-none px-4 text-center">
+            Choose your healing path
+        </p>
+
+        <!-- Premium Medicine Type Cards - Desktop Grid (Hidden on Mobile) -->
+        <div class="hidden md:grid md:grid-cols-3 md:gap-8 md:mb-2 relative z-0">
+            <!-- Allopathy Card -->
+            <div (click)="selectSystem('allopathy')" class="medicine-card allopathy-card group cursor-pointer">
+                <div class="card-gradient allopathy-gradient"></div>
+                <div class="card-pattern allopathy-pattern"></div>
+                <div class="card-content relative z-10 flex flex-col gap-6 h-full">
+                    <div
+                        class="card-icon allopathy-icon w-20 h-20 rounded-2xl flex items-center justify-center transition-all group-hover:scale-110 group-hover:rotate-6">
+                        <span class="icon-emoji text-5xl">⚕️</span>
+                        <div class="icon-glow allopathy-glow"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-black text-slate-800 mb-2 leading-tight">Allopathy</h3>
+                        <p class="text-base font-bold text-blue-600">Modern Science, Proven Results</p>
+                    </div>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        Evidence-based modern medicine with proven treatments and specialist care
+                    </p>
+                    <ul class="flex flex-col gap-3 flex-grow">
+                        <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                            <i class="fas fa-check-circle text-blue-500"></i> 1000+ Specialists
+                        </li>
+                        <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                            <i class="fas fa-check-circle text-blue-500"></i> 50+ Specialties
+                        </li>
+                        <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                            <i class="fas fa-check-circle text-blue-500"></i> Evidence-Based Care
+                        </li>
+                    </ul>
+                    <button
+                        class="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5">
+                        <span>Explore Allopathy</span>
+                        <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Ayurveda Card -->
+            <div (click)="selectSystem('ayurveda')" class="medicine-card ayurveda-card group cursor-pointer">
+                <div class="card-gradient ayurveda-gradient"></div>
+                <div class="card-pattern ayurveda-pattern"></div>
+                <div class="card-content relative z-10 flex flex-col gap-6 h-full">
+                    <div
+                        class="card-icon ayurveda-icon w-20 h-20 rounded-2xl flex items-center justify-center transition-all group-hover:scale-110 group-hover:rotate-6">
+                        <span class="icon-emoji text-5xl">🌿</span>
+                        <div class="icon-glow ayurveda-glow"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-black text-slate-800 mb-2 leading-tight">Ayurveda</h3>
+                        <p class="text-base font-bold text-emerald-600">Nature's Wisdom, Personalized</p>
+                    </div>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        Ancient healing wisdom personalized for your unique constitution and natural balance
+                    </p>
+                    <ul class="flex flex-col gap-3 flex-grow">
+                        <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                            <i class="fas fa-check-circle text-emerald-500"></i> 500+ Verified Practitioners
+                        </li>
+                        <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                            <i class="fas fa-check-circle text-emerald-500"></i> 1000+ Herbal Medicines
+                        </li>
+                        <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                            <i class="fas fa-check-circle text-emerald-500"></i> Personalized Dosha Plans
+                        </li>
+                    </ul>
+                    <button
+                        class="w-full py-4 px-6 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-emerald-500/30 hover:-translate-y-0.5">
+                        <span>Explore Ayurveda</span>
+                        <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Homeopathy Card -->
+            <div (click)="selectSystem('homeopathy')" class="medicine-card homeopathy-card group cursor-pointer">
+                <div class="card-gradient homeopathy-gradient"></div>
+                <div class="card-pattern homeopathy-pattern"></div>
+                <div class="card-content relative z-10 flex flex-col gap-6 h-full">
+                    <div
+                        class="card-icon homeopathy-icon w-20 h-20 rounded-2xl flex items-center justify-center transition-all group-hover:scale-110 group-hover:rotate-6">
+                        <span class="icon-emoji text-5xl">💧</span>
+                        <div class="icon-glow homeopathy-glow"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-black text-slate-800 mb-2 leading-tight">Homeopathy</h3>
+                        <p class="text-base font-bold text-purple-600">Gentle Healing, Deep Impact</p>
+                    </div>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        Natural, side-effect free treatments focusing on your body's innate ability to heal
+                    </p>
+                    <ul class="flex flex-col gap-3 flex-grow">
+                        <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                            <i class="fas fa-check-circle text-purple-500"></i> Safe for All Ages
+                        </li>
+                        <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                            <i class="fas fa-check-circle text-purple-500"></i> Individualized Approach
+                        </li>
+                        <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                            <i class="fas fa-check-circle text-purple-500"></i> Chronic Care Expert
+                        </li>
+                    </ul>
+                    <button
+                        class="w-full py-4 px-6 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-purple-500/30 hover:-translate-y-0.5">
+                        <span>Explore Homeopathy</span>
+                        <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Actions Grid (4x2 on desktop, 2x2 on mobile) -->
+<div class="mb-16">
+    <h2 class="text-2xl md:text-4xl font-bold text-slate-900 text-center mb-8 md:mt-4">
+        What would you like to do?
+    </h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <!-- Video Consult -->
+        <div (click)="navigateTo('/user/find-doctors')"
+            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            <div
+                class="absolute top-3 right-3 py-1 px-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-emerald-500 to-emerald-600 text-white animate-pulse">
+                LIVE</div>
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+                style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <i class="fas fa-video text-3xl text-white"></i>
+            </div>
+            <h4 class="text-base font-bold text-slate-800 mb-1">Video Consult</h4>
+            <p class="text-[11px] text-slate-500 font-medium">Talk to doctors now</p>
+        </div>
+
+        <!-- Order Medicine -->
+        <div (click)="navigateTo('/medicines')"
+            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            <div
+                class="absolute top-3 right-3 py-1 px-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-amber-500 to-orange-600 text-white">
+                15% OFF</div>
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+                style="background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);">
+                <i class="fas fa-pills text-3xl text-white"></i>
+            </div>
+            <h4 class="text-base font-bold text-slate-800 mb-1">Order Medicine</h4>
+            <p class="text-[11px] text-slate-500 font-medium">Delivered to your door</p>
+        </div>
+
+        <!-- Book Lab Test -->
+        <div (click)="navigateTo('/user/dashboard')"
+            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            <div
+                class="absolute top-3 right-3 py-1 px-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+                QUICK</div>
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+                style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                <i class="fas fa-flask text-3xl text-white"></i>
+            </div>
+            <h4 class="text-base font-bold text-slate-800 mb-1">Book Lab Test</h4>
+            <p class="text-[11px] text-slate-500 font-medium">Home sample pickup</p>
+        </div>
+
+        <!-- Schedule Checkup -->
+        <div (click)="navigateTo('/user/appointments')"
+            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+                style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);">
+                <i class="fas fa-calendar-check text-3xl text-white"></i>
+            </div>
+            <h4 class="text-base font-bold text-slate-800 mb-1">Schedule Checkup</h4>
+            <p class="text-[11px] text-slate-500 font-medium">Book your appointment</p>
+        </div>
+
+        <!-- Find Hospital -->
+        <div (click)="navigateTo('/user/find-doctors')"
+            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+                style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                <i class="fas fa-hospital text-3xl text-white"></i>
+            </div>
+            <h4 class="text-base font-bold text-slate-800 mb-1">Find Hospital</h4>
+            <p class="text-[11px] text-slate-500 font-medium">Locate nearby facilities</p>
+        </div>
+
+        <!-- Emergency -->
+        <div (click)="navigateTo('/user/find-doctors')"
+            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border-2 border-red-50">
+            <div
+                class="absolute top-3 right-3 py-1 px-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-red-500 to-red-600 text-white animate-pulse">
+                URGENT</div>
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+                style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                <i class="fas fa-ambulance text-3xl text-white"></i>
+            </div>
+            <h4 class="text-base font-bold text-slate-800 mb-1">Emergency</h4>
+            <p class="text-[11px] text-slate-500 font-medium">24/7 assistance</p>
+        </div>
+
+        <!-- Health Records -->
+        <div (click)="navigateTo('/user/dashboard')"
+            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+                style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                <i class="fas fa-file-medical text-3xl text-white"></i>
+            </div>
+            <h4 class="text-base font-bold text-slate-800 mb-1">Health Records</h4>
+            <p class="text-[11px] text-slate-500 font-medium">Access your reports</p>
+        </div>
+
+        <!-- Wellness Programs -->
+        <div (click)="navigateTo('/ayurveda/wellness')"
+            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+                style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
+                <i class="fas fa-spa text-3xl text-white"></i>
+            </div>
+            <h4 class="text-base font-bold text-slate-800 mb-1">Wellness</h4>
+            <p class="text-[11px] text-slate-500 font-medium">Yoga & meditation</p>
+        </div>
+    </div>
+</div>
+
+<!-- Services Section -->
+<section class="max-w mx-auto px-2 py-16 bg-white relative overflow-hidden">
+    <!-- Subtle background decoration -->
+    <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-50 rounded-full blur-3xl opacity-50"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+            <div class="space-y-4">
+                <span
+                    class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 rounded-full text-sm font-bold uppercase tracking-wider">Trusted
+                    Services</span>
+                <h2 class="text-4xl md:text-6xl font-black text-slate-900 leading-tight">Expert Care for <br><span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Your
+                        Wellness</span></h2>
+            </div>
+            <p class="text-slate-600 max-w-md text-lg leading-relaxed border-l-4 border-emerald-500 pl-6 py-2">Discover
+                our comprehensive range of medical services tailored to your specific needs with ancient wisdom and
+                modern technology.</p>
         </div>
 
         <!-- Show skeleton while loading -->
         <div *ngIf="loadingServices"
-            class="service-grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            class="service-grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             <app-skeleton-loader *ngFor="let i of [1,2,3,4]" type="card" [count]="1"></app-skeleton-loader>
         </div>
         <!-- Show actual services -->
         <div *ngIf="!loadingServices"
-            class="service-grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            <app-service-card *ngFor="let service of services; trackBy: trackByServiceId" [service]="service">
+            class="service-grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            <app-service-card *ngFor="let service of services; let i = index; trackBy: trackByServiceId"
+                [service]="service" class="stagger-item" [style.--delay]="i * 0.12 + 's'">
             </app-service-card>
         </div>
     </div>
 </section>
 
 <!-- Categories Grid -->
-<section class="py-12 md:py-16 bg-slate-50">
+<!-- <section class="py-12 md:py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-2xl md:text-4xl font-bold text-slate-900 mb-3 md:mb-4">Shop by Category</h2>
+            <h2 class="text-2xl md:text-4xl font-bold text-slate-900 mb-3 md:mb-4">Shop by Category
+            </h2>
             <p class="text-lg text-slate-600">Browse through our wide range of products</p>
         </div>
 
@@ -163,7 +563,7 @@
             <app-category-card *ngFor="let category of categories" [category]="category"></app-category-card>
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- Deals Section -->
 <section class="py-12 md:py-16 bg-white">
@@ -214,7 +614,8 @@
 <section class="py-12 md:py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-2xl md:text-4xl font-bold text-slate-900 mb-4">Why Trust HealthConnect?</h2>
+            <h2 class="text-2xl md:text-4xl font-bold text-slate-900 mb-4">Why Trust HealthConnect?
+            </h2>
             <p class="text-lg text-slate-600">Join thousands of satisfied customers</p>
         </div>
 

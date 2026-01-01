@@ -1,25 +1,39 @@
-<div (click)="navigate()"
-    class="group cursor-pointer bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-slate-200">
+<div #cardContent (click)="navigate()"
+    class="group relative cursor-pointer bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-sm hover:shadow-2xl transition-all duration-300 border border-white/20 overflow-hidden"
+    [style.transform]="transform" style="transform-style: preserve-3d;">
 
-    <!-- Icon -->
-    <div
-        [class]="'w-12 h-12 md:w-16 md:h-16 rounded-lg flex items-center justify-center text-white text-2xl md:text-3xl mb-4 bg-gradient-to-br ' + service.gradient">
-        <i [class]="service.icon"></i>
+    <!-- Shine Effect -->
+    <div class="absolute inset-0 pointer-events-none transition-opacity duration-300" [style]="shineStyle"></div>
+
+    <!-- Icon Container -->
+    <div class="relative z-10" style="transform: translateZ(50px);">
+        <div
+            [class]="'w-16 h-16 rounded-xl flex items-center justify-center text-white text-3xl mb-6 bg-gradient-to-br shadow-lg ' + service.gradient">
+            <i [class]="service.icon"></i>
+        </div>
     </div>
 
     <!-- Content -->
-    <h3 class="text-base md:text-lg font-bold text-slate-900 mb-2">{{ service.title }}</h3>
-    <p class="text-xs md:text-sm text-slate-600 mb-4 md:mb-4">{{ service.description }}</p>
+    <div class="relative z-10" style="transform: translateZ(30px);">
+        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">{{
+            service.title }}</h3>
+        <p class="text-slate-600 mb-6 leading-relaxed">{{ service.description }}</p>
 
-    <!-- Badge -->
-    <div *ngIf="service.badge"
-        class="inline-flex items-center px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-semibold">
-        {{ service.badge }}
+        <!-- Badge -->
+        <div *ngIf="service.badge"
+            class="inline-flex items-center px-4 py-1.5 bg-emerald-100/80 text-emerald-700 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
+            {{ service.badge }}
+        </div>
+
+        <!-- Action -->
+        <div class="flex items-center gap-2 text-emerald-600 font-semibold group-hover:gap-4 transition-all">
+            <span>Discover more</span>
+            <i class="fas fa-arrow-right"></i>
+        </div>
     </div>
 
-    <!-- Arrow -->
-    <div class="mt-4 text-emerald-600 group-hover:translate-x-1 transition-transform inline-flex items-center gap-2">
-        <span class="text-sm font-medium">Learn More</span>
-        <i class="fas fa-arrow-right"></i>
+    <!-- Decorative Element -->
+    <div
+        class="absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-to-br from-emerald-500/10 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700">
     </div>
 </div>

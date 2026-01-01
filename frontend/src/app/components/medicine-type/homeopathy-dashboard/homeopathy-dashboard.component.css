@@ -1,0 +1,576 @@
+/* ===================================
+   HOMEOPATHY DASHBOARD - PREMIUM DESIGN
+   Gentle Purple Theme
+   =================================== */
+
+.homeopathy-dashboard {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+    position: relative;
+}
+
+/* Premium Dashboard Header with Gradient */
+.dashboard-header {
+    position: relative;
+    background: var(--homeopathy-gradient);
+    padding: 60px 40px;
+    border-radius: 24px;
+    margin-bottom: 40px;
+    overflow: hidden;
+    box-shadow:
+        0 10px 30px rgba(139, 92, 246, 0.2),
+        0 0 40px rgba(139, 92, 246, 0.1);
+}
+
+/* Animated gradient overlay */
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 100%);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Pattern overlay */
+.dashboard-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.5;
+}
+
+.header-content {
+    position: relative;
+    z-index: 1;
+}
+
+.header-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: white;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.title-icon {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.header-subtitle {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 600px;
+    line-height: 1.6;
+}
+
+/* Quick Stats Section - Premium Cards */
+.quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.02),
+        0 12px 24px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(139, 92, 246, 0.08);
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow:
+        0 8px 16px rgba(139, 92, 246, 0.1),
+        0 20px 40px rgba(139, 92, 246, 0.15);
+    border-color: var(--homeopathy-primary);
+}
+
+/* Gradient accent bar */
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--homeopathy-gradient);
+}
+
+/* Icon background glow */
+.stat-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--homeopathy-gradient-soft);
+    font-size: 2rem;
+    margin-bottom: 16px;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.stat-icon::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--homeopathy-gradient);
+    opacity: 0;
+    filter: blur(20px);
+    transition: opacity 0.3s ease;
+}
+
+.stat-card:hover .stat-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.stat-card:hover .stat-icon::after {
+    opacity: 0.3;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--homeopathy-primary);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.9375rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Section */
+.section {
+    margin-bottom: 56px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.section-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-title::before {
+    content: '';
+    width: 6px;
+    height: 32px;
+    background: var(--homeopathy-gradient);
+    border-radius: 3px;
+}
+
+.view-all-btn {
+    background: var(--homeopathy-gradient);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.view-all-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+}
+
+.view-all-btn:hover .arrow {
+    transform: translateX(4px);
+}
+
+/* Doctors Grid - Premium Cards */
+.doctors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
+}
+
+.doctor-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.02),
+        0 8px 16px rgba(0, 0, 0, 0.04);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.doctor-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--homeopathy-gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.doctor-card:hover::before {
+    transform: scaleX(1);
+}
+
+.doctor-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.04),
+        0 16px 32px rgba(139, 92, 246, 0.12);
+    border-color: var(--homeopathy-primary);
+}
+
+/* Doctor image with overlay */
+.doctor-image {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+    background: var(--homeopathy-lighter);
+}
+
+.doctor-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.doctor-card:hover .doctor-image img {
+    transform: scale(1.1);
+}
+
+/* Gradient overlay on image */
+.doctor-image::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.doctor-card:hover .doctor-image::after {
+    opacity: 1;
+}
+
+.doctor-info {
+    padding: 24px;
+}
+
+.doctor-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.doctor-spec {
+    font-size: 0.9375rem;
+    color: #64748b;
+    margin-bottom: 16px;
+}
+
+.doctor-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: var(--homeopathy-lighter);
+    border-radius: 8px;
+    font-size: 0.875rem;
+}
+
+.experience {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.fee {
+    color: var(--homeopathy-primary);
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.book-btn {
+    width: 100%;
+    background: var(--homeopathy-gradient);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.book-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.book-btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+.book-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+}
+
+/* Wellness Tips Grid */
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.tip-card {
+    background: linear-gradient(135deg, var(--homeopathy-lighter) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border: 2px solid var(--homeopathy-light);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.tip-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, var(--homeopathy-primary) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.tip-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(139, 92, 246, 0.15);
+    border-color: var(--homeopathy-primary);
+}
+
+.tip-card:hover::before {
+    opacity: 0.05;
+    animation: pulse-rotate 4s linear infinite;
+}
+
+@keyframes pulse-rotate {
+    0% {
+        transform: rotate(0deg);
+        opacity: 0.05;
+    }
+
+    50% {
+        transform: rotate(180deg);
+        opacity: 0.08;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        opacity: 0.05;
+    }
+}
+
+.tip-icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 4px 8px rgba(139, 92, 246, 0.2));
+    position: relative;
+    z-index: 1;
+}
+
+.tip-card h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--homeopathy-dark);
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.tip-card p {
+    font-size: 0.9375rem;
+    color: #7c3aed;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid var(--homeopathy-light);
+    border-top-color: var(--homeopathy-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.no-doctors {
+    text-align: center;
+    padding: 60px 20px;
+    color: #64748b;
+    font-size: 1.125rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .dashboard-header {
+        padding: 48px 32px;
+    }
+
+    .quick-stats {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .doctors-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .homeopathy-dashboard {
+        padding: 16px;
+    }
+
+    .dashboard-header {
+        padding: 40px 24px;
+        margin-bottom: 32px;
+    }
+
+    .header-title {
+        font-size: 2rem;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .quick-stats {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .doctors-grid,
+    .tips-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .section {
+        margin-bottom: 40px;
+    }
+}

@@ -8,11 +8,12 @@ import { MedicalInfoModalComponent } from '../medical-info-modal/medical-info-mo
 import { AuthService } from '../../shared/services/auth.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
+import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
 
 @Component({
   selector: 'app-emergency-hub',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterLink, EmergencyContactModalComponent, MedicalInfoModalComponent, DragDropModule],
+  imports: [CommonModule, HttpClientModule, RouterLink, EmergencyContactModalComponent, MedicalInfoModalComponent, DragDropModule, MobileLocationBarComponent],
   templateUrl: './emergency-hub.component.html',
   styleUrl: './emergency-hub.component.css'
 })
@@ -419,4 +420,3 @@ export class EmergencyHubComponent implements OnInit {
   }
 
 }
-

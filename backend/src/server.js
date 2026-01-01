@@ -15,6 +15,7 @@ const verificationRoutes = require('./routes/verification');
 const otpRoutes = require('./routes/otp');
 const medicineTypesRoutes = require('./routes/medicineTypes');
 const oauthRoutes = require('./routes/oauth.routes');
+const ayurvedaRoutes = require('./routes/ayurveda');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -57,6 +58,10 @@ app.use('/api', require('./routes/refill.routes')); // Prescription refill API
 app.use('/api/doctor', require('./routes/doctor-refill.routes')); // Doctor refill management API
 app.use('/api/doctor', require('./routes/doctor-prescription.routes')); // Doctor prescription verification API
 app.use('/api/notifications', require('./routes/notification.routes')); // Notification API
+app.use('/api/prakriti', require('./routes/prakritiRoutes')); // Prakriti Quiz API
+app.use('/api/ayurveda', ayurvedaRoutes); // Ayurveda dashboard API
+app.use('/api/allopathy', require('./routes/allopathy')); // Allopathy dashboard API
+app.use('/api/favorites', require('./routes/favorite.routes')); // Favorites API
 
 
 // Test route

@@ -1,0 +1,32 @@
+.medical-grid {
+    background-size: 30px 30px;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+}
+
+.serif-font {
+    font-family: 'Cormorant Garamond', serif;
+}
+
+@keyframes slide-in-bottom {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slide-in-bottom 0.5s ease-out forwards;
+}
+
+/* Custom horizontal scroll for timeline on mobile if needed */
+@media (max-width: 768px) {
+    .timeline-container {
+        overflow-x: auto;
+        padding-bottom: 2rem;
+    }
+}

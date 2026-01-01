@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BookingModalComponent } from '../booking-modal/booking-modal.component';
 import { SnackbarService } from 'src/app/shared/services/snackbar.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { FavoritesService } from 'src/app/shared/services/favorites.service';
 
 @Component({
   selector: 'app-doctor-detail-modal',
@@ -19,7 +20,8 @@ export class DoctorDetailModalComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private favoritesService: FavoritesService
   ) { }
 
   ngOnInit(): void {
@@ -39,8 +41,17 @@ export class DoctorDetailModalComponent implements OnInit, OnDestroy {
       this.snackbar.warning('Please login to book an appointment');
       return;
     }
-    this.showBooking = true;
-    // this.book.emit(this.doctor); // Disabled to use inline booking
+    this.book.emit(this.doctor);
+  }
+
+  toggleFavorite() {
+    if (this.doctor) {
+      this.favoritesService.toggleFavorite(this.doctor.id, 'doctor').subscribe();
+    }
+  }
+
+  isFavorite(): boolean {
+    return this.doctor ? this.favoritesService.isFavorite(this.doctor.id, 'doctor') : false;
   }
 
   closeBooking() {

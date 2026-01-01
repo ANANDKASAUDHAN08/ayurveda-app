@@ -32,7 +32,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Load cart
     this.loading = true;
-    this.cartSubscription = this.cartService.cart$.subscribe(cart => {
+    this.cartSubscription = this.cartService.getCart().subscribe(cart => {
       this.cart = cart;
       this.loading = false;
 
@@ -42,8 +42,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         this.router.navigate(['/cart']);
       }
     });
-
-    this.cartService.getCart().subscribe();
 
     // Initialize form
     this.checkoutForm = this.fb.group({
@@ -65,7 +63,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   get subtotal(): number {
     if (!this.cart || !this.cart.items) return 0;
-    return this.cart.items.reduce((sum, item) => sum + parseFloat(String(item.total_price)), 0);
+    return this.cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   }
 
   get tax(): number {

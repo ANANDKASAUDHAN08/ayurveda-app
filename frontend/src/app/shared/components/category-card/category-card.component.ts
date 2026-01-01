@@ -9,6 +9,7 @@ export interface CategoryCardData {
   route: string;
   color: string; // e.g., 'bg-blue-100', 'bg-pink-100'
   iconColor: string; // e.g., 'text-blue-600'
+  image?: string; // Background image URL
 }
 @Component({
   selector: 'app-category-card',

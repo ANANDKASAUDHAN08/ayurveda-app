@@ -22,16 +22,23 @@ export const authGuard: CanActivateFn = (route, state) => {
         }
         return true;
     } else {
-        // Get user role before any potential redirect
-        const user = authService.getUser();
-        const userRole = user?.role || 'user';
+        // Only show token expired message if user actually had a token before
+        const token = localStorage.getItem('auth_token');
 
-        // Show alert message
-        snackbarService.show('Token is expired, please login again');
+        if (token) {
+            // User had a token but it's expired/invalid
+            const user = authService.getUser();
+            const userRole = user?.role || 'user';
 
-        // Redirect to appropriate login page based on role
-        const loginPath = userRole === 'doctor' ? '/for-doctors' : '/for-users';
-        router.navigate([loginPath]);
+            snackbarService.show('Token is expired, please login again');
+
+            const loginPath = userRole === 'doctor' ? '/for-doctors' : '/for-users';
+            router.navigate([loginPath]);
+        } else {
+            // No token at all - just redirect silently for guest users
+            router.navigate(['/for-users']);
+        }
+
         return false;
     }
 };

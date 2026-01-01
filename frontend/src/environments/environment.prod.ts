@@ -1,4 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://your-production-domain.com/api'  // Update this with your production API URL
+    apiUrl: 'https://your-production-domain.com/api',
+    googleMapsApiKey: 'REPLACE_WITH_YOUR_KEY'
 };

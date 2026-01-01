@@ -1,0 +1,146 @@
+/* Allopathy Dashboard - Neo-Clinical Modern Theme */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+.allopathy-dashboard {
+    scroll-behavior: smooth;
+    font-family: 'Inter', sans-serif;
+    color: #0f172a;
+    /* Slate 900 */
+}
+
+/* Universal Transitions */
+.allopathy-dashboard * {
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Hero & Backgrounds */
+.hero-section-bg {
+    background-color: #f8fafc !important;
+    /* Slate 50 */
+    background-image:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.05), transparent 600px),
+        radial-gradient(circle at bottom left, rgba(30, 64, 175, 0.03), transparent 600px) !important;
+}
+
+/* Sticky Navigation Polish */
+.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 40;
+}
+
+/* Navigation Interactive States */
+.allopathy-dashboard button {
+    cursor: pointer;
+}
+
+.allopathy-dashboard button:active {
+    transform: scale(0.95);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-in {
+    animation-duration: 0.5s;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation-fill-mode: forwards;
+}
+
+.fade-in {
+    animation-name: fadeIn;
+}
+
+.zoom-in {
+    animation-name: zoomIn;
+}
+
+/* Medical Vital Pulse Effect */
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Scrollbar Customization for modern look */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Precision Grid - Thin lines for medical feel */
+.medical-grid {
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, rgba(226, 232, 240, 0.5) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(226, 232, 240, 0.5) 1px, transparent 1px);
+}
+
+/* Hero Image Shadow Polish */
+.animate-scale-in {
+    animation: zoomIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Vitals Indicator Glass Effect */
+.backdrop-blur-xl {
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .allopathy-dashboard {
+        padding-bottom: 80px;
+    }
+}

@@ -1,14 +1,53 @@
 :host {
     display: block;
+    height: 100%;
 }
 
-/* Smooth hover */
-.group:hover {
-    transform: scale(1.05);
+.category-card-premium {
+    height: 100%;
+    min-height: 180px;
 }
 
-/* Icon animation */
-.group:hover i {
-    transform: scale(1.1);
-    transition: transform 0.3s ease;
+.category-card-premium::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 15;
+}
+
+/* Glass effect on icon */
+.backdrop-blur-md {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Text glow on hover */
+.group:hover h4 {
+    text-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
+}
+
+/* Gradient animate */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.category-card-premium img {
+    transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.group:hover img {
+    transform: scale(1.15);
 }

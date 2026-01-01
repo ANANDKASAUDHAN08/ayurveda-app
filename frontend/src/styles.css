@@ -1,3 +1,6 @@
+/* Premium Design System */
+@import 'styles/design-system.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,7 +14,11 @@ body {
   background-color: #f3f4f6;
 }
 
-/* Fade In Animation */
+/* ================================
+   MICRO-ANIMATIONS & POLISH
+   ================================ */
+
+/* Smooth Fade In */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -28,6 +35,170 @@ body {
   animation: fadeIn 0.5s ease-out forwards;
 }
 
+/* Scale In Animation */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Slide Up Animation */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce-gentle {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+/* Success Checkmark Animation */
+@keyframes checkmark {
+  0% {
+    transform: scale(0) rotate(45deg);
+  }
+
+  50% {
+    transform: scale(1.2) rotate(45deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(45deg);
+  }
+}
+
+.animate-checkmark {
+  animation: checkmark 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Shake Animation (for errors) */
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Rotate Animation */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-rotate {
+  animation: rotate 1s linear infinite;
+}
+
+/* Shimmer Effect for Skeleton Loaders */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+/* Pulse Glow Effect */
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+
+  50% {
+    box-shadow: 0 0 20px 5px rgba(16, 185, 129, 0);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+/* ================================
+   SMOOTH TRANSITIONS
+   ================================ */
+
+/* Smooth hover effects */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.transition-fast {
+  transition: all 0.15s ease-out;
+}
+
+.transition-spring {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -39,26 +210,22 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #10b981;
-  /* Emerald-500 */
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #059669;
-  /* Emerald-600 */
 }
 
 /* ===================================
-   SIMPLE STANDARD TOOLTIPS
+   TOOLTIPS
    =================================== */
 
-/* Tooltip container */
 [data-tooltip] {
   position: relative;
   cursor: help;
 }
 
-/* Tooltip bubble */
 [data-tooltip]::before {
   content: attr(data-tooltip);
   position: absolute;
@@ -66,8 +233,6 @@ body {
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 8px;
-
-  /* Simple Styling */
   background-color: #333333;
   color: #ffffff;
   padding: 6px 10px;
@@ -78,13 +243,12 @@ body {
   max-width: 250px;
   text-align: center;
   z-index: 1000;
-
-  /* Simple Visibility */
   display: none;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-/* Tooltip arrow */
 [data-tooltip]::after {
   content: '';
   position: absolute;
@@ -92,24 +256,21 @@ body {
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 3px;
-
   border: 5px solid transparent;
   border-top-color: #333333;
-
   display: none;
   pointer-events: none;
   z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-/* Show tooltip on hover */
 [data-tooltip]:hover::before,
 [data-tooltip]:hover::after {
   display: block;
+  opacity: 1;
 }
 
-/* Position Variants (Simple) */
-
-/* Bottom */
 [data-tooltip-position="bottom"]::before {
   bottom: auto;
   top: 100%;
@@ -122,12 +283,10 @@ body {
   top: 100%;
   margin-bottom: 0;
   margin-top: -2px;
-  /* Pull arrow up slightly */
   border-top-color: transparent;
   border-bottom-color: #333333;
 }
 
-/* Left */
 [data-tooltip-position="left"]::before {
   bottom: auto;
   top: 50%;
@@ -150,7 +309,6 @@ body {
   border-left-color: #333333;
 }
 
-/* Right */
 [data-tooltip-position="right"]::before {
   bottom: auto;
   top: 50%;
@@ -173,4 +331,97 @@ body {
 
 [data-tooltip-multiline]::before {
   white-space: normal;
+}
+
+/* ===================================
+   BUTTON HOVER EFFECTS
+   =================================== */
+
+.btn-hover-lift {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-hover-lift:active {
+  transform: translateY(0);
+}
+
+/* ===================================
+   CARD EFFECTS
+   =================================== */
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* ===================================
+   LOADING STATES
+   =================================== */
+
+.loading-dots::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+
+  0%,
+  20% {
+    content: '';
+  }
+
+  40% {
+    content: '.';
+  }
+
+  60% {
+    content: '..';
+  }
+
+  80%,
+  100% {
+    content: '...';
+  }
+}
+
+/* ===================================
+   SAFE AREA (for mobile notches)
+   =================================== */
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ===================================
+   TOUCH OPTIMIZATIONS
+   =================================== */
+
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Larger touch targets on mobile */
+@media (max-width: 768px) {
+
+  button,
+  a,
+  input,
+  select {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }

@@ -1,0 +1,46 @@
+<div class="medicine-type-selector">
+  <!-- Header -->
+  <div class="header">
+    <h1 class="title">Choose Your Healing Path</h1>
+    <p class="subtitle">Explore different systems of medicine and find the right approach for your wellness journey</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading medicine types...</p>
+  </div>
+
+  <!-- Medicine Type Cards -->
+  <div *ngIf="!loading" class="types-grid">
+    <div *ngFor="let type of medicineTypes" class="type-card" [style.border-left-color]="type.color"
+      (click)="selectType(type.id)" [attr.data-type]="type.id">
+
+      <!-- Icon -->
+      <div class="type-icon" [style.background]="type.color + '15'">
+        <span class="icon">{{ type.icon }}</span>
+      </div>
+
+      <!-- Content -->
+      <h2 class="type-name" [style.color]="type.color">{{ type.name }}</h2>
+      <p class="type-tagline">{{ type.tagline }}</p>
+
+      <!-- CTA Button -->
+      <button class="explore-btn" [style.background]="type.color">
+        Explore {{ type.name }}
+        <span class="arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+
+  <!-- Information Banner -->
+  <div class="info-banner">
+    <div class="banner-icon">ℹ️</div>
+    <div class="banner-content">
+      <p><strong>Not sure which to choose?</strong> Each system has unique strengths. Ayurveda focuses on holistic
+        balance, Homeopathy offers gentle healing, and Allopathy provides rapid symptom relief. You can always switch
+        between them later!</p>
+    </div>
+  </div>
+</div>

@@ -85,21 +85,19 @@ export class MedicalDevicesComponent implements OnInit {
     const key = `device-${device.id}`;
     this.addingToCart[key] = true;
 
-    this.cartService.addToCart({
-      product_id: device.id,
-      product_type: 'device',
+    this.cartService.addItem({
+      id: String(device.id),
+      name: device.name,
+      type: 'device',
+      price: device.price || 0,
       quantity: 1,
-      price: device.price
-    }).subscribe({
-      next: () => {
-        this.addingToCart[key] = false;
-        this.snackbarService.show(`${device.name} added to cart!`, 'success');
-      },
-      error: () => {
-        this.addingToCart[key] = false;
-        this.snackbarService.show('Failed to add to cart', 'error');
-      }
+      image: ''
     });
+
+    setTimeout(() => {
+      this.addingToCart[key] = false;
+      this.snackbarService.show(`${device.name} added to cart!`, 'success');
+    }, 300);
   }
 
   openDetails(device: SearchResult) {

@@ -17,14 +17,23 @@
   <app-footer *ngIf="!isAdminRoute"></app-footer>
 
   <!-- Bottom Navigation (Mobile only) -->
-  <app-bottom-navigation (navItemClicked)="closeHamburgerMenu()"></app-bottom-navigation>
-
-  <!-- NEW: Enhanced Mobile Menu with Bottom Nav + Slide-in Menu -->
-  <app-mobile-menu></app-mobile-menu>
+  <!-- <app-bottom-navigation (navItemClicked)="closeHamburgerMenu()"></app-bottom-navigation> -->
 
   <!-- Snackbar -->
   <app-snackbar></app-snackbar>
 
+  <!-- FAB Menu (Mobile only) -->
+  <app-fab-menu (actionClicked)="handleFabAction($event)"></app-fab-menu>
+
   <!-- Scroll to Top Button -->
   <app-scroll-to-top></app-scroll-to-top>
+
+  <!-- Location Bottom Sheet -->
+  <app-location-bottom-sheet [isOpen]="isLocationSheetOpen" (closeRequested)="locationService.toggleBottomSheet(false)">
+  </app-location-bottom-sheet>
+
+  <!-- Global Map Modal -->
+  <app-location-map-modal [isOpen]="showMapModal" [initialLocation]="locationService.getCurrentLocation()"
+    (modalClosed)="locationService.toggleMap(false)" (locationSelected)="onLocationFromMap($event)">
+  </app-location-map-modal>
 </div>

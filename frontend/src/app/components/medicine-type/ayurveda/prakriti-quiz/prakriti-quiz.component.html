@@ -1,0 +1,377 @@
+<div
+    class="min-h-screen bg-[#f8fafc] px-3 md:px-6 lg:px-10 py-4 font-['Inter',sans-serif] text-[#1e293b] flex flex-col items-center relative overflow-hidden">
+
+    <!-- Dynamic Background Blobs -->
+    <div class="floating-blob blob-1"></div>
+    <div class="floating-blob blob-2"></div>
+    <div class="floating-blob blob-3"></div>
+
+    <!-- Background Watermark -->
+    <img src="assets/images/prakriti/dosha_equilibrium.png" alt=""
+        class="fixed -right-[150px] -bottom-[150px] w-[800px] opacity-[0.05] pointer-events-none z-0 blur-[2px]">
+
+    <!-- Header -->
+    <header class="w-full relative z-10 flex flex-col">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-3 mb-5 text-sm md:text-base font-bold">
+            <!-- Root Link -->
+            <button (click)="goBack()" class="text-[#10b981] hover:text-[#064e3b] transition-colors">
+                Ayurveda
+            </button>
+            <span class="text-slate-300">
+                <i class="fas fa-chevron-right text-[12px]"></i>
+            </span>
+
+            <!-- Prakriti Link (Clickable if in Quiz or Results) -->
+            <button *ngIf="currentStep !== 0" (click)="resetToIntro()"
+                class="text-[#10b981] hover:text-[#064e3b] transition-colors">
+                Prakriti
+            </button>
+            <span *ngIf="currentStep === 0" class="text-slate-900 opacity-40 text-xl md:text-2xl">Prakriti</span>
+
+            <!-- Quiz Step (Visible if in Quiz or Results) -->
+            <ng-container *ngIf="currentStep !== 0">
+                <span class="text-slate-300">
+                    <i class="fas fa-chevron-right text-[12px]"></i>
+                </span>
+                <span class="text-slate-900 opacity-40 font-bold text-xl md:text-2xl">Quiz</span>
+            </ng-container>
+        </nav>
+
+        <!-- Centered Heading Content (Only on Intro) -->
+        <div *ngIf="currentStep === 0" class="text-center flex flex-col items-center mb-6">
+            <h1
+                class="animate-reveal text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tighter leading-[0.8] mb-6">
+                Know Your <span
+                    class="animate-shine text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Prakriti</span>
+            </h1>
+            <p
+                class="animate-reveal text-xl md:text-3xl text-slate-600 font-medium max-w-4xl leading-relaxed opacity-90">
+                Your unique mind-body blueprint for a balanced, vibrant life.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="w-full relative z-10 min-h-[400px]">
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading"
+            class="text-center py-20 bg-white/40 backdrop-blur-md rounded-[40px] border border-white/50 shadow-xl max-w-4xl mx-auto">
+            <div
+                class="w-[80px] h-[80px] border-[6px] border-emerald-100 border-t-emerald-500 rounded-full mx-auto mb-8 animate-spin">
+            </div>
+            <p class="text-emerald-900 text-xl font-bold tracking-tight">Analyzing your constitution...</p>
+        </div>
+
+        <!-- Intro Step -->
+        <div *ngIf="currentStep === 0 && !isLoading" class="relative w-full flex flex-col gap-12" [@listAnimation]>
+
+            <!-- Hero Stats Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 items-stretch">
+                <!-- Main Intro Card -->
+                <div
+                    class="glass-card rounded-[48px] p-10 md:p-16 flex flex-col items-start gap-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.06)] group">
+                    <div class="flex items-center gap-6">
+                        <div
+                            class="w-24 h-24 bg-emerald-500/10 text-emerald-600 rounded-3xl flex items-center justify-center text-4xl shadow-inner transform transition group-hover:rotate-12">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+                                Biological<br>Insight</h2>
+                        </div>
+                    </div>
+
+                    <p class="text-xl md:text-2xl text-slate-600 leading-relaxed font-medium">
+                        Discover the ancient science of phenotypic matching. Your Prakriti defines your physical traits,
+                        emotional tendencies, and metabolic health.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                        <div
+                            class="p-6 rounded-3xl bg-sky-500/5 border border-sky-500/10 hover:bg-sky-500/10 transition-all cursor-default">
+                            <div
+                                class="w-10 h-10 bg-sky-500 text-white rounded-xl mb-4 flex items-center justify-center shadow-lg shadow-sky-500/30">
+                                <i class="fas fa-wind"></i>
+                            </div>
+                            <h4 class="text-sky-900 font-bold text-lg mb-1">Vata</h4>
+                            <p class="text-sky-700/80 text-sm leading-snug">The energy of movement & space.</p>
+                        </div>
+                        <div
+                            class="p-6 rounded-3xl bg-orange-500/5 border border-orange-500/10 hover:bg-orange-500/10 transition-all cursor-default">
+                            <div
+                                class="w-10 h-10 bg-orange-500 text-white rounded-xl mb-4 flex items-center justify-center shadow-lg shadow-orange-500/30">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <h4 class="text-orange-900 font-bold text-lg mb-1">Pitta</h4>
+                            <p class="text-orange-700/80 text-sm leading-snug">The energy of transformation.</p>
+                        </div>
+                        <div
+                            class="p-6 rounded-3xl bg-emerald-500/5 border border-emerald-500/10 hover:bg-emerald-500/10 transition-all cursor-default">
+                            <div
+                                class="w-10 h-10 bg-emerald-500 text-white rounded-xl mb-4 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                                <i class="fas fa-water"></i>
+                            </div>
+                            <h4 class="text-emerald-900 font-bold text-lg mb-1">Kapha</h4>
+                            <p class="text-emerald-700/80 text-sm leading-snug">The energy of structure & fluid.</p>
+                        </div>
+                    </div>
+
+                    <div class="h-[1px] w-full bg-slate-200"></div>
+
+                    <div class="flex flex-wrap items-center gap-8 gap-y-4">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+                                <i class="fas fa-microscope text-lg"></i>
+                            </div>
+                            <span class="font-bold text-slate-700">Trait Mapping</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+                                <i class="fas fa-bolt text-lg"></i>
+                            </div>
+                            <span class="font-bold text-slate-700">Smart Algorithm</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+                                <i class="fas fa-spa text-lg"></i>
+                            </div>
+                            <span class="font-bold text-slate-700">Lifestyle Guide</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-6 w-full mt-4">
+                        <button
+                            class="flex-1 md:flex-none px-12 py-6 bg-slate-900 text-white rounded-3xl font-black text-xl cursor-pointer flex items-center justify-center gap-4 transition-all shadow-[0_20px_40px_-10px_rgba(15,23,42,0.3)] hover:bg-black hover:-translate-y-2 hover:shadow-[0_25px_50px_-12px_rgba(15,23,42,0.4)] active:scale-95 group"
+                            (click)="startQuiz()">
+                            Start Assessment
+                            <i class="fas fa-sparkles transition-transform group-hover:rotate-12"></i>
+                        </button>
+                        <div class="hidden md:flex flex-col">
+                            <span class="text-slate-900 font-bold">~ 4 Minutes</span>
+                            <span class="text-slate-400 text-sm font-medium">30 Quick Questions</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Info Cards -->
+                <div class="flex flex-col gap-8">
+                    <div
+                        class="glass-card rounded-[40px] p-10 flex-1 flex flex-col justify-center border-l-8 border-emerald-500 shadow-xl overflow-hidden relative group">
+                        <div
+                            class="absolute -right-16 -top-16 w-48 h-48 bg-emerald-500/5 rounded-full transition-transform group-hover:scale-150 duration-700">
+                        </div>
+                        <h3 class="text-3xl font-black text-slate-900 mb-4 pr-12">Why it matters?</h3>
+                        <p class="text-xl text-slate-600 leading-relaxed font-medium">
+                            Knowing your constitution is like having a personalized manual for your health. Avoid
+                            generic advice and embrace what truly works for <span
+                                class="text-emerald-600 underline decoration-2 underline-offset-4">your</span> body.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900 rounded-[40px] p-12 text-white shadow-2xl relative overflow-hidden group">
+                        <div
+                            class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/leaf.png')]">
+                        </div>
+                        <blockquote class="relative z-10">
+                            <p class="text-2xl font-medium leading-relaxed italic mb-8">
+                                "Health is a state of physical, mental, and social well-being and not merely the absence
+                                of disease."
+                            </p>
+                            <footer class="flex items-center gap-4">
+                                <div class="w-12 h-[2px] bg-emerald-500"></div>
+                                <cite
+                                    class="not-italic font-bold text-emerald-400 uppercase tracking-widest text-sm">Ayurvedic
+                                    Wisdom</cite>
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Sections (Modularized) -->
+        <app-prakriti-questions *ngIf="currentStep > 0 && currentStep <= sections.length && !isLoading"
+            [sections]="sections" [currentStep]="currentStep" [answers]="answers" [isLoading]="isLoading"
+            (answerSelected)="handleAnswerSelected($event)" (next)="nextStep()" (previous)="prevStep()"
+            (submit)="submitQuiz()">
+        </app-prakriti-questions>
+
+        <!-- Results View -->
+        <div *ngIf="currentStep === -1 && result && !isLoading" class="flex flex-col gap-12 max-w-7xl mx-auto mb-20"
+            [@listAnimation]>
+
+            <!-- High Impact Header -->
+            <div class="relative rounded-[64px] overflow-hidden shadow-[0_48px_80px_-16px_rgba(0,0,0,0.1)] p-12 md:p-20 text-center flex flex-col items-center gap-10 group"
+                [ngClass]="{
+                    'bg-slate-900 text-white': true
+                }">
+                <!-- Dynamic Background Gradients based on Dosha -->
+                <div class="absolute inset-0 opacity-40 transition-all duration-1000" [ngClass]="{
+                        'bg-gradient-to-br from-sky-400 via-indigo-500 to-purple-600': result.dominant === 'Vata',
+                        'bg-gradient-to-br from-orange-400 via-red-500 to-rose-600': result.dominant === 'Pitta',
+                        'bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600': result.dominant === 'Kapha'
+                    }">
+                </div>
+                <div
+                    class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse">
+                </div>
+
+                <div class="relative z-10 space-y-4">
+                    <span
+                        class="px-8 py-3 bg-white/10 backdrop-blur-xl rounded-full text-sm font-black uppercase tracking-[0.4em] border border-white/20">
+                        Analysis Complete
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-bold opacity-80">Your dominant constitution is</h2>
+                    <h3
+                        class="text-8xl md:text-[12rem] font-black tracking-tighter leading-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.3)] transform transition group-hover:scale-105 duration-700">
+                        {{result.dominant}}
+                    </h3>
+                </div>
+
+                <div class="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-8 mt-4">
+                    <!-- Stat 1 -->
+                    <div
+                        class="glass-card !bg-white/10 p-8 rounded-[40px] border-white/10 flex flex-col items-center gap-3">
+                        <span class="text-xs font-black uppercase tracking-widest opacity-60">Vata</span>
+                        <div class="relative w-full h-4 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-sky-300 shadow-[0_0_15px_rgba(125,211,252,0.5)] transition-all duration-[2000ms]"
+                                [style.width.%]="result.breakdown.vata"></div>
+                        </div>
+                        <span class="text-3xl font-black">{{result.breakdown.vata}}%</span>
+                    </div>
+                    <!-- Stat 2 -->
+                    <div
+                        class="glass-card !bg-white/10 p-8 rounded-[40px] border-white/10 flex flex-col items-center gap-3">
+                        <span class="text-xs font-black uppercase tracking-widest opacity-60">Pitta</span>
+                        <div class="relative w-full h-4 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-orange-300 shadow-[0_0_15px_rgba(253,186,116,0.5)] transition-all duration-[2000ms]"
+                                [style.width.%]="result.breakdown.pitta"></div>
+                        </div>
+                        <span class="text-3xl font-black">{{result.breakdown.pitta}}%</span>
+                    </div>
+                    <!-- Stat 3 -->
+                    <div
+                        class="glass-card !bg-white/10 p-8 rounded-[40px] border-white/10 flex flex-col items-center gap-3">
+                        <span class="text-xs font-black uppercase tracking-widest opacity-60">Kapha</span>
+                        <div class="relative w-full h-4 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-300 shadow-[0_0_15px_rgba(110,231,183,0.5)] transition-all duration-[2000ms]"
+                                [style.width.%]="result.breakdown.kapha"></div>
+                        </div>
+                        <span class="text-3xl font-black">{{result.breakdown.kapha}}%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Analysis Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Nature & Element -->
+                <div class="glass-card rounded-[48px] p-12 shadow-xl border-white/40 flex flex-col gap-8">
+                    <div class="flex items-center gap-5">
+                        <div
+                            class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center text-3xl shadow-inner">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <h3 class="text-3xl font-black text-slate-900 tracking-tight">Core Essence</h3>
+                    </div>
+                    <div class="space-y-6">
+                        <div
+                            class="p-8 bg-slate-900 text-white rounded-[32px] shadow-lg relative overflow-hidden group">
+                            <div
+                                class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/5 rounded-full transition-transform group-hover:scale-150 duration-700">
+                            </div>
+                            <span
+                                class="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400 block mb-2">Prime
+                                Element</span>
+                            <p class="text-3xl font-black tracking-tight">{{result.traits.element}}</p>
+                        </div>
+                        <div class="p-8 bg-white/50 border border-slate-100 rounded-[32px]">
+                            <span
+                                class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 block mb-2">Unique
+                                Qualities</span>
+                            <p class="text-xl text-slate-700 font-bold leading-relaxed">{{result.traits.qualities}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personality & Behavior -->
+                <div class="glass-card rounded-[48px] p-12 shadow-xl border-white/40 flex flex-col gap-8">
+                    <div class="flex items-center gap-5">
+                        <div
+                            class="w-16 h-16 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center text-3xl shadow-inner">
+                            <i class="fas fa-fingerprint"></i>
+                        </div>
+                        <h3 class="text-3xl font-black text-slate-900 tracking-tight">Phenotype Profile</h3>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-center">
+                        <p class="text-2xl text-slate-600 leading-loose font-medium italic">
+                            "{{result.traits.description}}"
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Strategy Cards -->
+                <div *ngIf="result.traits.integrative"
+                    class="md:col-span-2 glass-card rounded-[56px] p-12 md:p-16 shadow-2xl border-white/60">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
+                        <div class="flex items-center gap-6">
+                            <div
+                                class="w-20 h-20 bg-teal-50 text-teal-600 rounded-[28px] flex items-center justify-center text-4xl shadow-inner">
+                                <i class="fas fa-dna"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-4xl font-black text-slate-900 tracking-tighter">Integrative Strategy
+                                </h3>
+                                <p class="text-teal-600 font-bold tracking-widest uppercase text-xs">Bio-Individual
+                                    Protocol</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="integrative-content prose-lg max-w-none text-slate-700 leading-relaxed font-medium"
+                        [innerHTML]="result.traits.integrative"></div>
+                </div>
+
+                <div class="md:col-span-2 bg-slate-900 rounded-[56px] p-12 md:p-16 shadow-2xl relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/leaf.png')]">
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-6 mb-12">
+                            <div
+                                class="w-20 h-20 bg-emerald-500/20 text-emerald-400 rounded-[28px] flex items-center justify-center text-4xl shadow-inner">
+                                <i class="fas fa-sparkles"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-4xl font-black text-white tracking-tighter">Personalized Path</h3>
+                                <p class="text-emerald-400 font-bold tracking-widest uppercase text-xs">Recommended
+                                    Adaptations</p>
+                            </div>
+                        </div>
+                        <div class="recommendations-content prose-lg max-w-none text-slate-300 leading-relaxed font-medium"
+                            [innerHTML]="result.traits.recommendations"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-wrap justify-center gap-8 py-10">
+                <button
+                    class="px-12 py-6 bg-white text-slate-900 border-2 border-slate-100 rounded-[32px] font-black text-xl cursor-pointer flex items-center justify-center gap-5 transition-all hover:bg-slate-50 hover:shadow-2xl active:scale-95 group"
+                    (click)="retakeQuiz()">
+                    <i class="fas fa-redo transition-transform group-hover:rotate-180 duration-1000"></i>
+                    Retake Analysis
+                </button>
+                <button
+                    class="px-12 py-6 bg-emerald-600 text-white rounded-[32px] font-black text-xl cursor-pointer flex items-center justify-center gap-5 transition-all shadow-[0_20px_40px_-10px_rgba(5,150,105,0.4)] hover:bg-emerald-700 hover:-translate-y-2 active:scale-95 group"
+                    (click)="goBack()">
+                    Discover Your Herbs
+                    <i class="fas fa-arrow-right transition-transform group-hover:translate-x-2"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+</div>

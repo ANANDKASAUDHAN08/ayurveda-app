@@ -1,14 +1,16 @@
 import { Component, Input, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { LocationSelectorComponent } from '../location-selector/location-selector.component';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { SearchService } from '../../services/search.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { NotificationBellComponent } from '../../../components/shared/notification-bell/notification-bell.component';
+import { LocationSelectorComponent } from '../location-selector/location-selector.component';
+import { LocationService, UserLocation } from '../../services/location.service';
 
 @Component({
   selector: 'app-top-navbar',
@@ -16,9 +18,9 @@ import { NotificationBellComponent } from '../../../components/shared/notificati
   imports: [
     CommonModule,
     RouterModule,
-    LocationSelectorComponent,
     FormsModule,
-    NotificationBellComponent
+    NotificationBellComponent,
+    LocationSelectorComponent
   ],
   templateUrl: './top-navbar.component.html',
   styleUrl: './top-navbar.component.css'
@@ -35,10 +37,22 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   showMobileSearch = false;
 
   profileMenuOpen: boolean = false;
-  loginDropdownOpen: boolean = false; // For login dropdown
-  shopDropdownOpen: boolean = false; // NEW: For shop dropdown
-  myHealthDropdownOpen: boolean = false; // NEW: For my health dropdown
-  careDropdownOpen: boolean = false; // NEW: For find care dropdown
+  loginDropdownOpen: boolean = false;
+  shopDropdownOpen: boolean = false;
+  myHealthDropdownOpen: boolean = false;
+  careDropdownOpen: boolean = false;
+
+  // NEW: UI State for Redesign
+  isScrolled = false;
+  showSearchOverlay = false;
+  showCartSidebar = false;
+  isHome = false;
+  showNav = true;
+  lastScrollTop = 0;
+
+  // Cart Data
+  cart: any = null;
+  private cartDataSubscription?: Subscription;
 
   cartCount = 0;
   isLoggedIn = false;
@@ -52,18 +66,27 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   popularSearches: string[] = [];
   private suggestionTimeout: any;
 
+  // Location State
+  private locationSubscription?: Subscription;
+
   constructor(
     public router: Router,
     public authService: AuthService,
     private cartService: CartService,
     private searchService: SearchService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private locationService: LocationService
   ) { }
 
   ngOnInit() {
     // Subscribe to cart count
     this.cartSubscription = this.cartService.cartCount$.subscribe(
       count => this.cartCount = count
+    );
+
+    // Subscribe to full cart data
+    this.cartDataSubscription = this.cartService.getCart().subscribe(
+      cart => this.cart = cart
     );
     // Subscribe to auth state
     this.authSubscription = this.authService.authStatus$.subscribe(
@@ -79,10 +102,22 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
 
     // Load search data
     this.loadSearchData();
+
+    // Check initial route
+    this.isHome = this.router.url === '/' || this.router.url === '/home';
+
+    // Subscribe to router events to update isHome
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.isHome = event.url === '/' || event.url === '/home';
+      this.closeAllDropdowns();
+    });
   }
 
   ngOnDestroy() {
     this.cartSubscription?.unsubscribe();
+    this.cartDataSubscription?.unsubscribe();
     this.authSubscription?.unsubscribe();
   }
 
@@ -165,6 +200,66 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     this.shopDropdownOpen = false;
     this.myHealthDropdownOpen = false;
     this.profileMenuOpen = false;
+  }
+
+  // NEW: Scroll listener for glassmorphism and sticky behavior
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const st = window.pageYOffset || document.documentElement.scrollTop;
+    this.isScrolled = st > 50;
+
+    // Optional: Hide/Show on scroll logic
+    // if (st > this.lastScrollTop && st > 100) {
+    //   this.showNav = false;
+    // } else {
+    //   this.showNav = true;
+    // }
+    this.lastScrollTop = st;
+  }
+
+  toggleSearchOverlay() {
+    this.showSearchOverlay = !this.showSearchOverlay;
+    if (this.showSearchOverlay) {
+      setTimeout(() => {
+        const input = document.getElementById('search-overlay-input');
+        input?.focus();
+      }, 100);
+      this.closeAllDropdowns();
+    }
+  }
+
+  toggleCartSidebar() {
+    this.showCartSidebar = !this.showCartSidebar;
+    if (this.showCartSidebar) {
+      this.closeAllDropdowns();
+    }
+  }
+
+  updateCartQuantity(itemId: string, quantity: number) {
+    this.cartService.updateQuantity(itemId, quantity);
+  }
+
+  removeFromCart(itemId: string) {
+    this.cartService.removeItem(itemId);
+  }
+
+  clearCart() {
+    this.cartService.clearCart();
+  }
+
+  closeAllDropdowns() {
+    this.loginDropdownOpen = false;
+    this.shopDropdownOpen = false;
+    this.myHealthDropdownOpen = false;
+    this.careDropdownOpen = false;
+    this.profileMenuOpen = false;
+  }
+
+  performSearch() {
+    if (this.searchQuery.trim()) {
+      this.showSearchOverlay = false;
+      this.onSearch();
+    }
   }
 
   onSearch() {
@@ -341,11 +436,28 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     this.profileMenuOpen = false;
   }
 
+  navigateToFavorites() {
+    this.router.navigate(['/favorites']);
+    this.profileMenuOpen = false;
+  }
+
   logout() {
     this.authService.logout();
     this.clearUserData();
+    this.clearCart();
     this.profileMenuOpen = false;
     this.router.navigate(['/']);
+  }
+
+  // ============== LOCATION METHODS ==============
+
+  openMapModal() {
+    this.locationService.toggleMap(true);
+    this.closeAllDropdowns();
+  }
+
+  getCurrentLocation(): UserLocation | null {
+    return this.locationService.getCurrentLocation();
   }
 
   // Close dropdowns when clicking outside

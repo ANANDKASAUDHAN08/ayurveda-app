@@ -246,21 +246,20 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     addToCart(product: SearchResult) {
         const key = `${product.product_type}-${product.id}`;
         this.addingToCart[key] = true;
-        this.cartService.addToCart({
-            product_id: product.id,
-            product_type: product.product_type,
+
+        this.cartService.addItem({
+            id: String(product.id),
+            name: product.name,
+            type: (product.product_type || 'medicine') as 'medicine' | 'device' | 'wellness' | 'other',
+            price: product.price || 0,
             quantity: 1,
-            price: product.price
-        }).subscribe({
-            next: () => {
-                this.addingToCart[key] = false;
-                this.snackbarService.show(`${product.name} added to cart!`, 'success');
-            },
-            error: () => {
-                this.addingToCart[key] = false;
-                this.snackbarService.show('Failed to add to cart', 'error');
-            }
+            image: ''  // SearchResult doesn't have image property
         });
+
+        setTimeout(() => {
+            this.addingToCart[key] = false;
+            this.snackbarService.show(`${product.name} added to cart!`, 'success');
+        }, 300);
     }
 
     bookAppointment(doctor: SearchResult) {

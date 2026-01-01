@@ -23,17 +23,20 @@ exports.getCart = async (req, res) => {
                     WHEN c.product_type = 'medicine' THEN m.name
                     WHEN c.product_type = 'device' THEN d.name
                     WHEN c.product_type = 'lab_test' THEN l.name
+                    WHEN c.product_type = 'ayurveda_medicine' THEN am.name
                     ELSE 'Service'
                 END as product_name,
                 CASE 
                     WHEN c.product_type = 'medicine' THEN m.image_url
                     WHEN c.product_type = 'device' THEN d.image_url
+                    WHEN c.product_type = 'ayurveda_medicine' THEN am.image_url
                     ELSE NULL
                 END as image,
                 CASE 
                     WHEN c.product_type = 'medicine' THEN m.description
                     WHEN c.product_type = 'device' THEN d.description
                     WHEN c.product_type = 'lab_test' THEN l.description
+                    WHEN c.product_type = 'ayurveda_medicine' THEN am.description
                     ELSE NULL
                 END as description,
                 (c.quantity * c.price) as total_price
@@ -41,6 +44,7 @@ exports.getCart = async (req, res) => {
             LEFT JOIN medicines m ON c.product_type = 'medicine' AND c.product_id = m.id
             LEFT JOIN medical_devices d ON c.product_type = 'device' AND c.product_id = d.id
             LEFT JOIN lab_tests l ON c.product_type = 'lab_test' AND c.product_id = l.id
+            LEFT JOIN ayurveda_medicines am ON c.product_type = 'ayurveda_medicine' AND c.product_id = am.id
             WHERE c.user_id = ?
             ORDER BY c.created_at DESC
         `, [userId]);
@@ -130,6 +134,18 @@ exports.addToCart = async (req, res) => {
                 });
             }
             price = labTest[0].discounted_price;
+        } else if (product_type === 'ayurveda_medicine') {
+            const [medicine] = await db.execute(
+                'SELECT price FROM ayurveda_medicines WHERE id = ?',
+                [product_id]
+            );
+            if (medicine.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Ayurveda Medicine not found'
+                });
+            }
+            price = medicine[0].price;
         } else {
             return res.status(400).json({
                 success: false,

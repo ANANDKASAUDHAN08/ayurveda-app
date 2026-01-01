@@ -1,0 +1,50 @@
+/* Redesign Top Navigation Styles */
+
+/* Slide-in animation for cart */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out forwards;
+}
+
+/* Dropdown animations */
+.dropdown-enter {
+    animation: fadeInUp 0.2s ease-out forwards;
+}
+
+/* Active link styles */
+a.router-link-active {
+    color: var(--ayurveda-primary);
+    font-weight: 600;
+}
+
+/* Custom scrollbar for search results */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: var(--radius-full);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
+}
+
+/* FormsModule support */
+input[type="text"] {
+    font-family: var(--font-body);
+}

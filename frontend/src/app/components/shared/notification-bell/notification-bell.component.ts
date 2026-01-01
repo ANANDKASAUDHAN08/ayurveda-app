@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NotificationService, Notification } from '../../../shared/services/notification.service';
@@ -19,7 +19,10 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(public notificationService: NotificationService) { }
+  constructor(
+    public notificationService: NotificationService,
+    private elementRef: ElementRef
+  ) { }
 
   ngOnInit() {
     // Subscribe to unread count
@@ -90,5 +93,12 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
     this.markAsRead(notification, new Event('click'));
     this.closeDropdown();
     // Navigation handled by routerLink in template
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (this.showDropdown && !this.elementRef.nativeElement.contains(event.target)) {
+      this.showDropdown = false;
+    }
   }
 }

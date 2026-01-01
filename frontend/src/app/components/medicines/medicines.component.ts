@@ -6,16 +6,22 @@ import { SearchService, SearchResult } from '../../shared/services/search.servic
 import { CartService } from '../../shared/services/cart.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { ProductDetailModalComponent } from '../product-detail-modal/product-detail-modal.component';
+import { MedicineTypeService, MedicineType, FilterMode } from '../../shared/services/medicine-type.service';
+import { ContextBannerComponent } from '../../shared/components/context-banner/context-banner.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
 
 @Component({
   selector: 'app-medicines',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProductDetailModalComponent],
+  imports: [CommonModule, FormsModule, ProductDetailModalComponent, ContextBannerComponent, MobileLocationBarComponent],
   templateUrl: './medicines.component.html',
   styleUrls: ['./medicines.component.css']
 })
 export class MedicinesComponent implements OnInit {
   medicines: SearchResult[] = [];
+  allMedicines: SearchResult[] = []; // Store all medicines for client-side filtering
   loading = false;
   addingToCart: { [key: string]: boolean } = {};
   selectedProduct: SearchResult | null = null;
@@ -41,16 +47,27 @@ export class MedicinesComponent implements OnInit {
     { value: 'price_desc', label: 'Price (High to Low)' }
   ];
 
+  // Medicine type context
+  currentMedicineType: MedicineType | 'all' = 'all';
+  private destroy$ = new Subject<void>();
+
   constructor(
     private searchService: SearchService,
     private cartService: CartService,
     private snackbarService: SnackbarService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private medicineTypeService: MedicineTypeService
   ) { }
 
   ngOnInit() {
     this.loadCategories();
+
+    // Track medicine type changes and reapply filtering
+    this.medicineTypeService.getCurrentType().pipe(takeUntil(this.destroy$)).subscribe(type => {
+      this.currentMedicineType = type;
+      this.applyMedicineTypeFilter(); // Refilter when type changes
+    });
 
     // Check for query params
     this.route.queryParams.subscribe(params => {
@@ -78,14 +95,43 @@ export class MedicinesComponent implements OnInit {
     }).subscribe({
       next: (response) => {
         if (response.success) {
-          this.medicines = response.data.results;
-          this.totalMedicines = response.data.pagination.total;
+          this.allMedicines = response.data.results;
+          this.applyMedicineTypeFilter(); // Apply client-side medicine type filtering
+          this.totalMedicines = this.medicines.length; // Update with filtered count
         }
         this.loading = false;
       },
       error: () => {
         this.loading = false;
         this.snackbarService.show('Failed to load medicines', 'error');
+      }
+    });
+  }
+
+  // Client-side filtering by medicine type based on keywords
+  applyMedicineTypeFilter() {
+    if (this.currentMedicineType === 'all') {
+      this.medicines = [...this.allMedicines];
+      return;
+    }
+
+    // Keywords to identify medicine types
+    const ayurvedaKeywords = ['ayur', 'herbal', 'natural', 'churna', 'ashwagandha', 'triphala', 'brahmi', 'tulsi', 'neem', 'amla', 'guduchi', 'shatavari'];
+    const homeopathyKeywords = ['homeo', 'dilution', 'arnica', 'belladonna', 'bryonia', 'chamomilla', 'pulsatilla', 'nux vomica', 'rhus tox'];
+    const allopathyKeywords = ['tablet', 'capsule', 'syrup', 'injection', 'antibiotic', 'paracetamol', 'ibuprofen', 'aspirin', 'mg', 'ml'];
+
+    this.medicines = this.allMedicines.filter(medicine => {
+      const searchText = `${medicine.name} ${medicine.description || ''} ${medicine.category || ''}`.toLowerCase();
+
+      switch (this.currentMedicineType) {
+        case 'ayurveda':
+          return ayurvedaKeywords.some(keyword => searchText.includes(keyword));
+        case 'homeopathy':
+          return homeopathyKeywords.some(keyword => searchText.includes(keyword));
+        case 'allopathy':
+          return allopathyKeywords.some(keyword => searchText.includes(keyword));
+        default:
+          return true;
       }
     });
   }
@@ -106,21 +152,19 @@ export class MedicinesComponent implements OnInit {
     const key = `medicine-${medicine.id}`;
     this.addingToCart[key] = true;
 
-    this.cartService.addToCart({
-      product_id: medicine.id,
-      product_type: 'medicine',
+    this.cartService.addItem({
+      id: String(medicine.id),
+      name: medicine.name,
+      type: 'medicine',
+      price: medicine.price || 0,
       quantity: 1,
-      price: medicine.price
-    }).subscribe({
-      next: () => {
-        this.addingToCart[key] = false;
-        this.snackbarService.show(`${medicine.name} added to cart!`, 'success');
-      },
-      error: () => {
-        this.addingToCart[key] = false;
-        this.snackbarService.show('Failed to add to cart', 'error');
-      }
+      image: ''
     });
+
+    setTimeout(() => {
+      this.addingToCart[key] = false;
+      this.snackbarService.show(`${medicine.name} added to cart!`, 'success');
+    }, 300);
   }
 
   openDetails(medicine: SearchResult) {
@@ -171,5 +215,26 @@ export class MedicinesComponent implements OnInit {
 
   previousPage() {
     this.goToPage(this.currentPage - 1);
+  }
+
+  // Context banner actions
+  onToggleFilter() {
+    // Filter mode toggle not implemented in service
+    this.applyMedicineTypeFilter();
+  }
+
+  onClearFilter() {
+    // Set to default type
+    this.currentMedicineType = 'all';
+    this.applyMedicineTypeFilter();
+  }
+
+  onSwitchType(type: MedicineType) {
+    this.medicineTypeService.setMedicineType(type);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

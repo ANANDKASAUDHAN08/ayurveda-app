@@ -1,0 +1,89 @@
+<div class="search-overlay" (click)="onClose()">
+    <div class="search-modal glassmorphism" (click)="$event.stopPropagation()">
+        <!-- Header / Input -->
+        <div class="search-header">
+            <div class="input-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input #searchInput type="text" [(ngModel)]="query" (input)="onInputChange()"
+                    (keydown.enter)="handleEnter()" placeholder="Search for doctors, medicines, tests..." />
+                <div *ngIf="isLoading" class="loader"></div>
+            </div>
+            <button class="close-btn" (click)="onClose()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="search-body custom-scrollbar">
+            <!-- Recent Searches -->
+            <div class="section" *ngIf="recentSearches.length > 0 && query.length < 2">
+                <div class="section-header">
+                    <span class="title">RECENT SEARCHES</span>
+                    <button class="clear-all" (click)="clearRecent()">Clear All</button>
+                </div>
+                <div class="chip-container">
+                    <div *ngFor="let term of recentSearches" class="recent-chip" (click)="performSearch(term)">
+                        <i class="fas fa-history"></i>
+                        <span>{{ term }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suggestions -->
+            <div class="section" *ngIf="suggestions.length > 0">
+                <div class="section-header">
+                    <span class="title">SUGGESTIONS</span>
+                </div>
+                <div class="suggestion-list">
+                    <div *ngFor="let item of suggestions" class="suggestion-item" (click)="selectSuggestion(item)">
+                        <span class="type-icon">{{ item.dataType === 'knowledge' ? '📚' : (item.dataType === 'herb' ?
+                            '🌿' : '✨') }}</span>
+                        <div class="item-info">
+                            <span class="item-name">{{ item.name || item.disease || item.title }}</span>
+                            <span class="item-category">{{ item.dataType }}</span>
+                        </div>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Default Suggestions when empty -->
+            <div class="section" *ngIf="query.length < 2 && recentSearches.length === 0">
+                <div class="section-header">
+                    <span class="title">TRY SEARCHING FOR</span>
+                </div>
+                <div class="suggestion-list">
+                    <div class="suggestion-item" (click)="performSearch('Ashwagandha')">
+                        <span class="type-icon">🌿</span>
+                        <div class="item-info">
+                            <span class="item-name">Ashwagandha</span>
+                            <span class="item-category">Popular Herb</span>
+                        </div>
+                    </div>
+                    <div class="suggestion-item" (click)="performSearch('Indigestion')">
+                        <span class="type-icon">🤢</span>
+                        <div class="item-info">
+                            <span class="item-name">Indigestion Remedies</span>
+                            <span class="item-category">Ailment</span>
+                        </div>
+                    </div>
+                    <div class="suggestion-item" (click)="performSearch('Vaidya')">
+                        <span class="type-icon">👨‍⚕️</span>
+                        <div class="item-info">
+                            <span class="item-name">Find a Vaidya</span>
+                            <span class="item-category">Consultation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="search-footer">
+            <div class="key-hints">
+                <span class="hint"><span class="key">↵</span> to search</span>
+                <span class="hint"><span class="key">esc</span> to close</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,151 @@
+<div class="min-h-screen bg-slate-50">
+    <!-- Hero Header Section -->
+    <header
+        class="relative pt-12 pb-16 md:pt-10 md:pb-10 bg-gradient-to-br from-indigo-900 via-slate-900 to-emerald-900 overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-0 -left-1/4 w-96 h-96 bg-emerald-500 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-0 -right-1/4 w-96 h-96 bg-blue-500 rounded-full blur-3xl animate-pulse"
+                style="animation-delay: 1s"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-10 md:gap-16">
+                <!-- Left Side: Text Content -->
+                <div class="text-center md:text-left md:flex-1">
+                    <h1 class="text-3xl md:text-5xl font-black text-white mb-4 tracking-tight leading-tight">
+                        Health <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Insights</span>
+                        & Tips
+                    </h1>
+                    <p class="text-base md:text-lg text-slate-400 max-w-xl mx-auto md:mx-0 leading-relaxed">
+                        Empowering you with expert medical knowledge and holistic wellness guides tailored to your
+                        journey.
+                    </p>
+                </div>
+
+                <!-- Right Side: Search & Filters -->
+                <div class="md:flex-1 w-full max-w-2xl mx-auto md:mx-0">
+                    <div class="space-y-4 md:space-y-6">
+                        <!-- Search Bar -->
+                        <div class="relative group">
+                            <div
+                                class="absolute inset-0 bg-emerald-500/10 group-hover:bg-emerald-500/20 rounded-2xl blur-xl transition-all">
+                            </div>
+                            <div
+                                class="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-1 md:p-1.5 shadow-2xl flex items-center">
+                                <i class="fas fa-search text-slate-400 ml-4"></i>
+                                <input type="text" [(ngModel)]="searchQuery" (input)="onSearchChange()"
+                                    placeholder="Search articles..."
+                                    class="bg-transparent border-none focus:ring-0 text-white placeholder-slate-500 w-full px-4 py-2 text-sm md:text-lg">
+                            </div>
+                        </div>
+
+                        <!-- Category Filters - Horizontal scroll on mobile -->
+                        <div
+                            class="flex flex-nowrap overflow-x-auto gap-2 pb-2 md:pb-0 md:flex-wrap md:justify-end scrollbar-hide">
+                            <button *ngFor="let cat of categories" (click)="setCategory(cat)"
+                                [class]="selectedCategory === cat ? 'bg-white text-slate-900 border-white shadow-lg' : 'bg-white/5 hover:bg-white/10 text-slate-300 border-white/10'"
+                                class="flex-shrink-0 px-3 py-1.5 md:px-4 md:py-1.5 rounded-xl font-bold text-xs md:text-sm transition-all duration-300 border backdrop-blur-sm">
+                                {{ cat }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 relative z-20">
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+            <div *ngFor="let i of [1,2,3,4,5,6]" class="bg-white rounded-3xl p-3 md:p-4 shadow-sm animate-pulse">
+                <div class="aspect-video bg-slate-200 rounded-2xl mb-4"></div>
+                <div class="h-6 bg-slate-200 rounded w-3/4 mb-4"></div>
+                <div class="h-4 bg-slate-200 rounded w-full mb-2"></div>
+            </div>
+        </div>
+
+        <!-- Articles Grid -->
+        <div *ngIf="!loading" class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+            <article *ngFor="let article of filteredArticles" (click)="openArticle(article)"
+                class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer border border-slate-100 flex flex-col h-full">
+
+                <!-- Image Container -->
+                <div class="relative aspect-[4/3] md:aspect-[16/10] overflow-hidden">
+                    <img [src]="article.image_url" [alt]="article.title"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <span
+                        class="absolute top-2 left-2 md:top-4 md:left-4 bg-white/90 backdrop-blur-sm text-slate-900 px-2 py-1 md:px-3 md:py-1.5 rounded-lg text-[10px] md:text-xs font-black uppercase tracking-widest shadow-lg">
+                        {{ article.category }}
+                    </span>
+                </div>
+
+                <!-- Content -->
+                <div class="p-4 md:p-8 flex-grow flex flex-col">
+                    <!-- Mobile view hide author for space -->
+                    <div class="hidden md:flex items-center gap-3 mb-4">
+                        <div
+                            class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
+                            {{ article.author?.charAt(0) }}
+                        </div>
+                        <div class="text-xs text-slate-500 font-bold">
+                            {{ article.author }} <span class="mx-2 text-slate-300">•</span> {{ article.created_at |
+                            date:'mediumDate' }}
+                        </div>
+                    </div>
+
+                    <h3
+                        class="text-sm md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 group-hover:text-emerald-600 transition-colors line-clamp-2">
+                        {{ article.title }}
+                    </h3>
+
+                    <p class="hidden md:block text-slate-600 line-clamp-3 mb-6 leading-relaxed flex-grow">
+                        {{ article.excerpt }}
+                    </p>
+
+                    <div class="mt-auto pt-3 md:pt-6 border-t border-slate-50 flex items-center justify-between">
+                        <span
+                            class="text-emerald-600 font-bold text-[10px] md:text-sm flex items-center gap-1 md:gap-2 group-hover:gap-3 transition-all">
+                            Read More <i class="fas fa-arrow-right"></i>
+                        </span>
+                        <!-- Favorite Toggle -->
+                        <button (click)="toggleFavorite($event, article)" title="Add to Favorites"
+                            class="p-1.5 rounded-full backdrop-blur-md transition-all duration-300 group/fav shadow-sm border border-slate-100"
+                            [ngClass]="isFavorite(article.id) ? 'bg-red-500' : 'bg-white/90'">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                [attr.fill]="isFavorite(article.id) ? 'currentColor' : 'none'" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform duration-300"
+                                [class.text-red-500]="!isFavorite(article.id)"
+                                [class.text-white]="isFavorite(article.id)" [class.scale-110]="isFavorite(article.id)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <!-- No Results -->
+        <div *ngIf="!loading && filteredArticles.length === 0" class="text-center py-20">
+            <div
+                class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300 text-5xl">
+                <i class="fas fa-search"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">No articles found</h2>
+            <p class="text-slate-500">Try adjusting your filters or search terms.</p>
+            <button (click)="searchQuery = ''; selectedCategory = 'All'; applyFilters()"
+                class="mt-6 text-emerald-600 font-bold hover:underline">
+                Clear all filters
+            </button>
+        </div>
+    </main>
+
+    <!-- Full Article Modal -->
+    <app-article-details *ngIf="showArticleModal && selectedArticle" [article]="selectedArticle"
+        (close)="closeArticle()">
+    </app-article-details>
+</div>

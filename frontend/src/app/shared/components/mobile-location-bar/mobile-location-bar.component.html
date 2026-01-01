@@ -1,0 +1,13 @@
+<div (click)="openLocationSheet()"
+    class="flex items-center gap-2 px-4 py-2 cursor-pointer active:scale-95 transition-all w-full bg-white">
+    <div class="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+        <i class="fas fa-map-marker-alt text-sm"></i>
+    </div>
+    <div class="flex-1 min-w-0">
+        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5">Delivering to</p>
+        <p class="text-sm font-black text-slate-800 truncate leading-none">
+            {{ selectedLocation || 'Detecting...' }}
+        </p>
+    </div>
+    <i class="fas fa-chevron-down text-slate-300 text-[10px]"></i>
+</div>

@@ -2,12 +2,13 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MapService, Location } from '../../shared/services/map.service';
+import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
 import * as maplibregl from 'maplibre-gl';
 
 @Component({
   selector: 'app-nearby-services',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MobileLocationBarComponent],
   templateUrl: './nearby-services.component.html',
   styleUrl: './nearby-services.component.css'
 })

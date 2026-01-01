@@ -164,6 +164,7 @@ export class EmergencyService {
         });
     }
 
+
     // Get emergency call history
     getCallHistory(limit: number = 50, offset: number = 0): Observable<any> {
         return this.http.get(`${this.apiUrl}/call-history`, {

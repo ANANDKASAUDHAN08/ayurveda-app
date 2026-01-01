@@ -1,0 +1,191 @@
+<div class="homeopathy-dashboard animate-fade-in">
+    <!-- Header Hero -->
+    <div
+        class="dashboard-header rounded-[2.5rem] overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-700 p-12 lg:p-16 relative">
+        <div class="header-content relative z-10">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="text-5xl animate-float">💊</span>
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">Homeopathy Hub</h1>
+                    <p class="text-purple-100 text-lg font-medium opacity-90">Gentle Healing • Individualized Care •
+                        Natural Balance</p>
+                </div>
+            </div>
+            <p class="max-w-2xl text-purple-50 leading-relaxed text-lg mb-8">
+                Homeopathy is a safe and natural system of medicine that works with your body to relieve symptoms,
+                restore itself, and improve your overall health. Best for chronic conditions and gentle recovery.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <button (click)="viewAllDoctors()"
+                    class="px-8 py-4 bg-white text-purple-700 font-bold rounded-2xl shadow-xl hover:scale-105 transition-transform">
+                    Find a Specialist
+                </button>
+                <div
+                    class="flex items-center gap-2 px-6 py-4 bg-white/10 backdrop-blur-md rounded-2xl text-white border border-white/20">
+                    <i class="fas fa-check-circle"></i>
+                    <span>100% Genuine Remedies</span>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative elements -->
+        <div
+            class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4">
+        </div>
+    </div>
+
+    <!-- Core Principles Section -->
+    <div class="section my-16">
+        <h2 class="text-3xl font-bold text-slate-900 mb-8 flex items-center gap-3">
+            <span class="w-2 h-10 bg-purple-500 rounded-full"></span>
+            The Core Principles
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div
+                class="bg-purple-50 p-8 rounded-3xl border border-purple-100 group hover:bg-white hover:shadow-2xl hover:-translate-y-2 transition-all">
+                <div class="text-4xl mb-6 group-hover:scale-110 transition-transform">💧</div>
+                <h3 class="text-xl font-bold text-purple-900 mb-4">Law of Similars</h3>
+                <p class="text-purple-700/80 leading-relaxed text-sm">"Like Cures Like" — using highly diluted
+                    substances that would cause symptoms in a healthy person to trigger healing in a sick person.</p>
+            </div>
+            <div
+                class="bg-purple-50 p-8 rounded-3xl border border-purple-100 group hover:bg-white hover:shadow-2xl hover:-translate-y-2 transition-all">
+                <div class="text-4xl mb-6 group-hover:scale-110 transition-transform">🌱</div>
+                <h3 class="text-xl font-bold text-purple-900 mb-4">The Single Remedy</h3>
+                <p class="text-purple-700/80 leading-relaxed text-sm">We focus on treating the person as a whole, not
+                    just isolated symptoms, using a single well-chosen remedy at a time.</p>
+            </div>
+            <div
+                class="bg-purple-50 p-8 rounded-3xl border border-purple-100 group hover:bg-white hover:shadow-2xl hover:-translate-y-2 transition-all">
+                <div class="text-4xl mb-6 group-hover:scale-110 transition-transform">⚡</div>
+                <h3 class="text-xl font-bold text-purple-900 mb-4">Minimum Dose</h3>
+                <p class="text-purple-700/80 leading-relaxed text-sm">Only the smallest possible dose is used to
+                    stimulate the body's vital force, ensuring zero side effects.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16 px-4">
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
+            <p class="text-3xl font-black text-purple-600 mb-1">500+</p>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Specialists</p>
+        </div>
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
+            <p class="text-3xl font-black text-purple-600 mb-1">1.2K</p>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Remedies</p>
+        </div>
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
+            <p class="text-3xl font-black text-purple-600 mb-1">98%</p>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Satisfaction</p>
+        </div>
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
+            <p class="text-3xl font-black text-purple-600 mb-1">24/7</p>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Support</p>
+        </div>
+    </div>
+
+    <!-- Featured Doctors -->
+    <div class="section mb-16">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-3xl font-bold text-slate-900 flex items-center gap-3">
+                <span class="w-2 h-10 bg-purple-500 rounded-full"></span>
+                Top Homeopaths
+            </h2>
+            <button (click)="viewAllDoctors()" class="text-purple-600 font-bold hover:underline">View All Specialists
+                →</button>
+        </div>
+
+        <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div *ngFor="let i of [1,2,3]" class="h-96 bg-slate-100 rounded-3xl animate-pulse"></div>
+        </div>
+
+        <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-3 gap-8 text-slate-900">
+            <div *ngFor="let doctor of doctors"
+                class="group bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-2xl transition-all">
+                <div class="relative mb-6">
+                    <img [src]="doctor.image || 'https://images.unsplash.com/photo-1559839734-2b71f1e3c770?w=400'"
+                        class="w-full h-64 object-cover rounded-3xl group-hover:scale-[1.02] transition-transform shadow-md"
+                        [alt]="doctor.name">
+                    <div
+                        class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-purple-700 text-xs font-bold flex items-center gap-1 shadow-md">
+                        <i class="fas fa-star text-yellow-400"></i> {{ doctor.rating || '4.9' }}
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 group-hover:text-purple-600 transition-colors">{{
+                    doctor.name }}</h3>
+                <p class="text-slate-500 text-sm mb-4">{{ doctor.specialization || 'Constitutional Homeopathy' }}</p>
+                <div class="flex items-center justify-between pt-4 border-t border-slate-50">
+                    <span class="text-lg font-black text-slate-900">₹{{ doctor.consultationFee }}</span>
+                    <button
+                        class="px-6 py-2 bg-purple-600 text-white rounded-xl font-bold text-sm hover:bg-purple-700 transition-colors shadow-lg shadow-purple-200">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="doctors.length === 0" class="col-span-full py-16 text-center text-slate-500">
+                <div class="text-5xl mb-4">🩺</div>
+                <p class="text-lg font-medium">No Homeopathic doctors available at the moment.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Consultation Process -->
+    <div class="bg-slate-900 rounded-[3rem] p-12 text-white relative overflow-hidden">
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-4xl font-bold mb-6">The Constitutional Journey</h2>
+                <p class="text-slate-400 text-lg mb-8 leading-relaxed">
+                    Unlike modern medicine, homeopathy looks at your mental, emotional, and physical states together
+                    to find a remedy that matches YOUR unique energy.
+                </p>
+                <div class="space-y-6">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center font-bold">1
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-200">Deep Consultation</p>
+                            <p class="text-sm text-slate-500">60-minute session to understand your whole life pattern.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center font-bold">2
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-200">Repertoization</p>
+                            <p class="text-sm text-slate-500">Matching your symptoms with thousands of natural remedies.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center font-bold">3
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-200">Natural Potency</p>
+                            <p class="text-sm text-slate-500">Highly diluted, safe remedies tailored precisely to you.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="bg-white/5 backdrop-blur-3xl rounded-[2rem] p-8 border border-white/10">
+                    <div class="text-center space-y-4">
+                        <div class="text-6xl">✨</div>
+                        <h4 class="text-2xl font-bold text-slate-200">Ready for Gentle Healing?</h4>
+                        <p class="text-slate-400">Our senior homeopaths are available for video consultations.</p>
+                        <button (click)="viewAllDoctors()"
+                            class="w-full py-4 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-2xl transition-all shadow-xl shadow-purple-500/20">
+                            Book Initial Assessment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

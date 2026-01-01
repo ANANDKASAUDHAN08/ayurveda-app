@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, Observable, interval } from 'rxjs';
+import { BehaviorSubject, Observable, interval, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { AuthService } from './auth.service';
 
 export interface Notification {
   id: number;
@@ -28,10 +29,18 @@ export class NotificationService {
   private apiUrl = `${environment.apiUrl}/notifications`;
   private unreadCountSubject = new BehaviorSubject<number>(0);
   public unreadCount$ = this.unreadCountSubject.asObservable();
+  private pollingSubscription?: Subscription;
 
-  constructor(private http: HttpClient) {
-    // Auto-refresh unread count every 30 seconds
-    this.startPolling();
+  constructor(private http: HttpClient, private authService: AuthService) {
+    // Listen for auth state changes
+    this.authService.authStatus$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.startPolling();
+      } else {
+        this.stopPolling();
+        this.unreadCountSubject.next(0);
+      }
+    });
   }
 
   getNotifications(params: {
@@ -76,14 +85,31 @@ export class NotificationService {
   }
 
   refreshUnreadCount(): void {
-    this.getUnreadCount().subscribe();
+    if (this.authService.isLoggedIn()) {
+      this.getUnreadCount().subscribe({
+        error: (err) => {
+          if (err.status === 401) {
+            this.unreadCountSubject.next(0);
+          }
+        }
+      });
+    }
   }
 
   startPolling(): void {
+    if (this.pollingSubscription) return; // Already polling
+
     // Refresh unread count every 30 seconds
-    interval(30000).subscribe(() => this.refreshUnreadCount());
+    this.pollingSubscription = interval(30000).subscribe(() => this.refreshUnreadCount());
     // Initial load
     this.refreshUnreadCount();
+  }
+
+  stopPolling(): void {
+    if (this.pollingSubscription) {
+      this.pollingSubscription.unsubscribe();
+      this.pollingSubscription = undefined;
+    }
   }
 
   getNotificationIcon(type: string): string {

@@ -21,31 +21,36 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         catchError((error: HttpErrorResponse) => {
             // Check if it's a 401 Unauthorized error
             if (error.status === 401) {
-                // Get user role before clearing localStorage
-                const userStr = localStorage.getItem('user');
-                let userRole = 'user'; // default to regular user
+                // Only handle this if user actually HAD a token
+                const currentToken = localStorage.getItem('auth_token');
 
-                try {
-                    if (userStr) {
-                        const user = JSON.parse(userStr);
-                        userRole = user.role || 'user';
+                if (currentToken) {
+                    // User was logged in but token is now expired/invalid
+                    const userStr = localStorage.getItem('user');
+                    let userRole = 'user';
+
+                    try {
+                        if (userStr) {
+                            const user = JSON.parse(userStr);
+                            userRole = user.role || 'user';
+                        }
+                    } catch (e) {
+                        console.error('Error parsing user data:', e);
                     }
-                } catch (e) {
-                    console.error('Error parsing user data:', e);
+
+                    // Determine redirect path BEFORE clearing data
+                    const loginPath = userRole === 'doctor' ? '/for-doctors' : '/for-users';
+
+                    // Clear authentication data
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('user');
+
+                    // Show error message
+                    snackbarService.show('Token is expired, please login again', 'error');
+
+                    // Navigate after alert is dismissed
+                    router.navigate([loginPath]);
                 }
-
-                // Determine redirect path BEFORE clearing data
-                const loginPath = userRole === 'doctor' ? '/for-doctors' : '/for-users';
-
-                // Clear authentication data
-                localStorage.removeItem('auth_token');
-                localStorage.removeItem('user');
-
-                // Show error message
-                snackbarService.show('Token is expired, please login again', 'error');
-
-                // Navigate after alert is dismissed
-                router.navigate([loginPath]);
             }
 
             // Re-throw the error for other handlers

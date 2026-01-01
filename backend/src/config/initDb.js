@@ -74,6 +74,19 @@ async function initDb() {
             )
         `);
 
+        // Favorites Table
+        await db.execute(`
+            CREATE TABLE IF NOT EXISTS favorites (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                userId INT NOT NULL,
+                itemId VARCHAR(255) NOT NULL,
+                itemType ENUM('article', 'doctor', 'hospital', 'pharmacy') NOT NULL,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE KEY unique_favorite (userId, itemId, itemType),
+                FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+            )
+        `);
+
         process.exit(0);
     } catch (error) {
         console.error('❌ Database initialization failed:', error);

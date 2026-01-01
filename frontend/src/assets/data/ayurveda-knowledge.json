@@ -1,0 +1,201 @@
+{
+    "herbs": [
+        {
+            "id": "h1",
+            "name": "Ashwagandha",
+            "botanicalName": "Withania somnifera",
+            "properties": {
+                "rasa": "Tikta, Kashaya",
+                "guna": "Laghu, Snigdha",
+                "virya": "Ushna",
+                "vipaka": "Katu"
+            },
+            "benefits": [
+                "Stress relief",
+                "Immunity booster",
+                "Rejuvenation",
+                "Muscle strength"
+            ],
+            "usage": "1/2 tsp with warm milk at night",
+            "precautions": "Avoid during pregnancy unless advised by a doctor."
+        },
+        {
+            "id": "h2",
+            "name": "Turmeric",
+            "botanicalName": "Curcuma longa",
+            "properties": {
+                "rasa": "Tikta, Katu",
+                "guna": "Ruksha, Laghu",
+                "virya": "Ushna",
+                "vipaka": "Katu"
+            },
+            "benefits": [
+                "Anti-inflammatory",
+                "Antioxidant",
+                "Skin health",
+                "Wound healing"
+            ],
+            "usage": "1/4 tsp in food or warm water",
+            "precautions": "High doses can cause stomach upset."
+        },
+        {
+            "id": "h3",
+            "name": "Triphala",
+            "botanicalName": "Three fruit blend (Amalaki, Bibhitaki, Haritaki)",
+            "properties": {
+                "rasa": "Pancha Rasa (except Salty)",
+                "guna": "Laghu, Ruksha",
+                "virya": "Anushna",
+                "vipaka": "Madhura"
+            },
+            "benefits": [
+                "Digestion",
+                "Detoxification",
+                "Eye health",
+                "Bowel regularity"
+            ],
+            "usage": "1 tsp with warm water before bed",
+            "precautions": "May cause loose stools initially."
+        }
+    ],
+    "medicines": [
+        {
+            "id": "m1",
+            "name": "Chyawanprash",
+            "category": "Rasayana (Rejuvenative)",
+            "primaryAilment": "Low immunity, fatigue",
+            "composition": "Amla, Honey, Ghee, and 40+ herbs",
+            "dosage": "1 tsp twice daily",
+            "remedy": "Boosts respiratory health and seasonal immunity."
+        },
+        {
+            "id": "m2",
+            "name": "Brahmi Vati",
+            "category": "Medhya (Cognitive)",
+            "primaryAilment": "Memory loss, anxiety",
+            "composition": "Brahmi, Shankhapushpi, Vacha",
+            "dosage": "1 tablet twice daily with milk",
+            "remedy": "Enhances focus and calms the nervous system."
+        }
+    ],
+    "allopathy": [
+        {
+            "id": "a1",
+            "name": "Paracetamol",
+            "brand": "Crocin / Calpol",
+            "composition": "Paracetamol 500mg",
+            "type": "Antipyretic / Analgesic",
+            "primaryAilment": "Fever, Headache, Body pain",
+            "dosage": "1 tablet every 6 hours",
+            "price": "₹15 - ₹20"
+        },
+        {
+            "id": "a2",
+            "name": "Amoxicillin",
+            "brand": "Novamox",
+            "composition": "Amoxicillin 500mg",
+            "type": "Antibiotic",
+            "primaryAilment": "Bacterial infections",
+            "dosage": "Twice daily for 5 days as prescribed",
+            "remedy": "Fights bacterial growth in the body."
+        }
+    ],
+    "homeopathy": [
+        {
+            "id": "hom1",
+            "name": "Arnica Montana",
+            "brand": "SBL / Dr. Reckeweg",
+            "type": "Dilution / Gel",
+            "primaryAilment": "Muscle soreness, Bruises",
+            "dosage": "5 drops in 1/4 cup water thrice daily",
+            "benefit": "Accelerates healing of soft tissue injuries."
+        },
+        {
+            "id": "hom2",
+            "name": "Nux Vomica",
+            "brand": "SBL",
+            "type": "Digestive Aid",
+            "primaryAilment": "Indigestion, Overindulgence",
+            "dosage": "30C potency, 4 pills at night",
+            "benefit": "Helps with gas, bloating, and irritability."
+        }
+    ],
+    "hospitals": [
+        {
+            "id": "hos1",
+            "name": "All India Institute of Ayurveda (AIIA)",
+            "location": "New Delhi",
+            "type": "Govt / Ayurveda",
+            "specialties": [
+                "Kayachikitsa",
+                "Panchakarma"
+            ],
+            "contact": "011-26944301"
+        },
+        {
+            "id": "hos2",
+            "name": "Apollo Hospitals",
+            "location": "Chennai / Multi-city",
+            "type": "Private / Allopathy",
+            "specialties": [
+                "Cardiology",
+                "Neurology",
+                "General Medicine"
+            ],
+            "contact": "1066",
+            "website": "apollohospitals.com"
+        },
+        {
+            "id": "hos3",
+            "name": "AIIMS",
+            "location": "New Delhi / Multi-city",
+            "type": "Govt / Allopathy",
+            "specialties": [
+                "Tertiary Care",
+                "All Specializations"
+            ],
+            "contact": "011-26588500"
+        }
+    ],
+    "yogas": [
+        {
+            "id": "y1",
+            "name": "Surya Namaskar",
+            "type": "Asana Sequence",
+            "benefit": "Full body stretching and solar energy activation",
+            "difficulty": "Intermediate",
+            "steps": 12
+        },
+        {
+            "id": "y2",
+            "name": "Anulom Vilom",
+            "type": "Pranayama / Breathing",
+            "benefit": "Nervous system balance",
+            "difficulty": "Beginner"
+        },
+        {
+            "id": "y3",
+            "name": "Savasana",
+            "type": "Restorative",
+            "benefit": "Deep relaxation and mental cooling",
+            "difficulty": "Beginner"
+        }
+    ],
+    "remedies": [
+        {
+            "id": "r1",
+            "ailment": "Common Cold",
+            "method": "Boil Tulsi leaves and ginger. Drink with honey."
+        },
+        {
+            "id": "r2",
+            "ailment": "Indigestion",
+            "method": "Chew 1 tsp fennel seeds after meals."
+        },
+        {
+            "id": "r3",
+            "ailment": "Sunburn / Heat",
+            "method": "Apply fresh Aloe Vera gel directly to the skin."
+        }
+    ]
+}

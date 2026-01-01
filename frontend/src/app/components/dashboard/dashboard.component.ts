@@ -4,13 +4,13 @@ import { RouterModule } from '@angular/router';
 import { AppointmentService } from '../../shared/services/appointment.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { AuthService } from '../../shared/services/auth.service';
-import { ServiceCardComponent } from '../service-card/service-card.component';
+import { UserServiceCardComponent } from '../user-service-card/user-service-card.component';
 import { ServiceCard } from '../../models/service-card.interface';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ServiceCardComponent],
+  imports: [CommonModule, RouterModule, UserServiceCardComponent],
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
@@ -57,139 +57,26 @@ export class DashboardComponent implements OnInit {
   initializeServiceCards() {
     this.serviceCards = [
       // CARE Category
-      {
-        id: 'appointments',
-        title: 'Appointments',
-        icon: 'fas fa-calendar-check',
-        description: 'Book and manage your medical appointments',
-        route: '/user/dashboard',
-        category: 'care',
-        color: 'emerald'
-      },
-      {
-        id: 'find-doctors',
-        title: 'Find Doctors',
-        icon: 'fas fa-user-md',
-        description: 'Search and connect with doctors',
-        route: '/find-doctors',
-        category: 'care',
-        color: 'blue'
-      },
-      {
-        id: 'hospitals',
-        title: 'Hospitals',
-        icon: 'fas fa-hospital',
-        description: 'Find hospitals near you',
-        route: '/hospitals',
-        category: 'care',
-        color: 'red'
-      },
-      {
-        id: 'pharmacies',
-        title: 'Pharmacies',
-        icon: 'fa-solid fa-store',
-        description: 'Locate pharmacies nearby',
-        route: '/pharmacies',
-        category: 'care',
-        color: 'green'
-      },
+      { id: 'appointments', title: 'Appointments', icon: 'fas fa-calendar-check', description: 'Book and manage your medical appointments', route: '/user/dashboard', category: 'care', color: 'emerald' },
+      { id: 'find-doctors', title: 'Find Doctors', icon: 'fas fa-user-md', description: 'Search and connect with doctors', route: '/find-doctors', category: 'care', color: 'blue' },
+      { id: 'hospitals', title: 'Hospitals', icon: 'fas fa-hospital', description: 'Find hospitals near you', route: '/hospitals', category: 'care', color: 'red' },
+      { id: 'pharmacies', title: 'Pharmacies', icon: 'fa-solid fa-store', description: 'Locate pharmacies nearby', route: '/pharmacies', category: 'care', color: 'green' },
 
       // SHOP Category
-      {
-        id: 'prescriptions',
-        title: 'My Prescriptions',
-        icon: 'fa-solid fa-file-prescription',
-        description: 'Manage prescriptions and refills',
-        route: '/user/prescriptions',
-        category: 'shop',
-        color: 'purple'
-      },
-      {
-        id: 'orders',
-        title: 'My Orders',
-        icon: 'fas fa-shopping-bag',
-        description: 'Track your orders and purchases',
-        route: '/orders',
-        category: 'shop',
-        badge: this.ordersCount,
-        color: 'orange'
-      },
-      {
-        id: 'medicines',
-        title: 'Medicines',
-        icon: 'fa-solid fa-pills',
-        description: 'Buy medicines online',
-        route: '/medicines',
-        category: 'shop',
-        color: 'teal'
-      },
-      {
-        id: 'medical-devices',
-        title: 'Medical Devices',
-        icon: 'fas fa-heartbeat',
-        description: 'Browse medical devices and equipment',
-        route: '/medical-devices',
-        category: 'shop',
-        color: 'pink'
-      },
-      {
-        id: 'lab-tests',
-        title: 'Lab Tests',
-        icon: 'fa-solid fa-flask',
-        description: 'Book lab tests and health checkups',
-        route: '/lab-tests',
-        category: 'shop',
-        color: 'indigo'
-      },
+      { id: 'prescriptions', title: 'My Prescriptions', icon: 'fa-solid fa-file-prescription', description: 'Manage prescriptions and refills', route: '/user/prescriptions', category: 'shop', color: 'purple' },
+      { id: 'orders', title: 'My Orders', icon: 'fas fa-shopping-bag', description: 'Track your orders and purchases', route: '/orders', category: 'shop', badge: this.ordersCount, color: 'orange' },
+      { id: 'medicines', title: 'Medicines', icon: 'fa-solid fa-pills', description: 'Buy medicines online', route: '/medicines', category: 'shop', color: 'teal' },
+      { id: 'medical-devices', title: 'Medical Devices', icon: 'fas fa-heartbeat', description: 'Browse medical devices and equipment', route: '/medical-devices', category: 'shop', color: 'pink' },
+      { id: 'lab-tests', title: 'Lab Tests', icon: 'fa-solid fa-flask', description: 'Book lab tests and health checkups', route: '/lab-tests', category: 'shop', color: 'indigo' },
 
       // EMERGENCY Category
-      {
-        id: 'emergency-hub',
-        title: 'Emergency Hub',
-        icon: 'fas fa-ambulance',
-        description: 'Access emergency services quickly',
-        route: '/emergency',
-        category: 'emergency',
-        color: 'red'
-      },
-      {
-        id: 'nearby-hospitals',
-        title: 'Nearby Hospitals',
-        icon: 'fas fa-hospital-alt',
-        description: 'Find emergency hospitals nearby',
-        route: '/nearby-hospitals',
-        category: 'emergency',
-        color: 'red'
-      },
-      {
-        id: 'first-aid',
-        title: 'First Aid Guide',
-        icon: 'fas fa-first-aid',
-        description: 'Learn first aid procedures',
-        route: '/first-aid',
-        category: 'emergency',
-        color: 'red'
-      },
+      { id: 'emergency-hub', title: 'Emergency Hub', icon: 'fas fa-ambulance', description: 'Access emergency services quickly', route: '/emergency', category: 'emergency', color: 'red' },
+      { id: 'nearby-hospitals', title: 'Nearby Hospitals', icon: 'fas fa-hospital-alt', description: 'Find emergency hospitals nearby', route: '/nearby-hospitals', category: 'emergency', color: 'red' },
+      { id: 'first-aid', title: 'First Aid Guide', icon: 'fas fa-first-aid', description: 'Learn first aid procedures', route: '/first-aid', category: 'emergency', color: 'red' },
 
       // OTHER Category
-      {
-        id: 'profile',
-        title: 'My Profile',
-        icon: 'fas fa-user-circle',
-        description: 'Manage your profile and preferences',
-        route: '/user/profile',
-        category: 'other',
-        color: 'purple'
-      },
-      {
-        id: 'settings',
-        title: 'Settings',
-        icon: 'fa-solid fa-gear',
-        description: 'Manage your account settings',
-        route: '/user/settings',
-        category: 'other',
-        color: 'slate'
-      }
+      { id: 'profile', title: 'My Profile', icon: 'fas fa-user-circle', description: 'Manage your profile and preferences', route: '/user/profile', category: 'other', color: 'purple' },
+      { id: 'settings', title: 'Settings', icon: 'fas fa-cog', description: 'Manage your account settings', route: '/user/settings', category: 'other', color: 'slate' }
     ];
 
     // Organize by category

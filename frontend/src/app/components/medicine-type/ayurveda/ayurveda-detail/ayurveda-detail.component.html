@@ -1,0 +1,294 @@
+<!-- Modern Centered Detail Modal -->
+<div class="detail-overlay fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8 bg-black/60 backdrop-blur-md transition-all duration-300"
+    (click)="onClose()">
+
+    <div class="relative w-full max-w-5xl bg-white rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] md:max-h-[85vh] animate-in zoom-in-95 duration-500"
+        (click)="$event.stopPropagation()">
+
+        <!-- Header: Deep Brand Gradient -->
+        <div
+            class="relative px-10 py-5 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-800 text-white overflow-hidden shrink-0">
+            <!-- Decorative Pattern -->
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -mr-32 -mt-32 blur-[100px]"></div>
+
+            <div class="relative flex justify-between items-center">
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3">
+                        <span
+                            class="inline-block px-3 py-1 glass-pill rounded-full text-[10px] font-black uppercase tracking-[0.2em]">
+                            {{ item.dataType }}
+                        </span>
+                        <span *ngIf="item.doshas || item.constitution_prakriti"
+                            class="px-3 py-1 bg-orange-500/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-orange-200">
+                            {{ item.doshas || item.constitution_prakriti }}
+                        </span>
+                    </div>
+                    <div class="flex items-baseline gap-6 flex-wrap">
+                        <!-- Main English Name -->
+                        <h1 class="text-3xl md:text-5xl font-black tracking-tighter leading-tight">
+                            {{ item.name || item.disease }}
+                        </h1>
+                        <!-- Hindi Name (Now on the right side) -->
+                        <span class="text-lg font-bold border-l-4 border-emerald-500/50 pl-4 py-1"
+                            *ngIf="item.hindi_name">
+                            {{ item.hindi_name }}
+                        </span>
+                    </div>
+                </div>
+
+                <button (click)="onClose()"
+                    class="w-12 h-12 rounded-full glass-pill hover:bg-white/20 flex items-center justify-center group transition-all shadow-lg">
+                    <span class="text-2xl group-hover:rotate-90 transition-transform duration-300">✕</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Dynamic Navigation Tabs -->
+        <div class="flex bg-stone-50 border-b-2 border-stone-200 px-10 shrink-0 overflow-x-auto no-scrollbar">
+            <button *ngFor="let tab of tabs" (click)="setTab(tab)" [class.text-emerald-900]="activeTab === tab"
+                [class.tab-underline]="activeTab === tab"
+                class="px-6 py-4 border-b-4 border-transparent text-sm font-black uppercase tracking-widest text-stone-600 hover:text-emerald-800 transition-all capitalize whitespace-nowrap">
+                {{ tab }}
+            </button>
+        </div>
+
+        <!-- Scrollable Content Core -->
+        <div class="flex-1 overflow-y-auto p-8 md:p-10 space-y-10 custom-scrollbar bg-white"
+            (click)="handleContentClick($event)">
+
+            <!-- Medical Intelligence -->
+            <div class="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700"
+                *ngIf="activeTab === 'medical'">
+                <div class="space-y-3">
+                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Pathology &
+                        Manifestation</h3>
+                    <p class="text-xl text-stone-900 font-bold leading-relaxed">{{ item.symptoms || 'Awaiting clinical
+                        data...' }}</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-3">
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Diagnostic
+                            Protocols</h3>
+                        <p class="text-lg text-stone-800 leading-relaxed font-bold">{{ item.diagnosis_tests || 'Standard
+                            observation recommended' }}</p>
+                    </div>
+                    <div class="space-y-3">
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Clinical Intensity
+                        </h3>
+                        <span
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-900 rounded-xl text-xs font-black uppercase tracking-widest border-2 border-red-100 shadow-sm">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>
+                            {{ item.severity || 'Moderate Intensity' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 border-t border-stone-100 pt-8">
+                    <div class="space-y-3">
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Prognosis View</h3>
+                        <p class="text-base text-stone-700 font-bold italic">"{{ item.prognosis || 'Steady recovery
+                            expected' }}"</p>
+                    </div>
+                    <div class="space-y-3">
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Risk Matrix</h3>
+                        <p class="text-base text-red-800 font-bold underline decoration-red-200 underline-offset-8">{{
+                            item.complications || 'None reported' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Treatment Protocol -->
+            <div class="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700"
+                *ngIf="activeTab === 'treatment'">
+                <div class="p-5 bg-emerald-50 rounded-[2rem] border-2 border-emerald-100 space-y-2 shadow-sm">
+                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-900/40">
+                        Sacred Botanical Matrix
+                    </h3>
+                    <p class="text-2xl text-emerald-950 font-black leading-tight" [innerHTML]="formattedTreatmentText">
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-3">
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Vedic Formulations
+                        </h3>
+                        <p class="text-lg text-stone-900 leading-relaxed font-bold border-l-4 border-stone-200 pl-4">{{
+                            item.formulation || 'Tailored per constitution' }}</p>
+                    </div>
+                    <div class="space-y-3">
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Yoga & Physical
+                            Vitality</h3>
+                        <p class="text-lg text-stone-900 leading-relaxed font-bold border-l-4 border-stone-200 pl-4">{{
+                            item.yoga_physical_therapy || 'Yoga not specified' }}</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3 p-6 bg-stone-50 rounded-3xl border-2 border-stone-100"
+                    *ngIf="item.medical_intervention">
+                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Medical Intervention
+                    </h3>
+                    <p class="text-base text-stone-800 font-bold italic">{{ item.medical_intervention }}</p>
+                </div>
+            </div>
+
+            <!-- Lifestyle & Rituals -->
+            <div class="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700"
+                *ngIf="activeTab === 'lifestyle'">
+                <div class="space-y-3">
+                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Ahara (Dietary Wisdom)
+                    </h3>
+                    <p class="text-xl text-stone-900 font-bold leading-relaxed">{{ item.diet_lifestyle_recommendations
+                        || item.dietary_habits || 'Sattvic diet advised' }}</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6 bg-stone-50 rounded-2xl space-y-2">
+                        <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-stone-400">Sleep</h3>
+                        <p class="text-base text-stone-800 font-bold">{{ item.sleep_patterns || 'Circadian alignment' }}
+                        </p>
+                    </div>
+                    <div class="p-6 bg-stone-50 rounded-2xl space-y-2">
+                        <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-stone-400">Activity</h3>
+                        <p class="text-base text-stone-800 font-bold">{{ item.physical_activity || 'Gentle Movement' }}
+                        </p>
+                    </div>
+                    <div class="p-6 bg-stone-50 rounded-2xl space-y-2">
+                        <h3 class="text-[9px] font-black uppercase tracking-[0.3em] text-stone-400">Stress</h3>
+                        <p class="text-base text-stone-800 font-bold">{{ item.stress_levels || 'Balanced' }}</p>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-orange-50 border-2 border-orange-100 rounded-3xl space-y-2"
+                    *ngIf="item.seasonal_variation">
+                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-orange-900/40">Seasonal
+                        Adaptations</h3>
+                    <p class="text-lg text-orange-950 font-bold underline decoration-orange-200 underline-offset-4">{{
+                        item.seasonal_variation }}</p>
+                </div>
+            </div>
+
+            <!-- Profile & Demographics -->
+            <div class="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700"
+                *ngIf="activeTab === 'profile'">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-3 p-6 bg-stone-50 rounded-2xl border-2 border-stone-100">
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Genetic Lineage
+                        </h3>
+                        <p class="text-lg text-stone-900 leading-relaxed font-bold italic">"{{ item.family_history ||
+                            'No established patterns' }}"</p>
+                    </div>
+                    <div class="space-y-3 p-6 bg-stone-50 rounded-2xl border-2 border-stone-100">
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Current Synergy
+                        </h3>
+                        <p class="text-lg text-stone-900 leading-relaxed font-black uppercase tracking-tight">{{
+                            item.current_medications || 'Pristine State' }}</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-3">
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Vulnerability
+                            Matrix</h3>
+                        <p class="text-xl text-red-950 border-l-4 border-red-500 pl-4 font-black leading-tight">{{
+                            item.risk_factors || 'Minimal' }}</p>
+                    </div>
+                    <div class="space-y-3">
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Allergy Registry
+                        </h3>
+                        <p class="text-lg text-stone-800 font-bold">{{ item.allergies || 'No known allergies' }}</p>
+                    </div>
+                </div>
+
+                <div class="p-8 bg-emerald-50 rounded-[2rem] space-y-4" *ngIf="item.age_group || item.gender">
+                    <h3 class="text-xs font-black uppercase tracking-[0.4em] text-emerald-900/40">Demographic Context
+                    </h3>
+                    <div class="flex gap-10">
+                        <div class="space-y-1">
+                            <span class="text-[10px] uppercase font-bold text-emerald-800">Age Stratum</span>
+                            <p class="text-lg font-black text-emerald-950">{{ item.age_group || 'Universal' }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <span class="text-[10px] uppercase font-bold text-emerald-800">Gender Dynamics</span>
+                            <p class="text-lg font-black text-emerald-950">{{ item.gender || 'Universal' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expert Footer: Clinical Integration -->
+        <div class="px-10 py-4 bg-stone-100 backdrop-blur-md border-t-2 border-stone-200 shrink-0"
+            *ngIf="item.patient_recommendations">
+            <div class="flex items-center gap-5">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-emerald-950 flex items-center justify-center shrink-0 shadow-xl shadow-emerald-900/30 text-2xl">
+                    💡</div>
+                <div class="space-y-0.5">
+                    <h4 class="text-[9px] font-black uppercase tracking-[0.2em] text-stone-500">Expert Insight</h4>
+                    <p class="text-base text-emerald-950 leading-tight font-black italic tracking-tight">{{
+                        item.patient_recommendations }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Herb Quick View Overlay -->
+    <div *ngIf="showHerbQuickView && selectedHerb"
+        class="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300"
+        (click)="closeHerbQuickView(); $event.stopPropagation()">
+
+        <div class="bg-white rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300"
+            (click)="$event.stopPropagation()">
+            <div class="relative h-48">
+                <img [src]="selectedHerb.image_url" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
+                    <div>
+                        <span class="text-[9px] font-black text-emerald-400 uppercase tracking-widest">{{
+                            selectedHerb.scientific_name }}</span>
+                        <h3 class="text-3xl font-black text-white tracking-tighter">{{ selectedHerb.name }}</h3>
+                    </div>
+                </div>
+                <button (click)="closeHerbQuickView()"
+                    class="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="p-8 space-y-6">
+                <div class="flex flex-wrap gap-2">
+                    <span *ngFor="let d of selectedHerb.pacify"
+                        class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg text-[10px] font-black uppercase tracking-widest">
+                        Pacifies {{ d }}
+                    </span>
+                    <span *ngIf="selectedHerb.tridosha"
+                        class="px-3 py-1 bg-purple-100 text-purple-800 rounded-lg text-[10px] font-black uppercase tracking-widest">
+                        Tridoshic ✨
+                    </span>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-3 rounded-xl">
+                            <span class="text-[9px] font-black text-gray-400 uppercase block mb-1">Virya
+                                (Potency)</span>
+                            <span class="text-sm font-bold text-gray-900">{{ selectedHerb.virya }}</span>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-xl">
+                            <span class="text-[9px] font-black text-gray-400 uppercase block mb-1">Vipaka</span>
+                            <span class="text-sm font-bold text-gray-900">{{ selectedHerb.vipaka }}</span>
+                        </div>
+                    </div>
+
+                    <p class="text-gray-600 text-sm leading-relaxed font-medium line-clamp-3">
+                        {{ selectedHerb.preview || selectedHerb.description }}
+                    </p>
+                </div>
+
+                <div class="pt-6 border-t border-gray-100 italic text-emerald-800 font-bold text-sm">
+                    "{{ selectedHerb.benefits }}"
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,12 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
+export interface Article {
+    id: number | string;
+    title: string;
+    category: string;
+    content?: string;
+    image?: string;
+    author?: string;
+    excerpt?: string;
+    created_at?: string;
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class ContentService {
-    private baseUrl = 'http://localhost:3000/api/content';
+    private baseUrl = `${environment.apiUrl}/content`;
 
     constructor(private http: HttpClient) { }
 

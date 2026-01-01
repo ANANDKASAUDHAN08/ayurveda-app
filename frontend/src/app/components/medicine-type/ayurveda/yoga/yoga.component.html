@@ -1,0 +1,256 @@
+<div class="w-full bg-[#fafaf8] min-h-screen font-['Inter'] pb-8 overflow-x-hidden">
+    <!-- Compact Hero -->
+    <header class="w-full bg-white border-b border-emerald-50/50 py-8 md:py-12 relative overflow-hidden">
+        <div
+            class="absolute top-0 right-0 w-[40rem] h-full bg-[#fcf9f1] rounded-l-[20rem] -z-10 blur-[100px] opacity-50">
+        </div>
+
+        <div class="max-w-[90%] xl:max-w-7xl mx-auto md:mt-10 px-6 relative">
+            <div class="grid lg:grid-cols-12 gap-8 md:gap-12 items-center">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="space-y-4">
+                        <span
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-900 text-[9px] font-black uppercase tracking-[0.4em] rounded-full border border-emerald-100/50">
+                            Pranayama · Life Force
+                        </span>
+                        <h1 class="text-5xl md:text-6xl font-black text-[#1a1c1e] leading-[0.9] tracking-tighter">
+                            Inhale.<br>
+                            <span class="text-emerald-700 italic serif-font font-light">Transcend.</span>
+                        </h1>
+                        <p class="text-gray-500 text-lg md:text-xl font-bold max-w-xl leading-tight italic serif-font">
+                            "A sanctuary for somatic intelligence. Sequenced to ignite your inner resonance."
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <button
+                            class="px-8 py-4 bg-emerald-900 text-white font-black rounded-2xl shadow-xl hover:scale-105 transition-all text-[10px] uppercase tracking-[0.3em]">
+                            Start Flow
+                        </button>
+                        <button
+                            class="px-8 py-4 bg-white text-gray-950 font-black rounded-2xl border border-gray-100 hover:bg-gray-50 transition-all text-[10px] uppercase tracking-[0.3em] shadow-lg">
+                            Calendar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Breathing Circle -->
+                <div class="lg:col-span-5 relative flex flex-col items-center justify-center p-6 group">
+                    <div
+                        class="absolute inset-0 bg-emerald-50/50 rounded-full blur-[80px] group-hover:blur-[100px] transition-all duration-[2s]">
+                    </div>
+                    <div class="breathing-ring p-12 rounded-full border-2 border-emerald-100/30 relative z-10 backdrop-blur-sm"
+                        [ngClass]="breathingState">
+                        <div class="w-48 h-48 bg-emerald-950 rounded-full flex flex-col items-center justify-center text-white shadow-xl group-hover:scale-105 cursor-pointer transition-all duration-[1s]"
+                            (click)="startBreathing()">
+                            <span class="text-[9px] font-black uppercase tracking-[0.4em] mb-3 text-emerald-400">
+                                {{ breathingState === 'ready' ? 'Tap To Start' : breathingState }}
+                            </span>
+                            <h2 class="text-3xl font-black tracking-tighter">
+                                {{ breathingState === 'ready' ? 'Start' : 'Breath' }}
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center space-y-2">
+                        <p class="text-emerald-900 font-black uppercase tracking-[0.4em] text-[9px]">4-7-8 Technique</p>
+                        <p class="text-gray-600 font-bold text-sm italic serif-font">Synchronize with the rhythm.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Yoga Sequences -->
+    <section class="max-w-[90%] xl:max-w-7xl mx-auto px-6 py-8">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-10 gap-6">
+            <div class="space-y-3">
+                <span class="text-emerald-700 font-black text-[9px] uppercase tracking-[0.4em] block">Curated
+                    Programming</span>
+                <h2 class="text-4xl md:text-5xl font-black text-[#1a1c1e] tracking-tighter leading-[0.9]">Mindful
+                    <span class="text-emerald-700 italic serif-font font-light">Flows.</span>
+                </h2>
+                <p class="text-gray-500 font-bold text-lg max-w-xl">Precision sequences for accelerated evolution.</p>
+            </div>
+            <div class="flex bg-white p-2 rounded-2xl border border-gray-100 shadow-lg">
+                <button
+                    class="px-6 py-3 bg-[#1a1c1e] text-white rounded-xl font-black text-[9px] uppercase tracking-[0.3em]">Unified</button>
+                <button
+                    class="px-6 py-3 text-gray-400 hover:text-emerald-700 font-black text-[9px] uppercase tracking-[0.3em] transition-all">Foundational</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+            <div *ngFor="let seq of yogaSequences"
+                class="group bg-white border-b-8 border-r-8 border-[#1a1c1e] rounded-[3rem] overflow-hidden hover:-translate-y-2 hover:-translate-x-2 transition-all duration-500 shadow-xl">
+                <div class="aspect-[4/3] overflow-hidden relative">
+                    <img [src]="seq.image_url" [alt]="seq.name"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-[#1a1c1e]/80 via-[#1a1c1e]/10 to-transparent opacity-70 group-hover:opacity-30 transition-opacity">
+                    </div>
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="px-4 py-2 bg-white text-[#1a1c1e] text-[8px] font-black uppercase tracking-[0.3em] rounded-full shadow-lg">
+                            {{ seq.difficulty }}
+                        </span>
+                    </div>
+                </div>
+                <div class="p-6 space-y-5">
+                    <div class="space-y-2">
+                        <h3
+                            class="text-2xl md:text-3xl font-black text-[#1a1c1e] leading-tight tracking-tighter group-hover:text-emerald-800 transition-colors">
+                            {{ seq.name }}</h3>
+                        <p class="text-gray-500 text-sm font-bold leading-tight italic serif-font">{{ seq.description }}
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">⏱️</span>
+                            <span class="text-[9px] font-black text-[#1a1c1e] uppercase tracking-[0.3em]">{{
+                                seq.duration_minutes }}m</span>
+                        </div>
+                        <button
+                            class="w-10 h-10 bg-[#1a1c1e] text-white rounded-xl flex items-center justify-center hover:bg-emerald-900 transition-all shadow-lg text-sm font-black">
+                            →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pose of the Week -->
+    <section *ngIf="poseOfWeek"
+        class="w-full py-10 bg-[#fcf9f1]/70 relative overflow-hidden border-y border-emerald-50/50">
+        <div class="max-w-[90%] xl:max-w-7xl mx-auto px-6 relative z-10">
+            <div
+                class="bg-gray-950 rounded-[4rem] p-8 md:p-12 flex flex-col lg:grid lg:grid-cols-12 gap-12 items-center overflow-hidden relative shadow-2xl border border-white/5">
+                <div
+                    class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-emerald-500/[0.08] rounded-full blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2">
+                </div>
+
+                <div class="lg:col-span-6 space-y-8 relative z-10 w-full">
+                    <div class="space-y-4">
+                        <span
+                            class="px-4 py-2 bg-emerald-500 text-gray-950 text-[9px] font-black uppercase tracking-[0.4em] rounded-full shadow-lg">Weekly
+                            Focus</span>
+                        <h2 class="text-4xl md:text-5xl font-black text-white tracking-tighter leading-[0.9]">{{
+                            poseOfWeek.name }}</h2>
+                        <p class="text-emerald-500 serif-font italic text-2xl font-bold">{{ poseOfWeek.sanskrit_name }}
+                        </p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex flex-col gap-3">
+                            <label
+                                class="text-[9px] font-black text-gray-500 uppercase tracking-[0.4em] border-b border-white/10 pb-2 block w-fit">Alignment
+                                Tips</label>
+                            <div class="flex flex-wrap gap-2">
+                                <span *ngFor="let tip of poseOfWeek.alignment_tips.split(',')"
+                                    class="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white font-bold text-sm hover:bg-white/10 transition-all cursor-default">
+                                    {{ tip.trim() }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-gray-300 text-lg font-bold leading-tight italic serif-font">"{{
+                                poseOfWeek.description }}"</p>
+                            <ul class="grid md:grid-cols-2 gap-4">
+                                <li *ngFor="let benefit of poseOfWeek.benefits.split(',')"
+                                    class="flex items-center gap-3 text-emerald-400 font-bold text-sm">
+                                    <span
+                                        class="w-2 h-2 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50"></span>
+                                    {{ benefit.trim() }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button
+                        class="w-full md:w-auto px-10 py-4 bg-white text-gray-950 font-black rounded-2xl hover:scale-105 transition-all shadow-lg text-[9px] uppercase tracking-[0.3em]">
+                        Start Asana
+                    </button>
+                </div>
+
+                <div class="lg:col-span-6 relative w-full group">
+                    <div
+                        class="absolute inset-0 bg-emerald-500/20 rounded-[3rem] blur-[80px] group-hover:blur-[100px] transition-all duration-[2s]">
+                    </div>
+                    <div
+                        class="relative bg-white/5 p-4 rounded-[3rem] border border-white/10 overflow-hidden shadow-xl">
+                        <img [src]="poseOfWeek.image_url" [alt]="poseOfWeek.name"
+                            class="w-full h-full object-cover aspect-[4/5] xl:aspect-square rounded-[2rem] group-hover:scale-110 transition-transform duration-[3s]">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meditation Sanctuary -->
+    <section class="w-full py-8 bg-white relative">
+        <div class="max-w-[90%] xl:max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-8 md:gap-16 items-center">
+                <div class="lg:col-span-6 space-y-6">
+                    <div class="space-y-4">
+                        <span
+                            class="text-emerald-700 font-black text-[9px] uppercase tracking-[0.4em] block">Bio-Acoustic</span>
+                        <h2 class="text-4xl md:text-5xl font-black text-[#1a1c1e] tracking-tighter leading-[0.9]">
+                            Neural <br>
+                            <span class="text-emerald-700 italic serif-font font-light">Immersion.</span>
+                        </h2>
+                        <p class="text-gray-600 text-lg font-bold leading-tight italic serif-font">
+                            "Reprogram your baseline through primordial frequency."
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <div *ngFor="let session of meditationSessions; let i = index"
+                            class="group flex items-center justify-between p-5 bg-[#fafaf8] border border-gray-100 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all duration-500 cursor-pointer">
+                            <div class="flex items-center gap-5">
+                                <div
+                                    class="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-2xl group-hover:bg-emerald-950 group-hover:text-white transition-all shadow-sm group-hover:scale-110">
+                                    ✨</div>
+                                <div>
+                                    <h4 class="text-xl font-black text-[#1a1c1e] tracking-tighter leading-none">{{
+                                        session.name }}</h4>
+                                    <p class="text-emerald-600 font-black text-[9px] uppercase tracking-[0.3em] mt-1">{{
+                                        session.duration_minutes }}m</p>
+                                </div>
+                            </div>
+                            <button
+                                class="w-12 h-12 rounded-full bg-emerald-950 text-white flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg text-lg font-black">▶</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualizer -->
+                <div
+                    class="lg:col-span-6 bg-gray-950 rounded-[3rem] p-10 md:p-12 text-center space-y-10 shadow-2xl relative overflow-hidden group border border-white/5">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-emerald-900/30 via-transparent to-transparent opacity-60">
+                    </div>
+                    <div
+                        class="absolute -bottom-20 -right-20 w-[20rem] h-[20rem] bg-emerald-500/10 rounded-full blur-[100px]">
+                    </div>
+
+                    <div class="relative z-10 space-y-6">
+                        <div class="w-32 h-32 bg-emerald-600 rounded-full mx-auto flex items-center justify-center text-4xl shadow-lg cursor-pointer hover:scale-110 transition-all duration-[1s] active:scale-90 border-4 border-white/5"
+                            (click)="toggleAudio()">
+                            {{ isAudioPlaying ? '⏸' : '▶' }}
+                        </div>
+                        <div class="space-y-3">
+                            <h3 class="text-3xl font-black text-white tracking-tighter">Frequency: Shunya</h3>
+                            <p class="text-emerald-500 font-black uppercase tracking-[0.5em] text-[9px]">Neural Loop</p>
+                        </div>
+                    </div>
+
+                    <div class="h-32 flex items-end justify-center gap-2 px-6 relative z-10">
+                        <div *ngFor="let bar of visualizerBars"
+                            class="flex-1 bg-emerald-400 rounded-full transition-all duration-[0.4s] ease-out shadow-lg shadow-emerald-400/30"
+                            [style.height.%]="isAudioPlaying ? bar : 10" [style.opacity]="isAudioPlaying ? 1 : 0.2">
+                        </div>
+                    </div>
+
+                    <p class="text-gray-500 font-bold text-sm relative z-10 italic serif-font opacity-40">
+                        "Feel the resonance stabilize your architecture."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

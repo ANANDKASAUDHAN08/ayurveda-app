@@ -43,10 +43,26 @@ import { EmergencyHubComponent } from './components/emergency-hub/emergency-hub.
 import { FirstAidGuideComponent } from './components/first-aid-guide/first-aid-guide.component';
 import { NearbyHospitalsComponent } from './components/nearby-hospitals/nearby-hospitals.component';
 import { EmergencyCallHistoryComponent } from './components/emergency-call-history/emergency-call-history.component';
+import { LandingPageComponent } from './components/medicine-type/landing-page/landing-page.component';
+import { MedicineTypeSelectorComponent } from './components/medicine-type/medicine-type-selector/medicine-type-selector.component';
+import { AyurvedaDashboardComponent } from './components/medicine-type/ayurveda/ayurveda-dashboard/ayurveda-dashboard.component';
+import { HomeopathyDashboardComponent } from './components/medicine-type/homeopathy-dashboard/homeopathy-dashboard.component';
+import { AllopathyDashboardComponent } from './components/medicine-type/allopathy/allopathy-dashboard/allopathy-dashboard.component';
+import { AyurvedaWellnessComponent } from './components/medicine-type/ayurveda/ayurveda-wellness/ayurveda-wellness.component';
+import { YogaComponent } from './components/medicine-type/ayurveda/yoga/yoga.component';
+import { AyurvedaArticleComponent } from './components/medicine-type/ayurveda/ayurveda-article/ayurveda-article.component';
+import { AyurvedaAboutComponent } from './components/medicine-type/ayurveda/ayurveda-about/ayurveda-about.component';
+import { AyurvedaSearchComponent } from './components/medicine-type/ayurveda/ayurveda-search/ayurveda-search.component';
+import { PrakritiQuizComponent } from './components/medicine-type/ayurveda/prakriti-quiz/prakriti-quiz.component';
+import { HealthArticlesListComponent } from './pages/health-articles/health-articles-list.component';
+import { FavoritesPageComponent } from './pages/favorites/favorites-page.component';
 
 export const routes: Routes = [
     // Public routes
     { path: 'home', component: HomeComponent, canActivate: [StrictLogoutGuard] },
+    { path: 'articles', component: HealthArticlesListComponent },
+    { path: 'favorites', component: FavoritesPageComponent },
+    // Admin Routes
     { path: 'for-doctors', component: DoctorLandingComponent, canActivate: [StrictLogoutGuard] },
     { path: 'for-users', component: UserLandingComponent, canActivate: [StrictLogoutGuard] },
     { path: 'hospitals', component: HospitalsComponent, canActivate: [StrictLogoutGuard] },
@@ -60,10 +76,24 @@ export const routes: Routes = [
     { path: 'about-us', component: AboutUsComponent, canActivate: [StrictLogoutGuard] },
     { path: 'help-support', component: HelpSupportComponent, canActivate: [StrictLogoutGuard] },
     { path: 'contact', component: ContactComponent, canActivate: [StrictLogoutGuard] },
+    { path: 'wellness', component: AyurvedaWellnessComponent, canActivate: [StrictLogoutGuard] },
     { path: 'emergency', component: EmergencyHubComponent }, // Emergency services - no auth required for quick access
     { path: 'first-aid', component: FirstAidGuideComponent }, // First Aid Guide - no auth required
     { path: 'nearby-hospitals', component: NearbyHospitalsComponent }, // Nearby Hospitals - no auth required
     { path: 'emergency-history', component: EmergencyCallHistoryComponent }, // Call History - requires auth
+
+    // Medicine Type System (Phase 12)
+    { path: 'landing', component: LandingPageComponent, canActivate: [StrictLogoutGuard] }, // Common landing page
+    { path: 'choose-type', component: MedicineTypeSelectorComponent }, // Medicine type selector
+    { path: 'ayurveda', component: AyurvedaDashboardComponent }, // Ayurveda dashboard
+    { path: 'ayurveda/search', component: AyurvedaSearchComponent },
+    { path: 'ayurveda/ayurveda-article', component: AyurvedaArticleComponent },
+    { path: 'ayurveda/ayurveda-wellness', component: AyurvedaWellnessComponent },
+    { path: 'ayurveda/yoga', component: YogaComponent },
+    { path: 'ayurveda/about', component: AyurvedaAboutComponent },
+    { path: 'ayurveda/prakriti', component: PrakritiQuizComponent },
+    { path: 'homeopathy', component: HomeopathyDashboardComponent }, // Homeopathy dashboard
+    { path: 'allopathy', component: AllopathyDashboardComponent }, // Allopathy dashboard
 
     // Email verification (public - no auth required)
     { path: 'verify-email', component: VerifyEmailComponent },

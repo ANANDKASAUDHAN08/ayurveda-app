@@ -1,0 +1,117 @@
+<div class="principles-view animate-in fade-in py-16 px-4 sm:px-6 lg:px-8 bg-white">
+    <div class="max-w-7xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center mb-20 space-y-4">
+            <span class="text-blue-600 font-black uppercase tracking-[0.3em] text-[10px]">The Science of Healing</span>
+            <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Clinical <span
+                    class="text-blue-600">Pillars</span></h2>
+            <div class="w-24 h-1.5 bg-blue-600 mx-auto rounded-full"></div>
+        </div>
+
+        <!-- Principles Grid (Dynamic) -->
+        <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+            <div *ngFor="let i of [1,2]" class="h-80 bg-slate-50 rounded-[3.5rem] animate-pulse"></div>
+        </div>
+
+        <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mb-32">
+            <div *ngFor="let pillar of pillars"
+                class="group p-10 bg-slate-50 rounded-[3.5rem] border border-slate-100 hover:border-blue-200 hover:bg-white hover:shadow-2xl transition-all">
+                <div
+                    class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-3xl mb-8 group-hover:scale-110 shadow-lg shadow-blue-200">
+                    <i [class]="pillar.image_url"></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-900 mb-4">{{pillar.title}}</h3>
+                <p class="text-slate-600 leading-relaxed mb-6">{{pillar.content}}</p>
+                <div class="flex flex-wrap gap-2">
+                    <span *ngFor="let tag of pillar.tags"
+                        class="px-3 py-1 bg-slate-100 text-[10px] font-black text-slate-400 uppercase tracking-widest rounded-full border border-slate-50">{{tag}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medical Evolution Timeline (Interactive) -->
+        <div class="mb-32 space-y-12">
+            <div class="text-center space-y-4">
+                <span class="text-blue-600 font-black uppercase tracking-[0.3em] text-[10px]">Historical
+                    Breakthroughs</span>
+                <h2 class="text-4xl font-black text-slate-900 tracking-tight">Medical <span
+                        class="text-blue-600">Evolution</span></h2>
+            </div>
+
+            <div class="relative pt-20">
+                <!-- Timeline Baseline -->
+                <div class="absolute top-[84px] left-0 right-0 h-1 bg-slate-100 hidden md:block"></div>
+
+                <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-12 relative z-10">
+                    <div *ngFor="let mil of timeline; let i = index" (click)="setActiveMilestone(i)"
+                        class="flex-1 text-center group cursor-pointer">
+                        <!-- Connector Dot -->
+                        <div class="w-10 h-10 mx-auto rounded-full flex items-center justify-center transition-all duration-500 mb-6"
+                            [class.bg-blue-600]="activeMilestoneIndex === i"
+                            [class.scale-125]="activeMilestoneIndex === i" [class.bg-white]="activeMilestoneIndex !== i"
+                            [class.border-4]="true" [class.border-blue-600]="activeMilestoneIndex === i"
+                            [class.border-slate-200]="activeMilestoneIndex !== i">
+                            <span *ngIf="activeMilestoneIndex === i"
+                                class="w-2 h-2 bg-white rounded-full animate-ping"></span>
+                        </div>
+                        <span class="text-xs font-black uppercase tracking-widest transition-colors"
+                            [class.text-blue-600]="activeMilestoneIndex === i"
+                            [class.text-slate-400]="activeMilestoneIndex !== i">{{mil.author}}</span>
+                        <h4 class="text-sm font-black mt-2 transition-colors"
+                            [class.text-slate-900]="activeMilestoneIndex === i"
+                            [class.text-slate-300]="activeMilestoneIndex !== i">{{mil.title.split(':')[1]?.trim() ||
+                            mil.title}}</h4>
+                    </div>
+                </div>
+
+                <!-- Milestone Detail View -->
+                <div *ngIf="timeline[activeMilestoneIndex]"
+                    class="mt-16 p-12 bg-slate-900 rounded-[4rem] text-white relative overflow-hidden animate-in slide-in-from-bottom duration-700">
+                    <div class="absolute -right-20 -bottom-20 opacity-10">
+                        <i [class]="timeline[activeMilestoneIndex].image_url + ' text-[20rem]'"></i>
+                    </div>
+                    <div class="relative z-10 max-w-2xl">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-xl mb-6">
+                            <i [class]="timeline[activeMilestoneIndex].image_url"></i>
+                        </div>
+                        <h3 class="text-3xl font-black mb-4">{{timeline[activeMilestoneIndex].title}}</h3>
+                        <p class="text-slate-400 text-lg leading-relaxed italic serif-font">
+                            "{{timeline[activeMilestoneIndex].content}}"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bio-Ethical Pillars (Dynamic Tips) -->
+        <div class="space-y-12">
+            <div class="text-center space-y-4">
+                <span class="text-blue-600 font-black uppercase tracking-[0.3em] text-[10px]">Professional
+                    Practice</span>
+                <h2 class="text-4xl font-black text-slate-900 tracking-tight">Bio-Ethical <span
+                        class="text-blue-600">Pillars</span></h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div *ngFor="let pillar of ethics"
+                    class="p-8 bg-white border border-slate-100 rounded-[2.5rem] shadow-xl shadow-slate-200/50 hover:border-blue-200 hover:-translate-y-2 transition-all group">
+                    <div
+                        class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-xl text-slate-400 mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                        <i [class]="pillar.image_url"></i>
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-2">{{pillar.title}}</h4>
+                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-4">
+                        {{pillar.description}}</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">{{pillar.content}}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div
+            class="mt-32 p-12 bg-slate-50 rounded-[3.5rem] text-center relative overflow-hidden border border-slate-100">
+            <p class="text-xl font-bold italic serif-font opacity-80 text-slate-400">
+                "Modern medicine is a testament to human reason and scientific perseverance."
+            </p>
+        </div>
+    </div>
+</div>

@@ -3,16 +3,23 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ContentService } from '../../shared/services/content.service';
+import { MedicineTypeService, MedicineType, FilterMode } from '../../shared/services/medicine-type.service';
+import { FavoritesService } from '../../shared/services/favorites.service';
+import { ContextBannerComponent } from '../../shared/components/context-banner/context-banner.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
 
 @Component({
     selector: 'app-hospitals',
     standalone: true,
-    imports: [CommonModule, RouterModule, FormsModule],
+    imports: [CommonModule, RouterModule, FormsModule, ContextBannerComponent, MobileLocationBarComponent],
     templateUrl: './hospitals.component.html',
     styleUrl: './hospitals.component.css'
 })
 export class HospitalsComponent implements OnInit {
     hospitals: any[] = [];
+    allHospitals: any[] = []; // Store all hospitals for client-side filtering
     filteredHospitals: any[] = [];
     searchTerm: string = '';
     loading = true;
@@ -20,9 +27,24 @@ export class HospitalsComponent implements OnInit {
     showModal = false;
     popularSearches: string[] = [];
 
-    constructor(private contentService: ContentService) { }
+    // Medicine type context
+    currentMedicineType: MedicineType | 'all' = 'all';
+    private destroy$ = new Subject<void>();
+
+    constructor(
+        private contentService: ContentService,
+        private medicineTypeService: MedicineTypeService,
+        private favoritesService: FavoritesService
+    ) { }
 
     ngOnInit() {
+        // Track medicine type changes and reapply filtering
+        this.medicineTypeService.getCurrentType().pipe(takeUntil(this.destroy$)).subscribe(type => {
+            this.currentMedicineType = type;
+            this.applyMedicineTypeFilter(); // Refilter when type changes
+            this.searchHospitals(); // Reapply search after filtering
+        });
+
         this.loadHospitals();
     }
 
@@ -30,8 +52,10 @@ export class HospitalsComponent implements OnInit {
         this.loading = true;
         this.contentService.getHospitals().subscribe({
             next: (response) => {
-                this.hospitals = response.hospitals || [];
-                this.filteredHospitals = [...this.hospitals];
+                this.allHospitals = response.hospitals || [];
+                this.hospitals = [...this.allHospitals];
+                this.applyMedicineTypeFilter(); // Apply client-side medicine type filtering
+                this.searchHospitals(); // Then apply search filter
                 this.calculatePopularSearches();
                 setTimeout(() => {
                     this.loading = false;
@@ -42,6 +66,34 @@ export class HospitalsComponent implements OnInit {
                 setTimeout(() => {
                     this.loading = false;
                 }, 500);
+            }
+        });
+    }
+
+    // Client-side filtering by medicine type based on specialties
+    applyMedicineTypeFilter() {
+        if (this.currentMedicineType === 'all') {
+            this.hospitals = [...this.allHospitals];
+            return;
+        }
+
+        // Keywords to identify hospital types based on specialties
+        const ayurvedaKeywords = ['ayur', 'panchakarma', 'ayurvedic', 'herbal', 'natural', 'traditional'];
+        const homeopathyKeywords = ['homeo', 'homoeopathy', 'homeopathic'];
+        const allopathyKeywords = ['cardiology', 'neurology', 'orthopedic', 'surgery', 'oncology', 'pediatric', 'dermatology', 'general'];
+
+        this.hospitals = this.allHospitals.filter(hospital => {
+            const searchText = `${hospital.name || ''} ${hospital.specialties || ''} ${hospital.facilities || ''}`.toLowerCase();
+
+            switch (this.currentMedicineType) {
+                case 'ayurveda':
+                    return ayurvedaKeywords.some(keyword => searchText.includes(keyword));
+                case 'homeopathy':
+                    return homeopathyKeywords.some(keyword => searchText.includes(keyword));
+                case 'allopathy':
+                    return allopathyKeywords.some(keyword => searchText.includes(keyword));
+                default:
+                    return true;
             }
         });
     }
@@ -105,5 +157,34 @@ export class HospitalsComponent implements OnInit {
     searchBySpecialty(specialty: string) {
         this.searchTerm = specialty;
         this.searchHospitals();
+    }
+
+    onToggleFilter() {
+        // Filter mode toggle not implemented in service
+        this.applyMedicineTypeFilter();
+    }
+
+    onClearFilter() {
+        this.currentMedicineType = 'all';
+        this.applyMedicineTypeFilter();
+    }
+
+    onSwitchType(type: MedicineType) {
+        this.medicineTypeService.setMedicineType(type);
+    }
+
+
+    toggleFavorite(event: Event, hospital: any) {
+        event.stopPropagation();
+        this.favoritesService.toggleFavorite(hospital.id, 'hospital').subscribe();
+    }
+
+    isFavorite(hospitalId: string | number): boolean {
+        return this.favoritesService.isFavorite(hospitalId, 'hospital');
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

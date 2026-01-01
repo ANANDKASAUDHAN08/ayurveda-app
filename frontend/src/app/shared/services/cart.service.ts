@@ -1,186 +1,194 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { AuthService } from './auth.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
-// Environment configuration
-const API_URL = 'http://localhost:3000/api';
 export interface CartItem {
-    id: number;
-    product_id: number;
-    product_type: string;
-    product_name: string;
-    quantity: number;
+    id: string;
+    name: string;
+    type: 'medicine' | 'device' | 'wellness' | 'other';
+    medicineType?: 'ayurveda' | 'homeopathy' | 'allopathy';
     price: number;
-    total_price: number;
+    quantity: number;
     image?: string;
-    description?: string;
+    prescription_required?: boolean;
 }
 
 export interface Cart {
     items: CartItem[];
-    total_items: number;
+    totalItems: number;
     subtotal: number;
-    tax: number;
+    delivery: number;
     total: number;
-}
-
-export interface AddToCartRequest {
-    product_id: number;
-    product_type: string;
-    quantity?: number;
-    price?: number; // Optional price (for testing without product tables)
 }
 
 @Injectable({
     providedIn: 'root'
 })
 export class CartService {
-    private apiUrl = `${API_URL}/cart`;
-
-    private cartSubject = new BehaviorSubject<Cart | null>(null);
+    private readonly STORAGE_KEY = 'shopping_cart';
+    private cart$ = new BehaviorSubject<Cart>(this.getStoredCart());
     private cartCountSubject = new BehaviorSubject<number>(0);
-    public cart$ = this.cartSubject.asObservable();
+    // public cart$ = this.cartSubject.asObservable();
     public cartCount$ = this.cartCountSubject.asObservable();
 
-    constructor(private http: HttpClient, private authService: AuthService) {
-        // Don't auto-load cart - components should call loadCart() when needed
+    constructor() {
+        // Initialize from localStorage
+        const stored = this.getStoredCart();
+        if (stored) {
+            this.cart$.next(stored);
+        }
+    }
 
-        // Subscribe to auth state changes (handles login/logout via authService)
-        this.authService.authStatus$.subscribe(isLoggedIn => {
-            if (isLoggedIn) {
-                this.loadCart();
+    /**
+     * Get cart as Observable
+     */
+    getCart(): Observable<Cart> {
+        return this.cart$.asObservable();
+    }
+
+    /**
+     * Get current cart value (synchronous)
+     */
+    getCartValue(): Cart {
+        return this.cart$.value;
+    }
+
+    /**
+     * Get total item count
+     */
+    getItemCount(): number {
+        return this.cart$.value.totalItems;
+    }
+
+    /**
+     * Add item to cart
+     */
+    addItem(item: CartItem): void {
+        const currentCart = this.cart$.value;
+        const existingItemIndex = currentCart.items.findIndex(i => i.id === item.id);
+
+        if (existingItemIndex > -1) {
+            // Increase quantity if item already exists
+            currentCart.items[existingItemIndex].quantity += item.quantity;
+        } else {
+            // Add new item
+            currentCart.items.push(item);
+        }
+
+        this.updateCart(currentCart);
+    }
+
+    /**
+     * Remove item from cart
+     */
+    removeItem(itemId: string): void {
+        const currentCart = this.cart$.value;
+        currentCart.items = currentCart.items.filter(item => item.id !== itemId);
+        this.updateCart(currentCart);
+    }
+
+    /**
+     * Update item quantity
+     */
+    updateQuantity(itemId: string, quantity: number): void {
+        const currentCart = this.cart$.value;
+        const item = currentCart.items.find(i => i.id === itemId);
+
+        if (item) {
+            if (quantity <= 0) {
+                this.removeItem(itemId);
             } else {
-                this.clearCartState();
+                item.quantity = quantity;
+                this.updateCart(currentCart);
             }
-        });
-
-        // Handle manual localStorage clearing or cross-tab logout
-        if (typeof window !== 'undefined') {
-            window.addEventListener('storage', (event) => {
-                if (event.key === 'auth_token') {
-                    if (!event.newValue) {
-                        // Token removed - clear cart
-                        this.clearCartState();
-                    } else {
-                        // Token added - load cart
-                        this.loadCart();
-                    }
-                }
-            });
-
-            setInterval(() => {
-                const hasToken = !!localStorage.getItem('auth_token');
-                const hasCart = (this.cartCountSubject.value || 0) > 0;
-
-                // If no token but cart has items, clear it
-                if (!hasToken && hasCart) {
-                    this.clearCartState();
-                }
-            }, 2000);
         }
     }
 
-    loadCart(): void {
-        // Check if user has a token
-        const token = localStorage.getItem('auth_token') || localStorage.getItem('token');
-        if (!token) {
-            // User not logged in
-            this.clearCartState();
-            return;
-        }
-
-        this.http.get<{ success: boolean; data: Cart }>(`${this.apiUrl}`)
-            .subscribe({
-                next: (response) => {
-                    if (response.success) {
-                        this.cartSubject.next(response.data);
-                        this.cartCountSubject.next(response.data.total_items);
-                    }
-                },
-                error: (error) => {
-                    // Silently fail - user might not be logged in
-                    this.clearCartState();
-                }
-            });
-    }
-
-    private clearCartState(): void {
-        this.cartSubject.next({
+    /**
+     * Clear entire cart
+     */
+    clearCart(): void {
+        const emptyCart: Cart = {
             items: [],
-            total_items: 0,
+            totalItems: 0,
             subtotal: 0,
-            tax: 0,
+            delivery: 0,
             total: 0
-        });
-        this.cartCountSubject.next(0);
+        };
+        this.updateCart(emptyCart);
     }
 
-    getCart(): Observable<{ success: boolean; data: Cart }> {
-        return this.http.get<{ success: boolean; data: Cart }>(`${this.apiUrl}`)
-            .pipe(
-                tap(response => {
-                    if (response.success) {
-                        this.cartSubject.next(response.data);
-                        this.cartCountSubject.next(response.data.total_items);
-                    }
-                })
-            );
+    /**
+     * Update cart and recalculate totals
+     */
+    private updateCart(cart: Cart): void {
+        // Recalculate totals
+        cart.totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+        cart.subtotal = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+        // Calculate delivery (free over 999)
+        cart.delivery = cart.subtotal >= 999 ? 0 : 50;
+        cart.total = cart.subtotal + cart.delivery;
+
+        // Update state
+        this.cart$.next(cart);
+
+        // Persist to localStorage
+        this.saveCart(cart);
     }
 
-    addToCart(item: AddToCartRequest): Observable<{ success: boolean; message: string }> {
-        return this.http.post<{ success: boolean; message: string }>(
-            `${this.apiUrl}/add`,
-            item
-        ).pipe(
-            tap(() => this.loadCart()) // Reload cart after adding
-        );
+    /**
+     * Check if item is in cart
+     */
+    isInCart(itemId: string): boolean {
+        return this.cart$.value.items.some(item => item.id === itemId);
     }
 
-    updateQuantity(itemId: number, quantity: number): Observable<{ success: boolean; message: string }> {
-        return this.http.put<{ success: boolean; message: string }>(
-            `${this.apiUrl}/item/${itemId}`,
-            { quantity }
-        ).pipe(
-            tap(() => this.loadCart())
-        );
+    /**
+     * Get item quantity in cart
+     */
+    getItemQuantity(itemId: string): number {
+        const item = this.cart$.value.items.find(i => i.id === itemId);
+        return item ? item.quantity : 0;
     }
 
-    removeItem(itemId: number): Observable<{ success: boolean; message: string }> {
-        return this.http.delete<{ success: boolean; message: string }>(
-            `${this.apiUrl}/item/${itemId}`
-        ).pipe(
-            tap(() => this.loadCart())
-        );
+    /**
+     * Check if cart needs prescription
+     */
+    needsPrescription(): boolean {
+        return this.cart$.value.items.some(item => item.prescription_required);
     }
 
-    clearCart(): Observable<{ success: boolean; message: string }> {
-        return this.http.delete<{ success: boolean; message: string }>(
-            `${this.apiUrl}/clear`
-        ).pipe(
-            tap(() => {
-                // Set empty cart structure instead of null
-                this.cartSubject.next({
-                    items: [],
-                    total_items: 0,
-                    subtotal: 0,
-                    tax: 0,
-                    total: 0
-                });
-                this.cartCountSubject.next(0);
-            })
-        );
+    /**
+     * Save cart to localStorage
+     */
+    private saveCart(cart: Cart): void {
+        try {
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cart));
+        } catch (error) {
+            console.error('Error saving cart:', error);
+        }
     }
 
-    getCartCount(): Observable<{ success: boolean; data: { count: number } }> {
-        return this.http.get<{ success: boolean; data: { count: number } }>(
-            `${this.apiUrl}/count`
-        ).pipe(
-            tap(response => {
-                if (response.success) {
-                    this.cartCountSubject.next(response.data.count);
-                }
-            })
-        );
+    /**
+     * Get cart from localStorage
+     */
+    private getStoredCart(): Cart {
+        try {
+            const stored = localStorage.getItem(this.STORAGE_KEY);
+            if (stored) {
+                return JSON.parse(stored);
+            }
+        } catch (error) {
+            console.error('Error reading stored cart:', error);
+        }
+
+        // Return empty cart
+        return {
+            items: [],
+            totalItems: 0,
+            subtotal: 0,
+            delivery: 0,
+            total: 0
+        };
     }
 }

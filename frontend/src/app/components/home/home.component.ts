@@ -1,8 +1,13 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { ContentService } from '../../shared/services/content.service';
+import { SearchService } from '../../shared/services/search.service';
+import { MedicineTypeService, MedicineType } from '../../shared/services/medicine-type.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
+import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
 
 import { ArticleDetailsComponent } from '../article-details/article-details.component';
 import { TopRatedDoctorsCarouselComponent } from './top-rated-doctors-carousel/top-rated-doctors-carousel.component';
@@ -13,11 +18,37 @@ import { ServiceCardComponent, ServiceCardData } from 'src/app/shared/components
 import { CategoryCardComponent, CategoryCardData } from 'src/app/shared/components/category-card/category-card.component';
 import { DealCardComponent, DealCardData } from 'src/app/shared/components/deal-card/deal-card.component';
 import { TrustBadgeComponent, TrustBadgeData } from 'src/app/shared/components/trust-badge/trust-badge.component';
-import { FormsModule } from '@angular/forms';
 import { SkeletonLoaderComponent } from 'src/app/shared/components/skeleton-loader/skeleton-loader.component';
 import { EmptyStateComponent } from 'src/app/shared/components/empty-state/empty-state.component';
-import { SearchService } from 'src/app/shared/services/search.service';
-import { SnackbarService } from 'src/app/shared/services/snackbar.service';
+
+interface Doctor {
+  id: number;
+  name: string;
+  specialty: string;
+  image: string;
+  rating: number;
+  experience: number;
+  available: boolean;
+  medicine_type?: string;
+}
+
+interface Article {
+  id: number;
+  title: string;
+  excerpt: string;
+  image: string;
+  date: string;
+  author?: string;
+  readTime?: string;
+}
+
+interface Service {
+  id: number;
+  name: string;
+  icon: string;
+  description: string;
+  color: string;
+}
 
 @Component({
   selector: 'app-home',
@@ -36,21 +67,50 @@ import { SnackbarService } from 'src/app/shared/services/snackbar.service';
     DealCardComponent,
     TrustBadgeComponent,
     SkeletonLoaderComponent,
-    EmptyStateComponent
+    EmptyStateComponent,
+    MobileLocationBarComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
+  userName = 'Guest';
   loadingDoctors = true;
   loadingArticles = true;
   loadingServices = true;
   showScrollTop = false;
+  currentCardIndex = 0;
+
+  onCardScroll(event: Event) {
+    const element = event.target as HTMLElement;
+    const scrollPosition = element.scrollLeft;
+    const scrollWidth = element.scrollWidth - element.clientWidth;
+    const scrollPercentage = scrollPosition / scrollWidth;
+
+    // There are 3 cards, so 0, 1, 2 indices
+    if (scrollPercentage <= 0.25) {
+      this.currentCardIndex = 0;
+    } else if (scrollPercentage > 0.25 && scrollPercentage <= 0.75) {
+      this.currentCardIndex = 1;
+    } else {
+      this.currentCardIndex = 2;
+    }
+  }
+
+  scrollToCard(index: number) {
+    const container = document.querySelector('.flex.overflow-x-auto');
+    if (container) {
+      const cards = container.querySelectorAll('.medicine-card');
+      if (cards[index]) {
+        cards[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        this.currentCardIndex = index;
+      }
+    }
+  }
 
   // Modal properties
   selectedDoctor: any = null;
   showDoctorModal = false;
-
   selectedArticle: any = null;
   showArticleModal = false;
 
@@ -65,11 +125,21 @@ export class HomeComponent implements OnInit {
   popularSearches: string[] = [];
   private suggestionTimeout: any;
 
+  // Typing animation
+  typedText = '';
+  private fullTexts = ['Perfect Health', 'Natural Healing', 'Modern Science', 'Expert Care'];
+  private currentFullTextIndex = 0;
+  private typingSpeed = 100;
+  private erasingSpeed = 50;
+  private pauseDuration = 2000;
+  isTyping = true;
+
   constructor(
     private router: Router,
     private contentService: ContentService,
     private searchService: SearchService,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private medicineTypeService: MedicineTypeService,
   ) { }
 
   ngOnInit() {
@@ -124,6 +194,16 @@ export class HomeComponent implements OnInit {
       return;
     }
 
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        this.userName = user.name || 'Anand';
+      } catch (e) {
+        console.error('Failed to parse user data', e);
+      }
+    }
+
     this.loadFeaturedDoctors();
     this.loadHealthArticles();
 
@@ -136,6 +216,39 @@ export class HomeComponent implements OnInit {
 
     // Load search data
     this.loadSearchData();
+
+    // Start animations
+    this.startTypingAnimation();
+    this.initializeScrollAnimations();
+  }
+
+  ngAfterViewInit(): void {
+    // Re-initialize scroll animations after view is ready to catch all elements
+    setTimeout(() => this.initializeScrollAnimations(), 500);
+  }
+
+  private initializeScrollAnimations(): void {
+    if (typeof window === 'undefined') return;
+
+    const options = {
+      root: null,
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Once animated, we usually don't need to observe it anymore
+          // Unless we want it to animate every time it enters
+        }
+      });
+    }, options);
+
+    // Elements to observe
+    const animatedElements = document.querySelectorAll('.animate-on-scroll, .stagger-item, .medicine-card, .quick-action-card, .search-container');
+    animatedElements.forEach(el => observer.observe(el));
   }
 
   loadFeaturedDoctors() {
@@ -332,7 +445,8 @@ export class HomeComponent implements OnInit {
       mrp: 999,
       discount: 30,
       badge: 'Hot Deal',
-      route: '/product/vitamin-c'
+      route: '/product/vitamin-c',
+      expiresAt: new Date(Date.now() + 8 * 60 * 60 * 1000) // 8 hours from now
     },
     {
       productId: 2,
@@ -343,7 +457,8 @@ export class HomeComponent implements OnInit {
       price: 149,
       mrp: 199,
       discount: 25,
-      route: '/product/face-wash'
+      route: '/product/face-wash',
+      expiresAt: new Date(Date.now() + 12 * 60 * 60 * 1000) // 12 hours from now
     },
     {
       productId: 3,
@@ -355,7 +470,8 @@ export class HomeComponent implements OnInit {
       mrp: 450,
       discount: 34,
       badge: 'Limited',
-      route: '/product/shampoo'
+      route: '/product/shampoo',
+      expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000) // 6 hours from now
     },
     {
       productId: 4,
@@ -366,7 +482,8 @@ export class HomeComponent implements OnInit {
       price: 1499,
       mrp: 2499,
       discount: 40,
-      route: '/product/protein'
+      route: '/product/protein',
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours from now
     }
   ];
 
@@ -463,6 +580,50 @@ export class HomeComponent implements OnInit {
   clearHistory() {
     this.searchService.clearSearchHistory();
     this.searchHistory = [];
+  }
+
+  selectSystem(type: MedicineType | 'all') {
+    this.medicineTypeService.setMedicineType(type);
+    if (type === 'all') {
+      this.router.navigate(['/user/dashboard']);
+    } else {
+      this.router.navigate([`/${type}`]);
+    }
+  }
+
+  navigateTo(path: string) {
+    this.router.navigate([path]);
+  }
+
+  // Typing animation
+  startTypingAnimation() {
+    this.typeNextChar();
+  }
+
+  private typeNextChar() {
+    const currentFullText = this.fullTexts[this.currentFullTextIndex];
+    if (this.typedText.length < currentFullText.length && this.isTyping) {
+      this.typedText += currentFullText[this.typedText.length];
+      setTimeout(() => this.typeNextChar(), this.typingSpeed);
+    } else if (this.isTyping) {
+      // Pause at end before erasing
+      setTimeout(() => {
+        this.isTyping = false;
+        this.eraseText();
+      }, this.pauseDuration);
+    }
+  }
+
+  eraseText() {
+    if (this.typedText.length > 0 && !this.isTyping) {
+      this.typedText = this.typedText.slice(0, -1);
+      setTimeout(() => this.eraseText(), this.erasingSpeed);
+    } else if (!this.isTyping) {
+      // Move to next text and restart typing
+      this.isTyping = true;
+      this.currentFullTextIndex = (this.currentFullTextIndex + 1) % this.fullTexts.length;
+      setTimeout(() => this.typeNextChar(), 500);
+    }
   }
 
 }

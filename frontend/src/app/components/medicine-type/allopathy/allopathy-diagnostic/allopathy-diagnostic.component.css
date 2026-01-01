@@ -1,0 +1,4 @@
+.medical-grid {
+    background-size: 30px 30px;
+    background-image: radial-gradient(circle, rgba(59, 130, 246, 0.4) 1px, transparent 1px);
+}

@@ -1,0 +1,276 @@
+/* Minimal custom CSS - Most styling with Tailwind */
+
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+/* Apply modern font globally to this component */
+/* Modern font stacks */
+.ayurveda-dashboard * {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.serif-font {
+    font-family: 'Cormorant Garamond', serif;
+}
+
+/* Custom styles for Leaf Header */
+.rotate-\[-45deg\] {
+    transform: rotate(-45deg);
+}
+
+.rotate-\[45deg\] {
+    transform: rotate(45deg);
+}
+
+/* Line clamp utilities (if not in Tailwind config) */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Modal Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-in {
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: forwards;
+}
+
+.fade-in {
+    animation-name: fadeIn;
+}
+
+.zoom-in {
+    animation-name: zoomIn;
+}
+
+/* Custom Backdrop Blur for Browsers that don't support backdrop-filter */
+.bg-black\/60 {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Section Header Buttons */
+.ayurveda-dashboard button {
+    cursor: pointer;
+}
+
+.ayurveda-dashboard .bg-gradient-to-r:hover {
+    filter: brightness(1.05);
+}
+
+/* Premium Visual Effects */
+.grain-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    opacity: 0.04;
+    z-index: 5;
+    mix-blend-mode: multiply;
+}
+
+.floating-element {
+    position: absolute;
+    font-size: 2.5rem;
+    pointer-events: none;
+    filter: blur(2px);
+    opacity: 0.3;
+    animation: float 8s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-30px) rotate(15deg) scale(1.1);
+    }
+}
+
+.float-slow {
+    animation-duration: 12s;
+}
+
+.float-fast {
+    animation-duration: 6s;
+}
+
+.float-delay-1 {
+    animation-delay: 1s;
+}
+
+.float-delay-2 {
+    animation-delay: 3s;
+}
+
+.float-delay-3 {
+    animation-delay: 5s;
+}
+
+/* Philosophy Card Hover */
+.phi-card:hover .phi-icon {
+    transform: scale(1.2) rotate(10deg);
+}
+
+.phi-card:hover .phi-bg {
+    opacity: 0.1;
+    transform: scale(1.5);
+}
+
+.phi-card .phi-bg {
+    transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scroll Smoothing */
+html {
+    scroll-behavior: smooth;
+}
+
+.ayurveda-dashboard {
+    color: #2d3436;
+}
+
+/* Make glass cards feel more "milky" and less "transparent white" */
+.backdrop-blur-2xl {
+    background-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Add a very subtle vignette to the corners of the screen to focus the center */
+.ayurveda-dashboard::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.02);
+    pointer-events: none;
+    z-index: 50;
+}
+
+/* Secondary Nav Polish */
+.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 40;
+    transition: all 0.3s ease;
+}
+
+.ayurveda-subnav-shadow {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+}
+
+.sticky.top-0 {
+    top: 0px;
+}
+
+/* Force FontAwesome for navigation icons */
+.nav-icon {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    display: inline-block !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+}
+
+.grain-overlay {
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    mix-blend-mode: overlay;
+}
+
+[class*='bg-emerald-50'],
+[class*='bg-blue-50'],
+[class*='bg-orange-50'] {
+    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.animate-in.zoom-in {
+    animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-in.slide-in-from-bottom-4 {
+    animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Ensure the sub-nav icons look premium */
+/* .nav-icon {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+} */

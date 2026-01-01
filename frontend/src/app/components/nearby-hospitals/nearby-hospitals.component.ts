@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HospitalsService, Hospital } from '../../shared/services/hospitals.service';
 import { EmergencyService } from '../../shared/services/emergency.service';
+import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
 
 @Component({
   selector: 'app-nearby-hospitals',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MobileLocationBarComponent],
   templateUrl: './nearby-hospitals.component.html',
   styleUrl: './nearby-hospitals.component.css'
 })

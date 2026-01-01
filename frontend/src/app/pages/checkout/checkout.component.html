@@ -134,8 +134,8 @@
                     <!-- Items -->
                     <div class="space-y-3 mb-4">
                         <div *ngFor="let item of cart.items" class="flex justify-between text-xs md:text-sm">
-                            <span class="text-gray-600">{{ item.product_name }} (×{{ item.quantity }})</span>
-                            <span class="font-semibold">₹{{ item.total_price }}</span>
+                            <span class="text-gray-600">{{ item.name }} (×{{ item.quantity }})</span>
+                            <span class="font-semibold">₹{{ (item.price * item.quantity).toFixed(2) }}</span>
                         </div>
                     </div>
 

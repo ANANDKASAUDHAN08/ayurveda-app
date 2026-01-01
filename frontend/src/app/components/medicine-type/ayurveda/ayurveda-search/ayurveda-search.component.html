@@ -1,0 +1,238 @@
+<div
+    [ngClass]="isModal ? 'fixed inset-0 z-[110] p-4 md:p-10 bg-black/40 backdrop-blur-md flex items-start justify-center overflow-auto' : 'relative w-full bg-transparent p-0 pt-8'">
+
+    <div
+        [ngClass]="isModal ? 'bg-white rounded-[2.5rem] w-full max-w-6xl max-h-[90vh] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-500' : 'w-full flex flex-col md:flex-row gap-12 pb-20 px-4 md:px-12'">
+
+        <!-- High Visibility Sidebar Filters -->
+        <aside
+            [ngClass]="isModal ? 'w-full md:w-80 bg-stone-50 border-r border-stone-200 p-8 space-y-10 overflow-y-auto' : 'w-full md:w-80 space-y-12 pr-10 border-stone-200/50'">
+
+            <!-- Filter Group: Knowledge Core -->
+            <div class="space-y-6">
+                <button (click)="toggleSection('categories')"
+                    class="w-full flex items-center justify-between text-left group">
+                    <h3
+                        class="text-xs font-black uppercase tracking-[0.25em] text-emerald-900 group-hover:text-emerald-700 transition-colors">
+                        Knowledge Core
+                    </h3>
+                    <span class="text-[14px] text-emerald-900 transition-transform duration-300"
+                        [class.rotate-180]="sections.categories">▼</span>
+                </button>
+
+                <div [class.hidden]="!sections.categories"
+                    class="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <button *ngFor="let cat of categories" (click)="setCategory(cat.id)"
+                        [class.bg-emerald-900]="activeCategory === cat.id" [class.shadow-xl]="activeCategory === cat.id"
+                        [ngClass]="{
+                            'text-white': activeCategory === cat.id,
+                            'text-emerald-900/70': activeCategory !== cat.id,
+                            'shadow-emerald-900/20': activeCategory === cat.id
+                        }"
+                        class="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-left text-sm font-bold transition-all hover:bg-emerald-50 hover:text-emerald-900 active:scale-95 group">
+                        <span class="text-xl group-hover:scale-125 transition-all">{{ cat.icon }}</span>
+                        <span class="flex-1 tracking-tight">{{ cat.label }}</span>
+                        <div *ngIf="activeCategory === cat.id" class="w-2 h-2 rounded-full bg-white shadow-sm"></div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="h-px bg-stone-200"></div>
+
+            <!-- Filter Group: Energy Archetype -->
+            <div class="space-y-6">
+                <button (click)="toggleSection('doshas')"
+                    class="w-full flex items-center justify-between text-left group">
+                    <h3
+                        class="text-xs font-black uppercase tracking-[0.25em] text-orange-900 group-hover:text-orange-700 transition-colors">
+                        Energy Archetype
+                    </h3>
+                    <span class="text-[14px] text-orange-900 transition-transform duration-300"
+                        [class.rotate-180]="sections.doshas">▼</span>
+                </button>
+
+                <div [class.hidden]="!sections.doshas" class="animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div class="grid grid-cols-2 gap-3">
+                        <button *ngFor="let d of doshas" (click)="setDosha(d.id)"
+                            [class.bg-orange-700]="activeDosha === d.id" [class.text-white]="activeDosha === d.id"
+                            [class.shadow-lg]="activeDosha === d.id"
+                            [ngClass]="{ 'shadow-orange-900/20': activeDosha === d.id }"
+                            [class.border-transparent]="activeDosha === d.id"
+                            class="px-2 py-3.5 rounded-xl border-2 border-orange-100 bg-white text-[11px] font-black uppercase tracking-widest transition-all hover:border-orange-400 text-orange-900 active:scale-95">
+                            {{ d.label }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="h-px bg-stone-200"></div>
+
+            <!-- Filter Group: Intensity Filter -->
+            <div class="space-y-6">
+                <!-- Header with Hover Border and Dropdown Icon -->
+                <button (click)="toggleSection('severity')"
+                    class="w-full flex items-center justify-between text-left group hover:bg-red-50/50 p-2 -m-2 rounded-xl border border-transparent hover:border-red-200 transition-all">
+                    <h3 class="text-xs font-black uppercase tracking-[0.25em] text-red-900">
+                        Intensity Filter
+                    </h3>
+                    <span class="text-[12px] text-red-900/40 transition-transform duration-300"
+                        [class.rotate-180]="sections.severity">▼</span>
+                </button>
+
+                <div [class.hidden]="!sections.severity"
+                    class="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <button *ngFor="let s of severities" (click)="setSeverity(s.id)"
+                        [class.bg-red-50]="activeSeverity === s.id" [class.border-red-200]="activeSeverity === s.id"
+                        [class.shadow-md]="activeSeverity === s.id" [ngClass]="{ 
+                'text-red-900': activeSeverity === s.id, 
+                'text-red-900/40': activeSeverity !== s.id 
+            }" class="w-full flex items-center justify-between px-5 py-4 rounded-2xl border-2 border-transparent bg-white text-sm font-bold transition-all hover:bg-stone-50 active:scale-95 group">
+
+                        <span>{{ s.label }}</span>
+
+                        <!-- The Active Dot: Changed to red for high visibility against the light bg -->
+                        <div *ngIf="activeSeverity === s.id"
+                            class="w-2.5 h-2.5 rounded-full bg-red-600 shadow-[0_0_8px_rgba(153,27,27,0.4)] animate-pulse">
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reset Action -->
+            <div class="pt-6">
+                <button (click)="activeCategory = 'all'; activeDosha = 'all'; activeSeverity = 'all'; applyFilters()"
+                    class="w-full flex items-center justify-center gap-3 px-6 py-5 rounded-2xl bg-emerald-900 hover:bg-emerald-800 text-[11px] font-black uppercase tracking-widest text-white transition-all active:scale-95 group shadow-xl shadow-emerald-900/20">
+                    <span class="group-hover:rotate-180 transition-transform duration-700">🔄</span>
+                    Refresh Discoveries
+                </button>
+            </div>
+
+            <!-- Branding -->
+            <div class="pt-12 opacity-30">
+                <div class="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-900">AyurGenix Intelligence
+                </div>
+                <div class="text-[8px] font-bold text-emerald-800 mt-1">DEEP KNOWLEDGE ENGINE V3.5</div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col min-w-0">
+            <!-- Search Input Bar -->
+            <div [ngClass]="isModal ? 'p-8 pb-4' : 'mb-8'">
+                <div class="relative group">
+                    <input type="text" [(ngModel)]="searchQuery" (input)="onSearchChange()"
+                        placeholder="Seek wisdom... (e.g. 'Migraine', 'Ashwagandha')"
+                        class="w-full h-16 pl-16 pr-8 bg-white border-2 border-transparent focus:border-emerald-500/30 rounded-[2rem] shadow-2xl shadow-emerald-900/5 text-xl font-medium outline-none transition-all placeholder:text-gray-300" />
+                    <span
+                        class="absolute left-6 top-1/2 -translate-y-1/2 text-2xl group-focus-within:scale-110 transition-transform">🧠</span>
+
+                    <div *ngIf="isLoading" class="absolute right-6 top-1/2 -translate-y-1/2">
+                        <div class="w-6 h-6 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div [ngClass]="isModal ? 'flex-1 overflow-y-auto p-8 pt-0 space-y-6' : 'space-y-8'">
+
+                <!-- Loading State placeholder -->
+                <div *ngIf="isLoading && filteredResults.length === 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div *ngFor="let i of [1,2,3,4]" class="h-48 bg-gray-50 rounded-[2.5rem] animate-pulse"></div>
+                </div>
+
+                <!-- Empty State -->
+                <div *ngIf="!hasSearched && !isLoading"
+                    class="text-center py-20 bg-white/50 rounded-[3rem] border-2 border-dashed border-emerald-100">
+                    <div class="text-6xl mb-6">🌿</div>
+                    <h3 class="text-2xl font-black text-gray-900 mb-2 leading-tight">Enter Your Inquiry</h3>
+                    <p class="text-gray-400 font-medium max-w-sm mx-auto">Explore 5,000+ years of healing wisdom through
+                        our clinical and botanical directories.</p>
+                </div>
+
+                <!-- No Results -->
+                <div *ngIf="hasSearched && filteredResults.length === 0 && !isLoading"
+                    class="text-center py-20 bg-white/50 rounded-[3rem] border-2 border-dashed border-orange-100">
+                    <div class="text-6xl mb-6">🏜️</div>
+                    <h3 class="text-2xl font-black text-gray-900 mb-2 leading-tight">Wisdom Uncharted</h3>
+                    <p class="text-gray-400 font-medium max-w-sm mx-auto">We couldn't find a direct match. Try broad
+                        terms like 'Digestion' or 'Stress'.</p>
+                </div>
+
+                <!-- Results Grid -->
+                <div *ngIf="filteredResults.length > 0" class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    <div *ngFor="let item of filteredResults" (click)="viewDetails(item)"
+                        class="group bg-white border border-transparent hover:border-emerald-100 p-8 rounded-[2.5rem] hover:shadow-2xl hover:shadow-emerald-900/5 transition-all cursor-pointer relative overflow-hidden active:scale-[0.98]">
+
+                        <!-- Floating Background Accent -->
+                        <div
+                            class="absolute -top-12 -right-12 w-32 h-32 bg-emerald-50/50 rounded-full blur-3xl group-hover:scale-150 transition-transform">
+                        </div>
+
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                                        {{ getIcon(item.dataType) }}
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="block text-[10px] font-black uppercase tracking-widest text-emerald-700/60 leading-none mb-1">
+                                            {{ item.dataType === 'knowledge' ? 'Clinical Study' :
+                                            getTypeLabel(item.dataType) }}
+                                        </span>
+                                        <h4
+                                            class="font-black text-gray-900 text-xl leading-tight group-hover:text-emerald-800 transition-colors">
+                                            {{ item.name || item.title || item.ailment || item.disease }}
+                                        </h4>
+                                    </div>
+                                </div>
+                                <div *ngIf="item.severity"
+                                    class="px-3 py-1 bg-red-50 text-red-600 text-[10px] font-black rounded-lg uppercase tracking-widest border border-red-100">
+                                    {{ item.severity }}
+                                </div>
+                            </div>
+
+                            <!-- Bilingual Names -->
+                            <div *ngIf="item.hindi_name" class="flex gap-4 mb-4 text-xs font-bold text-gray-400">
+                                <span *ngIf="item.hindi_name" class="serif-font">हिन्दी: {{ item.hindi_name }}</span>
+                            </div>
+
+                            <!-- Meta Info -->
+                            <div class="space-y-3 mb-6">
+                                <p *ngIf="item.symptoms" class="text-sm text-gray-600 leading-relaxed line-clamp-2">
+                                    <span
+                                        class="text-gray-400 font-extrabold uppercase text-[9px] tracking-widest block mb-1">Signals:</span>
+                                    {{ item.symptoms }}
+                                </p>
+                                <p *ngIf="item.ayurvedic_herbs" class="text-sm text-emerald-800 font-medium">
+                                    <span
+                                        class="text-emerald-800/20 font-extrabold uppercase text-[9px] tracking-widest block mb-1">Recommended
+                                        Herbs:</span>
+                                    {{ item.ayurvedic_herbs }}
+                                </p>
+                            </div>
+
+                            <!-- Action / Details Trigger -->
+                            <div class="flex items-center justify-between pt-6 border-t border-gray-50">
+                                <span
+                                    class="text-[9px] font-black uppercase tracking-widest text-emerald-800/40">Reference
+                                    #{{ item.id }}</span>
+                                <span
+                                    class="flex items-center gap-2 text-[10px] font-black text-emerald-700 uppercase tracking-widest group-hover:translate-x-1 transition-transform">
+                                    Deep Dive →
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Detail View Component (Always modal-like) -->
+    <app-ayurveda-detail *ngIf="selectedItem" [item]="selectedItem" (close)="closeDetails()"></app-ayurveda-detail>
+</div>

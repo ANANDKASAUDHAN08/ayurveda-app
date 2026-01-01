@@ -161,7 +161,7 @@ export class LabTestsComponent implements OnInit {
     this.loadTests();
   }
 
-  // Cart integration
+  //Cart integration
   addToCart(test: LabTest) {
     if (!this.authService.isLoggedIn()) {
       this.snackbar.warning('Please login to book an appointment');
@@ -169,21 +169,20 @@ export class LabTestsComponent implements OnInit {
     }
 
     this.addingToCart[test.id] = true;
-    this.cartService.addToCart({
-      product_id: test.id,
-      product_type: 'lab_test',
+
+    this.cartService.addItem({
+      id: String(test.id),
+      name: test.name,
+      type: 'other', // lab_test is not a valid CartItem type, using 'other'
+      price: test.discounted_price || 0,
       quantity: 1,
-      price: test.discounted_price
-    }).subscribe({
-      next: () => {
-        this.addingToCart[test.id] = false;
-        this.snackbar.show(`${test.name} added to cart!`, 'success');
-      },
-      error: () => {
-        this.addingToCart[test.id] = false;
-        this.snackbar.show('Failed to add to cart', 'error');
-      }
+      image: ''
     });
+
+    setTimeout(() => {
+      this.addingToCart[test.id] = false;
+      this.snackbar.show(`${test.name} added to cart!`, 'success');
+    }, 300);
   }
 
   // Test details modal

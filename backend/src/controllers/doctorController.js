@@ -99,10 +99,16 @@ exports.registerDoctor = async (req, res) => {
 
 exports.getDoctors = async (req, res) => {
     try {
-        const { specialization, mode, search, maxFee, minExperience } = req.query;
+        const { specialization, mode, search, maxFee, minExperience, medicine_type } = req.query;
 
         let query = 'SELECT * FROM doctors WHERE 1=1';
         const params = [];
+
+        // NEW: Medicine Type Filter (optional, backward compatible)
+        if (medicine_type && ['ayurveda', 'homeopathy', 'allopathy'].includes(medicine_type)) {
+            query += ' AND medicine_type = ?';
+            params.push(medicine_type);
+        }
 
         if (specialization) {
             // Handle both string and array for specialization

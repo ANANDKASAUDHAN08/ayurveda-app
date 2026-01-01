@@ -1,0 +1,9 @@
+:host {
+    display: block;
+}
+
+.doctor-card {
+    transition: all 0.3s ease;
+}
+
+/* Add any custom styles here if Tailwind is not sufficient */

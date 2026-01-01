@@ -26,8 +26,8 @@ export class CartComponent implements OnInit, OnDestroy {
   private cartSubscription?: Subscription;
 
   // Loading states for buttons
-  updatingItemId: number | null = null;
-  removingItemId: number | null = null;
+  updatingItemId: string | null = null;
+  removingItemId: string | null = null;
   clearingCart = false;
 
   // Modal states
@@ -42,8 +42,8 @@ export class CartComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // Subscribe to cart$ observable for automatic updates
-    this.cartSubscription = this.cartService.cart$.subscribe({
+    // Subscribe to cart observable for automatic updates
+    this.cartSubscription = this.cartService.getCart().subscribe({
       next: (cart) => {
         this.cart = cart;
         this.loading = false;
@@ -96,18 +96,10 @@ export class CartComponent implements OnInit, OnDestroy {
     this.showRemoveModal = false;
     document.body.classList.remove('overflow-hidden');
 
-    this.cartService.removeItem(this.itemToRemove.id).subscribe({
-      next: () => {
-        this.removingItemId = null;
-        this.itemToRemove = null;
-        this.snackbar.show('Item removed from cart', 'success');
-      },
-      error: (error) => {
-        this.snackbar.show('Failed to remove item', 'error');
-        this.removingItemId = null;
-        this.itemToRemove = null;
-      }
-    });
+    this.cartService.removeItem(this.itemToRemove.id);
+    this.removingItemId = null;
+    this.itemToRemove = null;
+    this.snackbar.show('Item removed from cart', 'success');
   }
 
   // Cancel remove
@@ -129,16 +121,11 @@ export class CartComponent implements OnInit, OnDestroy {
     this.showClearModal = false;
     document.body.classList.remove('overflow-hidden');
 
-    this.cartService.clearCart().subscribe({
-      next: () => {
-        this.clearingCart = false;
-        this.snackbar.show('Cart cleared successfully', 'success');
-      },
-      error: (error) => {
-        this.snackbar.show('Failed to clear cart', 'error');
-        this.clearingCart = false;
-      }
-    });
+    this.cartService.clearCart();
+    setTimeout(() => {
+      this.clearingCart = false;
+      this.snackbar.show('Cart cleared successfully', 'success');
+    }, 300);
   }
 
   // Cancel clear
@@ -152,23 +139,18 @@ export class CartComponent implements OnInit, OnDestroy {
     if (newQuantity < 1 || newQuantity > 10) return;
 
     this.updatingItemId = item.id;
-    this.cartService.updateQuantity(item.id, newQuantity).subscribe({
-      next: () => {
-        this.updatingItemId = null;
-      },
-      error: (error) => {
-        this.snackbar.show('Failed to update quantity', 'error');
-        this.updatingItemId = null;
-      }
-    });
+    this.cartService.updateQuantity(item.id, newQuantity);
+    setTimeout(() => {
+      this.updatingItemId = null;
+    }, 300);
   }
 
   // Helper to check if button is loading
-  isUpdating(itemId: number): boolean {
+  isUpdating(itemId: string): boolean {
     return this.updatingItemId === itemId;
   }
 
-  isRemoving(itemId: number): boolean {
+  isRemoving(itemId: string): boolean {
     return this.removingItemId === itemId;
   }
 

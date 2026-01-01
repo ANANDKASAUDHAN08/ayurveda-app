@@ -1,3 +1,5 @@
+<app-mobile-location-bar class="md:hidden"></app-mobile-location-bar>
+
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="container mx-auto px-4">
         <!-- Header -->
@@ -8,6 +10,11 @@
             </div>
             <p class="text-gray-600">Browse and shop for medicines and supplements</p>
         </div>
+
+        <!-- Context Banner for Medicine Type Filtering -->
+        <app-context-banner [currentType]="currentMedicineType" [resultCount]="totalMedicines" [itemName]="'medicines'"
+            (toggleFilter)="onToggleFilter()" (clearFilter)="onClearFilter()" (switchType)="onSwitchType($event)">
+        </app-context-banner>
 
         <!-- Filters -->
         <div class="bg-white rounded-lg shadow-sm p-4 mb-6">

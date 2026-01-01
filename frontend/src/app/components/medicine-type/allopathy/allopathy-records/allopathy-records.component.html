@@ -1,0 +1,95 @@
+<div class="records-vault animate-in fade-in py-16 px-4 bg-slate-50">
+    <div class="max-w-7xl mx-auto space-y-12">
+
+        <!-- Header with Cloud Status -->
+        <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left">
+                <span class="text-blue-600 font-black uppercase tracking-[0.3em] text-[10px]">GDPR & HIPAA
+                    Compliant</span>
+                <h2 class="text-4xl font-black text-slate-900 tracking-tighter">Medical <span
+                        class="text-blue-600">Records</span></h2>
+                <p class="text-slate-500 font-medium">Your medical history, secured with end-to-end encryption.</p>
+            </div>
+            <div class="flex items-center gap-4 bg-white p-4 rounded-3xl border border-slate-200 shadow-sm">
+                <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-black text-slate-800 tracking-tight">Cloud Sync Active</p>
+                    <p class="text-[8px] font-bold text-slate-400 uppercase">Last Backup: 4m ago</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Records Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+            <!-- Quick filters sidebar -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50">
+                    <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6">Filter by Type</h3>
+                    <div class="space-y-2">
+                        <button *ngFor="let f of filters" (click)="setFilter(f.type)"
+                            [class.bg-blue-600]="activeFilter === f.type" [class.text-white]="activeFilter === f.type"
+                            class="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-blue-50 transition-all font-bold group">
+                            <div class="flex items-center gap-3">
+                                <i
+                                    [class]="f.icon + (activeFilter === f.type ? ' text-white' : ' text-slate-400 group-hover:text-blue-500') + ' transition-colors'"></i>
+                                <span class="text-sm" [class.text-slate-700]="activeFilter !== f.type">{{f.name}}</span>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-lg" [class.bg-white]="activeFilter === f.type"
+                                [class.text-blue-600]="activeFilter === f.type"
+                                [class.bg-slate-100]="activeFilter !== f.type"
+                                [class.text-slate-500]="activeFilter !== f.type">{{f.count}}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Records List -->
+            <div class="lg:col-span-3 space-y-6">
+                <!-- Loading State -->
+                <div *ngIf="loading" class="space-y-4">
+                    <div *ngFor="let i of [1,2,3]" class="h-24 bg-white rounded-[2.5rem] animate-pulse"></div>
+                </div>
+
+                <!-- Empty State -->
+                <div *ngIf="!loading && documents.length === 0"
+                    class="bg-white p-20 rounded-[3rem] text-center border-2 border-dashed border-slate-200">
+                    <i class="fas fa-folder-open text-6xl text-slate-100 mb-6"></i>
+                    <p class="text-xl font-black text-slate-300 uppercase tracking-widest">No Records Found</p>
+                </div>
+
+                <div *ngIf="!loading" class="space-y-6">
+                    <div *ngFor="let doc of documents"
+                        class="group bg-white p-6 rounded-[2.5rem] border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-2xl hover:border-blue-100 transition-all">
+                        <div class="flex items-center gap-6">
+                            <div
+                                class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-2xl text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                <i [class]="doc.icon"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-black text-slate-900">{{doc.name}}</h4>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                    {{doc.provider}}
+                                    • {{doc.date}}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button
+                                class="p-4 bg-slate-50 rounded-2xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all"><i
+                                    class="fas fa-eye"></i></button>
+                            <button
+                                class="p-4 bg-slate-50 rounded-2xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all"><i
+                                    class="fas fa-download"></i></button>
+                            <button
+                                class="px-6 py-4 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 shadow-xl shadow-slate-200">Share
+                                Securely</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>

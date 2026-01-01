@@ -1,0 +1,140 @@
+/* Glassmorphism & Animations */
+.glass-card {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.floating-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+    opacity: 0.4;
+    pointer-events: none;
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-40px) scale(1.1);
+    }
+}
+
+.blob-1 {
+    width: 400px;
+    height: 400px;
+    background: rgba(76, 175, 80, 0.2);
+    top: -100px;
+    left: -100px;
+    animation-duration: 25s;
+}
+
+.blob-2 {
+    width: 300px;
+    height: 300px;
+    background: rgba(3, 169, 244, 0.15);
+    bottom: 10%;
+    right: -50px;
+    animation-duration: 20s;
+    animation-delay: -5s;
+}
+
+.blob-3 {
+    width: 350px;
+    height: 350px;
+    background: rgba(255, 193, 7, 0.1);
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-duration: 30s;
+    animation-delay: -10s;
+}
+
+/* Essential styles for content rendered via innerHTML */
+
+.integrative-content ::ng-deep h4,
+.recommendations-content ::ng-deep h4 {
+    margin: 1.5rem 0 1rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #134e4a;
+    border-bottom: 2px solid #ccfbf1;
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.integrative-content ::ng-deep ul,
+.recommendations-content ::ng-deep ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.integrative-content ::ng-deep li,
+.recommendations-content ::ng-deep li {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border-left: 6px solid #2dd4bf;
+    color: #0f766e;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.recommendations-content ::ng-deep li {
+    border-left-color: #10b981;
+    color: #064e3b;
+}
+
+.integrative-content ::ng-deep p,
+.recommendations-content ::ng-deep p {
+    margin-bottom: 1rem;
+}
+
+/* 1. Define the animation */
+@keyframes revealText {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) skewY(2deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) skewY(0deg);
+    }
+}
+
+/* 2. Create the utility classes */
+.animate-reveal {
+    animation: revealText 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    opacity: 0;
+    /* Starts hidden */
+}
+
+/* Optional: Staggering the timing for the subtitle */
+.delay-200 {
+    animation-delay: 0.2s;
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
+
+.animate-shine {
+    background-size: 200% auto;
+    animation: shine 3s linear infinite;
+}

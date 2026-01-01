@@ -63,14 +63,15 @@
 
                 <!-- Quick Actions Bar -->
                 <div class="flex gap-3 pb-6 border-b">
-                    <button
+                    <button (click)="onBook()"
                         class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-2">
                         <i class="fas fa-calendar-check"></i>
                         Book Appointment
                     </button>
-                    <button
+                    <button (click)="toggleFavorite()" [class.bg-rose-50]="isFavorite()"
+                        [class.border-rose-200]="isFavorite()"
                         class="px-6 py-3 border-2 border-gray-200 hover:border-emerald-600 rounded-xl transition-all">
-                        <i class="far fa-heart text-rose-500"></i>
+                        <i [class]="isFavorite() ? 'fas fa-heart text-rose-500' : 'far fa-heart text-gray-400'"></i>
                     </button>
                     <button
                         class="px-6 py-3 border-2 border-gray-200 hover:border-emerald-600 rounded-xl transition-all">

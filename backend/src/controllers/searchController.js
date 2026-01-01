@@ -190,6 +190,66 @@ exports.searchProducts = async (req, res) => {
             }
         }
 
+        // Search Ayurveda Medicines
+        if (!type || type === 'ayurveda_medicine' || type === 'all') {
+            let ayurQuery = `
+                SELECT id, name, description, price, category, 'ayurveda_medicine' as product_type, image_url, benefits
+                FROM ayurveda_medicines
+                WHERE 1=1
+            `;
+            let ayurParams = [];
+            if (q) {
+                ayurQuery += ` AND (name LIKE ? OR description LIKE ? OR category LIKE ? OR benefits LIKE ?)`;
+                ayurParams.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
+            }
+            try {
+                const [rows] = await db.execute(ayurQuery, ayurParams);
+                allResults.push(...rows);
+            } catch (error) {
+                console.log('Ayurveda medicines query failed:', error.message);
+            }
+        }
+
+        // Search Ayurveda Exercises
+        if (!type || type === 'ayurveda_exercise' || type === 'all') {
+            let exerciseQuery = `
+                SELECT id, name, description, NULL as price, type as category, 'ayurveda_exercise' as product_type, image_url, benefits
+                FROM ayurveda_exercises
+                WHERE 1=1
+            `;
+            let exParams = [];
+            if (q) {
+                exerciseQuery += ` AND (name LIKE ? OR description LIKE ? OR type LIKE ? OR benefits LIKE ?)`;
+                exParams.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
+            }
+            try {
+                const [rows] = await db.execute(exerciseQuery, exParams);
+                allResults.push(...rows);
+            } catch (error) {
+                console.log('Ayurveda exercises query failed:', error.message);
+            }
+        }
+
+        // Search Ayurveda Articles
+        if (!type || type === 'ayurveda_article' || type === 'all') {
+            let articleQuery = `
+                SELECT id, title as name, excerpt as description, NULL as price, category, 'ayurveda_article' as product_type, image_url
+                FROM ayurveda_articles
+                WHERE 1=1
+            `;
+            let artParams = [];
+            if (q) {
+                articleQuery += ` AND (title LIKE ? OR excerpt LIKE ? OR category LIKE ? OR content LIKE ?)`;
+                artParams.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
+            }
+            try {
+                const [rows] = await db.execute(articleQuery, artParams);
+                allResults.push(...rows);
+            } catch (error) {
+                console.log('Ayurveda articles query failed:', error.message);
+            }
+        }
+
         // Apply sorting
         const sortMap = {
             'price_asc': (a, b) => (a.price || 0) - (b.price || 0),
@@ -305,6 +365,32 @@ exports.getSuggestions = async (req, res) => {
             allSuggestions.push(...pharmacies);
         } catch (err) {
             console.log('Pharmacy suggestions failed:', err.message);
+        }
+
+        // Ayurveda Medicines
+        try {
+            const [ayurMeds] = await db.execute(`
+                SELECT name, price, category, 'ayurveda_medicine' as type
+                FROM ayurveda_medicines
+                WHERE name LIKE ?
+                LIMIT 2
+            `, [`%${q}%`]);
+            allSuggestions.push(...ayurMeds);
+        } catch (err) {
+            console.log('Ayurveda suggestions failed:', err.message);
+        }
+
+        // Ayurveda Articles
+        try {
+            const [ayurArts] = await db.execute(`
+                SELECT title as name, NULL as price, category, 'ayurveda_article' as type
+                FROM ayurveda_articles
+                WHERE title LIKE ?
+                LIMIT 2
+            `, [`%${q}%`]);
+            allSuggestions.push(...ayurArts);
+        } catch (err) {
+            console.log('Ayurveda article suggestions failed:', err.message);
         }
 
         // Limit total suggestions to 10

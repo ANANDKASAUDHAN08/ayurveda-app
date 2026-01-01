@@ -1,126 +1,136 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
-export interface MedicineType {
-    id: number;
+export type MedicineType = 'ayurveda' | 'homeopathy' | 'allopathy';
+export type FilterMode = 'strict' | 'inclusive' | 'all';
+
+
+export interface MedicineTypeInfo {
+    id: MedicineType;
     name: string;
-    description: string;
+    tagline: string;
     icon: string;
     color: string;
-    is_active: boolean;
-}
-
-export interface MedicineTypeStats {
-    id: number;
-    name: string;
-    color: string;
-    icon: string;
-    doctor_count: number;
-    consultation_count: number;
-    avg_rating: number;
+    gradient: string;
+    route: string;
 }
 
 @Injectable({
     providedIn: 'root'
 })
 export class MedicineTypeService {
-    private apiUrl = 'http://localhost:3000/api/medicine-types';
+    private readonly STORAGE_KEY = 'preferredMedicineType';
+    private currentType$ = new BehaviorSubject<MedicineType>(this.getStoredType());
 
-    // Active medicine type (stored in BehaviorSubject for reactivity)
-    private activeMedicineTypeSubject = new BehaviorSubject<number | null>(null);
-    public activeMedicineType$ = this.activeMedicineTypeSubject.asObservable();
+    private medicineTypes: MedicineTypeInfo[] = [
+        {
+            id: 'ayurveda',
+            name: 'Ayurveda',
+            tagline: 'Nature\'s Wisdom, Personalized',
+            icon: '🌿',
+            color: '#10b981',
+            gradient: 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)',
+            route: '/ayurveda'
+        },
+        {
+            id: 'homeopathy',
+            name: 'Homeopathy',
+            tagline: 'Gentle Healing, Deep Cure',
+            icon: '💧',
+            color: '#3b82f6',
+            gradient: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+            route: '/homeopathy'
+        },
+        {
+            id: 'allopathy',
+            name: 'Allopathy',
+            tagline: 'Modern Science, Proven Results',
+            icon: '⚕️',
+            color: '#f97316',
+            gradient: 'linear-gradient(135deg, #f97316 0%, #ef4444 100%)',
+            route: '/allopathy'
+        }
+    ];
 
-    constructor(private http: HttpClient) {
-        // Load from localStorage on init
-        const stored = localStorage.getItem('activeMedicineType');
+    constructor() {
+        // Initialize from localStorage
+        const stored = this.getStoredType();
         if (stored) {
-            this.activeMedicineTypeSubject.next(parseInt(stored));
+            this.currentType$.next(stored);
+        }
+    }
+
+    /**
+     * Get current medicine type as Observable
+     */
+    getCurrentType(): Observable<MedicineType> {
+        return this.currentType$.asObservable();
+    }
+
+    /**
+     * Get current medicine type value (synchronous)
+     */
+    getCurrentTypeValue(): MedicineType | 'all' {
+        return this.currentType$.value;
+    }
+
+    /**
+     * Set medicine type
+     */
+    setMedicineType(type: MedicineType | 'all'): void {
+        this.currentType$.next(type as MedicineType);
+        if (type !== 'all') {
+            localStorage.setItem(this.STORAGE_KEY, type);
         }
     }
 
     /**
      * Get all medicine types
      */
-    getAllMedicineTypes(): Observable<{ success: boolean; data: MedicineType[] }> {
-        return this.http.get<{ success: boolean; data: MedicineType[] }>(this.apiUrl);
+    getAllTypes(): MedicineTypeInfo[] {
+        return this.medicineTypes;
     }
 
     /**
-     * Get medicine type by ID
+     * Get medicine type info by ID
      */
-    getMedicineTypeById(id: number): Observable<{ success: boolean; data: MedicineType }> {
-        return this.http.get<{ success: boolean; data: MedicineType }>(`${this.apiUrl}/${id}`);
+    getTypeInfo(type: MedicineType): MedicineTypeInfo | undefined {
+        return this.medicineTypes.find(t => t.id === type);
     }
 
     /**
-     * Get doctors filtered by medicine type
+     * Get stored medicine type from localStorage
      */
-    getDoctorsByMedicineType(
-        medicineTypeId: number,
-        filters?: { city?: string; specialization?: string; available?: boolean }
-    ): Observable<any> {
-        let url = `${this.apiUrl}/${medicineTypeId}/doctors`;
-        const params = new URLSearchParams();
-
-        if (filters?.city) {
-            params.append('city', filters.city);
+    private getStoredType(): MedicineType {
+        try {
+            const stored = localStorage.getItem(this.STORAGE_KEY);
+            if (stored && this.isValidType(stored)) {
+                return stored as MedicineType;
+            }
+        } catch (error) {
+            console.error('Error reading stored medicine type:', error);
         }
-        if (filters?.specialization) {
-            params.append('specialization', filters.specialization);
-        }
-        if (filters?.available !== undefined) {
-            params.append('available', filters.available.toString());
-        }
-
-        if (params.toString()) {
-            url += `?${params.toString()}`;
-        }
-
-        return this.http.get(url);
+        return 'ayurveda'; // Default
     }
 
     /**
-     * Get statistics for all medicine types
+     * Validate medicine type
      */
-    getMedicineTypeStats(): Observable<{ success: boolean; data: MedicineTypeStats[] }> {
-        return this.http.get<{ success: boolean; data: MedicineTypeStats[] }>(`${this.apiUrl}/stats`);
+    private isValidType(type: string): boolean {
+        return ['ayurveda', 'homeopathy', 'allopathy'].includes(type);
     }
 
     /**
-     * Set active medicine type
+     * Get color for medicine type
      */
-    setActiveMedicineType(typeId: number | null): void {
-        this.activeMedicineTypeSubject.next(typeId);
-        if (typeId) {
-            localStorage.setItem('activeMedicineType', typeId.toString());
-        } else {
-            localStorage.removeItem('activeMedicineType');
-        }
+    getColor(type: MedicineType): string {
+        return this.getTypeInfo(type)?.color || '#10b981';
     }
 
     /**
-     * Get current active medicine type (synchronous)
+     * Get gradient for medicine type
      */
-    getActiveMedicineType(): number | null {
-        return this.activeMedicineTypeSubject.value;
-    }
-
-    /**
-     * Clear active medicine type filter
-     */
-    clearFilter(): void {
-        this.setActiveMedicineType(null);
-    }
-
-    /**
-     * Filter doctors array by medicine type
-     */
-    filterDoctorsByType(doctors: any[], typeId: number | null): any[] {
-        if (!typeId) {
-            return doctors; // No filter, return all
-        }
-        return doctors.filter(doctor => doctor.medicine_type_id === typeId);
+    getGradient(type: MedicineType): string {
+        return this.getTypeInfo(type)?.gradient || 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)';
     }
 }

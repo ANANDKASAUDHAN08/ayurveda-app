@@ -1,0 +1,594 @@
+/* ===================================
+   MEDICINE TYPE SELECTOR - PREMIUM DESIGN
+   Glassmorphism + Gradients + Animations
+   =================================== */
+
+.medicine-type-selector {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdf4 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated background particles */
+.medicine-type-selector::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+  top: -200px;
+  right: -200px;
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+.medicine-type-selector::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
+  bottom: -100px;
+  left: -100px;
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+/* Header Section */
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: #64748b;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Types Grid */
+.types-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  margin-bottom: 48px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Type Card - Premium Glassmorphism */
+.type-card {
+  position: relative;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(255, 255, 255, 0.92) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
+  padding: 40px 32px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  cursor: pointer;
+  animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Stagger animation delay for cards */
+.type-card:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.type-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.type-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+/* Animated gradient border */
+.type-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 24px;
+  padding: 2px;
+  background: var(--card-gradient);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.type-card:hover::before {
+  opacity: 1;
+}
+
+/* Floating particle effect on hover */
+.type-card::after {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--card-color) 0%, transparent 70%);
+  opacity: 0;
+  top: -150px;
+  right: -150px;
+  border-radius: 50%;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.type-card:hover::after {
+  transform: scale(1.5);
+  opacity: 0.15;
+}
+
+/* Ayurveda - Green Nature Theme */
+.type-card.ayurveda {
+  --card-gradient: var(--ayurveda-gradient);
+  --card-color: var(--ayurveda-primary);
+  border-left: 6px solid var(--ayurveda-primary);
+}
+
+.type-card.ayurveda .type-icon {
+  background: var(--ayurveda-gradient-soft);
+}
+
+.type-card.ayurveda:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow:
+    0 20px 40px rgba(16, 185, 129, 0.2),
+    0 0 40px rgba(16, 185, 129, 0.12);
+}
+
+/* Homeopathy - Purple Gentle Theme */
+.type-card.homeopathy {
+  --card-gradient: var(--homeopathy-gradient);
+  --card-color: var(--homeopathy-primary);
+  border-left: 6px solid var(--homeopathy-primary);
+}
+
+.type-card.homeopathy .type-icon {
+  background: var(--homeopathy-gradient-soft);
+}
+
+.type-card.homeopathy:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow:
+    0 20px 40px rgba(139, 92, 246, 0.2),
+    0 0 40px rgba(139, 92, 246, 0.12);
+}
+
+/* Allopathy - Blue Medical Theme */
+.type-card.allopathy {
+  --card-gradient: var(--allopathy-gradient);
+  --card-color: var(--allopathy-primary);
+  border-left: 6px solid var(--allopathy-primary);
+}
+
+.type-card.allopathy .type-icon {
+  background: var(--allopathy-gradient-soft);
+}
+
+.type-card.allopathy:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow:
+    0 20px 40px rgba(59, 130, 246, 0.2),
+    0 0 40px rgba(59, 130, 246, 0.12);
+}
+
+/* Card Icon */
+.type-icon {
+  width: 90px;
+  height: 90px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  overflow: hidden;
+}
+
+.type-icon .icon {
+  font-size: 3.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  position: relative;
+  z-index: 1;
+}
+
+.type-card:hover .type-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Card Content */
+.type-name {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: #1e293b;
+  transition: color 0.3s ease;
+}
+
+.type-card.ayurveda:hover .type-name {
+  color: var(--ayurveda-primary);
+}
+
+.type-card.homeopathy:hover .type-name {
+  color: var(--homeopathy-primary);
+}
+
+.type-card.allopathy:hover .type-name {
+  color: var(--allopathy-primary);
+}
+
+.type-tagline {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 16px;
+  letter-spacing: 0.01em;
+}
+
+.type-description {
+  font-size: 0.9375rem;
+  color: #64748b;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* Stats Row */
+.stats {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(248, 250, 252, 0.8);
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.type-card.ayurveda .stat-value {
+  color: var(--ayurveda-primary);
+}
+
+.type-card.homeopathy .stat-value {
+  color: var(--homeopathy-primary);
+}
+
+.type-card.allopathy .stat-value {
+  color: var(--allopathy-primary);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+/* CTA Button - Premium with Ripple */
+.explore-btn {
+  width: 100%;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Button gradient backgrounds */
+.type-card.ayurveda .explore-btn {
+  background: var(--ayurveda-gradient);
+}
+
+.type-card.homeopathy .explore-btn {
+  background: var(--homeopathy-gradient);
+}
+
+.type-card.allopathy .explore-btn {
+  background: var(--allopathy-gradient);
+}
+
+/* Ripple effect */
+.explore-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.explore-btn:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+.explore-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.explore-btn:active {
+  transform: translateY(0);
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.explore-btn:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Info Banner */
+.info-banner {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-left: 4px solid var(--allopathy-primary);
+  border-radius: 16px;
+  padding: 24px 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 16px;
+}
+
+.banner-icon {
+  font-size: 1.5rem;
+  color: var(--allopathy-primary);
+  flex-shrink: 0;
+}
+
+.banner-content p {
+  font-size: 0.9375rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.banner-content strong {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+/* All Types Option */
+.all-types-option {
+  text-align: center;
+  padding: 32px;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  border: 2px dashed #cbd5e1;
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.all-types-option:hover {
+  transform: translateY(-4px);
+  border-color: #94a3b8;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.all-types-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto;
+}
+
+.all-types-btn .icon {
+  font-size: 3rem;
+  opacity: 0.4;
+  transition: all 0.3s ease;
+}
+
+.all-types-option:hover .all-types-btn .icon {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+.all-types-btn span {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid #e2e8f0;
+  border-top-color: var(--ayurveda-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 24px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .types-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .type-card {
+    padding: 32px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .medicine-type-selector {
+    padding: 24px 16px;
+  }
+
+  .header {
+    margin-bottom: 40px;
+  }
+
+  .types-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .type-card {
+    padding: 28px 20px;
+  }
+
+  .type-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .type-icon .icon {
+    font-size: 3rem;
+  }
+
+  .type-name {
+    font-size: 1.75rem;
+  }
+
+  .stats {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .info-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .all-types-option {
+    padding: 24px;
+  }
+
+  /* Reduce animations on mobile for performance */
+  .medicine-type-selector::before,
+  .medicine-type-selector::after {
+    display: none;
+  }
+
+  .type-card:hover {
+    transform: scale(0.98);
+    /* Tap effect instead of lift */
+  }
+}

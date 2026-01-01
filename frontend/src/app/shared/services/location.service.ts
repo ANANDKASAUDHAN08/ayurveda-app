@@ -15,6 +15,14 @@ export interface UserLocation {
 export class LocationService {
     private locationSubject = new BehaviorSubject<UserLocation | null>(null);
     public location$ = this.locationSubject.asObservable();
+
+    // UI Interaction Subjects
+    private openMapSubject = new BehaviorSubject<boolean>(false);
+    public openMap$ = this.openMapSubject.asObservable();
+
+    private sheetOpenSubject = new BehaviorSubject<boolean>(false);
+    public sheetOpen$ = this.sheetOpenSubject.asObservable();
+
     private http = inject(HttpClient);
 
     constructor() {
@@ -116,5 +124,14 @@ export class LocationService {
 
     getCurrentLocation(): UserLocation | null {
         return this.locationSubject.value;
+    }
+
+    // UI Methods
+    toggleMap(open: boolean): void {
+        this.openMapSubject.next(open);
+    }
+
+    toggleBottomSheet(open: boolean): void {
+        this.sheetOpenSubject.next(open);
     }
 }

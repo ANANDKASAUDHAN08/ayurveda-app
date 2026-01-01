@@ -1,0 +1,474 @@
+/* ===================================
+   LANDING PAGE - PREMIUM DESIGN
+   Medical Healthcare Theme
+   =================================== */
+
+.landing-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated background gradient */
+.landing-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 600px;
+    background: linear-gradient(135deg,
+            rgba(99, 102, 241, 0.05) 0%,
+            rgba(139, 92, 246, 0.05) 50%,
+            rgba(16, 185, 129, 0.05) 100%);
+    z-index: -1;
+}
+
+/* Hero Section - Premium Design */
+.hero-section {
+    text-align: center;
+    padding: 80px 20px;
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+}
+
+.hero-title .brand {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #10b981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+    animation: gradient-shift 5s ease infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes gradient-shift {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.hero-subtitle {
+    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+    color: #64748b;
+    max-width: 700px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+}
+
+.cta-button {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    padding: 18px 48px;
+    border: none;
+    border-radius: 14px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 12px rgba(99, 102, 241, 0.3),
+        0 0 30px rgba(99, 102, 241, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.cta-button:active::before {
+    width: 400px;
+    height: 400px;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow:
+        0 8px 24px rgba(99, 102, 241, 0.4),
+        0 0 50px rgba(99, 102, 241, 0.2);
+}
+
+/* Feature Cards Grid - Premium */
+.features-section {
+    margin-bottom: 80px;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 48px;
+    color: #1e293b;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+}
+
+.feature-card {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 255, 255, 0.9) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 20px;
+    padding: 40px 32px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #10b981);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow:
+        0 20px 40px rgba(99, 102, 241, 0.12),
+        0 0 40px rgba(99, 102, 241, 0.08);
+    border-color: #6366f1;
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+}
+
+/* Type-specific icon backgrounds */
+.feature-card:nth-child(1) .feature-icon,
+.feature-card:nth-child(4) .feature-icon {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+}
+
+.feature-card:nth-child(2) .feature-icon,
+.feature-card:nth-child(5) .feature-icon {
+    background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+}
+
+.feature-card:nth-child(3) .feature-icon,
+.feature-card:nth-child(6) .feature-icon {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.15) rotate(10deg);
+}
+
+.feature-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 12px;
+}
+
+.feature-description {
+    font-size: 0.9375rem;
+    color: #64748b;
+    line-height: 1.7;
+}
+
+/* Stats Banner - Premium */
+.stats-banner {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 24px;
+    padding: 60px 40px;
+    margin-bottom: 80px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 20px 40px rgba(30, 41, 59, 0.3),
+        0 0 60px rgba(30, 41, 59, 0.1);
+}
+
+.stats-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.05) 50%,
+            transparent 100%);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff 0%, #e2e8f0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.stat-label {
+    font-size: 1.125rem;
+    color: #cbd5e1;
+    font-weight: 500;
+}
+
+/* Medicine Types Preview - Premium Cards */
+.types-preview {
+    margin-bottom: 80px;
+}
+
+.types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+}
+
+.type-preview-card {
+    background: white;
+    border-radius: 20px;
+    padding: 36px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.type-preview-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.type-preview-card.ayurveda {
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.type-preview-card.ayurveda::after {
+    background: radial-gradient(circle, var(--ayurveda-primary) 0%, transparent 70%);
+}
+
+.type-preview-card.ayurveda:hover {
+    border-color: var(--ayurveda-primary);
+    box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2);
+}
+
+.type-preview-card.homeopathy {
+    border-color: rgba(139, 92, 246, 0.2);
+}
+
+.type-preview-card.homeopathy::after {
+    background: radial-gradient(circle, var(--homeopathy-primary) 0%, transparent 70%);
+}
+
+.type-preview-card.homeopathy:hover {
+    border-color: var(--homeopathy-primary);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+}
+
+.type-preview-card.allopathy {
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.type-preview-card.allopathy::after {
+    background: radial-gradient(circle, var(--allopathy-primary) 0%, transparent 70%);
+}
+
+.type-preview-card.allopathy:hover {
+    border-color: var(--allopathy-primary);
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+}
+
+.type-preview-card:hover {
+    transform: translateY(-10px) scale(1.03);
+}
+
+.type-preview-card:hover::after {
+    opacity: 0.05;
+    animation: pulse-rotate 4s linear infinite;
+}
+
+@keyframes pulse-rotate {
+    0% {
+        transform: rotate(0deg);
+        opacity: 0.03;
+    }
+
+    50% {
+        transform: rotate(180deg);
+        opacity: 0.06;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        opacity: 0.03;
+    }
+}
+
+.type-preview-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    z-index: 1;
+}
+
+.type-preview-card:hover .type-preview-icon {
+    transform: scale(1.2) rotate(-5deg);
+}
+
+.type-preview-name {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.type-preview-card.ayurveda .type-preview-name {
+    color: var(--ayurveda-primary);
+}
+
+.type-preview-card.homeopathy .type-preview-name {
+    color: var(--homeopathy-primary);
+}
+
+.type-preview-card.allopathy .type-preview-name {
+    color: var(--allopathy-primary);
+}
+
+.type-preview-description {
+    font-size: 0.9375rem;
+    color: #64748b;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .stats-banner {
+        padding: 48px 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .landing-page {
+        padding: 24px 16px;
+    }
+
+    .hero-section {
+        padding: 60px 20px;
+    }
+
+    .cta-button {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .features-grid,
+    .types-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .stats-banner {
+        padding: 40px 24px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 32px;
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+}
