@@ -35,7 +35,7 @@ class ShareController {
                 [id, shareToken, userId, recipient_email, recipient_name, recipient_type, expiresAt]
             );
 
-            const frontendUrl = process.env.FRONTEND_URL || 'process.env.APP_URL';
+            const frontendUrl = process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:4200';
             const shareUrl = `${frontendUrl}/share/rx/${shareToken}`;
 
             let emailSent = false;
