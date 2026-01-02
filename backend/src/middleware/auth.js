@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, 'supersecretkey');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-random-secret-key-anand-infinityMan');
         req.user = decoded;
         next();
     } catch (ex) {

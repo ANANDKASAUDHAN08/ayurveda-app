@@ -68,7 +68,7 @@ exports.registerDoctor = async (req, res) => {
         const doctorId = doctorResult.insertId;
 
         // Generate Token
-        const token = jwt.sign({ id: userId, role: 'doctor' }, process.env.JWT_SECRET || 'supersecretkey', { expiresIn: '1h' });
+        const token = jwt.sign({ id: userId, role: 'doctor' }, process.env.JWT_SECRET || 'your-random-secret-key-anand-infinityMan', { expiresIn: '1h' });
 
         // Send welcome email (non-blocking)
         try {

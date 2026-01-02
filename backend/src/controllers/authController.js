@@ -35,7 +35,7 @@ exports.register = async (req, res) => {
         );
 
         const userId = result.insertId;
-        const token = jwt.sign({ id: userId, role: userRole }, process.env.JWT_SECRET || 'supersecretkey', { expiresIn: '1h' });
+        const token = jwt.sign({ id: userId, role: userRole }, process.env.JWT_SECRET || 'your-random-secret-key-anand-infinityMan', { expiresIn: '1h' });
 
         // Send welcome email (non-blocking)
         try {
@@ -77,7 +77,7 @@ exports.login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-        const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'supersecretkey', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'your-random-secret-key-anand-infinityMan', { expiresIn: '1h' });
 
         res.json({
             token,
