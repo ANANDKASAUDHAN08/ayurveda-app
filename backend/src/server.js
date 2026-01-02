@@ -23,14 +23,16 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 const allowedOrigins = [
     process.env.APP_URL,
-    process.env.FRONTEND_URL
-].filter(Boolean);
+    process.env.FRONTEND_URL,
+    'https://healthconnect-zeta.vercel.app'
+].filter(Boolean).map(url => url.replace(/\/$/, ""));
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        if (!origin || allowedOrigins.indexOf(origin.replace(/\/$/, "")) !== -1) {
             callback(null, true);
         } else {
+            console.log('CORS blocked origin:', origin);
             callback(new Error('Not allowed by CORS'));
         }
     },
@@ -84,18 +86,18 @@ app.get('/', (req, res) => {
     res.send('Ayurveda API is running');
 });
 
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
 async function startServer() {
     try {
         // Test database connection
         await db.execute('SELECT 1');
         console.log('✅ Connected to MySQL database successfully.');
-
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
     } catch (error) {
         console.error('❌ Unable to connect to the database:', error);
-        console.error('Please check your .env file and ensure MySQL is running.');
+        console.error('Please check your environment variables and ensure MySQL is running.');
     }
 }
 
