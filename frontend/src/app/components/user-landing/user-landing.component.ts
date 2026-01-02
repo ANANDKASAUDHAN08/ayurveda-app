@@ -1,3 +1,4 @@
+import { environment } from '@env/environment';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -5,6 +6,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { AuthService } from '../../shared/services/auth.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
+
 
 @Component({
   selector: 'app-user-landing',
@@ -60,7 +62,7 @@ export class UserLandingComponent implements OnInit {
 
   signInWithGoogle() {
     // Redirect to backend OAuth endpoint
-    window.location.href = 'http://localhost:3000/api/auth/google/user';
+    window.location.href = environment.apiUrl + '/auth/google/user';
   }
 
   switchTab(tab: 'login' | 'register') {

@@ -11,7 +11,7 @@ import { HamburgerMenuComponent } from './shared/components/hamburger-menu/hambu
 import { BottomNavigationComponent } from './shared/components/bottom-navigation/bottom-navigation.component';
 import { ScrollToTopComponent } from './shared/components/scroll-to-top/scroll-to-top.component';
 import { OfflineIndicatorComponent } from './shared/components/offline-indicator/offline-indicator.component';
-import { LocationService } from './shared/services/location.service';
+import { LocationService, UserLocation } from './shared/services/location.service';
 import { LocationBottomSheetComponent } from './shared/components/location-bottom-sheet/location-bottom-sheet.component';
 import { LocationMapModalComponent } from './shared/components/location-map-modal/location-map-modal.component';
 import { FabMenuComponent } from './shared/components/fab-menu/fab-menu.component';
@@ -74,12 +74,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       this.showMapModal = open;
     });
 
-    // Detect location on start if not already stored
+    /* 
+    // Detect location on start if not already stored - REMOVED per user request
     if (!this.locationService.getStoredLocation()) {
       this.locationService.detectLocation();
-      // Optionally show the sheet if we want the user to confirm/choose
-      // this.locationService.toggleBottomSheet(true);
     }
+    */
 
 
     // Listen for auth state changes
@@ -165,8 +165,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
 
-  onLocationFromMap(location: any) {
-    this.locationService.setLocation(location);
+  onLocationFromMap(location: UserLocation) {
+    this.locationService.setLocation(location, true); // Map selection is persistent
     this.locationService.toggleMap(false);
   }
 

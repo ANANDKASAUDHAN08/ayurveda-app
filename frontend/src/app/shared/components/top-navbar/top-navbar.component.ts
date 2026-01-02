@@ -75,7 +75,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private searchService: SearchService,
     private snackbarService: SnackbarService,
-    private locationService: LocationService
+    public locationService: LocationService
   ) { }
 
   ngOnInit() {

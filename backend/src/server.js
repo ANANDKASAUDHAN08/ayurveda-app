@@ -21,7 +21,21 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+    'process.env.APP_URL',
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
 app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'));
 
@@ -62,6 +76,7 @@ app.use('/api/prakriti', require('./routes/prakritiRoutes')); // Prakriti Quiz A
 app.use('/api/ayurveda', ayurvedaRoutes); // Ayurveda dashboard API
 app.use('/api/allopathy', require('./routes/allopathy')); // Allopathy dashboard API
 app.use('/api/favorites', require('./routes/favorite.routes')); // Favorites API
+app.use('/api/payment', require('./routes/paymentRoutes')); // Payment API
 
 
 // Test route
@@ -85,3 +100,4 @@ async function startServer() {
 }
 
 startServer();
+

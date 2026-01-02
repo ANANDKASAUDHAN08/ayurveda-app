@@ -1,5 +1,6 @@
+import { environment } from '@env/environment';
+
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { forkJoin, catchError, Observable, map, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 

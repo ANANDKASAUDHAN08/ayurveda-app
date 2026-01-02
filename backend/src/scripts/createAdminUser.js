@@ -51,7 +51,7 @@ async function createAdminUser() {
         console.log('Email: admin@healthconnect.com');
         console.log('Password: admin123');
         console.log('\n🔗 Next Steps:');
-        console.log('1. Open http://localhost:4200/admin');
+        console.log('1. Open process.env.APP_URL/admin');
         console.log('2. Login with the above credentials');
         console.log('3. You\'ll be redirected to the admin dashboard');
         console.log('\n✨ Admin panel is ready to use!');
@@ -68,3 +68,4 @@ async function createAdminUser() {
 }
 
 createAdminUser();
+

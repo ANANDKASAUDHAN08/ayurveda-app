@@ -1,8 +1,9 @@
+import { environment } from '@env/environment';
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
 import { OfflineService } from './offline.service';
 
 export interface EmergencyContact {
@@ -123,7 +124,10 @@ export class EmergencyService {
 
     // Helper: Call emergency number
     callEmergencyNumber(number: string, location?: GeolocationCoordinates) {
-        // Log the call (optional)
+        // 1. Initiate phone call immediately
+        window.location.href = `tel:${number}`;
+
+        // 2. Log the call asynchronously afterwards
         if (location) {
             this.logEmergencyCall({
                 call_type: 'ambulance',
@@ -135,9 +139,6 @@ export class EmergencyService {
                 error: (err) => console.error('Failed to log call:', err)
             });
         }
-
-        // Initiate phone call
-        window.location.href = `tel:${number}`;
     }
 
     // Helper: Get current location

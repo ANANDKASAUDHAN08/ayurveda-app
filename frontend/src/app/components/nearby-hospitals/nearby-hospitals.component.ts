@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HospitalsService, Hospital } from '../../shared/services/hospitals.service';
-import { EmergencyService } from '../../shared/services/emergency.service';
+import { LocationService } from '../../shared/services/location.service';
 import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
 
 @Component({
@@ -24,7 +24,7 @@ export class NearbyHospitalsComponent implements OnInit {
 
   constructor(
     private hospitalsService: HospitalsService,
-    private emergencyService: EmergencyService,
+    private locationService: LocationService,
     private router: Router
   ) { }
 
@@ -34,9 +34,9 @@ export class NearbyHospitalsComponent implements OnInit {
 
   detectLocationAndLoadHospitals() {
     this.loading = true;
-    this.emergencyService.getCurrentLocation().then(
-      (location: GeolocationCoordinates) => {
-        this.userLocation = location;
+    this.locationService.getCoordinates().then(
+      (position) => {
+        this.userLocation = position.coords;
         this.loadNearbyHospitals();
       },
       (error: any) => {
@@ -89,8 +89,8 @@ export class NearbyHospitalsComponent implements OnInit {
   }
 
   getDirections(hospital: Hospital) {
-    // OpenStreetMap directions link
-    const url = `https://www.openstreetmap.org/directions?from=${this.userLocation?.latitude},${this.userLocation?.longitude}&to=${hospital.latitude},${hospital.longitude}`;
+    // Google Maps directions link
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${hospital.latitude},${hospital.longitude}`;
     window.open(url, '_blank');
   }
 

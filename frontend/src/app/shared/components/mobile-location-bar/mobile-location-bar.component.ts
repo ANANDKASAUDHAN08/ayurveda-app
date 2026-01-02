@@ -18,14 +18,14 @@ export class MobileLocationBarComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.locationSubscription = this.locationService.location$.subscribe(location => {
-            if (location) {
-                this.selectedLocation = location.city;
-            }
+            this.selectedLocation = location ? (location.displayName || location.city) : 'Select Location';
         });
 
         const stored = this.locationService.getStoredLocation();
         if (stored) {
-            this.selectedLocation = stored.city;
+            this.selectedLocation = stored.displayName || stored.city;
+        } else {
+            this.selectedLocation = 'Select Location';
         }
     }
 

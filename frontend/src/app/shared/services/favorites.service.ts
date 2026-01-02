@@ -1,10 +1,10 @@
+import { environment } from '@env/environment';
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, map, tap, of } from 'rxjs';
 import { AuthService } from './auth.service';
 import { SnackbarService } from './snackbar.service';
-import { environment } from '../../../environments/environment';
-
 export type FavoriteType = 'article' | 'doctor' | 'hospital' | 'pharmacy';
 
 export interface FavoriteItem {

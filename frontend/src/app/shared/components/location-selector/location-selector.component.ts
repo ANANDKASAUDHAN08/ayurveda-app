@@ -1,50 +1,52 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { LocationService, UserLocation } from '../../services/location.service';
-import { LocationMapModalComponent } from '../location-map-modal/location-map-modal.component';
 
 @Component({
   selector: 'app-location-selector',
   standalone: true,
-  imports: [CommonModule, LocationMapModalComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './location-selector.component.html',
   styleUrl: './location-selector.component.css'
 })
 export class LocationSelectorComponent implements OnInit, OnDestroy {
-  selectedLocation: string = 'Delhi NCR';
+  selectedLocation: string = '';
+  searchQuery: string = '';
   showDropdown: boolean = false;
   isDetecting: boolean = false;
-  showMapModal: boolean = false;
+  predictions: google.maps.places.AutocompletePrediction[] = [];
   private locationSubscription?: Subscription;
+  private detectionSubscription?: Subscription;
 
-  locations: string[] = [
-    'Delhi NCR',
-    'Mumbai',
-    'Bangalore',
-    'Hyderabad',
-    'Chennai',
-    'Kolkata',
-    'Pune',
-    'Ahmedabad',
-    'Jaipur',
-    'Lucknow'
+  popularCities = [
+    { name: 'Mumbai', lat: 19.0760, lng: 72.8777 },
+    { name: 'Delhi', lat: 28.6139, lng: 77.2090 },
+    { name: 'Bangalore', lat: 12.9716, lng: 77.5946 },
+    { name: 'Hyderabad', lat: 17.3850, lng: 78.4867 },
+    { name: 'Chennai', lat: 13.0827, lng: 80.2707 },
+    { name: 'Kolkata', lat: 22.5726, lng: 88.3639 },
+    { name: 'Pune', lat: 18.5204, lng: 73.8567 },
+    { name: 'Ahmedabad', lat: 23.0225, lng: 72.5714 }
   ];
 
-  constructor(private locationService: LocationService) { }
+  constructor(private locationService: LocationService, private el: ElementRef) { }
 
   ngOnInit() {
     // Subscribe to location updates
     this.locationSubscription = this.locationService.location$.subscribe(location => {
-      if (location) {
-        this.selectedLocation = location.city;
-      }
+      this.selectedLocation = location ? (location.displayName || location.city) : '';
+    });
+
+    this.detectionSubscription = this.locationService.isDetecting$.subscribe(isDetecting => {
+      this.isDetecting = isDetecting;
     });
 
     // Load stored location
     const stored = this.locationService.getStoredLocation();
     if (stored) {
-      this.selectedLocation = stored.city;
+      this.selectedLocation = stored.displayName || stored.city;
     }
   }
 
@@ -52,61 +54,78 @@ export class LocationSelectorComponent implements OnInit, OnDestroy {
     if (this.locationSubscription) {
       this.locationSubscription.unsubscribe();
     }
+    if (this.detectionSubscription) {
+      this.detectionSubscription.unsubscribe();
+    }
   }
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
   }
 
-  selectLocation(location: string) {
-    this.selectedLocation = location;
+  selectCity(city: any) {
+    this.selectedLocation = city.name;
     this.showDropdown = false;
-
-    // Update the location service
     this.locationService.setLocation({
-      city: location,
+      city: city.name,
       state: '',
-      latitude: 0,
-      longitude: 0
+      displayName: city.name,
+      formattedAddress: city.name,
+      latitude: city.lat,
+      longitude: city.lng
+    }); // Popular cities are persistent when clicked
+    this.searchQuery = '';
+  }
+
+  onSearchInput() {
+    if (this.searchQuery.length < 3) return;
+
+    this.locationService.searchPlaces(this.searchQuery).subscribe(predictions => {
+      this.predictions = predictions;
     });
   }
 
-  detectMyLocation() {
-    this.isDetecting = true;
-    this.showDropdown = false;
-    this.locationService.detectLocation();
+  selectPrediction(prediction: google.maps.places.AutocompletePrediction) {
+    this.locationService.resolvePlaceId(prediction.place_id).subscribe({
+      next: (location) => {
+        this.selectedLocation = location.formattedAddress;
+        this.showDropdown = false;
+        this.searchQuery = '';
+        this.predictions = [];
+        this.locationService.setLocation(location, true); // Search selection is persistent
+      },
+      error: (err) => console.error('Error selecting location:', err)
+    });
+  }
 
-    // Reset detecting state after 3 seconds
-    setTimeout(() => {
-      this.isDetecting = false;
-    }, 3000);
+
+
+  detectMyLocation() {
+    this.locationService.detectLocation();
+    this.showDropdown = false;
   }
 
   openMapModal() {
-    this.showMapModal = true;
+    this.locationService.toggleMap(true);
     this.showDropdown = false;
   }
 
-  onLocationFromMap(location: UserLocation) {
-    this.selectedLocation = location.city;
-    this.showMapModal = false;
-    this.locationService.setLocation(location);
-  }
-
-  closeMapModal() {
-    this.showMapModal = false;
-  }
-
-  getCurrentLocation(): UserLocation {
-    return this.locationService.getCurrentLocation() || {
-      city: 'Delhi NCR',
-      state: 'Delhi',
-      latitude: 28.6139,
-      longitude: 77.2090
-    };
+  getCurrentLocation(): UserLocation | null {
+    return this.locationService.getCurrentLocation();
   }
 
   closeDropdown() {
     this.showDropdown = false;
+    this.searchQuery = '';
+    this.predictions = [];
+  }
+
+  // Click outside to close
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (this.showDropdown && !this.el.nativeElement.contains(target)) {
+      this.closeDropdown();
+    }
   }
 }

@@ -1,3 +1,5 @@
+import { environment } from '@env/environment';
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -47,7 +49,7 @@ export interface DateException {
     providedIn: 'root'
 })
 export class AppointmentService {
-    private apiUrl = 'http://localhost:3000/api';
+    private apiUrl = environment.apiUrl;
 
     constructor(private http: HttpClient) { }
 

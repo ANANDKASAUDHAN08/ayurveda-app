@@ -57,7 +57,7 @@ export class DealCardComponent implements OnInit, OnDestroy {
       if (cart && cart.items) {
         const cartItem = cart.items.find(item =>
           item.id === String(this.deal.productId || 1) &&
-          item.type === (this.deal.productType || 'medicine')
+          item.product_type === (this.deal.productType || 'medicine')
         );
         this.cartQuantity = cartItem ? cartItem.quantity : 0;
       } else {
@@ -166,7 +166,7 @@ export class DealCardComponent implements OnInit, OnDestroy {
       if (cart && cart.items) {
         const cartItem = cart.items.find(item =>
           item.id === String(this.deal.productId || 1) &&
-          item.type === (this.deal.productType || 'medicine')
+          item.product_type === (this.deal.productType || 'medicine')
         );
 
         if (cartItem) {

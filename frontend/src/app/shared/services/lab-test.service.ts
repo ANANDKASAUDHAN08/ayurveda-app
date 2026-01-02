@@ -1,3 +1,5 @@
+import { environment } from '@env/environment';
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -21,7 +23,7 @@ export interface LabTest {
     providedIn: 'root'
 })
 export class LabTestService {
-    private apiUrl = 'http://localhost:3000/api/lab-tests';
+    private apiUrl = environment.apiUrl + '/lab-tests';
 
     constructor(private http: HttpClient) { }
 

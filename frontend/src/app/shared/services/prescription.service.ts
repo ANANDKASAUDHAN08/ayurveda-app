@@ -1,8 +1,8 @@
+import { environment } from '@env/environment';
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-
 export interface Prescription {
     id: number;
     user_id: number;
@@ -245,4 +245,3 @@ export class PrescriptionService {
         return this.http.post<any>(`${environment.apiUrl}/refills/${refillId}/reject`, data);
     }
 }
-

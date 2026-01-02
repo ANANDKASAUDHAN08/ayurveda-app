@@ -1,11 +1,10 @@
+<!-- Mobile Location Bar -->
+<div class="block sm:hidden">
+    <app-mobile-location-bar></app-mobile-location-bar>
+</div>
+
 <!-- Emergency Services Hub - Full Width -->
 <div class="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50/30">
-
-    <!-- Mobile Location Bar -->
-    <div class="block sm:hidden px-4 pt-4">
-        <app-mobile-location-bar></app-mobile-location-bar>
-    </div>
-
     <div class="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
 
         <!-- Compact Header -->
@@ -13,7 +12,7 @@
             <!-- Top Badge Row with History Button -->
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <div class="inline-flex items-center gap-2 bg-red-100 text-red-700 px-3 py-1.5 rounded-full">
-                    <i class="fas fa-ambulance text-sm"></i>
+                    <i class="fas fa-phone-alt text-sm"></i>
                     <span class="text-xs sm:text-sm font-bold">24/7 Emergency Services</span>
                 </div>
 
@@ -52,8 +51,8 @@
 
         <!-- CRITICAL: Big Ambulance Call Button - Compact Design -->
         <div class="mb-6">
-            <button (click)="callAmbulance()"
-                class="w-full group relative overflow-hidden bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-2xl shadow-xl hover:shadow-red-500/30 transition-all transform hover:scale-[1.01] active:scale-[0.99] p-6">
+            <a [href]="'tel:' + ambulanceNumber"
+                class="w-full group relative overflow-hidden bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-2xl shadow-xl hover:shadow-red-500/30 transition-all transform hover:scale-[1.01] active:scale-[0.99] p-6 block">
 
                 <!-- Animated pulse background -->
                 <div class="absolute inset-0 bg-red-400 opacity-0 group-hover:opacity-20 animate-pulse"></div>
@@ -61,7 +60,7 @@
                 <div class="relative flex items-center justify-between gap-4">
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-ambulance text-2xl"></i>
+                            <i class="fas fa-phone-alt text-2xl"></i>
                         </div>
                         <div class="text-left">
                             <div class="text-xl sm:text-2xl font-bold mb-1">CALL AMBULANCE</div>
@@ -70,13 +69,46 @@
                     </div>
                     <div class="hidden sm:block text-xs text-red-100 bg-red-800/30 px-3 py-1.5 rounded-full">
                         <i class="fas fa-map-marker-alt mr-1"></i>
-                        <span *ngIf="currentLocation">
-                            {{currentLocation.latitude.toFixed(4)}}, {{currentLocation.longitude.toFixed(4)}}
+                        <span *ngIf="currentLocation" class="truncate max-w-[150px]">
+                            {{currentLocation.displayName || currentLocation.city}}
                         </span>
                         <span *ngIf="!currentLocation">Detecting...</span>
                     </div>
                 </div>
-            </button>
+            </a>
+        </div>
+
+        <!-- Live Location Card -->
+        <div class="mb-8">
+            <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-lg overflow-hidden">
+                <div class="p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-4 flex-1">
+                        <div
+                            class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0 animate-pulse">
+                            <i class="fas fa-map-marker-alt text-emerald-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-1">Live Location Sharing</h3>
+                            <p class="text-slate-600 text-sm" *ngIf="!currentLocation">
+                                Detect your location to share with emergency contacts.
+                            </p>
+                            <p class="text-emerald-700 font-semibold text-sm flex items-center gap-2"
+                                *ngIf="currentLocation">
+                                <i class="fas fa-check-circle"></i>
+                                Using detected location: {{currentLocation.formattedAddress}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <button (click)="openLocationModal()"
+                            class="flex-1 sm:flex-none px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-map"></i>
+                            {{ currentLocation ? 'Change Location' : 'Set Location' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Quick Actions Grid - Full Width -->

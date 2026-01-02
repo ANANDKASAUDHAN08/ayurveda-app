@@ -29,8 +29,6 @@
                 <div class="hidden lg:block">
                     <app-location-selector></app-location-selector>
                 </div>
-
-
             </div>
 
             <!-- Center: Navigation Links -->
@@ -136,11 +134,11 @@
                 </div>
 
                 <!-- Nearby Services -->
-                <a routerLink="/nearby-services" (click)="careDropdownOpen = false"
+                <!-- <a routerLink="/nearby-services" (click)="careDropdownOpen = false"
                     class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all border-t border-slate-50 mt-1">
                     <i class="fas fa-map-marked-alt text-emerald-600 w-5"></i>
                     <span class="text-sm font-black text-emerald-700">Nearby Care</span>
-                </a>
+                </a> -->
             </div>
 
             <!-- Right: Utilities & User Profile -->
@@ -163,7 +161,7 @@
                     aria-label="Cart">
                     <i class="fas fa-shopping-cart text-xl"></i>
                     <span *ngIf="cartCount > 0"
-                        class="absolute top-1.5 right-1.5 bg-gradient-energy text-white text-[10px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center border-2 border-white">
+                        class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white shadow-sm">
                         {{ cartCount }}
                     </span>
                 </button>
@@ -268,8 +266,8 @@
                                     <i class="fas fa-search text-slate-400 group-hover:text-emerald-600"></i>
                                 </div>
                                 <span class="text-slate-700 font-medium">{{ item.name }}</span>
-                                <span class="text-[10px] text-slate-400 uppercase font-bold">{{ item.type
-                                    || 'Result' }}</span>
+                                <span class="text-[10px] text-slate-400 uppercase font-bold">{{ item.product_type ||
+                                    'Product' }}</span>
                             </div>
                             <i
                                 class="fas fa-arrow-right text-slate-300 group-hover:text-emerald-500 opacity-0 group-hover:opacity-100 transition-all translate-x-[-10px] group-hover:translate-x-0"></i>
@@ -355,7 +353,7 @@
                                 <i class="fas fa-trash-alt text-xs"></i>
                             </button>
                         </div>
-                        <p class="text-xs text-slate-400 mb-3 capitalize">{{ item.type }}</p>
+                        <p class="text-xs text-slate-400 mb-3 capitalize">{{ item.product_type || 'Product' }}</p>
                         <div class="flex justify-between items-center">
                             <div class="flex items-center bg-slate-50 rounded-lg p-1">
                                 <button (click)="updateCartQuantity(item.id, item.quantity - 1)"

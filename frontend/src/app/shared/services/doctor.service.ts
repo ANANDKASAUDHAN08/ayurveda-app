@@ -1,3 +1,5 @@
+import { environment } from '@env/environment';
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -6,8 +8,8 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class DoctorService {
-    private apiUrl = 'http://localhost:3000/api/doctors';
-    private slotsUrl = 'http://localhost:3000/api/slots';
+    private apiUrl = environment.apiUrl + '/doctors';
+    private slotsUrl = environment.apiUrl + '/slots';
 
     constructor(private http: HttpClient) { }
 

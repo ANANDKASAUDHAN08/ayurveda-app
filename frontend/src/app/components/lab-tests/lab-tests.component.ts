@@ -1,10 +1,12 @@
+import { environment } from '@env/environment';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CartService } from '../../shared/services/cart.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
+
 
 export interface LabTest {
   id: number;
@@ -99,7 +101,7 @@ export class LabTestsComponent implements OnInit {
       .map(key => `${key}=${encodeURIComponent(params[key])}`)
       .join('&');
     // Fetch from API
-    fetch(`http://localhost:3000/api/lab-tests?${queryString}`)
+    fetch(`${environment.apiUrl}/lab-tests?${queryString}`)
       .then(response => response.json())
       .then(data => {
         if (data.success) {
@@ -173,7 +175,7 @@ export class LabTestsComponent implements OnInit {
     this.cartService.addItem({
       id: String(test.id),
       name: test.name,
-      type: 'other', // lab_test is not a valid CartItem type, using 'other'
+      product_type: 'lab_test',
       price: test.discounted_price || 0,
       quantity: 1,
       image: ''

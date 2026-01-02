@@ -166,8 +166,8 @@
                         <i class="fa-solid fa-image text-emerald-600"></i>
                         Prescription Image
                     </h2>
-                    <img [src]="'http://localhost:3000/' + prescription.upload_file_path" alt="Prescription"
-                        class="w-full rounded-lg shadow-md border border-slate-200">
+                    <img [src]="environment.apiUrl.replace('/api', '') + '/' + prescription.upload_file_path"
+                        alt="Prescription" class="w-full rounded-lg shadow-md border border-slate-200">
                 </div>
 
                 <!-- Action Buttons -->

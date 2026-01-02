@@ -7,7 +7,32 @@
         <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
 
         <h2 class="text-xl font-black text-slate-900 mb-2">Select Your Location</h2>
-        <p class="text-sm text-slate-500 mb-8">Choose your city to see services near you</p>
+        <p class="text-sm text-slate-500 mb-6">Choose your city to see services near you</p>
+
+        <!-- Search Input -->
+        <div class="relative mb-6 group">
+            <i
+                class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors"></i>
+            <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()"
+                placeholder="Search for your city, area..."
+                class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-800 placeholder:text-slate-400 font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all shadow-sm">
+
+            <!-- Predictions Dropdown -->
+            <div *ngIf="predictions.length > 0"
+                class="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden max-h-60 overflow-y-auto z-10 animate-fade-in">
+                <button *ngFor="let p of predictions" (click)="selectPrediction(p)"
+                    class="w-full px-4 py-3 text-left hover:bg-slate-50 flex items-center gap-3 border-b border-slate-50 last:border-none transition-colors">
+                    <div
+                        class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 text-slate-400">
+                        <i class="fas fa-map-marker-alt text-xs"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-sm font-bold text-slate-800 truncate">{{ p.structured_formatting.main_text }}</p>
+                        <p class="text-xs text-slate-500 truncate">{{ p.structured_formatting.secondary_text }}</p>
+                    </div>
+                </button>
+            </div>
+        </div>
 
         <!-- Current Location Button -->
         <button (click)="detectLocation()"
@@ -25,7 +50,7 @@
         <div class="grid grid-cols-2 gap-3 mb-8">
             <button *ngFor="let city of popularCities" (click)="selectCity(city)"
                 class="p-4 bg-slate-50 hover:bg-slate-100 rounded-2xl text-slate-700 font-bold text-sm transition-all border border-slate-100">
-                {{ city }}
+                {{ city.name }}
             </button>
         </div>
 

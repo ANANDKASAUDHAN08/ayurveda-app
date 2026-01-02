@@ -1,3 +1,5 @@
+import { environment } from '@env/environment';
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -6,7 +8,7 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class AdminService {
-    private baseUrl = 'http://localhost:3000/api/admin';
+    private baseUrl = environment.apiUrl + '/admin';
 
     constructor(private http: HttpClient) { }
 
@@ -30,19 +32,19 @@ export class AdminService {
 
     // Get all doctors (for dropdown when adding featured doctor)
     getAllDoctors(): Observable<any> {
-        return this.http.get('http://localhost:3000/api/doctors');
+        return this.http.get(environment.apiUrl + '/doctors');
     }
 
     addDoctor(data: any): Observable<any> {
-        return this.http.post('http://localhost:3000/api/admin/doctors', data);
+        return this.http.post(environment.apiUrl + '/admin/doctors', data);
     }
 
     updateDoctor(id: number, data: any): Observable<any> {
-        return this.http.put(`http://localhost:3000/api/admin/doctors/${id}`, data);
+        return this.http.put(`${environment.apiUrl}/admin/doctors/${id}`, data);
     }
 
     deleteDoctor(id: number): Observable<any> {
-        return this.http.delete(`http://localhost:3000/api/admin/doctors/${id}`);
+        return this.http.delete(`${environment.apiUrl}/admin/doctors/${id}`);
     }
 
     // ==================== HEALTH ARTICLES ====================

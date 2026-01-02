@@ -63,7 +63,7 @@
                         <div
                             class="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-lg md:text-xl font-bold border border-white/20 shadow-inner overflow-hidden relative">
                             <img *ngIf="imagePreview || user?.profile_image"
-                                [src]="imagePreview || 'http://localhost:3000/' + user.profile_image"
+                                [src]="imagePreview || environment.apiUrl.replace('/api', '') + '/' + user.profile_image"
                                 class="w-full h-full object-cover rounded-xl">
                             <span *ngIf="!imagePreview && !user?.profile_image">{{ user?.name?.charAt(0) || 'U'
                                 }}</span>

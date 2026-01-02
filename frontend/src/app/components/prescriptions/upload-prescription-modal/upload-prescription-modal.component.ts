@@ -1,3 +1,5 @@
+import { environment } from '@env/environment';
+
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -6,8 +8,6 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { PrescriptionService } from '../../../shared/services/prescription.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
-import { environment } from '../../../../environments/environment';
-
 @Component({
   selector: 'app-upload-prescription-modal',
   standalone: true,

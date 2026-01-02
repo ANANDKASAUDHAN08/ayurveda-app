@@ -1,3 +1,5 @@
+import { environment } from '@env/environment';
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -45,7 +47,7 @@ export class DoctorDashboardComponent implements OnInit {
   }
 
   fetchDoctorProfile() {
-    this.http.get<any[]>('http://localhost:3000/api/doctors').subscribe({
+    this.http.get<any[]>(environment.apiUrl + '/doctors').subscribe({
       next: (doctors) => {
         this.doctor = doctors.find(d => d.userId === this.user.id);
         this.loading = false; // Keep loading true until both complete? Or just handle gracefully.

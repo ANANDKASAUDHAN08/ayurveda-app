@@ -1,14 +1,24 @@
+import { environment } from '@env/environment';
+
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { AuthService } from './auth.service';
+import { SnackbarService } from './snackbar.service';
+
+const API_URL = environment.apiUrl;
 
 export interface CartItem {
-    id: string;
+    id: string; // Cart Item ID (DB ID)
+    product_id: string | number;
+    product_type: 'medicine' | 'device' | 'lab_test' | 'ayurveda_medicine';
     name: string;
-    type: 'medicine' | 'device' | 'wellness' | 'other';
-    medicineType?: 'ayurveda' | 'homeopathy' | 'allopathy';
+    description?: string;
+    image?: string;
     price: number;
     quantity: number;
-    image?: string;
+    total_price?: number;
     prescription_required?: boolean;
 }
 
@@ -17,6 +27,7 @@ export interface Cart {
     totalItems: number;
     subtotal: number;
     delivery: number;
+    tax: number;
     total: number;
 }
 
@@ -24,171 +35,130 @@ export interface Cart {
     providedIn: 'root'
 })
 export class CartService {
-    private readonly STORAGE_KEY = 'shopping_cart';
-    private cart$ = new BehaviorSubject<Cart>(this.getStoredCart());
-    private cartCountSubject = new BehaviorSubject<number>(0);
-    // public cart$ = this.cartSubject.asObservable();
-    public cartCount$ = this.cartCountSubject.asObservable();
+    private apiUrl = `${API_URL}/cart`;
 
-    constructor() {
-        // Initialize from localStorage
-        const stored = this.getStoredCart();
-        if (stored) {
-            this.cart$.next(stored);
-        }
+    // Initial empty state
+    private emptyCart: Cart = {
+        items: [],
+        totalItems: 0,
+        subtotal: 0,
+        delivery: 0,
+        tax: 0,
+        total: 0
+    };
+
+    private cart$ = new BehaviorSubject<Cart>(this.emptyCart);
+
+    // Derived observable for cart count
+    public cartCount$ = this.cart$.pipe(
+        map(cart => cart ? cart.totalItems : 0)
+    );
+
+    constructor(
+        private http: HttpClient,
+        private authService: AuthService,
+        private snackbar: SnackbarService
+    ) {
+        // Sync cart on load if logged in
+        // Using authStatus$ which emits true/false
+        this.authService.authStatus$.subscribe(isLoggedIn => {
+            if (isLoggedIn) {
+                this.refreshCart();
+            } else {
+                this.cart$.next(this.emptyCart);
+            }
+        });
     }
 
-    /**
-     * Get cart as Observable
-     */
+    // Get cart as Observable
     getCart(): Observable<Cart> {
         return this.cart$.asObservable();
     }
 
-    /**
-     * Get current cart value (synchronous)
-     */
-    getCartValue(): Cart {
-        return this.cart$.value;
+    // Refresh cart from server
+    refreshCart(): void {
+        this.http.get<{ success: boolean; data: any }>(this.apiUrl)
+            .pipe(
+                catchError(err => {
+                    console.error('Error fetching cart', err);
+                    return of({ success: false, data: null });
+                })
+            )
+            .subscribe(response => {
+                if (response.success && response.data) {
+                    this.cart$.next(response.data);
+                }
+            });
     }
 
-    /**
-     * Get total item count
-     */
-    getItemCount(): number {
-        return this.cart$.value.totalItems;
-    }
-
-    /**
-     * Add item to cart
-     */
-    addItem(item: CartItem): void {
-        const currentCart = this.cart$.value;
-        const existingItemIndex = currentCart.items.findIndex(i => i.id === item.id);
-
-        if (existingItemIndex > -1) {
-            // Increase quantity if item already exists
-            currentCart.items[existingItemIndex].quantity += item.quantity;
-        } else {
-            // Add new item
-            currentCart.items.push(item);
+    // Add item to cart
+    addItem(item: any): void {
+        if (!this.authService.isLoggedIn()) {
+            this.snackbar.show('Please log in to add items to cart', 'error');
+            return;
         }
 
-        this.updateCart(currentCart);
-    }
+        const payload = {
+            product_id: item.id || item.product_id,
+            product_type: item.type || item.product_type,
+            quantity: item.quantity || 1
+        };
 
-    /**
-     * Remove item from cart
-     */
-    removeItem(itemId: string): void {
-        const currentCart = this.cart$.value;
-        currentCart.items = currentCart.items.filter(item => item.id !== itemId);
-        this.updateCart(currentCart);
-    }
-
-    /**
-     * Update item quantity
-     */
-    updateQuantity(itemId: string, quantity: number): void {
-        const currentCart = this.cart$.value;
-        const item = currentCart.items.find(i => i.id === itemId);
-
-        if (item) {
-            if (quantity <= 0) {
-                this.removeItem(itemId);
-            } else {
-                item.quantity = quantity;
-                this.updateCart(currentCart);
+        this.http.post(this.apiUrl + '/add', payload).subscribe({
+            next: () => {
+                this.snackbar.show('Item added to cart', 'success');
+                this.refreshCart();
+            },
+            error: (err) => {
+                this.snackbar.show(err.error?.message || 'Failed to add item', 'error');
             }
-        }
+        });
     }
 
-    /**
-     * Clear entire cart
-     */
+    // Remove item from cart
+    removeItem(cartItemId: string): void {
+        this.http.delete(`${this.apiUrl}/item/${cartItemId}`).subscribe({
+            next: () => {
+                this.refreshCart();
+                this.snackbar.show('Item removed', 'info');
+            },
+            error: (err) => console.error('Error removing item', err)
+        });
+    }
+
+    // Update item quantity
+    updateQuantity(cartItemId: string, quantity: number): void {
+        if (quantity < 1) {
+            this.removeItem(cartItemId);
+            return;
+        }
+
+        this.http.put(`${this.apiUrl}/item/${cartItemId}`, { quantity }).subscribe({
+            next: () => this.refreshCart(),
+            error: (err) => this.snackbar.show(err.error?.message || 'Error updating cart', 'error')
+        });
+    }
+
+    // Clear entire cart
     clearCart(): void {
-        const emptyCart: Cart = {
-            items: [],
-            totalItems: 0,
-            subtotal: 0,
-            delivery: 0,
-            total: 0
-        };
-        this.updateCart(emptyCart);
+        this.http.delete(`${this.apiUrl}/clear`).subscribe({
+            next: () => {
+                this.cart$.next(this.emptyCart);
+            },
+            error: (err) => console.error('Error clearing cart', err)
+        });
     }
 
-    /**
-     * Update cart and recalculate totals
-     */
-    private updateCart(cart: Cart): void {
-        // Recalculate totals
-        cart.totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
-        cart.subtotal = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    // Helper: Check if item is in cart (local check against current state)
+    // Note: DB Cart items use 'product_id' ref, while local items might use 'id'. 
+    // This helper checks against the currently loaded cart state.
+    isInCart(productId: string | number): boolean {
+        const cart = this.cart$.value;
+        if (!cart || !cart.items) return false;
 
-        // Calculate delivery (free over 999)
-        cart.delivery = cart.subtotal >= 999 ? 0 : 50;
-        cart.total = cart.subtotal + cart.delivery;
-
-        // Update state
-        this.cart$.next(cart);
-
-        // Persist to localStorage
-        this.saveCart(cart);
-    }
-
-    /**
-     * Check if item is in cart
-     */
-    isInCart(itemId: string): boolean {
-        return this.cart$.value.items.some(item => item.id === itemId);
-    }
-
-    /**
-     * Get item quantity in cart
-     */
-    getItemQuantity(itemId: string): number {
-        const item = this.cart$.value.items.find(i => i.id === itemId);
-        return item ? item.quantity : 0;
-    }
-
-    /**
-     * Check if cart needs prescription
-     */
-    needsPrescription(): boolean {
-        return this.cart$.value.items.some(item => item.prescription_required);
-    }
-
-    /**
-     * Save cart to localStorage
-     */
-    private saveCart(cart: Cart): void {
-        try {
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cart));
-        } catch (error) {
-            console.error('Error saving cart:', error);
-        }
-    }
-
-    /**
-     * Get cart from localStorage
-     */
-    private getStoredCart(): Cart {
-        try {
-            const stored = localStorage.getItem(this.STORAGE_KEY);
-            if (stored) {
-                return JSON.parse(stored);
-            }
-        } catch (error) {
-            console.error('Error reading stored cart:', error);
-        }
-
-        // Return empty cart
-        return {
-            items: [],
-            totalItems: 0,
-            subtotal: 0,
-            delivery: 0,
-            total: 0
-        };
+        return cart.items.some(item =>
+            // Check both ID and Product ID as they might differ in DB vs API
+            item.product_id == productId || item.id == String(productId)
+        );
     }
 }

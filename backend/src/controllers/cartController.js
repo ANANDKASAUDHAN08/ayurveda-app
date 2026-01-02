@@ -53,15 +53,17 @@ exports.getCart = async (req, res) => {
         const subtotal = cartItems.reduce((sum, item) => sum + parseFloat(item.total_price), 0);
         const taxRate = 0.09; // 9% tax
         const tax = subtotal * taxRate;
-        const total = subtotal + tax;
+        const delivery = subtotal >= 500 ? 0 : 50; // Free delivery above 500
+        const total = subtotal + tax + delivery;
 
         res.json({
             success: true,
             data: {
                 items: cartItems,
-                total_items: cartItems.reduce((sum, item) => sum + item.quantity, 0),
+                totalItems: cartItems.reduce((sum, item) => sum + item.quantity, 0),
                 subtotal: parseFloat(subtotal.toFixed(2)),
                 tax: parseFloat(tax.toFixed(2)),
+                delivery: parseFloat(delivery.toFixed(2)),
                 total: parseFloat(total.toFixed(2))
             }
         });

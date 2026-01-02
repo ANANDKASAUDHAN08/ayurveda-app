@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { environment } from '@env/environment';
+
+import { Component }
+from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -68,7 +71,7 @@ export class DoctorLandingComponent {
 
   signInWithGoogle() {
     // Redirect to backend OAuth endpoint for doctors
-    window.location.href = 'http://localhost:3000/api/auth/google/doctor';
+    window.location.href = environment.apiUrl + '/auth/google/doctor';
   }
 
   toggleLoginPassword() {
@@ -106,7 +109,7 @@ export class DoctorLandingComponent {
   onRegisterSubmit() {
     if (this.registerForm.valid) {
       this.isLoading = true;
-      this.http.post<any>('http://localhost:3000/api/doctors/register', this.registerForm.value)
+      this.http.post<any>(environment.apiUrl + '/doctors/register', this.registerForm.value)
         .subscribe({
           next: (res) => {
             this.isLoading = false;

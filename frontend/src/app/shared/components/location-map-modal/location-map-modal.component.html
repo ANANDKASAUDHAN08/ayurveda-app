@@ -8,28 +8,63 @@
         <div class="relative w-full max-w-4xl bg-white rounded-lg shadow-xl max-h-[90vh] flex flex-col"
             (click)="$event.stopPropagation()">
 
-            <!-- Header -->
-            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 flex-shrink-0">
-                <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2">
+            <!-- Header with Search & Actions -->
+            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 flex-shrink-0 gap-4">
+                <!-- Title -->
+                <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2 whitespace-nowrap">
                     <i class="fas fa-map-marked-alt text-emerald-600"></i>
                     Select Your Location
                 </h3>
-                <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+
+                <!-- CENTER: Search Bar & Detect Location (Moved from Map) -->
+                <div class="flex-1 flex items-center justify-end gap-3 min-w-0">
+
+                    <!-- Search Bar -->
+                    <div class="relative group w-full max-w-sm">
+                        <i
+                            class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                        <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()"
+                            placeholder="Search for a location..."
+                            class="w-full pl-9 pr-4 py-2 bg-gray-50 hover:bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+
+                        <!-- Predictions Dropdown (High Z-Index to float over map) -->
+                        <div *ngIf="predictions.length > 0"
+                            class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden max-h-60 overflow-y-auto z-[100]">
+                            <button *ngFor="let p of predictions" (click)="selectPrediction(p)"
+                                class="w-full px-4 py-2 text-left hover:bg-gray-50 flex items-start gap-3 border-b border-gray-50 last:border-none transition-colors">
+                                <i class="fas fa-map-marker-alt text-gray-400 mt-1 text-xs"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900 truncate">{{
+                                        p.structured_formatting.main_text }}</p>
+                                    <p class="text-xs text-gray-500 truncate">{{ p.structured_formatting.secondary_text
+                                        }}</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Use My Location Button -->
+                    <button (click)="detectMyLocation()" [disabled]="isDetectingLocation"
+                        class="hidden sm:flex items-center gap-2 px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-black rounded-lg text-xs font-bold transition-colors whitespace-nowrap disabled:opacity-50">
+                        <i [class]="isDetectingLocation ? 'fas fa-spinner fa-spin' : 'fas fa-crosshairs'"
+                            class="text-emerald-600"></i>
+                        {{ isDetectingLocation ? 'Detecting...' : 'Use My Location' }}
+                    </button>
+                </div>
+
+                <!-- Close Button -->
+                <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors ml-2">
                     <i class="fas fa-times text-lg"></i>
                 </button>
             </div>
 
             <!-- Map Container - Compact height -->
             <div class="relative flex-shrink-0">
-                <div id="location-map" class="w-full h-[400px]"></div>
-
-                <!-- Detect Location Button Overlay -->
-                <button (click)="detectMyLocation()" [disabled]="isDetectingLocation"
-                    class="absolute top-3 right-3 bg-white hover:bg-gray-50 px-3 py-2 rounded-lg shadow-md border border-gray-200 text-xs font-medium text-gray-700 flex items-center gap-1.5 disabled:opacity-50">
-                    <i [class]="isDetectingLocation ? 'fas fa-spinner fa-spin' : 'fas fa-crosshairs'"
-                        class="text-emerald-600"></i>
-                    {{ isDetectingLocation ? 'Detecting...' : 'Use My Location' }}
-                </button>
+                <google-map height="400px" width="100%" [center]="center" [zoom]="zoom" (mapClick)="onMapClick($event)">
+                    <map-marker *ngIf="hasLocation" [position]="markerPosition" [options]="markerOptions"
+                        (mapDragend)="onMarkerDragEnd($event)">
+                    </map-marker>
+                </google-map>
             </div>
 
             <!-- Selected Location Info - More compact -->
@@ -53,7 +88,7 @@
                     class="px-4 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
                     Cancel
                 </button>
-                <button (click)="confirmLocation()" [disabled]="isGeocoding"
+                <button (click)="confirmLocation()" [disabled]="!hasLocation || isGeocoding"
                     class="px-5 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
                     <i class="fas fa-check"></i>
                     Confirm Location

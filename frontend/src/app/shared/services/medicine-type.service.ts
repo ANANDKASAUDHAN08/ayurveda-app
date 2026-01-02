@@ -134,3 +134,4 @@ export class MedicineTypeService {
         return this.getTypeInfo(type)?.gradient || 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)';
     }
 }
+

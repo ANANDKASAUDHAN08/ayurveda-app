@@ -1,3 +1,5 @@
+import { environment } from '@env/environment';
+
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -71,7 +73,7 @@ export class PhoneVerificationModalComponent {
         this.loading = true;
         this.error = '';
 
-        this.http.post<any>('http://localhost:3000/api/send-otp', {
+        this.http.post<any>(environment.apiUrl + '/send-otp', {
             phone: this.phoneNumber,
             userId: this.userId,
             name: this.userName
@@ -108,7 +110,7 @@ export class PhoneVerificationModalComponent {
         this.loading = true;
         this.error = '';
 
-        this.http.post<any>('http://localhost:3000/api/verify-otp', {
+        this.http.post<any>(environment.apiUrl + '/verify-otp', {
             userId: this.userId,
             otp: otp
         }).subscribe({

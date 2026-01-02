@@ -1,3 +1,5 @@
+import { environment } from '@env/environment';
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -6,8 +8,8 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class ProfileService {
-    private userApiUrl = 'http://localhost:3000/api/users';
-    private doctorApiUrl = 'http://localhost:3000/api/doctors';
+    private userApiUrl = environment.apiUrl + '/users';
+    private doctorApiUrl = environment.apiUrl + '/doctors';
 
     constructor(private http: HttpClient) { }
 
@@ -24,8 +26,8 @@ export class ProfileService {
         // Ideally, backend should support /api/doctors/profile for the logged-in doctor.
         // For now, I will mirror the component's logic or provide the specific endpoint if it exists.
         // Looking at component: 
-        // User: http://localhost:3000/api/users/profile
-        // Doctor: http://localhost:3000/api/doctors (and then filter)
+        // User: ${environment.apiUrl}/users/profile
+        // Doctor: ${environment.apiUrl}/doctors (and then filter)
         return this.http.get<any>(url);
     }
 

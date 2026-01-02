@@ -127,7 +127,16 @@
 
     <!-- Right Content: Map Area -->
     <div class="flex-1 relative">
-        <div id="map" class="w-full h-full"></div>
+        <google-map height="100%" width="100%" [center]="center" [zoom]="zoom" [options]="options">
+            <!-- User Marker -->
+            <map-marker *ngIf="userMarkerPosition" [position]="userMarkerPosition" [options]="userMarkerOptions">
+            </map-marker>
+
+            <!-- Services Markers -->
+            <map-marker *ngFor="let marker of markers" [position]="marker.position" [options]="marker.options"
+                [title]="marker.title" (mapClick)="focusOnItem(marker.data)">
+            </map-marker>
+        </google-map>
 
         <!-- Legend Overlay (Desktop Only) -->
         <div

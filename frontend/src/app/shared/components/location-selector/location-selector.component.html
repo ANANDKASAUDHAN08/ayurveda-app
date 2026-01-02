@@ -1,57 +1,84 @@
-<div class="relative">
+<div class="relative location-selector-container">
+    <!-- Activator Button - Refined look -->
     <button (click)="toggleDropdown()"
-        class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-slate-100 transition-colors">
-        <i class="fas fa-map-marker-alt text-emerald-600 text-sm"></i>
+        class="flex items-center gap-3 px-4 py-2 rounded-xl bg-white hover:bg-slate-50 transition-all shadow-sm">
+        <div class="flex items-center justify-center w-8 h-8 bg-emerald-50 rounded-full">
+            <i class="fas fa-map-marker-alt text-emerald-600"></i>
+        </div>
         <div class="text-left">
-            <p class="text-[10px] text-slate-500 leading-none hidden sm:block">Delivering to</p>
-            <p class="text-xs sm:text-sm font-semibold text-slate-900 flex items-center gap-1 leading-tight">
-                <span *ngIf="!isDetecting" class="truncate max-w-[120px] sm:max-w-none">{{ selectedLocation }}</span>
-                <span *ngIf="isDetecting" class="text-emerald-600">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <span class="hidden sm:inline">Detecting...</span>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Delivering to
+            </p>
+            <p class="text-sm font-black text-slate-900 flex items-center gap-1.5 leading-tight">
+                <span *ngIf="!isDetecting" class="truncate max-w-[150px]">
+                    {{ selectedLocation || 'Select Location' }}
                 </span>
+                <span *ngIf="isDetecting" class="text-emerald-600 flex items-center gap-2">
+                    <i class="fas fa-circle-notch fa-spin"></i>
+                    Detecting...
+                </span>
+                <i class="fas fa-chevron-down text-[10px] text-slate-400 transition-transform"
+                    [class.rotate-180]="showDropdown"></i>
             </p>
         </div>
-        <i class="fas fa-chevron-down text-[10px] text-slate-500"></i>
     </button>
 
-    <!-- Dropdown -->
+    <!-- Professional Dropdown -->
     <div *ngIf="showDropdown"
-        class="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-slate-200 z-50 max-h-80 overflow-y-auto">
-        <div class="p-2">
-            <!-- Auto-detect button -->
+        class="absolute top-full left-0 mt-3 w-80 bg-white rounded-[1rem] shadow-2xl border border-slate-100 z-50 overflow-hidden animate-fade-in-up">
+
+        <div class="p-6 space-y-6">
+            <!-- Search Bar -->
+            <div class="relative group">
+                <i
+                    class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()"
+                    placeholder="Enter PIN code or city"
+                    class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border-none rounded-2xl text-sm font-medium placeholder-slate-400 focus:ring-2 focus:ring-emerald-500/20 transition-all">
+
+                <!-- Search Predictions -->
+                <div *ngIf="predictions.length > 0"
+                    class="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 z-[60] py-2 overflow-hidden">
+                    <button *ngFor="let p of predictions" (click)="selectPrediction(p)"
+                        class="w-full px-4 py-3 text-left hover:bg-slate-50 flex items-start gap-3 border-b border-slate-50 last:border-none transition-colors">
+                        <i class="fas fa-map-marker-alt text-slate-400 mt-1"></i>
+                        <div>
+                            <p class="text-sm font-bold text-slate-900">{{ p.structured_formatting.main_text }}</p>
+                            <p class="text-[10px] text-slate-500">{{ p.structured_formatting.secondary_text }}</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Use Current Location -->
             <button (click)="detectMyLocation()"
-                class="w-full text-left px-3 py-2.5 rounded bg-emerald-50 hover:bg-emerald-100 transition-colors flex items-center gap-2 mb-2 border border-emerald-200">
-                <i class="fas fa-crosshairs text-emerald-600"></i>
-                <span class="text-sm font-medium text-emerald-700">Detect my location</span>
+                class="w-full group flex items-center gap-4 p-4 rounded-2xl border border-emerald-500/10 bg-emerald-500/5 hover:bg-emerald-500/10 transition-all text-left">
+                <div
+                    class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-crosshairs"></i>
+                </div>
+                <div>
+                    <p class="text-sm font-black text-emerald-900">Use current location</p>
+                    <p class="text-[10px] font-bold text-emerald-600/60 uppercase tracking-widest">Detection via GPS</p>
+                </div>
             </button>
 
-            <!-- Select on Map button -->
+            <!-- Popular Cities Section -->
+            <div class="space-y-4">
+                <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Popular Cities</h4>
+                <div class="grid grid-cols-2 gap-x-8 gap-y-4">
+                    <button *ngFor="let city of popularCities" (click)="selectCity(city)"
+                        class="text-left py-1 text-sm font-black text-slate-700 hover:text-emerald-600 transition-colors">
+                        {{ city.name }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Select on Map Button -->
             <button (click)="openMapModal()"
-                class="w-full text-left px-3 py-2.5 rounded bg-blue-50 hover:bg-blue-100 transition-colors flex items-center gap-2 mb-2 border border-blue-200">
-                <i class="fas fa-map-marked-alt text-blue-600"></i>
-                <span class="text-sm font-medium text-blue-700">Select on map</span>
-            </button>
-
-            <div class="border-t border-slate-200 my-2"></div>
-
-            <p class="text-xs text-slate-500 px-3 py-2">Or select manually</p>
-
-            <button *ngFor="let location of locations" (click)="selectLocation(location)"
-                [class.bg-emerald-50]="location === selectedLocation"
-                [class.text-emerald-700]="location === selectedLocation"
-                class="w-full text-left px-3 py-2.5 rounded hover:bg-slate-50 transition-colors flex items-center justify-between">
-                <span>{{ location }}</span>
-                <i *ngIf="location === selectedLocation" class="fas fa-check text-emerald-600"></i>
+                class="w-full py-4 border-2 border-slate-100 rounded-2xl hover:border-emerald-500 hover:bg-emerald-50/30 transition-all flex items-center justify-center gap-3 group">
+                <i class="fas fa-map-marked-alt text-emerald-600 group-hover:scale-110 transition-transform"></i>
+                <span class="text-xs font-black text-emerald-700">Select on Map</span>
             </button>
         </div>
     </div>
 </div>
-
-<!-- Click outside to close -->
-<div *ngIf="showDropdown" (click)="closeDropdown()" class="fixed inset-0 z-40"></div>
-
-<!-- Map Modal -->
-<app-location-map-modal [isOpen]="showMapModal" [initialLocation]="getCurrentLocation()"
-    (locationSelected)="onLocationFromMap($event)" (modalClosed)="closeMapModal()">
-</app-location-map-modal>

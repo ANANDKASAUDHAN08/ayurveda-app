@@ -302,3 +302,4 @@ export class FirstAidService {
     return this.guides.filter(guide => guide.category === category);
   }
 }
+

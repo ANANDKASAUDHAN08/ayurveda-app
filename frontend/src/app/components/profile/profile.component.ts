@@ -1,4 +1,6 @@
+import { environment } from '@env/environment';
 import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SnackbarService } from '../../shared/services/snackbar.service';
@@ -29,6 +31,7 @@ interface ActivityItem {
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  environment = environment;
   user: any = null;
   isEditing = false;
   isDoctor = false;

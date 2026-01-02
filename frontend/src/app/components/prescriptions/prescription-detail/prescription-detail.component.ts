@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { environment } from '@env/environment';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { PrescriptionService, Prescription } from '../../../shared/services/prescription.service';
-import { SnackbarService } from '../../../shared/services/snackbar.service';
-import { SharePrescriptionModalComponent } from '../share-prescription-modal/share-prescription-modal.component';
+import { Component, OnInit } from '@angular/core';
+import { RouterModule, ActivatedRoute } from '@angular/router';
+
+import { Prescription, PrescriptionService } from 'src/app/shared/services/prescription.service';
+import { SnackbarService } from 'src/app/shared/services/snackbar.service';
 import { QrCodeDisplayComponent } from '../qr-code-display/qr-code-display.component';
 import { RefillRequestModalComponent } from '../refill-request-modal/refill-request-modal.component';
+import { SharePrescriptionModalComponent } from '../share-prescription-modal/share-prescription-modal.component';
 
 @Component({
   selector: 'app-prescription-detail',
@@ -15,6 +17,7 @@ import { RefillRequestModalComponent } from '../refill-request-modal/refill-requ
   styleUrl: './prescription-detail.component.css'
 })
 export class PrescriptionDetailComponent implements OnInit {
+  environment = environment;
   prescription: Prescription | null = null;
   loading = true;
   prescriptionId: number = 0;
@@ -81,7 +84,8 @@ export class PrescriptionDetailComponent implements OnInit {
     this.prescriptionService.generatePDF(this.prescription.id).subscribe({
       next: (response) => {
         // Open the generated PDF in a new tab
-        window.open(`http://localhost:3000${response.pdf_url}`, '_blank');
+        const baseUrl = environment.apiUrl.replace('/api', '');
+        window.open(`${baseUrl}${response.pdf_url}`, '_blank');
         this.snackbar.success('PDF generated successfully!');
         this.downloadingPDF = false;
       },

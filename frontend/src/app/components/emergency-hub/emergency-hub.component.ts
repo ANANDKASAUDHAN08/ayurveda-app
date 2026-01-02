@@ -9,6 +9,8 @@ import { AuthService } from '../../shared/services/auth.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
+import { LocationService, UserLocation } from '../../shared/services/location.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-emergency-hub',
@@ -20,9 +22,10 @@ import { MobileLocationBarComponent } from '../../shared/components/mobile-locat
 export class EmergencyHubComponent implements OnInit {
   emergencyContacts: EmergencyContact[] = [];
   medicalInfo: MedicalInformation | null = null;
-  currentLocation: GeolocationCoordinates | null = null;
+  currentLocation: UserLocation | null = null;
   ambulanceNumber = '108'; // India emergency number
   isLoggedIn = false;
+  private locationSub: Subscription | null = null;
 
   // Modal states
   showContactModal = false;
@@ -31,6 +34,7 @@ export class EmergencyHubComponent implements OnInit {
 
   constructor(
     private emergencyService: EmergencyService,
+    private locationService: LocationService, // Added
     private authService: AuthService,
     private snackbar: SnackbarService,
     private router: Router
@@ -50,31 +54,32 @@ export class EmergencyHubComponent implements OnInit {
 
   // Detect current location
   detectLocation() {
-    this.emergencyService.getCurrentLocation()
-      .then(coords => {
-        this.currentLocation = coords;
-      })
-      .catch(error => {
-        console.warn('Location detection failed:', error);
-        // Continue without location - not critical
-      });
+    this.locationSub = this.locationService.location$.subscribe(location => {
+      this.currentLocation = location;
+      if (!location) {
+        this.locationService.detectLocation();
+      }
+    });
   }
 
-  // Call ambulance - CRITICAL FUNCTION
-  callAmbulance() {
-    // Confirm before calling
-    const confirmed = confirm(
-      `⚠️ EMERGENCY CALL\n\nThis will dial ${this.ambulanceNumber} for emergency ambulance service.\n\n` +
-      (this.currentLocation ?
-        `Your location: ${this.currentLocation.latitude.toFixed(4)}, ${this.currentLocation.longitude.toFixed(4)}\n\n` :
-        'Location not detected. You may need to provide your address.\n\n') +
-      'Proceed with call?'
-    );
+  // Open location picker modal
+  openLocationModal() {
+    this.locationService.toggleMap(true);
+  }
 
-    if (confirmed) {
-      // Call emergency number
-      this.emergencyService.callEmergencyNumber(this.ambulanceNumber, this.currentLocation || undefined);
+  ngOnDestroy() {
+    if (this.locationSub) {
+      this.locationSub.unsubscribe();
     }
+  }
+
+  // No longer needed: handleAmbulanceClick is removed from HTML to allow direct tel: navigation.
+  // We can log the click using a simpler method if needed, but for reliability, 
+  // direct <a> href is best.
+
+  // Fallback/Legacy method
+  callAmbulance() {
+    this.emergencyService.callEmergencyNumber(this.ambulanceNumber, this.currentLocation as any);
   }
 
   // Navigate to nearby hospitals
@@ -205,13 +210,15 @@ export class EmergencyHubComponent implements OnInit {
     this.snackbar.info('Getting your location...');
 
     // Get current location
-    this.emergencyService.getCurrentLocation().then(
-      (coords: GeolocationCoordinates) => {
+    this.locationService.getCoordinates().then(
+      (position) => {
+        const coords = position.coords;
         const lat = coords.latitude;
         const lng = coords.longitude;
+        const address = this.currentLocation?.formattedAddress || this.currentLocation?.displayName || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
         const googleMapsLink = `https://maps.google.com/?q=${lat},${lng}`;
 
-        const message = `🆘 EMERGENCY! I need help!\n\nMy current location:\n${googleMapsLink}\n\nCoordinates: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        const message = `🆘 EMERGENCY! I need help!\n\nMy current location:\n${address}\n${googleMapsLink}`;
 
         // Try Web Share API first (better on mobile)
         if (navigator.share) {
@@ -249,20 +256,38 @@ export class EmergencyHubComponent implements OnInit {
       return;
     }
 
-    const count = this.emergencyContacts.length;
-    const confirmed = confirm(`📞 Call all ${count} emergency contacts?\n\nThis will open ${count} phone call${count > 1 ? 's' : ''} one after another.`);
+    const contacts = [...this.emergencyContacts];
+    const count = contacts.length;
 
-    if (!confirmed) return;
+    // Trigger first call immediately without confirm to preserve gesture
+    this.snackbar.info(`Starting emergency calls to ${count} contacts...`);
+    this.callInSequence(contacts, 0);
+  }
 
-    // Call each contact with a slight delay
-    this.emergencyContacts.forEach((contact, index) => {
+  private callInSequence(contacts: EmergencyContact[], index: number) {
+    if (index >= contacts.length) {
+      this.snackbar.success('Finished emergency calling list.');
+      return;
+    }
+
+    const contact = contacts[index];
+
+    // Re-verify: Browsers ONLY allow one protocol launch per user click.
+    // So for "Call All", we MUST have a manual interaction for each.
+    // I will show a snackbar with a button if possible, or just a direct confirm 
+    // for the NEXT ones.
+
+    window.location.href = `tel:${contact.phone_number}`;
+
+    if (index + 1 < contacts.length) {
+      const nextContact = contacts[index + 1];
+      // Delay slightly to let the first dialer open, then ask for next
       setTimeout(() => {
-        window.location.href = `tel:${contact.phone_number}`;
-        if (index === 0) {
-          this.snackbar.success(`Calling ${count} contact${count > 1 ? 's' : ''}...`);
+        if (confirm(`📞 Dial next contact: ${nextContact.name}?`)) {
+          this.callInSequence(contacts, index + 1);
         }
-      }, index * 3000); // 3 second delay between each call
-    });
+      }, 2000);
+    }
   }
 
   // Send SOS message with location to all contacts
@@ -280,13 +305,15 @@ export class EmergencyHubComponent implements OnInit {
     this.snackbar.info('Getting your location...');
 
     // Get current location
-    this.emergencyService.getCurrentLocation().then(
-      (coords: GeolocationCoordinates) => {
+    this.locationService.getCoordinates().then(
+      (position) => {
+        const coords = position.coords;
         const lat = coords.latitude;
         const lng = coords.longitude;
+        const address = this.currentLocation?.formattedAddress || this.currentLocation?.displayName || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
         const googleMapsLink = `https://maps.google.com/?q=${lat},${lng}`;
 
-        const message = `🆘 EMERGENCY! I need help!\n\nMy current location:\n${googleMapsLink}\n\nCoordinates: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        const message = `🆘 EMERGENCY! I need help!\n\nMy current location:\n${address}\n${googleMapsLink}`;
 
         // Create a comma-separated list of all phone numbers for group SMS
         const allNumbers = this.emergencyContacts.map(c => c.phone_number).join(',');

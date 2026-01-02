@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { CartService, Cart } from '../../shared/services/cart.service';
 import { OrderService } from '../../shared/services/order.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
+import { PaymentService } from '../../shared/services/payment.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-checkout',
@@ -26,6 +28,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private orderService: OrderService,
     private snackbarService: SnackbarService,
+    private paymentService: PaymentService,
+    private authService: AuthService,
     private router: Router
   ) { }
 
@@ -36,7 +40,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.cart = cart;
       this.loading = false;
 
-      // Redirect if cart is empty
+      // Redirect if cart is empty, but NOT if we are submitting an order
       if (!cart || cart.items.length === 0) {
         this.snackbarService.show('Your cart is empty', 'error');
         this.router.navigate(['/cart']);
@@ -52,6 +56,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       delivery_phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       payment_method: ['COD', Validators.required],
       notes: ['']
+    });
+
+    // Load Razorpay Script
+    this.paymentService.loadRazorpayScript().then(() => {
+      console.log('Razorpay loaded');
     });
   }
 
@@ -88,7 +97,81 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     this.submitting = true;
 
-    this.orderService.placeOrder(this.checkoutForm.value).subscribe({
+    const paymentMethod = this.checkoutForm.value.payment_method;
+
+    if (paymentMethod === 'COD') {
+      this.processOrderPlacement(this.checkoutForm.value);
+    } else {
+      // Online Payment
+      this.initiateOnlinePayment();
+    }
+  }
+
+  initiateOnlinePayment() {
+    const amount = this.total;
+    this.submitting = true;
+
+    this.paymentService.createOrder(amount).subscribe({
+      next: (orderResponse) => {
+        const user = this.authService.getUser();
+        const options = {
+          key: this.paymentService.getKeyId(),
+          amount: orderResponse.data.amount,
+          currency: orderResponse.data.currency,
+          name: 'HealthConnect',
+          description: 'Payment for Order',
+          order_id: orderResponse.data.id,
+          handler: (response: any) => {
+            this.verifyPayment(response);
+          },
+          prefill: {
+            name: user?.name || 'User Name',
+            email: user?.email || 'user@example.com',
+            contact: this.checkoutForm.value.delivery_phone
+          },
+          theme: {
+            color: '#1866e4ff'
+          }
+        };
+
+        const rzp = this.paymentService.initializeRazorpay(options);
+        rzp.open();
+        this.submitting = false; // Reset submitting so user can try again if closed
+      },
+      error: (error) => {
+        console.error('Payment initiation failed', error);
+        this.snackbarService.show('Failed to initiate payment', 'error');
+        this.submitting = false;
+      }
+    });
+  }
+
+  verifyPayment(response: any) {
+    this.submitting = true;
+    this.paymentService.verifyPayment(response).subscribe({
+      next: (verifyResponse) => {
+        // Payment successful, now place the order
+        const orderData = {
+          ...this.checkoutForm.value,
+          payment_details: {
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature
+          }
+        };
+        this.processOrderPlacement(orderData);
+      },
+      error: (error) => {
+        console.error('Payment verification failed', error);
+        this.snackbarService.show('Payment verification failed', 'error');
+        this.submitting = false;
+      }
+    });
+  }
+
+  processOrderPlacement(orderData: any) {
+    this.submitting = true;
+    this.orderService.placeOrder(orderData).subscribe({
       next: (response) => {
         this.snackbarService.show('✓ Order placed successfully!', 'success');
         this.submitting = false;
@@ -97,6 +180,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         if (this.cartSubscription) {
           this.cartSubscription.unsubscribe();
         }
+
+        // Clear the cart
+        this.cartService.clearCart();
 
         // Navigate to order details
         this.router.navigate([`/orders/${response.data.order_id}`]);

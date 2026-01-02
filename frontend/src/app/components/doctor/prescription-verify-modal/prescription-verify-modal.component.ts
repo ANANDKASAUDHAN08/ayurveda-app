@@ -1,11 +1,11 @@
+import { environment } from '@env/environment';
+
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DoctorPrescriptionService } from '../../../shared/services/doctor-prescription.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
-import { environment } from '../../../../environments/environment';
-
 @Component({
   selector: 'app-prescription-verify-modal',
   standalone: true,

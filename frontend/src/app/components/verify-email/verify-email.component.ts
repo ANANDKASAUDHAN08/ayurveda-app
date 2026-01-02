@@ -1,7 +1,9 @@
+import { environment } from '@env/environment';
+import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-verify-email',
@@ -36,7 +38,7 @@ export class VerifyEmailComponent implements OnInit {
     }
 
     // Call backend verification API
-    this.http.get<any>(`http://localhost:3000/api/verify-email/${token}?type=${type}`)
+    this.http.get<any>(`${environment.apiUrl}/verify-email/${token}?type=${type}`)
       .subscribe({
         next: (response) => {
           this.loading = false;

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { OrderService, Order } from '../../shared/services/order.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
+import { OrderTrackingMapComponent } from '../../shared/components/order-tracking-map/order-tracking-map.component';
 
 @Component({
   selector: 'app-order-details',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, OrderTrackingMapComponent],
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.css'
 })

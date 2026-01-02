@@ -1,22 +1,45 @@
 import { Component, Input, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderService } from '../../services/order.service';
-import * as maplibregl from 'maplibre-gl';
+import { GoogleMapsModule } from '@angular/google-maps';
 import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-order-tracking-map',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, GoogleMapsModule],
   templateUrl: './order-tracking-map.component.html',
   styleUrl: './order-tracking-map.component.css'
 })
 export class OrderTrackingMapComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() orderId!: number;
 
-  map!: maplibregl.Map;
-  driverMarker!: maplibregl.Marker;
-  customerMarker!: maplibregl.Marker;
+  // Google Maps State
+  center: google.maps.LatLngLiteral = { lat: 28.6139, lng: 77.2090 };
+  zoom = 13;
+  options: google.maps.MapOptions = {
+    disableDefaultUI: false,
+    zoomControl: true,
+  };
+
+  driverPosition: google.maps.LatLngLiteral | null = null;
+  customerPosition: google.maps.LatLngLiteral | null = null;
+
+  driverMarkerOptions: google.maps.MarkerOptions = {
+    icon: {
+      url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+      scaledSize: { width: 40, height: 40 } as any // Using simple icon for now
+    },
+    animation: google.maps.Animation.DROP
+  };
+
+  customerMarkerOptions: google.maps.MarkerOptions = {
+    icon: {
+      url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+      scaledSize: { width: 40, height: 40 } as any
+    }
+  };
+
   trackingSub?: Subscription;
 
   trackingData: any = null;
@@ -27,35 +50,14 @@ export class OrderTrackingMapComponent implements OnInit, OnDestroy, AfterViewIn
   ngOnInit() { }
 
   ngAfterViewInit() {
-    this.initMap();
+    this.startTracking();
   }
 
   ngOnDestroy() {
     if (this.trackingSub) this.trackingSub.unsubscribe();
-    if (this.map) this.map.remove();
   }
 
-  private initMap() {
-    this.map = new maplibregl.Map({
-      container: 'order-map',
-      style: 'https://demotiles.maplibre.org/style.json',
-      center: [77.2090, 28.6139], // Default Delhi
-      zoom: 13
-    });
-
-    this.map.on('load', () => {
-      // Add OSM layer
-      this.map.addSource('osm', {
-        type: 'raster',
-        tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
-        tileSize: 256,
-        attribution: '&copy; OpenStreetMap Contributors'
-      });
-      this.map.addLayer({ id: 'osm-layer', type: 'raster', source: 'osm' });
-
-      this.startTracking();
-    });
-  }
+  // initMap is handled by <google-map> component
 
   private startTracking() {
     // Initial fetch
@@ -86,46 +88,17 @@ export class OrderTrackingMapComponent implements OnInit, OnDestroy, AfterViewIn
   private syncMarkers() {
     if (!this.trackingData) return;
 
-    const driverPos: [number, number] = [
-      parseFloat(this.trackingData.driver_lng) || 77.2090,
-      parseFloat(this.trackingData.driver_lat) || 28.6139
-    ];
+    const driverLat = parseFloat(this.trackingData.driver_lat) || 28.6139;
+    const driverLng = parseFloat(this.trackingData.driver_lng) || 77.2090;
 
-    const customerPos: [number, number] = [
-      parseFloat(this.trackingData.customer_lng) || 77.2190,
-      parseFloat(this.trackingData.customer_lat) || 28.6239
-    ];
+    const customerLat = parseFloat(this.trackingData.customer_lat) || 28.6239;
+    const customerLng = parseFloat(this.trackingData.customer_lng) || 77.2190;
 
-    // Customer Marker
-    if (!this.customerMarker) {
-      this.customerMarker = new maplibregl.Marker({ color: '#10b981' }) // Emerald
-        .setLngLat(customerPos)
-        .setPopup(new maplibregl.Popup().setHTML('<b>Delivery Location</b>'))
-        .addTo(this.map);
-    } else {
-      this.customerMarker.setLngLat(customerPos);
-    }
+    // Update positions which automatically updates markers via template binding
+    this.driverPosition = { lat: driverLat, lng: driverLng };
+    this.customerPosition = { lat: customerLat, lng: customerLng };
 
-    // Driver Marker
-    if (!this.driverMarker) {
-      const el = document.createElement('div');
-      el.className = 'driver-marker';
-      el.innerHTML = '<i class="fas fa-motorcycle text-white bg-blue-600 p-2 rounded-full shadow-lg border-2 border-white"></i>';
-
-      this.driverMarker = new maplibregl.Marker(el)
-        .setLngLat(driverPos)
-        .setPopup(new maplibregl.Popup().setHTML(`<b>Driver: ${this.trackingData.driver_name || 'Assigned'}</b>`))
-        .addTo(this.map);
-    } else {
-      // Smoothly move the marker if supported, otherwise just set it
-      this.driverMarker.setLngLat(driverPos);
-    }
-
-    // Fit bounds
-    const bounds = new maplibregl.LngLatBounds()
-      .extend(driverPos)
-      .extend(customerPos);
-
-    this.map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
+    // Simply center map on driver for tracking
+    this.center = { lat: driverLat, lng: driverLng };
   }
 }
