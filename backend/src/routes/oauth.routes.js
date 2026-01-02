@@ -21,7 +21,7 @@ router.get('/google/user',
 router.get('/google/user/callback',
     passport.authenticate('google-user', {
         session: false,
-        failureRedirect: `${process.env.FRONTEND_URL || 'process.env.APP_URL'}/user-landing?error=oauth_failed`
+        failureRedirect: `${process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:4200'}/user-landing?error=oauth_failed`
     }),
     (req, res) => {
         try {
@@ -39,10 +39,10 @@ router.get('/google/user/callback',
 
             // Redirect to frontend with token and new user flag
             const isNewUser = req.user.isNewUser ? 'true' : 'false';
-            res.redirect(`${process.env.FRONTEND_URL || 'process.env.APP_URL'}/home?token=${token}&oauth=success&newUser=${isNewUser}`);
+            res.redirect(`${process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:4200'}/home?token=${token}&oauth=success&newUser=${isNewUser}`);
         } catch (error) {
             console.error('OAuth callback error:', error);
-            res.redirect(`${process.env.FRONTEND_URL || 'process.env.APP_URL'}/user-landing?error=token_generation_failed`);
+            res.redirect(`${process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:4200'}/user-landing?error=token_generation_failed`);
         }
     }
 );
@@ -65,7 +65,7 @@ router.get('/google/doctor',
 router.get('/google/doctor/callback',
     passport.authenticate('google-doctor', {
         session: false,
-        failureRedirect: `${process.env.FRONTEND_URL || 'process.env.APP_URL'}/doctor-landing?error=oauth_failed`
+        failureRedirect: `${process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:4200'}/doctor-landing?error=oauth_failed`
     }),
     (req, res) => {
         try {
@@ -83,10 +83,10 @@ router.get('/google/doctor/callback',
 
             // Redirect to frontend with token and new user flag
             const isNewUser = req.user.isNewUser ? 'true' : 'false';
-            res.redirect(`${process.env.FRONTEND_URL || 'process.env.APP_URL'}/home?token=${token}&oauth=success&newUser=${isNewUser}`);
+            res.redirect(`${process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:4200'}/home?token=${token}&oauth=success&newUser=${isNewUser}`);
         } catch (error) {
             console.error('OAuth callback error (doctor):', error);
-            res.redirect(`${process.env.FRONTEND_URL || 'process.env.APP_URL'}/doctor-landing?error=token_generation_failed`);
+            res.redirect(`${process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:4200'}/doctor-landing?error=token_generation_failed`);
         }
     }
 );
