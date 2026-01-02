@@ -44,7 +44,7 @@
                 <div class="lg:col-span-8 space-y-4">
 
                     <!-- Tracking Map -->
-                    <div *ngIf="order.status !== 'cancelled'" class="mb-4">
+                    <div *ngIf="order.status !== 'cancelled' && (mapsLoaded$ | async)" class="mb-4">
                         <app-order-tracking-map [orderId]="order.id"></app-order-tracking-map>
                     </div>
 

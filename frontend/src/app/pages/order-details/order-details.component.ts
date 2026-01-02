@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { OrderService, Order } from '../../shared/services/order.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { OrderTrackingMapComponent } from '../../shared/components/order-tracking-map/order-tracking-map.component';
+import { GoogleMapsLoaderService } from '../../shared/services/google-maps-loader.service';
 
 @Component({
   selector: 'app-order-details',
@@ -16,12 +17,14 @@ export class OrderDetailsComponent implements OnInit {
   order: Order | null = null;
   loading = false;
   cancelling = false;
+  mapsLoaded$ = this.googleMapsLoader.isLoaded$;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private orderService: OrderService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private googleMapsLoader: GoogleMapsLoaderService
   ) { }
 
   ngOnInit() {

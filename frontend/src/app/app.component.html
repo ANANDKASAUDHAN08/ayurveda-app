@@ -33,7 +33,8 @@
   </app-location-bottom-sheet>
 
   <!-- Global Map Modal -->
-  <app-location-map-modal [isOpen]="showMapModal" [initialLocation]="locationService.getCurrentLocation()"
-    (modalClosed)="locationService.toggleMap(false)" (locationSelected)="onLocationFromMap($event)">
+  <app-location-map-modal *ngIf="mapsLoaded$ | async" [isOpen]="showMapModal"
+    [initialLocation]="locationService.getCurrentLocation()" (modalClosed)="locationService.toggleMap(false)"
+    (locationSelected)="onLocationFromMap($event)">
   </app-location-map-modal>
 </div>

@@ -15,6 +15,7 @@ import { LocationService, UserLocation } from './shared/services/location.servic
 import { LocationBottomSheetComponent } from './shared/components/location-bottom-sheet/location-bottom-sheet.component';
 import { LocationMapModalComponent } from './shared/components/location-map-modal/location-map-modal.component';
 import { FabMenuComponent } from './shared/components/fab-menu/fab-menu.component';
+import { GoogleMapsLoaderService } from './shared/services/google-maps-loader.service';
 
 @Component({
   selector: 'app-root',
@@ -46,6 +47,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   isUserLoggedIn = false;
   isLocationSheetOpen = false;
   showMapModal = false;
+  mapsLoaded$ = this.googleMapsLoader.isLoaded$;
 
   // Subscriptions for cleanup
   private routerSubscription?: Subscription;
@@ -56,13 +58,21 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    public locationService: LocationService
+    public locationService: LocationService,
+    private googleMapsLoader: GoogleMapsLoaderService
   ) { }
 
   ngOnInit(): void {
     this.routerSubscription = this.router.events.subscribe(() => {
       this.isAdminRoute = this.router.url.startsWith('/admin');
       this.closeHamburgerMenu();
+    });
+
+    // Dynamically load Google Maps API
+    this.googleMapsLoader.load().then(() => {
+      console.log('Google Maps API loaded successfully');
+    }).catch(err => {
+      console.error('Failed to load Google Maps API', err);
     });
 
     // Handle Location Bottom Sheet
