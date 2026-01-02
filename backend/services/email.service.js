@@ -56,7 +56,7 @@ function getSubject(name, userType) {
  * Get email template based on user type
  */
 function getTemplate(name, userType) {
-  const appUrl = process.env.APP_URL || 'process.env.APP_URL';
+  const appUrl = process.env.APP_URL || 'http://localhost:4200';
 
   if (userType === 'doctor') {
     return getDoctorTemplate(name, appUrl);
@@ -246,7 +246,7 @@ async function sendVerificationEmail(to, name, verificationToken, userType) {
     throw new Error('Invalid email format');
   }
 
-  const appUrl = process.env.APP_URL || 'process.env.APP_URL';
+  const appUrl = process.env.APP_URL || 'http://localhost:4200';
   const verificationUrl = `${appUrl}/verify-email?token=${verificationToken}&type=${userType}`;
   const greeting = userType === 'doctor' ? `Dr. ${name}` : name;
 
