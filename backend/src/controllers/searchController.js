@@ -64,27 +64,27 @@ exports.searchProducts = async (req, res) => {
         if (!type || type === 'device' || type === 'all') {
             let deviceQuery = `
                 SELECT 
-                    id, name, description, price, category, stock,
+                    id, name, description, price, category, stock, image_url,
                     'device' as product_type
                 FROM medical_devices
-                WHERE 1=1
-            `;
+                WHERE 1 = 1
+                `;
             let deviceParams = [];
 
             if (q) {
-                deviceQuery += ` AND (name LIKE ? OR description LIKE ? OR category LIKE ? OR manufacturer LIKE ?)`;
-                deviceParams.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
+                deviceQuery += ` AND(name LIKE ? OR description LIKE ? OR category LIKE ? OR manufacturer LIKE ?)`;
+                deviceParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `, ` % ${q}% `);
             }
             if (category) {
-                deviceQuery += ` AND category = ?`;
+                deviceQuery += ` AND category = ? `;
                 deviceParams.push(category);
             }
             if (minPrice) {
-                deviceQuery += ` AND price >= ?`;
+                deviceQuery += ` AND price >= ? `;
                 deviceParams.push(minPrice);
             }
             if (maxPrice) {
-                deviceQuery += ` AND price <= ?`;
+                deviceQuery += ` AND price <= ? `;
                 deviceParams.push(maxPrice);
             }
 
@@ -99,20 +99,20 @@ exports.searchProducts = async (req, res) => {
         // Search Doctors (skip if price filters are active - doctors have consultationFee, not regular price)
         if ((!type || type === 'doctor' || type === 'all') && !minPrice && !maxPrice) {
             let doctorQuery = `
-                SELECT 
-                    id, name, specialization, phone, consultationFee as price,
-                    'doctor' as product_type,
-                    CONCAT(specialization, ' - ', COALESCE(experience, 0), ' years exp') as description,
-                    specialization as category,
-                    NULL as stock
+                SELECT
+            id, name, specialization, phone, consultationFee as price,
+                'doctor' as product_type,
+                CONCAT(specialization, ' - ', COALESCE(experience, 0), ' years exp') as description,
+                specialization as category,
+                NULL as stock
                 FROM doctors
-                WHERE 1=1
-            `;
+                WHERE 1 = 1
+                `;
 
             let doctorParams = [];
             if (q) {
-                doctorQuery += ` AND (name LIKE ? OR specialization LIKE ? OR location LIKE ?)`;
-                doctorParams.push(`%${q}%`, `%${q}%`, `%${q}%`);
+                doctorQuery += ` AND(name LIKE ? OR specialization LIKE ? OR location LIKE ?)`;
+                doctorParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `);
             }
 
             try {
@@ -130,20 +130,20 @@ exports.searchProducts = async (req, res) => {
         // Search Hospitals (skip if price filters are active - hospitals have no price)
         if ((!type || type === 'hospital' || type === 'all') && !minPrice && !maxPrice) {
             let hospitalQuery = `
-                SELECT 
-                    id, name, address as description, phone,
-                    'hospital' as product_type,
-                    NULL as price,
-                    NULL as category,
-                    NULL as stock
+            SELECT
+            id, name, address as description, phone,
+                'hospital' as product_type,
+                NULL as price,
+                NULL as category,
+                NULL as stock
                 FROM hospitals
-                WHERE 1=1
-            `;
+                WHERE 1 = 1
+                `;
             let hospitalParams = [];
 
             if (q) {
-                hospitalQuery += ` AND (name LIKE ? OR address LIKE ? OR city LIKE ?)`;
-                hospitalParams.push(`%${q}%`, `%${q}%`, `%${q}%`);
+                hospitalQuery += ` AND(name LIKE ? OR address LIKE ? OR city LIKE ?)`;
+                hospitalParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `);
             }
 
             try {
@@ -162,20 +162,20 @@ exports.searchProducts = async (req, res) => {
         // Search Pharmacies (skip if price filters are active - pharmacies have no price)
         if ((!type || type === 'pharmacy' || type === 'all') && !minPrice && !maxPrice) {
             let pharmacyQuery = `
-                SELECT 
-                    id, name, address as description, phone,
-                    'pharmacy' as product_type,
-                    NULL as price,
-                    'Pharmacy' as category,
-                    NULL as stock
+            SELECT
+            id, name, address as description, phone,
+                'pharmacy' as product_type,
+                NULL as price,
+                'Pharmacy' as category,
+                NULL as stock
                 FROM pharmacies
-                WHERE 1=1
-            `;
+                WHERE 1 = 1
+                `;
             let pharmacyParams = [];
 
             if (q) {
-                pharmacyQuery += ` AND (name LIKE ? OR address LIKE ? OR city LIKE ?)`;
-                pharmacyParams.push(`%${q}%`, `%${q}%`, `%${q}%`);
+                pharmacyQuery += ` AND(name LIKE ? OR address LIKE ? OR city LIKE ?)`;
+                pharmacyParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `);
             }
 
             try {
@@ -195,12 +195,12 @@ exports.searchProducts = async (req, res) => {
             let ayurQuery = `
                 SELECT id, name, description, price, category, 'ayurveda_medicine' as product_type, image_url, benefits
                 FROM ayurveda_medicines
-                WHERE 1=1
-            `;
+                WHERE 1 = 1
+                `;
             let ayurParams = [];
             if (q) {
-                ayurQuery += ` AND (name LIKE ? OR description LIKE ? OR category LIKE ? OR benefits LIKE ?)`;
-                ayurParams.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
+                ayurQuery += ` AND(name LIKE ? OR description LIKE ? OR category LIKE ? OR benefits LIKE ?)`;
+                ayurParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `, ` % ${q}% `);
             }
             try {
                 const [rows] = await db.execute(ayurQuery, ayurParams);
@@ -215,12 +215,12 @@ exports.searchProducts = async (req, res) => {
             let exerciseQuery = `
                 SELECT id, name, description, NULL as price, type as category, 'ayurveda_exercise' as product_type, image_url, benefits
                 FROM ayurveda_exercises
-                WHERE 1=1
-            `;
+                WHERE 1 = 1
+                `;
             let exParams = [];
             if (q) {
-                exerciseQuery += ` AND (name LIKE ? OR description LIKE ? OR type LIKE ? OR benefits LIKE ?)`;
-                exParams.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
+                exerciseQuery += ` AND(name LIKE ? OR description LIKE ? OR type LIKE ? OR benefits LIKE ?)`;
+                exParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `, ` % ${q}% `);
             }
             try {
                 const [rows] = await db.execute(exerciseQuery, exParams);
@@ -235,12 +235,12 @@ exports.searchProducts = async (req, res) => {
             let articleQuery = `
                 SELECT id, title as name, excerpt as description, NULL as price, category, 'ayurveda_article' as product_type, image_url
                 FROM ayurveda_articles
-                WHERE 1=1
-            `;
+                WHERE 1 = 1
+                `;
             let artParams = [];
             if (q) {
-                articleQuery += ` AND (title LIKE ? OR excerpt LIKE ? OR category LIKE ? OR content LIKE ?)`;
-                artParams.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
+                articleQuery += ` AND(title LIKE ? OR excerpt LIKE ? OR category LIKE ? OR content LIKE ?)`;
+                artParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `, ` % ${q}% `);
             }
             try {
                 const [rows] = await db.execute(articleQuery, artParams);
@@ -309,7 +309,7 @@ exports.getSuggestions = async (req, res) => {
                 FROM medicines
                 WHERE name LIKE ?
                 LIMIT 3
-            `, [`%${q}%`]);
+                    `, [` % ${q}% `]);
             allSuggestions.push(...medicines);
         } catch (err) {
             console.log('Medicine suggestions failed:', err.message);
@@ -322,7 +322,7 @@ exports.getSuggestions = async (req, res) => {
                 FROM medical_devices
                 WHERE name LIKE ?
                 LIMIT 3
-            `, [`%${q}%`]);
+                    `, [` % ${q}% `]);
             allSuggestions.push(...devices);
         } catch (err) {
             console.log('Device suggestions failed:', err.message);
@@ -335,7 +335,7 @@ exports.getSuggestions = async (req, res) => {
                 FROM doctors
                 WHERE name LIKE ? OR specialization LIKE ?
                 LIMIT 2
-            `, [`%${q}%`, `%${q}%`]);
+                    `, [` % ${q}% `, ` % ${q}% `]);
             allSuggestions.push(...doctors);
         } catch (err) {
             console.log('Doctor suggestions failed:', err.message);
@@ -348,7 +348,7 @@ exports.getSuggestions = async (req, res) => {
                 FROM hospitals
                 WHERE name LIKE ?
                 LIMIT 2
-            `, [`%${q}%`]);
+                    `, [` % ${q}% `]);
             allSuggestions.push(...hospitals);
         } catch (err) {
             console.log('Hospital suggestions failed:', err.message);
@@ -361,7 +361,7 @@ exports.getSuggestions = async (req, res) => {
                 FROM pharmacies
                 WHERE name LIKE ? OR address LIKE ?
                 LIMIT 2
-            `, [`%${q}%`, `%${q}%`]);
+                    `, [` % ${q}% `, ` % ${q}% `]);
             allSuggestions.push(...pharmacies);
         } catch (err) {
             console.log('Pharmacy suggestions failed:', err.message);
@@ -374,7 +374,7 @@ exports.getSuggestions = async (req, res) => {
                 FROM ayurveda_medicines
                 WHERE name LIKE ?
                 LIMIT 2
-            `, [`%${q}%`]);
+                    `, [` % ${q}% `]);
             allSuggestions.push(...ayurMeds);
         } catch (err) {
             console.log('Ayurveda suggestions failed:', err.message);
@@ -387,7 +387,7 @@ exports.getSuggestions = async (req, res) => {
                 FROM ayurveda_articles
                 WHERE title LIKE ?
                 LIMIT 2
-            `, [`%${q}%`]);
+                    `, [` % ${q}% `]);
             allSuggestions.push(...ayurArts);
         } catch (err) {
             console.log('Ayurveda article suggestions failed:', err.message);
@@ -421,7 +421,7 @@ exports.getPopularSearches = async (req, res) => {
                 SELECT name FROM medicines
                 ORDER BY RAND()
                 LIMIT 2
-            `);
+                `);
             popularItems.push(...medicines.map(m => m.name));
         } catch (err) {
             console.log('Popular medicines query failed:', err.message);
@@ -433,7 +433,7 @@ exports.getPopularSearches = async (req, res) => {
                 SELECT name FROM pharmacies
                 ORDER BY RAND()
                 LIMIT 1
-            `);
+                `);
             popularItems.push(...pharmacies.map(p => p.name));
         } catch (err) {
             console.log('Popular pharmacies query failed:', err.message);
@@ -445,7 +445,7 @@ exports.getPopularSearches = async (req, res) => {
                 SELECT name FROM doctors
                 ORDER BY RAND()
                 LIMIT 1
-            `);
+                `);
             popularItems.push(...doctors.map(d => d.name));
         } catch (err) {
             console.log('Popular doctors query failed:', err.message);

@@ -31,7 +31,8 @@ router.get('/google/user/callback',
                     id: req.user.id,
                     email: req.user.email,
                     role: req.user.role || 'user',
-                    name: req.user.name || req.user.email.split('@')[0]
+                    name: req.user.name || req.user.email.split('@')[0],
+                    avatar_url: req.user.avatar_url
                 },
                 process.env.JWT_SECRET,
                 { expiresIn: '7d' }
@@ -75,7 +76,8 @@ router.get('/google/doctor/callback',
                     id: req.user.id,
                     email: req.user.email,
                     role: req.user.role || 'doctor',
-                    name: req.user.name || req.user.email.split('@')[0]
+                    name: req.user.name || req.user.email.split('@')[0],
+                    avatar_url: req.user.avatar_url
                 },
                 process.env.JWT_SECRET,
                 { expiresIn: '7d' }

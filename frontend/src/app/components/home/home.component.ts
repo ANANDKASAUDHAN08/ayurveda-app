@@ -165,8 +165,8 @@ export class HomeComponent implements OnInit {
     const newUser = urlParams.get('newUser');
 
     if (token && oauthSuccess === 'success') {
-      // Store token in localStorage
-      localStorage.setItem('token', token);
+      // Store token in localStorage (using the key AuthService expects)
+      localStorage.setItem('auth_token', token);
 
       // Decode JWT to get user data
       try {
@@ -175,7 +175,8 @@ export class HomeComponent implements OnInit {
           id: payload.id,
           email: payload.email,
           role: payload.role,
-          name: payload.name || payload.email.split('@')[0]
+          name: payload.name || payload.email.split('@')[0],
+          avatar_url: payload.avatar_url
         };
         localStorage.setItem('user', JSON.stringify(user));
       } catch (e) {

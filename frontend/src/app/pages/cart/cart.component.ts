@@ -42,11 +42,22 @@ export class CartComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.loading = true;
+    const startTime = Date.now();
+
     // Subscribe to cart observable for automatic updates
     this.cartSubscription = this.cartService.getCart().subscribe({
       next: (cart) => {
         this.cart = cart;
-        this.loading = false;
+
+        // Minimum loading time of 500ms to prevent flickering
+        const elapsed = Date.now() - startTime;
+        const minLoadingTime = 500;
+        const remainingTime = Math.max(0, minLoadingTime - elapsed);
+
+        setTimeout(() => {
+          this.loading = false;
+        }, remainingTime);
       },
       error: (error) => {
         this.error = 'Failed to load cart';
@@ -55,8 +66,8 @@ export class CartComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Initial load
-    this.loadCart();
+    // Initial load/refresh from server
+    this.cartService.refreshCart();
   }
 
   ngOnDestroy() {
@@ -68,17 +79,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   loadCart() {
     this.loading = true;
-    this.cartService.getCart().subscribe({
-      next: () => {
-        // Cart will update via subscription
-        this.loading = false;
-      },
-      error: (error) => {
-        this.error = 'Failed to load cart';
-        this.loading = false;
-        this.snackbar.show('Failed to load cart', 'error');
-      }
-    });
+    this.cartService.refreshCart();
   }
 
   // Open remove confirmation modal
@@ -152,6 +153,10 @@ export class CartComponent implements OnInit, OnDestroy {
 
   isRemoving(itemId: string): boolean {
     return this.removingItemId === itemId;
+  }
+
+  getImageUrl(imagePath?: string): string {
+    return this.cartService.getFullImageUrl(imagePath);
   }
 
   checkout() {

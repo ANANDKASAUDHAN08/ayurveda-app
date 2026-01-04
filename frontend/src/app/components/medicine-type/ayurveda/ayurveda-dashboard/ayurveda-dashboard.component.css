@@ -274,3 +274,21 @@ html {
   text-rendering: auto;
   line-height: 1;
 } */
+
+/* Mobile Sidebar Styling */
+.ayurveda-mobile-sidebar {
+    transition: transform 0.5s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.ayurveda-mobile-sidebar.active {
+    transform: translateX(0);
+}
+
+.transition-active {
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.transition-active:active {
+    transform: scale(0.95);
+    background-color: #f0fdf4;
+}

@@ -11,7 +11,8 @@
         <!-- Loading State with Skeleton -->
         <div *ngIf="loading" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-4">
-                <app-skeleton-loader type="card" [count]="3"></app-skeleton-loader>
+                <app-skeleton-loader type="card"
+                    [count]="(cart && cart.items.length > 0) ? cart.items.length : 1"></app-skeleton-loader>
             </div>
             <div class="lg:col-span-1">
                 <app-skeleton-loader type="card" [count]="1"></app-skeleton-loader>
@@ -60,7 +61,7 @@
                         <div class="flex gap-3 sm:gap-4">
 
                             <!-- Product Image - Compact -->
-                            <img [src]="item.image || 'https://via.placeholder.com/100'" [alt]="item.name"
+                            <img [src]="getImageUrl(item.image)" [alt]="item.name"
                                 class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded border border-gray-200 flex-shrink-0">
 
                             <!-- Product Details - Compact -->

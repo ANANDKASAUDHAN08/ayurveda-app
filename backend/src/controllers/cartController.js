@@ -25,7 +25,7 @@ exports.getCart = async (req, res) => {
                     WHEN c.product_type = 'lab_test' THEN l.name
                     WHEN c.product_type = 'ayurveda_medicine' THEN am.name
                     ELSE 'Service'
-                END as product_name,
+                END as name,
                 CASE 
                     WHEN c.product_type = 'medicine' THEN m.image_url
                     WHEN c.product_type = 'device' THEN d.image_url

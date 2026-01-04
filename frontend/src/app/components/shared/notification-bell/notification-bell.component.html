@@ -12,23 +12,29 @@
         </span>
     </button>
 
-    <!-- Dropdown -->
     <div *ngIf="showDropdown"
-        class="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[500px] overflow-hidden"
+        class="fixed sm:absolute inset-x-4 sm:inset-auto sm:right-0 top-16 sm:top-full mt-0 sm:mt-4 w-auto sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 z-[120] max-h-[80vh] sm:max-h-[500px] overflow-hidden animate-fade-in-up shadow-emerald-900/10"
         (click)="$event.stopPropagation()">
 
         <!-- Header -->
         <div
-            class="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-emerald-50 to-teal-50">
-            <h3 class="font-semibold text-gray-900 flex items-center gap-2">
+            class="px-4 py-1 sm:py-2 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-emerald-50 to-teal-50">
+            <div class="flex items-center gap-2">
                 <i class="fa-solid fa-bell text-emerald-600"></i>
-                Notifications
-                <span *ngIf="unreadCount > 0" class="text-sm text-emerald-600">({{ unreadCount }})</span>
-            </h3>
-            <a routerLink="/notifications" (click)="closeDropdown()"
-                class="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
-                View All
-            </a>
+                <h3 class="font-semibold text-gray-900">
+                    Notifications
+                    <span *ngIf="unreadCount > 0" class="text-sm text-emerald-600">({{ unreadCount }})</span>
+                </h3>
+            </div>
+            <div class="flex items-center gap-2">
+                <a routerLink="/notifications" (click)="closeDropdown()"
+                    class="text-sm text-emerald-600 hover:text-emerald-700 font-medium whitespace-nowrap hidden sm:block">
+                    View All
+                </a>
+                <button (click)="closeDropdown()" class="text-gray-400 hover:text-gray-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
         </div>
 
         <!-- Loading State -->

@@ -13,4 +13,24 @@
     height: 30px;
 }
 
-/* Custom marker color handled in TS */
+/* Ensure map inner div always fills its container */
+:host ::ng-deep google-map>div {
+    height: 100% !important;
+    min-height: 300px;
+}
+
+@media (min-width: 640px) {
+    :host ::ng-deep google-map>div {
+        min-height: 400px;
+    }
+}
+
+.google-map-element {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.group input {
+    padding-right: 2.5rem !important;
+}

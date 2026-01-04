@@ -166,14 +166,16 @@
                     </span>
                 </button>
 
-                <!-- Notifications (Hidden on small screens) -->
-                <app-notification-bell *ngIf="isLoggedIn" class="hidden sm:block"></app-notification-bell>
+                <!-- Notifications -->
+                <app-notification-bell *ngIf="isLoggedIn"></app-notification-bell>
 
                 <!-- User Profile -->
                 <div class="relative profile-menu-container ml-2">
                     <button (click)="toggleProfileMenu()"
-                        class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-calm text-white font-bold text-sm shadow-md hover:scale-105 transition-transform">
-                        {{ isLoggedIn ? getUserInitials() : '?' }}
+                        class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-calm text-white font-bold text-sm shadow-md hover:scale-105 transition-transform overflow-hidden">
+                        <img *ngIf="isLoggedIn && userAvatar" [src]="userAvatar" [alt]="userName"
+                            class="w-full h-full object-cover">
+                        <span *ngIf="!userAvatar">{{ isLoggedIn ? getUserInitials() : '?' }}</span>
                     </button>
 
                     <!-- Profile Dropdown -->
@@ -317,6 +319,7 @@
 </div>
 
 <!-- Cart Sidebar -->
+<!-- Removed for now -->
 <div *ngIf="showCartSidebar" class="fixed inset-0 z-[110] flex justify-end" (click)="toggleCartSidebar()">
     <!-- Backdrop Overlay -->
     <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-fade-in"></div>
@@ -342,7 +345,7 @@
                 <div *ngFor="let item of cart.items" class="flex gap-4 group">
                     <div
                         class="w-20 h-20 bg-slate-50 rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center p-2 border border-slate-100">
-                        <img [src]="item.image || 'assets/images/placeholder-medicine.png'" [alt]="item.name"
+                        <img [src]="getImageUrl(item.image)" [alt]="item.name"
                             class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
                     </div>
                     <div class="flex-1">
@@ -367,7 +370,8 @@
                                     <i class="fas fa-plus text-[10px]"></i>
                                 </button>
                             </div>
-                            <span class="text-sm font-black text-slate-900">₹{{ item.price * item.quantity }}</span>
+                            <span class="text-sm font-black text-slate-900">₹{{ (item.price * item.quantity).toFixed(2)
+                                }}</span>
                         </div>
                     </div>
                 </div>
@@ -392,17 +396,17 @@
             <div class="space-y-2">
                 <div class="flex justify-between text-sm">
                     <span class="text-slate-500 font-medium">Subtotal</span>
-                    <span class="text-slate-900 font-bold">₹{{ cart.subtotal }}</span>
+                    <span class="text-slate-900 font-bold">₹{{ cart.subtotal.toFixed(2) }}</span>
                 </div>
                 <div class="flex justify-between text-sm">
                     <span class="text-slate-500 font-medium">Delivery</span>
                     <span class="text-slate-900 font-bold" [class.text-emerald-600]="cart.delivery === 0">
-                        {{ cart.delivery === 0 ? 'FREE' : '₹' + cart.delivery }}
+                        {{ cart.delivery === 0 ? 'FREE' : '₹' + cart.delivery.toFixed(2) }}
                     </span>
                 </div>
                 <div class="flex justify-between text-lg pt-2 border-t border-slate-200">
                     <span class="text-slate-900 font-black">Total</span>
-                    <span class="text-emerald-600 font-black">₹{{ cart.total }}</span>
+                    <span class="text-emerald-600 font-black">₹{{ cart.total.toFixed(2) }}</span>
                 </div>
             </div>
             <button routerLink="/cart" (click)="toggleCartSidebar()"

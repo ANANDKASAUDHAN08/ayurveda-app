@@ -15,6 +15,7 @@ export interface SearchResult {
     category?: string;
     stock?: number;
     stock_quantity?: number;
+    image_url?: string;
     product_type: 'medicine' | 'device' | 'doctor' | 'hospital' | 'pharmacy';
 }
 

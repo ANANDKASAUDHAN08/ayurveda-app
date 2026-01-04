@@ -34,6 +34,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   userName: string = '';
   userRole: string = '';
   userInitials: string = '';
+  userAvatar: string = '';
   showMobileSearch = false;
 
   profileMenuOpen: boolean = false;
@@ -127,6 +128,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     this.userName = user?.name || '';
     this.userRole = user?.role || '';
     this.userInitials = this.calculateInitials(user?.name || 'U');
+    this.userAvatar = user?.avatar_url || '';
   }
 
   // Clear user data on logout
@@ -134,6 +136,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     this.userName = '';
     this.userRole = '';
     this.userInitials = '';
+    this.userAvatar = '';
   }
 
   // Calculate user initials
@@ -229,10 +232,14 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   }
 
   toggleCartSidebar() {
-    this.showCartSidebar = !this.showCartSidebar;
-    if (this.showCartSidebar) {
-      this.closeAllDropdowns();
-    }
+    this.router.navigate(['/cart']);
+    // this.showCartSidebar = !this.showCartSidebar;
+    // if (this.showCartSidebar) {
+    //   this.closeAllDropdowns();
+    //   document.body.classList.add('overflow-hidden');
+    // } else {
+    //   document.body.classList.remove('overflow-hidden');
+    // }
   }
 
   updateCartQuantity(itemId: string, quantity: number) {
@@ -447,6 +454,10 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     this.clearCart();
     this.profileMenuOpen = false;
     this.router.navigate(['/']);
+  }
+
+  getImageUrl(imagePath?: string): string {
+    return this.cartService.getFullImageUrl(imagePath);
   }
 
   // ============== LOCATION METHODS ==============

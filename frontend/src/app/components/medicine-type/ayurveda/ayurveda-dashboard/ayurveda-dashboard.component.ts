@@ -66,6 +66,7 @@ export class AyurvedaDashboardComponent implements OnInit {
   seasonalTip = '';
 
   showQuickBalance = false;
+  showMobileNav = false;
   // Using your current time for a dynamic nav indicator
   currentDoshaPhase = { name: 'Pitta', icon: '🔥', activity: 'Active Agni', color: 'text-orange-600' };
   selectedFeeling: string | null = null;
@@ -226,6 +227,7 @@ export class AyurvedaDashboardComponent implements OnInit {
   // Tab switching method - Hero stays, only content changes
   switchTab(tab: 'home' | 'ayurveda-wellness' | 'yoga' | 'ayurveda-article' | 'about' | 'search' | 'herb-library'): void {
     this.activeTab = tab;
+    this.closeMobileNav();
 
     // Optional: Haptic feedback
     if ('vibrate' in navigator) {
@@ -328,5 +330,19 @@ export class AyurvedaDashboardComponent implements OnInit {
 
   viewAllArticles(): void {
     this.router.navigate(['/articles']);
+  }
+
+  toggleMobileNav(): void {
+    this.showMobileNav = !this.showMobileNav;
+    if (this.showMobileNav) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }
+
+  closeMobileNav(): void {
+    this.showMobileNav = false;
+    document.body.style.overflow = 'auto';
   }
 }

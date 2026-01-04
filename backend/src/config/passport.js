@@ -37,18 +37,22 @@ passport.use('google-user', new GoogleStrategy({
       const avatar_url = profile.photos[0]?.value;
       const name = profile.displayName;
 
-      // Check if user exists with this OAuth ID and role='user'
+      // Check if user exists with this OAuth ID
       let [users] = await db.execute(
-        'SELECT * FROM users WHERE oauth_provider = ? AND oauth_id = ? AND role = ?',
-        [oauth_provider, oauth_id, 'user']
+        'SELECT * FROM users WHERE oauth_provider = ? AND oauth_id = ?',
+        [oauth_provider, oauth_id]
       );
 
       if (users.length > 0) {
+        // Update avatar if it changed
+        if (avatar_url && users[0].avatar_url !== avatar_url) {
+          await db.execute('UPDATE users SET avatar_url = ? WHERE id = ?', [avatar_url, users[0].id]);
+        }
         return done(null, users[0]);
       }
 
-      // Check if user exists with this email and role='user'
-      [users] = await db.execute('SELECT * FROM users WHERE email = ? AND role = ?', [email, 'user']);
+      // Check if user exists with this email (across any role)
+      [users] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
 
       if (users.length > 0) {
         // Link OAuth to existing account
@@ -99,18 +103,22 @@ passport.use('google-doctor', new GoogleStrategy({
       const avatar_url = profile.photos[0]?.value;
       const name = profile.displayName;
 
-      // Check if doctor exists with this OAuth ID and role='doctor'
+      // Check if doctor exists with this OAuth ID
       let [doctors] = await db.execute(
-        'SELECT * FROM users WHERE oauth_provider = ? AND oauth_id = ? AND role = ?',
-        [oauth_provider, oauth_id, 'doctor']
+        'SELECT * FROM users WHERE oauth_provider = ? AND oauth_id = ?',
+        [oauth_provider, oauth_id]
       );
 
       if (doctors.length > 0) {
+        // Update avatar if it changed
+        if (avatar_url && doctors[0].avatar_url !== avatar_url) {
+          await db.execute('UPDATE users SET avatar_url = ? WHERE id = ?', [avatar_url, doctors[0].id]);
+        }
         return done(null, doctors[0]);
       }
 
-      // Check if doctor exists with this email and role='doctor'
-      [doctors] = await db.execute('SELECT * FROM users WHERE email = ? AND role = ?', [email, 'doctor']);
+      // Check if user exists with this email (across any role)
+      [doctors] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
 
       if (doctors.length > 0) {
         // Link OAuth to existing account

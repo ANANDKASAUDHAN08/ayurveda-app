@@ -253,7 +253,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
             type: (product.product_type || 'medicine') as 'medicine' | 'device' | 'wellness' | 'other',
             price: product.price || 0,
             quantity: 1,
-            image: ''  // SearchResult doesn't have image property
+            image: product.image_url || ''
         });
 
         setTimeout(() => {

@@ -161,4 +161,17 @@ export class CartService {
             item.product_id == productId || item.id == String(productId)
         );
     }
+
+    // Helper: Get full image URL
+    getFullImageUrl(imagePath?: string): string {
+        if (!imagePath || imagePath === '') {
+            return 'assets/images/placeholder-medicine.png';
+        }
+        if (imagePath.startsWith('http')) {
+            return imagePath;
+        }
+        // Remove leading slash if exists
+        const path = imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
+        return `${environment.uploadUrl}/${path}`;
+    }
 }

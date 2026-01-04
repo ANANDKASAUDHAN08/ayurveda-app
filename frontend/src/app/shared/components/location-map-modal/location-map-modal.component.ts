@@ -24,6 +24,12 @@ export class LocationMapModalComponent implements OnInit, OnChanges {
     zoom = 5;
     markerPosition: google.maps.LatLngLiteral = { lat: 20.5937, lng: 78.9629 };
     markerOptions: google.maps.MarkerOptions = { draggable: true };
+    mapOptions: google.maps.MapOptions = {
+        mapTypeControl: true,
+        fullscreenControl: true,
+        streetViewControl: false,
+        zoomControl: true
+    };
 
     selectedAddress: string = 'Click on map to select location';
     hasLocation: boolean = false;
@@ -139,6 +145,11 @@ export class LocationMapModalComponent implements OnInit, OnChanges {
 
     closeModal() {
         this.modalClosed.emit();
+        this.searchQuery = '';
+        this.predictions = [];
+    }
+
+    clearSearch() {
         this.searchQuery = '';
         this.predictions = [];
     }
