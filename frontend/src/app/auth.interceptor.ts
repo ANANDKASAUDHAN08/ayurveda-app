@@ -24,7 +24,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                 // Only handle this if user actually HAD a token
                 const currentToken = localStorage.getItem('auth_token');
 
-                if (currentToken) {
+                // URLs that are expected to return 401 when not logged in
+                const ignoredUrls = ['/cart', '/notifications'];
+                const shouldIgnore = ignoredUrls.some(url => req.url.includes(url));
+
+                if (currentToken && !shouldIgnore) {
                     // User was logged in but token is now expired/invalid
                     const userStr = localStorage.getItem('user');
                     let userRole = 'user';

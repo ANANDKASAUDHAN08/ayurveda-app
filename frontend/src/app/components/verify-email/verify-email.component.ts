@@ -17,6 +17,7 @@ export class VerifyEmailComponent implements OnInit {
   success = false;
   message = '';
   userType = 'user';
+  private static verificationCache: Map<string, { success: boolean, message: string }> = new Map();
 
   constructor(
     private route: ActivatedRoute,
@@ -37,6 +38,23 @@ export class VerifyEmailComponent implements OnInit {
       return;
     }
 
+    // Check if we already verified this token (prevents re-verification on back button)
+    const cacheKey = `${token}-${type}`;
+    const cached = VerifyEmailComponent.verificationCache.get(cacheKey);
+
+    if (cached) {
+      // Use cached result
+      this.loading = false;
+      this.success = cached.success;
+      this.message = cached.message;
+
+      // Auto-redirect if successful
+      if (this.success) {
+        setTimeout(() => this.goToLogin(), 3000);
+      }
+      return;
+    }
+
     // Call backend verification API
     this.http.get<any>(`${environment.apiUrl}/verify-email/${token}?type=${type}`)
       .subscribe({
@@ -44,20 +62,37 @@ export class VerifyEmailComponent implements OnInit {
           this.loading = false;
           this.success = response.success;
           this.message = response.message || 'Email verified successfully!';
+
+          // Cache the result
+          VerifyEmailComponent.verificationCache.set(cacheKey, {
+            success: this.success,
+            message: this.message
+          });
+
+          // Auto-redirect to login after 3 seconds if successful
+          if (this.success) {
+            setTimeout(() => this.goToLogin(), 3000);
+          }
         },
         error: (error) => {
           this.loading = false;
           this.success = false;
           this.message = error.error?.message || 'Verification failed. Please try again.';
+
+          // Cache the error result too
+          VerifyEmailComponent.verificationCache.set(cacheKey, {
+            success: this.success,
+            message: this.message
+          });
         }
       });
   }
 
   goToLogin() {
     if (this.userType === 'doctor') {
-      this.router.navigate(['/doctor-landing']);
+      this.router.navigate(['/for-doctors']);
     } else {
-      this.router.navigate(['/user-landing']);
+      this.router.navigate(['/for-users']);
     }
   }
 }
