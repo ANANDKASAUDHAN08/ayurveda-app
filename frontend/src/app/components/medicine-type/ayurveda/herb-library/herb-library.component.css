@@ -5,6 +5,15 @@
     width: 100%;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 .serif-font {
     font-family: 'Playfair Display', serif;
 }
@@ -66,11 +75,11 @@ button {
 }
 
 .pagination-arrow {
-    @apply w-10 h-10 rounded-xl border border-[#e2e8f0] flex items-center justify-center text-[#94a3b8] hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600 transition-all bg-[#f8fafc]/50;
+    @apply w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-[#e2e8f0] flex items-center justify-center text-[#94a3b8] hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600 transition-all bg-[#f8fafc]/50;
 }
 
 .pagination-number {
-    @apply w-10 h-10 rounded-xl border border-[#e2e8f0] font-bold text-sm text-[#475569] transition-all bg-[#f8fafc]/50 hover:border-emerald-200 hover:bg-emerald-50;
+    @apply w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-[#e2e8f0] font-bold text-xs sm:text-sm text-[#475569] transition-all bg-[#f8fafc]/50 hover:border-emerald-200 hover:bg-emerald-50 flex items-center justify-center;
 }
 
 .pagination-number.active {

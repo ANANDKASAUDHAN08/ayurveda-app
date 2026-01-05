@@ -1,7 +1,7 @@
 const db = require('../config/database');
 const { generateOTP, getOTPExpiration, isOTPExpired } = require('../../utils/otpGenerator');
 const { validatePhone } = require('../../utils/phoneValidator');
-const { sendOTP: sendSMS } = require('../../services/sms.service');
+const { sendOTP: sendSMS } = require('../services/sms.service');
 
 /**
  * Send OTP to phone number

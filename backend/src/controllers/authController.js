@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/database');
-const emailService = require('../../services/email.service');
+const emailService = require('../services/email.service');
 const { generateVerificationToken, getTokenExpiration } = require('../../utils/tokenGenerator');
 
 exports.register = async (req, res) => {

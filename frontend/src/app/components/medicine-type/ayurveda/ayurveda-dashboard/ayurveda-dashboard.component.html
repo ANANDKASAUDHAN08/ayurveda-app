@@ -51,6 +51,14 @@
                         <span>Herbs</span>
                     </button>
 
+                    <!-- Yoga -->
+                    <button (click)="switchTab('yoga')"
+                        [ngClass]="activeTab === 'yoga' ? 'bg-emerald-800 text-white shadow-md' : 'text-slate-700 hover:bg-emerald-100/80'"
+                        class="px-5 py-2 flex items-center gap-2 rounded-full font-black text-xs uppercase tracking-widest transition-all">
+                        <i class="fas fa-yin-yang text-[12px] nav-icon [class.text-white]:activeTab === 'yoga'"></i>
+                        <span>Yoga</span>
+                    </button>
+
                     <div class="w-[1px] h-6 bg-slate-200 mx-2"></div>
 
                     <!-- Quick Search Trigger -->
@@ -183,6 +191,16 @@
                         </div>
                         <i class="fas fa-chevron-right text-[10px] opacity-20 group-hover:opacity-100 nav-icon"></i>
                     </button>
+
+                    <button (click)="switchTab('yoga')"
+                        [ngClass]="activeTab === 'yoga' ? 'bg-emerald-50 text-emerald-900' : 'text-slate-600 hover:bg-gray-50'"
+                        class="w-full px-6 py-4 flex items-center justify-between rounded-2xl transition-all group">
+                        <div class="flex items-center gap-4">
+                            <i class="fas fa-yin-yang text-emerald-700 w-5 nav-icon"></i>
+                            <span class="font-bold text-sm">Yoga</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-[10px] opacity-20 group-hover:opacity-100 nav-icon"></i>
+                    </button>
                 </div>
 
                 <!-- Enhanced Footer Status -->
@@ -219,9 +237,10 @@
         </div>
     </div>
 
+    <!-- Home content -->
     <div *ngIf="activeTab === 'home'" class="mt-8 mb-14 md:mb-4">
         <!-- Premium Hero Section (Deep & Immersive) -->
-        <div class="relative pt-0 pb-12 sm:pb-16 md:pb-24 px-4 sm:px-6 md:px-8 overflow-hidden bg-[#fafaf8]">
+        <div class="relative pt-0 pb-12 sm:pb-8 md:pb-12 px-4 sm:px-6 md:px-8 overflow-hidden bg-[#fafaf8]">
             <!-- Background Accents -->
             <div class="absolute top-0 right-0 w-2/3 h-full bg-emerald-50/50 rounded-l-[20rem] -z-10 blur-3xl"></div>
             <div class="absolute bottom-10 left-10 w-96 h-96 bg-orange-50/40 rounded-full -z-10 blur-[120px]"></div>
@@ -234,7 +253,8 @@
 
             <div
                 class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-16 relative z-10">
-                <div class="flex-1 space-y-6 md:space-y-8 text-center md:text-left">
+                <!-- Hero Left Col -->
+                <div class="flex-1 space-y-2 md:space-y-6 text-center md:text-left">
                     <div (click)="toggleAyurvedaInfo()"
                         class="inline-flex items-center gap-3 px-4 py-2 bg-emerald-100/50 text-emerald-800 rounded-full text-xs font-black uppercase tracking-widest border border-emerald-200 cursor-pointer hover:bg-emerald-200 transition-all group">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -242,28 +262,29 @@
                         <span class="ml-1 opacity-60 group-hover:opacity-100 italic font-medium">Learn More</span>
                     </div>
                     <h1
-                        class="text-3xl sm:text-5xl md:text-4xl lg:text-6xl font-black text-gray-900 leading-[1] tracking-tighter">
+                        class="text-4xl sm:text-5xl md:text-4xl lg:text-7xl font-black text-gray-900 leading-[1.1] md:leading-[1] tracking-tighter">
                         The Art of <br>
                         <span class="text-emerald-700 italic serif-font font-light">Self-Healing.</span>
                     </h1>
-                    <p class="text-gray-600 text-lg md:text-xl font-medium max-w-xl leading-relaxed">
+                    <p class="text-gray-600 text-base md:text-xl font-medium max-w-xl leading-relaxed px-2 md:px-0">
                         Unlock your true potential with personalized Ayurvedic rituals, deep herbal insights, and
                         holistic
                         guidance for a balanced life.
                     </p>
-                    <div class="flex flex-wrap gap-4 pt-6 justify-center md:justify-start">
+                    <div class="grid grid-cols-2 md:flex gap-3 md:gap-4 pt-6 justify-center md:justify-start">
                         <button (click)="openDoshaQuiz()"
-                            class="px-10 py-5 bg-emerald-800 text-white font-bold rounded-2xl shadow-2xl shadow-emerald-200 hover:bg-emerald-900 transition-all hover:scale-105 flex items-center gap-3">
+                            class="px-4 py-3.5 md:px-10 md:py-5 bg-emerald-800 text-white font-bold text-[11px] md:text-base rounded-2xl shadow-2xl shadow-emerald-200 hover:bg-emerald-900 transition-all hover:scale-105 flex items-center justify-center gap-1.5 md:gap-3 whitespace-nowrap">
                             Discover Your Dosha
-                            <span class="text-xl">✨</span>
+                            <span class="text-md">✨</span>
                         </button>
                         <button (click)="switchTab('ayurveda-article')"
-                            class="px-10 py-5 bg-white text-emerald-900 font-bold rounded-2xl border-2 border-emerald-100 hover:border-emerald-200 transition-all shadow-lg hover:shadow-xl">
+                            class="px-4 py-3.5 md:px-10 md:py-5 bg-white text-emerald-900 font-bold text-[11px] md:text-base rounded-2xl border-2 border-emerald-100 hover:border-emerald-200 transition-all shadow-lg hover:shadow-xl flex items-center justify-center whitespace-nowrap">
                             Explore Wisdom
                         </button>
                     </div>
                 </div>
 
+                <!-- Hero Right Col (Daily Vibe) -->
                 <div class="w-full md:w-80">
                     <div
                         class="bg-white/40 backdrop-blur-xl rounded-[3rem] p-8 border border-white shadow-2xl shadow-emerald-900/5 relative overflow-hidden group">
@@ -316,23 +337,22 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
 
         <!-- Philosophy of Balance Section -->
-        <div class="py-24 bg-white/50 overflow-hidden relative border-b border-gray-50">
+        <div class="py-12 mb-12 bg-white/50 overflow-hidden relative border-b border-gray-50">
             <div class="max-w-6xl mx-auto px-8 relative z-10">
-                <div class="text-center space-y-4 mb-20 animate-in fade-in">
-                    <span class="text-emerald-600 font-black uppercase tracking-widest text-xs">Our Core Essence</span>
-                    <h2 class="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter">
+                <div class="text-center space-y-4 mb-12 md:mb-20 animate-in fade-in px-4">
+                    <span class="text-emerald-600 font-black uppercase tracking-widest text-[10px] md:text-xs">Our Core
+                        Essence</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tighter">
                         The Philosophy of <span class="serif-font italic font-light text-emerald-700">Balance</span>
                     </h2>
-                    <div class="w-24 h-1 bg-emerald-800 mx-auto rounded-full"></div>
+                    <div class="w-16 md:w-24 h-1 bg-emerald-800 mx-auto rounded-full"></div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 lg:gap-12">
                     <!-- Ahar Card -->
                     <div class="phi-card relative group">
                         <div
@@ -340,10 +360,13 @@
                         </div>
                         <div class="relative space-y-6">
                             <div
-                                class="phi-icon w-20 h-20 bg-emerald-800 text-white rounded-3xl flex items-center justify-center text-3xl shadow-2xl transition-all duration-500">
+                                class="phi-icon w-12 h-12 md:w-20 md:h-20 bg-emerald-800 text-white rounded-2xl md:rounded-3xl flex items-center justify-center text-xl md:text-3xl shadow-2xl transition-all duration-500">
                                 🍎</div>
-                            <h3 class="text-2xl font-black text-gray-900 tracking-tight">Ahar: Conscious Nutrition</h3>
-                            <p class="text-gray-600 leading-relaxed">Food as medicine. Understanding that what we
+                            <h3 class="text-base md:text-2xl font-black text-gray-900 tracking-tight">Ahar: Conscious
+                                Nutrition</h3>
+                            <p
+                                class="text-[10px] md:text-base text-gray-600 leading-relaxed line-clamp-3 md:line-clamp-none">
+                                Food as medicine. Understanding that what we
                                 consume
                                 builds our physical and mental vitality through Agni (digestive fire).</p>
                             <ul class="space-y-2 text-sm font-bold text-emerald-800">
@@ -360,10 +383,13 @@
                         </div>
                         <div class="relative space-y-6">
                             <div
-                                class="phi-icon w-20 h-20 bg-orange-800 text-white rounded-3xl flex items-center justify-center text-3xl shadow-2xl transition-all duration-500">
+                                class="phi-icon w-12 h-12 md:w-20 md:h-20 bg-orange-800 text-white rounded-2xl md:rounded-3xl flex items-center justify-center text-xl md:text-3xl shadow-2xl transition-all duration-500">
                                 🏃</div>
-                            <h3 class="text-2xl font-black text-gray-900 tracking-tight">Vihar: Balanced Lifestyle</h3>
-                            <p class="text-gray-600 leading-relaxed">The rhythm of life. Aligning daily actions with the
+                            <h3 class="text-base md:text-2xl font-black text-gray-900 tracking-tight">Vihar: Balanced
+                                Lifestyle</h3>
+                            <p
+                                class="text-[10px] md:text-base text-gray-600 leading-relaxed line-clamp-3 md:line-clamp-none">
+                                The rhythm of life. Aligning daily actions with the
                                 sun
                                 through Dincharya to maintain natural biological cycles.</p>
                             <ul class="space-y-2 text-sm font-bold text-orange-800">
@@ -380,10 +406,13 @@
                         </div>
                         <div class="relative space-y-6">
                             <div
-                                class="phi-icon w-20 h-20 bg-teal-800 text-white rounded-3xl flex items-center justify-center text-3xl shadow-2xl transition-all duration-500">
+                                class="phi-icon w-12 h-12 md:w-20 md:h-20 bg-teal-800 text-white rounded-2xl md:rounded-3xl flex items-center justify-center text-xl md:text-3xl shadow-2xl transition-all duration-500">
                                 🧘</div>
-                            <h3 class="text-2xl font-black text-gray-900 tracking-tight">Vichar: Mental Harmony</h3>
-                            <p class="text-gray-600 leading-relaxed">The quieted mind. Cultivating thoughts that empower
+                            <h3 class="text-base md:text-2xl font-black text-gray-900 tracking-tight">Vichar: Mental
+                                Harmony</h3>
+                            <p
+                                class="text-[10px] md:text-base text-gray-600 leading-relaxed line-clamp-3 md:line-clamp-none">
+                                The quieted mind. Cultivating thoughts that empower
                                 us
                                 and connecting to our inner self through stillness.</p>
                             <ul class="space-y-2 text-sm font-bold text-teal-800">
@@ -397,53 +426,62 @@
         </div>
 
         <!-- Stats Section (Zen Style) -->
-        <div class="relative z-10 max-w-7xl mx-auto px-8 -mt-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div class="relative z-10 max-w-7xl mx-auto px-4 md:px-8 mb-6 -mt-3">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8">
+                <!-- Doctors -->
                 <div
-                    class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-emerald-100 hover:border-emerald-200 transition-all hover:-translate-y-2 group">
-                    <div class="flex items-center gap-6">
+                    class="bg-white/95 backdrop-blur-xl rounded-2xl md:rounded-3xl shadow-xl p-3 md:p-8 border border-emerald-100/50 hover:border-emerald-200 transition-all hover:-translate-y-2 group">
+                    <div class="flex flex-col md:flex-row items-center gap-2 md:gap-6 text-center md:text-left">
                         <div
-                            class="w-16 h-16 bg-emerald-50 text-emerald-700 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                            class="w-8 h-8 md:w-16 md:h-16 bg-emerald-50 text-emerald-700 rounded-lg md:rounded-2xl flex items-center justify-center text-lg md:text-3xl group-hover:scale-110 transition-transform shadow-inner">
                             👨‍⚕️</div>
                         <div>
-                            <div class="text-3xl font-black text-gray-900 leading-none mb-1">{{ stats.doctors ||
+                            <div class="text-lg md:text-3xl font-black text-gray-900 leading-none mb-1">{{ stats.doctors
+                                ||
                                 (doctors ?
                                 doctors.length : 5) }}+</div>
-                            <div class="text-xs font-black text-emerald-800 uppercase tracking-widest opacity-60">Expert
-                                Vaidyas</div>
+                            <div
+                                class="text-[7px] md:text-xs font-black text-emerald-800 uppercase tracking-widest opacity-60">
+                                Expert Vaidyas</div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Herbs -->
                 <div
-                    class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-orange-100 hover:border-orange-200 transition-all hover:-translate-y-2 group">
-                    <div class="flex items-center gap-6">
+                    class="bg-white/95 backdrop-blur-xl rounded-2xl md:rounded-3xl shadow-xl p-3 md:p-8 border border-orange-100/50 hover:border-orange-200 transition-all hover:-translate-y-2 group">
+                    <div class="flex flex-col md:flex-row items-center gap-2 md:gap-6 text-center md:text-left">
                         <div
-                            class="w-16 h-16 bg-orange-50 text-orange-700 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                            class="w-8 h-8 md:w-16 md:h-16 bg-orange-50 text-orange-700 rounded-lg md:rounded-2xl flex items-center justify-center text-lg md:text-3xl group-hover:scale-110 transition-transform shadow-inner">
                             🌿</div>
                         <div>
-                            <div class="text-3xl font-black text-gray-900 leading-none mb-1">{{ stats.medicines || 500
+                            <div class="text-lg md:text-3xl font-black text-gray-1000 leading-none mb-1">{{
+                                stats.medicines || 500
                                 }}+
                             </div>
-                            <div class="text-xs font-black text-orange-800 uppercase tracking-widest opacity-60">
-                                Purified
-                                Herbs</div>
+                            <div
+                                class="text-[7px] md:text-xs font-black text-orange-800 uppercase tracking-widest opacity-60">
+                                Purified Herbs</div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Dharma -->
                 <div
-                    class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-teal-100 hover:border-teal-200 transition-all hover:-translate-y-2 group">
-                    <div class="flex items-center gap-6">
+                    class="bg-white/95 backdrop-blur-xl rounded-2xl md:rounded-3xl shadow-xl p-3 md:p-8 border border-teal-100/50 hover:border-teal-200 transition-all hover:-translate-y-2 group col-span-2 md:col-span-1">
+                    <div
+                        class="flex flex-row md:flex-row items-center justify-center md:justify-start gap-4 md:gap-6 text-center md:text-left">
                         <div
-                            class="w-16 h-16 bg-teal-50 text-teal-700 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                            class="w-8 h-8 md:w-16 md:h-16 bg-teal-50 text-teal-700 rounded-lg md:rounded-2xl flex items-center justify-center text-lg md:text-3xl group-hover:scale-110 transition-transform shadow-inner">
                             🧘</div>
-                        <div>
-                            <div class="text-3xl font-black text-gray-900 leading-none mb-1">{{ stats.exercises || 50
+                        <div class="flex flex-col items-start md:items-start text-left">
+                            <div class="text-lg md:text-3xl font-black text-gray-900 leading-none mb-1">{{
+                                stats.exercises || 50
                                 }}+
                             </div>
-                            <div class="text-xs font-black text-teal-800 uppercase tracking-widest opacity-60">Dharma
-                                Paths
+                            <div
+                                class="text-[7px] md:text-xs font-black text-teal-800 uppercase tracking-widest opacity-60">
+                                Dharma Paths
                             </div>
                         </div>
                     </div>
@@ -463,7 +501,7 @@
                         <!-- Doctors -->
                         <section>
                             <div class="flex items-center justify-between mb-12">
-                                <h2 class="text-3xl font-black text-gray-900 tracking-tight">Vaidya <span
+                                <h2 class="text-xl md:text-3xl font-black text-gray-900 tracking-tight">Vaidya <span
                                         class="serif-font italic font-light text-emerald-700">Expertise</span></h2>
                                 <button (click)="viewAllDoctors()"
                                     class="px-6 py-2 bg-emerald-50 text-emerald-700 rounded-xl font-bold hover:bg-emerald-100 transition-all">View
@@ -476,32 +514,35 @@
                                 </div>
                             </div>
 
-                            <div *ngIf="!loading" class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+                            <div *ngIf="!loading" class="grid grid-cols-2 gap-3 md:gap-8">
                                 <div *ngFor="let doctor of doctors.slice(0, 4)"
-                                    class="bg-white/50 border border-emerald-50 p-6 rounded-[2rem] flex items-center gap-6 group hover:border-emerald-200 hover:shadow-2xl hover:shadow-emerald-900/5 transition-all">
+                                    class="bg-white/60 backdrop-blur-md border border-emerald-50 p-2.5 md:p-6 rounded-2xl md:rounded-[2rem] flex flex-col md:flex-row items-center gap-2 md:gap-6 group hover:border-emerald-200 hover:shadow-xl transition-all text-center md:text-left">
                                     <div class="relative shrink-0">
                                         <img [src]="doctor.image || 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400'"
                                             [alt]="doctor.name"
-                                            class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg group-hover:scale-110 transition-transform">
+                                            class="w-14 h-14 md:w-24 md:h-24 rounded-full object-cover border-2 md:border-4 border-white shadow-md group-hover:scale-105 transition-transform">
                                         <div *ngIf="doctor.experience >= 10"
-                                            class="absolute -top-1 -right-1 w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white text-[10px] font-black shadow-md">
+                                            class="absolute -top-1 -right-1 w-5 h-5 md:w-8 md:h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white text-[7px] md:text-[10px] font-black shadow-md">
                                             ⭐</div>
                                     </div>
-                                    <div class="space-y-2">
-                                        <h3 class="font-black text-gray-900 text-lg leading-tight">{{ doctor.name }}
+                                    <div class="space-y-0.5 md:space-y-2">
+                                        <h3
+                                            class="font-black text-gray-900 text-[10px] md:text-lg leading-tight line-clamp-1">
+                                            {{ doctor.name }}
                                         </h3>
-                                        <p class="text-xs text-emerald-700 font-black uppercase tracking-widest">{{
+                                        <p
+                                            class="text-[7px] md:text-xs text-emerald-700 font-black uppercase tracking-widest opacity-80">
+                                            {{
                                             doctor.specialization }}</p>
                                         <button (click)="bookDoctor(doctor)"
-                                            class="text-xs font-black text-emerald-800 underline decoration-2 underline-offset-4 hover:text-emerald-900">Book
-                                            Session</button>
+                                            class="text-[8px] md:text-xs font-black text-emerald-800 underline decoration-1 md:decoration-2 underline-offset-2 md:underline-offset-4 hover:text-emerald-900 transition-colors">Book</button>
                                     </div>
                                 </div>
                             </div>
                         </section>
 
                         <!-- Medicines -->
-                        <section>
+                        <section class="mt-4 md:mt-20">
                             <div class="flex items-center justify-between mb-12">
                                 <h2 class="text-3xl font-black text-gray-900 tracking-tight">Ancient <span
                                         class="serif-font italic font-light text-emerald-700">Remedies</span></h2>
@@ -511,29 +552,30 @@
                                 </button>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+                            <div class="grid grid-cols-2 gap-3 md:gap-8">
                                 <div *ngFor="let medicine of medicines.slice(0, 2)"
-                                    class="bg-white/50 backdrop-blur-sm rounded-[2.5rem] p-6 border border-emerald-50 hover:border-emerald-100 transition-all group relative hover:-translate-y-2">
+                                    class="bg-white/60 backdrop-blur-md rounded-2xl md:rounded-[2.5rem] p-2.5 md:p-6 border border-emerald-50 hover:border-emerald-100 transition-all group relative hover:-translate-y-1 shadow-sm">
                                     <div *ngIf="medicine.is_bestseller"
-                                        class="absolute top-4 right-4 px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-black rounded-full shadow-lg z-10 uppercase tracking-widest">
-                                        Satvic Choice</div>
+                                        class="absolute top-2 right-2 md:top-4 md:right-4 px-1.5 md:px-3 py-0.5 md:py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[6px] md:text-[10px] font-black rounded-full shadow-lg z-10 uppercase tracking-widest">
+                                        Satvic</div>
                                     <div
-                                        class="w-full h-48 rounded-2xl flex items-center justify-center mb-6 overflow-hidden bg-gray-50">
+                                        class="w-full h-28 md:h-48 rounded-xl md:rounded-2xl flex items-center justify-center mb-2.5 md:mb-6 overflow-hidden bg-gray-50/50">
                                         <img [src]="medicine.image_url" [alt]="medicine.name"
-                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                                     </div>
-                                    <div class="w-full text-left space-y-3">
+                                    <div class="w-full text-left space-y-1 md:space-y-3 px-0.5">
                                         <span
-                                            class="inline-block px-3 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-black rounded-full uppercase tracking-widest">{{
+                                            class="inline-block px-1.5 py-0.5 bg-emerald-50 text-emerald-700 text-[6px] md:text-[10px] font-black rounded-full uppercase tracking-widest">{{
                                             medicine.category || 'Herbal' }}</span>
                                         <h3
-                                            class="font-black text-gray-900 text-base md:text-lg leading-tight truncate">
+                                            class="font-black text-gray-900 text-[10px] md:text-lg leading-tight truncate">
                                             {{
                                             medicine.name }}</h3>
-                                        <div class="flex items-center justify-between items-baseline">
-                                            <p class="text-xl font-black text-emerald-900">${{ medicine.price }}</p>
+                                        <div class="flex items-center justify-between gap-1">
+                                            <p class="text-sm md:text-xl font-black text-emerald-900">${{ medicine.price
+                                                }}</p>
                                             <button (click)="addToCart(medicine)"
-                                                class="w-10 h-10 bg-emerald-800 text-white rounded-xl flex items-center justify-center hover:bg-emerald-900 transition-all shadow-lg shadow-emerald-100">🛒</button>
+                                                class="w-7 h-7 md:w-10 md:h-10 bg-emerald-800 text-white rounded-lg md:rounded-xl flex items-center justify-center hover:bg-emerald-900 transition-all shadow-md text-[10px] md:text-base">🛒</button>
                                         </div>
                                     </div>
                                 </div>
@@ -541,7 +583,7 @@
                         </section>
 
                         <!-- Yoga & Pranayama -->
-                        <section>
+                        <section class="mt-4 md:mt-20">
                             <div class="flex items-center justify-between mb-12">
                                 <h2 class="text-3xl font-black text-gray-900 tracking-tight">Prana <span
                                         class="serif-font italic font-light text-emerald-700">Movement</span></h2>
@@ -561,23 +603,27 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
-                                <div *ngFor="let exercise of exercises.slice(0, 2)" class="group space-y-4">
-                                    <div class="aspect-video rounded-[2rem] overflow-hidden relative shadow-2xl">
+                            <div class="grid grid-cols-2 gap-3 md:gap-8">
+                                <div *ngFor="let exercise of exercises.slice(0, 2)"
+                                    class="group space-y-2 md:space-y-4">
+                                    <div
+                                        class="aspect-[4/3] md:aspect-video rounded-2xl md:rounded-[2rem] overflow-hidden relative shadow-lg">
                                         <img [src]="exercise.image_url || 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400'"
-                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                        <div
+                                            class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
                                         </div>
                                         <div
-                                            class="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
-                                            <div>
+                                            class="absolute bottom-2.5 left-2.5 right-2.5 md:bottom-6 md:left-6 md:right-6 flex flex-col md:flex-row md:items-end md:justify-between text-white gap-0.5">
+                                            <div class="min-w-0">
                                                 <span
-                                                    class="text-[10px] font-black uppercase tracking-widest opacity-80">{{
+                                                    class="text-[7px] md:text-[10px] font-black uppercase tracking-widest opacity-80">{{
                                                     exercise.type }}</span>
-                                                <h3 class="text-xl font-black">{{ exercise.name }}</h3>
+                                                <h3 class="text-[11px] md:text-xl font-black truncate">{{
+                                                    exercise.name }}</h3>
                                             </div>
                                             <span
-                                                class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-black">{{
+                                                class="w-fit px-1.5 md:px-3 py-0.5 md:py-1 bg-white/20 backdrop-blur-md rounded-md md:rounded-lg text-[7px] md:text-xs font-black">{{
                                                 exercise.duration_minutes }}m</span>
                                         </div>
                                     </div>
@@ -586,7 +632,7 @@
                         </section>
 
                         <!-- Health Articles Preview -->
-                        <section class="bg-transparent overflow-hidden mt-16 pb-8">
+                        <section class="bg-transparent overflow-hidden mt-4 md:mt-16 pb-8">
                             <div class="flex items-center justify-between mb-12">
                                 <h2 class="text-3xl font-black text-gray-900 tracking-tight">Dharma <span
                                         class="serif-font italic font-light text-emerald-700">Wisdom</span></h2>
@@ -601,30 +647,33 @@
                                 </div>
                             </div>
 
-                            <div *ngIf="!articlesLoading" class="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-10">
+                            <div *ngIf="!articlesLoading" class="grid grid-cols-2 gap-3 md:gap-10">
                                 <div *ngFor="let article of articles.slice(0, 2)"
-                                    class="bg-white rounded-[2.5rem] p-10 shadow-2xl shadow-emerald-50/50 border border-emerald-50 hover:border-emerald-100 transition-all group cursor-pointer">
-                                    <div class="flex items-center gap-8 mb-8">
+                                    class="bg-white rounded-2xl md:rounded-[2.5rem] p-3.5 md:p-10 shadow-lg shadow-emerald-50 border border-emerald-50 hover:border-emerald-200 transition-all group cursor-pointer">
+                                    <div
+                                        class="flex flex-col md:flex-row items-center md:items-start md:gap-8 mb-2.5 md:mb-8 text-center md:text-left">
                                         <div
-                                            class="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                                            class="w-9 h-9 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-50 flex items-center justify-center text-lg md:text-3xl group-hover:scale-105 transition-transform mb-2 md:mb-0 shadow-inner">
                                             📖</div>
-                                        <div>
+                                        <div class="min-w-0 w-full">
                                             <span
-                                                class="text-[10px] text-emerald-600 font-black uppercase tracking-widest">{{
+                                                class="text-[7px] md:text-[10px] text-emerald-600 font-black uppercase tracking-widest line-clamp-1">{{
                                                 article.category }}</span>
                                             <h3
-                                                class="font-black text-gray-900 text-xl md:text-2xl leading-tight group-hover:text-emerald-800 transition-colors">
+                                                class="font-black text-gray-900 text-[11px] md:text-2xl leading-tight group-hover:text-emerald-800 transition-colors line-clamp-2 md:line-clamp-none">
                                                 {{ article.title }}</h3>
                                         </div>
                                     </div>
-                                    <p class="text-base text-gray-500 mb-8 leading-relaxed line-clamp-2">{{
+                                    <p
+                                        class="hidden md:block text-base text-gray-500 mb-8 leading-relaxed line-clamp-2">
+                                        {{
                                         article.excerpt
                                         }}
                                     </p>
                                     <div
-                                        class="flex items-center justify-between text-[10px] font-black text-emerald-800/60 uppercase tracking-widest border-t border-emerald-50 pt-8">
-                                        <span>By {{ article.author }}</span>
-                                        <span>{{ article.read_time_minutes }} min read</span>
+                                        class="flex items-center justify-between text-[7px] md:text-[10px] font-black text-emerald-800/60 uppercase tracking-widest border-t border-emerald-50 pt-2.5 md:pt-8">
+                                        <span class="truncate">By {{ article.author.split(' ')[0] }}</span>
+                                        <span>{{ article.read_time_minutes }}m</span>
                                     </div>
                                 </div>
                             </div>
@@ -633,142 +682,155 @@
                 </div>
 
                 <!-- Sidebar Content (1/3) -->
-                <aside class="space-y-12">
-                    <!-- Search -->
-                    <div
-                        class="bg-white rounded-[2.5rem] p-6 md:p-8 border border-emerald-50 shadow-xl shadow-emerald-900/5 relative overflow-hidden group">
-                        <div class="absolute -top-4 -right-4 w-20 h-20 bg-emerald-50 rounded-full blur-2xl"></div>
-                        <div class="relative z-10 space-y-4">
-                            <h3 class="font-black text-xs text-emerald-800 uppercase tracking-widest">Global Wisdom</h3>
-                            <p class="text-gray-800 font-bold leading-tight">Can't find what you're looking for?</p>
+                <aside class="grid grid-cols-2 lg:grid-cols-1 gap-2 md:gap-6 items-start">
+                    <!-- Column 1 (Mobile) -->
+                    <div class="flex flex-col gap-1.5 md:gap-6">
+                        <!-- Search -->
+                        <div
+                            class="bg-white rounded-2xl md:rounded-[2.5rem] pt-3 px-3 pb-2 md:p-8 h-fit border border-emerald-50 shadow-lg relative overflow-hidden group">
+                            <div
+                                class="absolute -top-4 -right-4 w-12 h-12 md:w-20 md:h-20 bg-emerald-50 rounded-full blur-xl">
+                            </div>
+                            <div class="relative z-10 space-y-1 md:space-y-4">
+                                <h3
+                                    class="font-black text-[8px] md:text-xs text-emerald-800 uppercase tracking-widest opacity-70">
+                                    Global Wisdom</h3>
+                                <p class="text-gray-800 font-bold leading-tight text-[11px] md:text-base">Find
+                                    guidance...
+                                </p>
 
-                            <!-- Search Trigger Button -->
-                            <button (click)="toggleSearchPortal()"
-                                class="w-full flex items-center justify-between px-6 py-4 bg-emerald-50 text-emerald-800 rounded-2xl font-black text-sm hover:bg-emerald-100 transition-all">
-                                <span>Search Library...</span>
-                                <span class="text-lg">🔍</span>
-                            </button>
-
-                            <div class="pt-4 border-t border-emerald-50 flex flex-col gap-2">
-                                <button (click)="switchTab('ayurveda-article')"
-                                    class="text-left text-[11px] font-black text-emerald-600 hover:text-emerald-800 transition-colors uppercase tracking-wider">
-                                    → Access All Articles
+                                <!-- Search Trigger Button -->
+                                <button (click)="toggleSearchPortal()"
+                                    class="w-full flex items-center justify-between px-3 md:px-6 py-2.5 md:py-4 bg-emerald-50 text-emerald-800 rounded-xl md:rounded-2xl font-black text-[9px] md:text-sm hover:bg-emerald-100 transition-all">
+                                    <span>Search...</span>
+                                    <span class="text-xs md:text-lg">🔍</span>
                                 </button>
-                                <button (click)="toggleAyurvedaInfo()"
-                                    class="text-left text-[11px] font-black text-emerald-600 hover:text-emerald-800 transition-colors uppercase tracking-wider">
-                                    → Common Ayurvedic Terms
-                                </button>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Dosha Analysis -->
-                    <div
-                        class="bg-emerald-900 rounded-[2.5rem] p-6 md:p-8 text-white shadow-2xl relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl">
-                        </div>
-                        <h3 class="font-black text-xl mb-8 relative z-10">Prakriti <span
-                                class="serif-font italic font-light text-emerald-200">Analysis</span></h3>
-                        <div class="space-y-8 relative z-10">
-                            <div>
-                                <div
-                                    class="flex justify-between text-xs font-black uppercase tracking-widest mb-3 opacity-80">
-                                    <span>Vata (Air)</span>
-                                    <span>{{ doshaAssessment.vata || 40 }}%</span>
-                                </div>
-                                <div class="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                    <div class="h-full bg-orange-400 rounded-full shadow-[0_0_12px_rgba(251,146,60,0.5)] transition-all duration-1000"
-                                        [style.width.%]="doshaAssessment.vata || 40"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div
-                                    class="flex justify-between text-xs font-black uppercase tracking-widest mb-3 opacity-80">
-                                    <span>Pitta (Fire)</span>
-                                    <span>{{ doshaAssessment.pitta || 65 }}%</span>
-                                </div>
-                                <div class="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                    <div class="h-full bg-emerald-400 rounded-full shadow-[0_0_12px_rgba(52,211,153,0.5)] transition-all duration-1000"
-                                        [style.width.%]="doshaAssessment.pitta || 65"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div
-                                    class="flex justify-between text-xs font-black uppercase tracking-widest mb-3 opacity-80">
-                                    <span>Kapha (Earth)</span>
-                                    <span>{{ doshaAssessment.kapha || 40 }}%</span>
-                                </div>
-                                <div class="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                    <div class="h-full bg-blue-300 rounded-full shadow-[0_0_12px_rgba(147,197,253,0.5)] transition-all duration-1000"
-                                        [style.width.%]="doshaAssessment.kapha || 40"></div>
+                                <div class="pt-1.5 md:pt-4 border-t border-emerald-50 flex flex-col gap-1.5 md:gap-2">
+                                    <button (click)="switchTab('ayurveda-article')"
+                                        class="text-left text-[8px] md:text-[11px] font-black text-emerald-600 hover:text-emerald-800 transition-colors uppercase tracking-wider">
+                                        → All Wisdom
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <button (click)="openDoshaQuiz()"
-                            class="mt-10 w-full py-4 bg-white text-emerald-900 font-black rounded-2xl hover:bg-emerald-50 transition-all shadow-xl shadow-emerald-950/20">Deep
-                            Assessment</button>
-                    </div>
 
-                    <!-- Ritual of the Season -->
-                    <div
-                        class="bg-orange-50 rounded-[2.5rem] p-6 md:p-8 border border-orange-100 relative overflow-hidden group">
+                        <!-- Ritual of the Season -->
                         <div
-                            class="absolute -bottom-8 -left-8 w-24 h-24 bg-orange-200/30 rounded-full blur-2xl group-hover:scale-150 transition-transform">
-                        </div>
-                        <div class="relative z-10 space-y-6">
-                            <div class="flex items-center gap-3">
-                                <span
-                                    class="w-10 h-10 bg-orange-100 text-orange-700 rounded-xl flex items-center justify-center text-xl">🍂</span>
-                                <span class="text-xs font-black text-orange-800 uppercase tracking-widest">Seasonal
-                                    Wisdom</span>
+                            class="bg-orange-50 rounded-2xl md:rounded-[2.5rem] pt-4 px-3 pb-2 md:p-8 h-fit border border-orange-100 relative overflow-hidden group">
+                            <div
+                                class="absolute -bottom-8 -left-8 w-24 h-24 bg-orange-200/30 rounded-full blur-2xl group-hover:scale-150 transition-transform">
                             </div>
-                            <h3 class="text-2xl font-black text-gray-900 leading-tight">Ritual of <span
-                                    class="serif-font italic font-light text-orange-700">Hemanta</span></h3>
-                            <p class="text-sm text-gray-600 leading-relaxed font-medium">As we enter the winter season,
-                                focus on
-                                grounding practices and warm, unctuous foods to balance the rising Vata.</p>
-                            <button
-                                class="w-full py-4 bg-orange-800 text-white font-black rounded-2xl hover:bg-orange-900 transition-all shadow-xl shadow-orange-100">Unlock
-                                Full Guide</button>
+                            <div class="relative z-10 space-y-3 md:space-y-6">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="w-8 h-8 md:w-10 md:h-10 bg-orange-100 text-orange-700 rounded-xl flex items-center justify-center text-lg">🍂</span>
+                                    <span
+                                        class="text-[8px] md:text-xs font-black text-orange-800 uppercase tracking-widest">Seasonal
+                                        Wisdom</span>
+                                </div>
+                                <h3 class="text-lg md:text-2xl font-black text-gray-900 leading-tight">Ritual of <span
+                                        class="serif-font italic font-light text-orange-700">Hemanta</span></h3>
+                                <p
+                                    class="text-[10px] md:text-sm text-gray-600 leading-relaxed font-medium line-clamp-2 md:line-clamp-none">
+                                    As we enter the winter season,
+                                    focus on
+                                    grounding practices and warm, unctuous foods to balance the rising Vata.</p>
+                                <button
+                                    class="w-full py-2.5 md:py-4 bg-orange-800 text-white font-black rounded-xl md:rounded-2xl hover:bg-orange-900 transition-all shadow-xl shadow-orange-100 text-[10px] md:text-base">Unlock
+                                    Guide</button>
+                            </div>
+                        </div>
+
+                        <!-- Join -->
+                        <div
+                            class="bg-emerald-950 rounded-2xl md:rounded-[2.5rem] pt-4 px-3 pb-2 md:p-8 h-fit text-white relative overflow-hidden group shadow-2xl">
+                            <div
+                                class="absolute top-0 right-0 w-32 h-32 bg-emerald-400/10 rounded-full -mr-16 -mt-16 blur-3xl">
+                            </div>
+                            <div class="relative z-10 space-y-3 md:space-y-6">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="w-8 h-8 bg-emerald-800 rounded-lg flex items-center justify-center text-sm">👥</span>
+                                    <span
+                                        class="text-[10px] font-black uppercase tracking-widest text-emerald-300">Community</span>
+                                </div>
+                                <h3 class="text-xl font-black leading-tight truncate">Join the <span
+                                        class="serif-font italic font-light text-emerald-200">Satvic</span> Circle</h3>
+                                <p
+                                    class="text-[10px] md:text-xs text-emerald-100/70 leading-relaxed line-clamp-2 md:line-clamp-none">
+                                    Connect with 5,000+ seekers on the
+                                    path
+                                    to holistic wellness. Monthly live Q&A with our senior Vaidyas.</p>
+                                <button
+                                    class="w-full py-3 bg-white text-emerald-950 font-black rounded-xl text-[10px] md:text-xs hover:bg-emerald-50 transition-all">Join
+                                    WhatsApp Channel</button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Prana Tip -->
-                    <div
-                        class="bg-[#fafaf8] rounded-[2.5rem] p-6 md:p-8 border border-gray-100 relative group overflow-hidden text-center">
+                    <!-- Column 2 (Mobile) -->
+                    <div class="flex flex-col gap-1.5 md:gap-6">
+                        <!-- Dosha Analysis -->
                         <div
-                            class="absolute top-4 right-4 text-4xl opacity-10 group-hover:opacity-20 transition-opacity">
-                            🌿
-                        </div>
-                        <h3 class="font-black text-xs text-emerald-800 uppercase tracking-widest mb-4">Prana Tip of the
-                            Day
-                        </h3>
-                        <p class="text-lg font-bold text-gray-800 italic serif-font leading-tight">"Eat only when your
-                            previous
-                            meal has been digested. This is the root of all health."</p>
-                    </div>
-
-                    <!-- Join -->
-                    <div
-                        class="bg-emerald-950 rounded-[2.5rem] p-6 md:p-8 text-white relative overflow-hidden group shadow-2xl shadow-emerald-950/20">
-                        <div
-                            class="absolute top-0 right-0 w-32 h-32 bg-emerald-400/10 rounded-full -mr-16 -mt-16 blur-3xl">
-                        </div>
-                        <div class="relative z-10 space-y-6">
-                            <div class="flex items-center gap-3">
-                                <span
-                                    class="w-8 h-8 bg-emerald-800 rounded-lg flex items-center justify-center text-sm">👥</span>
-                                <span
-                                    class="text-[10px] font-black uppercase tracking-widest text-emerald-300">Community</span>
+                            class="bg-emerald-900 rounded-2xl md:rounded-[2.5rem] pt-3 px-3 pb-2 md:p-8 h-fit text-white shadow-xl relative overflow-hidden group">
+                            <div
+                                class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12 blur-2xl">
                             </div>
-                            <h3 class="text-xl font-black leading-tight">Join the <span
-                                    class="serif-font italic font-light text-emerald-200">Satvic</span> Circle</h3>
-                            <p class="text-xs text-emerald-100/70 leading-relaxed">Connect with 5,000+ seekers on the
-                                path
-                                to holistic wellness. Monthly live Q&A with our senior Vaidyas.</p>
-                            <button
-                                class="w-full py-3 bg-white text-emerald-950 font-black rounded-xl text-xs hover:bg-emerald-50 transition-all">Join
-                                WhatsApp Channel</button>
+                            <h3 class="font-black text-sm md:text-xl mb-2 md:mb-6 relative z-10">Prakriti <span
+                                    class="serif-font italic font-light text-emerald-200">Map</span></h3>
+                            <div class="space-y-3 md:space-y-8 relative z-10">
+                                <div>
+                                    <div
+                                        class="flex justify-between text-[7px] md:text-xs font-black uppercase tracking-widest mb-1.5 md:mb-3 opacity-80">
+                                        <span>Vata</span>
+                                        <span>{{ doshaAssessment.vata || 40 }}%</span>
+                                    </div>
+                                    <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-orange-400 rounded-full transition-all duration-1000"
+                                            [style.width.%]="doshaAssessment.vata || 40"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        class="flex justify-between text-[7px] md:text-xs font-black uppercase tracking-widest mb-1.5 md:mb-3 opacity-80">
+                                        <span>Pitta</span>
+                                        <span>{{ doshaAssessment.pitta || 65 }}%</span>
+                                    </div>
+                                    <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-emerald-400 rounded-full transition-all duration-1000"
+                                            [style.width.%]="doshaAssessment.pitta || 65"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        class="flex justify-between text-[7px] md:text-xs font-black uppercase tracking-widest mb-1.5 md:mb-3 opacity-80">
+                                        <span>Kapha</span>
+                                        <span>{{ doshaAssessment.kapha || 40 }}%</span>
+                                    </div>
+                                    <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-blue-300 rounded-full transition-all duration-1000"
+                                            [style.width.%]="doshaAssessment.kapha || 40"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button (click)="openDoshaQuiz()"
+                                class="mt-2 md:mt-6 w-full py-2 bg-white text-emerald-900 font-black rounded-lg md:rounded-2xl hover:bg-emerald-50 transition-all text-[8px] md:text-base uppercase tracking-widest">Assess</button>
+                        </div>
+
+                        <!-- Prana Tip -->
+                        <div
+                            class="bg-[#fafaf8] rounded-2xl md:rounded-[2.5rem] pt-3 px-3 pb-2 md:p-8 h-fit border border-gray-100 relative group overflow-hidden text-center flex flex-col justify-center">
+                            <div
+                                class="absolute top-2 right-2 text-2xl md:text-4xl opacity-10 group-hover:opacity-20 transition-opacity">
+                                🌿
+                            </div>
+                            <h3
+                                class="font-black text-[7px] md:text-xs text-emerald-800 uppercase tracking-widest mb-1 md:mb-4 opacity-70">
+                                Prana Tip</h3>
+                            <p class="text-[10px] md:text-lg font-bold text-gray-800 italic serif-font leading-tight">
+                                "Eat
+                                only when your previous meal is digested."</p>
                         </div>
                     </div>
                 </aside>
@@ -778,21 +840,31 @@
 
     <!-- TABS: Embedded Components -->
     <div [ngClass]="activeTab === 'home' || activeTab === 'search' ? '' : '-mt-12'">
+        <!-- Rituals -->
         <div *ngIf="activeTab === 'ayurveda-wellness'" class="animate-fade-in">
             <app-ayurveda-wellness></app-ayurveda-wellness>
         </div>
+
+        <!-- Yoga -->
         <div *ngIf="activeTab === 'yoga'" class="animate-fade-in">
             <app-yoga></app-yoga>
         </div>
+
+        <!-- Wisdom -->
         <div *ngIf="activeTab === 'ayurveda-article'" class="animate-fade-in">
             <app-ayurveda-article></app-ayurveda-article>
         </div>
+
+        <!-- Principles -->
         <div *ngIf="activeTab === 'about'" class="animate-fade-in">
             <app-ayurveda-about></app-ayurveda-about>
         </div>
+
+        <!-- Herb Library -->
         <div *ngIf="activeTab === 'herb-library'" class="animate-fade-in">
             <app-herb-library (herbSelected)="onHerbSelected($event)"></app-herb-library>
         </div>
+
         <!-- Search Results View -->
         <div class="max-w-[1600px] mx-auto transition-opacity duration-700 ease-in-out"
             [ngClass]="activeTab === 'search' ? 'opacity-100 block' : 'opacity-0 h-0 overflow-hidden hidden'">
@@ -814,26 +886,29 @@
     <div *ngIf="showDoshaQuiz"
         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
         <div
-            class="bg-white rounded-[3rem] w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
-            <div class="bg-emerald-900 p-10 text-white text-center relative">
+            class="bg-white rounded-3xl md:rounded-[3rem] w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-300 custom-scrollbar">
+            <div class="bg-emerald-900 p-6 md:p-10 text-white text-center relative">
                 <button (click)="closeDoshaQuiz()"
-                    class="absolute right-6 top-6 text-white/60 hover:text-white text-xl">✕</button>
-                <h3 class="text-3xl font-black mb-2 serif-font italic font-light">Dosha Discovery</h3>
-                <p class="text-emerald-200 text-xs font-black uppercase tracking-widest">Ancient Constitutional Map</p>
+                    class="absolute right-4 top-4 md:right-6 md:top-6 text-white/60 hover:text-white text-xl">✕</button>
+                <h3 class="text-xl md:text-3xl font-black mb-1 md:mb-2 serif-font italic font-light">Dosha Discovery
+                </h3>
+                <p class="text-emerald-200 text-[8px] md:text-[10px] font-black uppercase tracking-widest">Ancient
+                    Constitutional Map</p>
             </div>
-            <div class="p-10 space-y-8">
-                <div class="space-y-6">
-                    <p class="text-gray-900 font-black text-lg text-center leading-tight">How would you describe your
+            <div class="p-6 md:p-10 space-y-6 md:space-y-8">
+                <div class="space-y-4 md:space-y-6">
+                    <p class="text-gray-900 font-black text-sm md:text-lg text-center leading-tight">How would you
+                        describe your
                         energy levels?</p>
-                    <div class="grid grid-cols-1 gap-4">
+                    <div class="grid grid-cols-1 gap-2.5 md:gap-4">
                         <button (click)="submitDoshaQuiz({vata: 80, pitta: 10, kapha: 10})"
-                            class="p-6 text-center border-2 border-emerald-50 rounded-2xl hover:border-emerald-500 hover:bg-emerald-50 transition-all font-black text-sm text-gray-800">Dynamic,
+                            class="p-4 md:p-6 text-center border-2 border-emerald-50 rounded-xl md:rounded-2xl hover:border-emerald-500 hover:bg-emerald-50 transition-all font-black text-[10px] md:text-sm text-gray-800 shadow-sm active:scale-95">Dynamic,
                             quick to tire</button>
                         <button (click)="submitDoshaQuiz({vata: 10, pitta: 80, kapha: 10})"
-                            class="p-6 text-center border-2 border-emerald-50 rounded-2xl hover:border-emerald-500 hover:bg-emerald-50 transition-all font-black text-sm text-gray-800">Steady,
+                            class="p-4 md:p-6 text-center border-2 border-emerald-50 rounded-xl md:rounded-2xl hover:border-emerald-500 hover:bg-emerald-50 transition-all font-black text-[10px] md:text-sm text-gray-800 shadow-sm active:scale-95">Steady,
                             intense, focused</button>
                         <button (click)="submitDoshaQuiz({vata: 10, pitta: 10, kapha: 80})"
-                            class="p-6 text-center border-2 border-emerald-50 rounded-2xl hover:border-emerald-500 hover:bg-emerald-50 transition-all font-black text-sm text-gray-800">Calm,
+                            class="p-4 md:p-6 text-center border-2 border-emerald-50 rounded-xl md:rounded-2xl hover:border-emerald-500 hover:bg-emerald-50 transition-all font-black text-[10px] md:text-sm text-gray-800 shadow-sm active:scale-95">Calm,
                             enduring, consistent</button>
                     </div>
                 </div>
@@ -843,16 +918,20 @@
 
     <!-- Ayurveda Info Modal -->
     <div *ngIf="showAyurvedaInfo"
-        class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        (click)="showAyurvedaInfo = false">
         <div
-            class="bg-white rounded-[3rem] w-full max-w-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
-            <div class="bg-emerald-900 p-10 text-white relative">
-                <button (click)="toggleAyurvedaInfo()" class="absolute right-6 top-6 text-white/80 hover:text-white">
+            class="bg-white rounded-3xl md:rounded-[3rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-300 custom-scrollbar">
+            <div class="bg-emerald-900 p-6 md:p-10 text-white relative">
+                <button (click)="toggleAyurvedaInfo()"
+                    class="absolute right-4 top-4 md:right-8 md:top-8 text-white/80 hover:text-white">
                     ✕
                 </button>
-                <h3 class="text-4xl font-black mb-6 serif-font italic font-light">The Wisdom of Ayurveda</h3>
-                <div class="h-1.5 w-24 bg-emerald-300/30 rounded-full mb-8"></div>
-                <div class="space-y-6 text-emerald-50 font-medium leading-relaxed">
+                <h3
+                    class="text-2xl md:text-3xl lg:text-4xl font-black mb-3 md:mb-4 serif-font italic font-light leading-tight">
+                    The Wisdom of Ayurveda</h3>
+                <div class="h-1 w-16 md:h-1.5 md:w-24 bg-emerald-300/30 rounded-full mb-2 md:mb-4"></div>
+                <div class="space-y-2 md:space-y-4 text-emerald-50 text-sm md:text-base font-medium leading-relaxed">
                     <p>
                         Ayurveda is a 5,000-year-old system of natural healing that has its origins in the Vedic culture
                         of India. More than just a system of treating illness, Ayurveda is a science of life (Ayur =
@@ -867,29 +946,41 @@
                     </p>
                 </div>
             </div>
-            <div class="p-10 grid grid-cols-1 md:grid-cols-3 gap-6 bg-emerald-50/30">
+            <div class="p-2 md:p-6 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 bg-emerald-50/30">
                 <div
-                    class="p-6 bg-white rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 group hover:border-emerald-500 transition-all">
-                    <span class="text-3xl mb-4 block group-hover:scale-110 transition-transform">🌿</span>
-                    <h4 class="font-black text-emerald-900 text-sm mb-2 uppercase tracking-widest">Prakriti</h4>
-                    <p class="text-xs text-gray-600 font-medium">Your unique body constitution from birth.</p>
+                    class="p-5 md:p-6 bg-white rounded-2xl md:rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 group hover:border-emerald-500 transition-all">
+                    <span
+                        class="text-2xl md:text-3xl mb-3 md:mb-4 block group-hover:scale-110 transition-transform">🌿</span>
+                    <h4
+                        class="font-black text-emerald-900 text-[10px] md:text-sm mb-1 md:mb-2 uppercase tracking-widest">
+                        Prakriti</h4>
+                    <p class="text-[10px] md:text-xs text-gray-600 font-medium">Your unique body constitution from
+                        birth.</p>
                 </div>
                 <div
-                    class="p-6 bg-white rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 group hover:border-emerald-500 transition-all">
-                    <span class="text-3xl mb-4 block group-hover:scale-110 transition-transform">🍲</span>
-                    <h4 class="font-black text-emerald-900 text-sm mb-2 uppercase tracking-widest">Ahara</h4>
-                    <p class="text-xs text-gray-600 font-medium">Dietary principles tailored to your Dosha.</p>
+                    class="p-5 md:p-6 bg-white rounded-2xl md:rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 group hover:border-emerald-500 transition-all">
+                    <span
+                        class="text-2xl md:text-3xl mb-3 md:mb-4 block group-hover:scale-110 transition-transform">🍲</span>
+                    <h4
+                        class="font-black text-emerald-900 text-[10px] md:text-sm mb-1 md:mb-2 uppercase tracking-widest">
+                        Ahara</h4>
+                    <p class="text-[10px] md:text-xs text-gray-600 font-medium">Dietary principles tailored to your
+                        Dosha.</p>
                 </div>
                 <div
-                    class="p-6 bg-white rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 group hover:border-emerald-500 transition-all">
-                    <span class="text-3xl mb-4 block group-hover:scale-110 transition-transform">🧘</span>
-                    <h4 class="font-black text-emerald-900 text-sm mb-2 uppercase tracking-widest">Dina</h4>
-                    <p class="text-xs text-gray-600 font-medium">Daily routines to maintain cosmic harmony.</p>
+                    class="p-5 md:p-6 bg-white rounded-2xl md:rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 group hover:border-emerald-500 transition-all">
+                    <span
+                        class="text-2xl md:text-3xl mb-3 md:mb-4 block group-hover:scale-110 transition-transform">🧘</span>
+                    <h4
+                        class="font-black text-emerald-900 text-[10px] md:text-sm mb-1 md:mb-2 uppercase tracking-widest">
+                        Dina</h4>
+                    <p class="text-[10px] md:text-xs text-gray-600 font-medium">Daily routines to maintain cosmic
+                        harmony.</p>
                 </div>
             </div>
-            <div class="p-8 text-center bg-white border-t border-emerald-50">
+            <div class="p-2 md:p-2 text-center bg-white border-t border-emerald-50 md:mb-1">
                 <button (click)="toggleAyurvedaInfo()"
-                    class="px-12 py-4 bg-emerald-800 text-white rounded-2xl font-black hover:bg-emerald-900 transition-all shadow-2xl shadow-emerald-100">
+                    class="w-full md:w-auto px-10 md:px-12 py-3 md:py-4 bg-emerald-800 text-white rounded-xl md:rounded-2xl font-black hover:bg-emerald-900 transition-all shadow-xl md:shadow-2xl shadow-emerald-100 text-xs md:text-base">
                     Got it, Thank you!
                 </button>
             </div>
@@ -898,16 +989,19 @@
 
     <!-- Yoga Info Modal -->
     <div *ngIf="showYogaInfo"
-        class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        class="fixed inset-0 z-[100] flex items-center justify-center p-2 bg-black/60 backdrop-blur-sm">
         <div
-            class="bg-white rounded-[3rem] w-full max-w-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
-            <div class="bg-orange-600 p-10 text-white relative">
-                <button (click)="toggleYogaInfo()" class="absolute right-6 top-6 text-white/80 hover:text-white">
+            class="bg-white rounded-3xl md:rounded-[3rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-300 custom-scrollbar">
+            <div class="bg-orange-600 p-4 md:p-8 text-white relative">
+                <button (click)="toggleYogaInfo()"
+                    class="absolute right-4 top-4 md:right-8 md:top-8 text-white/80 hover:text-white">
                     ✕
                 </button>
-                <h3 class="text-4xl font-black mb-6 serif-font italic font-light">Yoga: Union of Essence</h3>
-                <div class="h-1.5 w-24 bg-orange-300/30 rounded-full mb-8"></div>
-                <div class="space-y-6 text-orange-50 font-medium leading-relaxed">
+                <h3
+                    class="text-xl md:text-3xl lg:text-4xl font-black mb-4 md:mb-6 serif-font italic font-light leading-tight">
+                    Yoga: Union of Essence</h3>
+                <div class="h-1 w-16 md:h-1.5 md:w-24 bg-orange-300/30 rounded-full mb-4 md:mb-8"></div>
+                <div class="space-y-2 md:space-y-3 text-orange-50 text-sm md:text-base font-medium leading-relaxed">
                     <p>
                         Yoga is a group of physical, mental, and spiritual practices which originated in ancient India.
                         In our wellness center, we focus on <strong class="text-white border-b border-orange-400">Hatha
@@ -921,32 +1015,40 @@
                     </p>
                 </div>
             </div>
-            <div class="p-10 grid grid-cols-1 md:grid-cols-2 gap-8 bg-orange-50/30">
-                <div class="flex gap-6 items-start p-6 bg-white rounded-3xl shadow-xl shadow-orange-900/5">
+            <div class="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 bg-orange-50/30">
+                <div
+                    class="flex gap-4 md:gap-6 items-start p-5 md:p-6 bg-white rounded-2xl md:rounded-3xl shadow-xl shadow-orange-900/5 transition-all">
                     <div
-                        class="w-14 h-14 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center shadow-inner shrink-0 text-3xl">
+                        class="w-12 h-12 md:w-14 md:h-14 bg-orange-100 text-orange-600 rounded-xl md:rounded-2xl flex items-center justify-center shadow-inner shrink-0 text-2xl md:text-3xl">
                         🧘</div>
                     <div>
-                        <h4 class="font-black text-orange-900 mb-2 uppercase tracking-widest text-sm">Physical Balance
+                        <h4
+                            class="font-black text-orange-900 mb-1 md:mb-2 uppercase tracking-widest text-[10px] md:text-sm">
+                            Physical Balance
                         </h4>
-                        <p class="text-xs text-gray-600 leading-relaxed font-medium">Asanas improve flexibility,
+                        <p class="text-[10px] md:text-xs text-gray-600 leading-relaxed font-medium">Asanas improve
+                            flexibility,
                             strength, and posture while massaging internal organs.</p>
                     </div>
                 </div>
-                <div class="flex gap-6 items-start p-6 bg-white rounded-3xl shadow-xl shadow-orange-900/5">
+                <div
+                    class="flex gap-4 md:gap-6 items-start p-5 md:p-6 bg-white rounded-2xl md:rounded-3xl shadow-xl shadow-orange-900/5 transition-all">
                     <div
-                        class="w-14 h-14 bg-teal-100 text-teal-600 rounded-2xl flex items-center justify-center shadow-inner shrink-0 text-3xl">
+                        class="w-12 h-12 md:w-14 md:h-14 bg-teal-100 text-teal-600 rounded-xl md:rounded-2xl flex items-center justify-center shadow-inner shrink-0 text-2xl md:text-3xl">
                         🌬️</div>
                     <div>
-                        <h4 class="font-black text-teal-900 mb-2 uppercase tracking-widest text-sm">Pranayama</h4>
-                        <p class="text-xs text-gray-600 leading-relaxed font-medium">Breath control techniques that
+                        <h4
+                            class="font-black text-teal-900 mb-1 md:mb-2 uppercase tracking-widest text-[10px] md:text-sm">
+                            Pranayama</h4>
+                        <p class="text-[10px] md:text-xs text-gray-600 leading-relaxed font-medium">Breath control
+                            techniques that
                             detoxify the body and calm the nervous system.</p>
                     </div>
                 </div>
             </div>
-            <div class="p-8 text-center bg-white border-t border-orange-50">
+            <div class="p-3 md:p-4 text-center bg-white border-t border-orange-50">
                 <button (click)="toggleYogaInfo()"
-                    class="px-12 py-4 bg-orange-600 text-white rounded-2xl font-black hover:bg-orange-700 transition-all shadow-2xl shadow-orange-100">
+                    class="w-full md:w-auto px-10 md:px-12 py-3 md:py-4 bg-orange-600 text-white rounded-xl md:rounded-2xl font-black hover:bg-orange-700 transition-all shadow-xl md:shadow-2xl shadow-orange-100 text-xs md:text-base">
                     Stunning, Let's Practice!
                 </button>
             </div>
@@ -958,33 +1060,37 @@
         <div class="absolute inset-0 bg-emerald-950/60 backdrop-blur-xl" (click)="showQuickBalance = false"></div>
 
         <div
-            class="relative bg-white w-full max-w-md rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in duration-500">
+            class="relative bg-white w-full max-w-md md:max-w-2xl rounded-3xl md:rounded-[3rem] shadow-2xl overflow-y-auto max-h-[95vh] animate-in zoom-in duration-500 custom-scrollbar">
             <!-- Visual Header -->
-            <div class="h-32 bg-gradient-to-br from-emerald-800 to-teal-900 flex items-center justify-center relative">
+            <div
+                class="h-14 md:h-24 bg-gradient-to-br from-emerald-800 to-teal-900 flex items-center justify-center relative">
                 <div class="absolute inset-0 opacity-20 grain-overlay"></div>
-                <div class="text-4xl">🧘‍♂️</div>
+                <div class="text-3xl md:text-4xl">🧘‍♂️</div>
                 <button (click)="showQuickBalance = false"
-                    class="absolute top-6 right-6 text-white/50 hover:text-white">✕</button>
+                    class="absolute top-2 right-4 md:top-10 md:right-10 text-white/50 hover:text-white">✕</button>
             </div>
 
-            <div class="p-8 space-y-8">
-                <div class="text-center space-y-2">
-                    <span class="text-[10px] font-black text-emerald-600 uppercase tracking-[0.4em]">Sattva
+            <div class="p-6 md:p-10 space-y-6 md:space-y-8">
+                <div class="text-center space-y-1 md:space-y-2">
+                    <span
+                        class="text-[8px] md:text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em] md:tracking-[0.4em]">Sattva
                         Discovery</span>
-                    <h3 class="text-3xl font-black text-slate-900 tracking-tighter">Tune Your Energy</h3>
+                    <h3 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tighter">Tune Your Energy</h3>
                 </div>
 
                 <!-- Choice Grid -->
-                <div *ngIf="!selectedFeeling" class="grid grid-cols-2 gap-4">
+                <div *ngIf="!selectedFeeling" class="grid grid-cols-2 gap-3 md:gap-4">
                     <button *ngFor="let state of [
                     {label:'Heavy', icon:'☁️', color:'bg-blue-50'},
                     {label:'Distracted', icon:'🌪️', color:'bg-orange-50'},
                     {label:'Anxious', icon:'🌬️', color:'bg-teal-50'},
                     {label:'Tired', icon:'💤', color:'bg-purple-50'}
                 ]" (click)="getQuickFix(state.label)"
-                        class="group p-6 {{state.color}} rounded-[2rem] border border-transparent hover:border-emerald-200 hover:shadow-xl hover:-translate-y-1 transition-all text-center space-y-3">
-                        <div class="text-3xl group-hover:scale-125 transition-transform">{{state.icon}}</div>
-                        <div class="text-[10px] font-black uppercase tracking-widest text-slate-700">{{state.label}}
+                        class="group p-4 md:p-6 {{state.color}} rounded-2xl md:rounded-[2rem] border border-transparent hover:border-emerald-200 hover:shadow-xl hover:-translate-y-1 transition-all text-center space-y-2 md:space-y-3">
+                        <div class="text-2xl md:text-3xl group-hover:scale-125 transition-transform">{{state.icon}}
+                        </div>
+                        <div class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-slate-700">
+                            {{state.label}}
                         </div>
                     </button>
                 </div>
@@ -992,47 +1098,49 @@
                 <!-- Ritual Result -->
                 <div *ngIf="selectedFeeling" class="animate-in slide-in-from-bottom-4">
                     <div
-                        class="bg-[#fafaf8] p-8 rounded-[2.5rem] border-2 border-emerald-100/50 text-center space-y-6 relative overflow-hidden">
+                        class="bg-[#fafaf8] p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border-2 border-emerald-100/50 text-center space-y-4 md:space-y-6 relative overflow-hidden">
                         <div class="absolute -top-10 -right-10 w-32 h-32 bg-emerald-200/20 rounded-full blur-3xl"></div>
 
-                        <div class="space-y-2">
-                            <span class="text-[9px] font-black text-emerald-800/40 uppercase tracking-[0.3em]">Your
+                        <div class="space-y-1 md:space-y-2">
+                            <span
+                                class="text-[8px] md:text-[9px] font-black text-emerald-800/40 uppercase tracking-[0.2em] md:tracking-[0.3em]">Your
                                 Ritual</span>
-                            <p class="text-xl font-black text-slate-900 leading-tight italic serif-font">"{{
+                            <p class="text-lg md:text-xl font-black text-slate-900 leading-tight italic serif-font">"{{
                                 activeRemedy }}"</p>
                         </div>
 
                         <!-- Herb Suggestion -->
                         <div *ngIf="suggestedHerb"
-                            class="p-4 bg-emerald-800 rounded-3xl text-left space-y-3 shadow-xl transition-all hover:scale-[1.02]">
-                            <div class="flex items-center gap-3">
+                            class="p-3 md:p-4 bg-emerald-800 rounded-2xl md:rounded-3xl text-left space-y-2 md:space-y-3 shadow-xl transition-all hover:scale-[1.02]">
+                            <div class="flex items-center gap-2 md:gap-3">
                                 <img [src]="suggestedHerb.image_url"
-                                    class="w-12 h-12 rounded-xl object-cover border border-emerald-700">
+                                    class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl object-cover border border-emerald-700">
                                 <div>
                                     <span
-                                        class="text-[8px] font-black text-emerald-300 uppercase block tracking-[0.2em]">Recommended
+                                        class="text-[7px] md:text-[8px] font-black text-emerald-300 uppercase block tracking-[0.1em] md:tracking-[0.2em]">Recommended
                                         Herb</span>
-                                    <h4 class="text-sm font-black text-white uppercase tracking-tighter">{{
+                                    <h4 class="text-xs md:text-sm font-black text-white uppercase tracking-tighter">{{
                                         suggestedHerb.name }}</h4>
                                 </div>
                             </div>
-                            <p class="text-[10px] text-emerald-100 font-medium leading-relaxed italic line-clamp-2">
+                            <p
+                                class="text-[9px] md:text-[10px] text-emerald-100 font-medium leading-relaxed italic line-clamp-2">
                                 "{{ suggestedHerb.benefits }}"
                             </p>
                             <button (click)="switchTab('herb-library'); showQuickBalance = false"
-                                class="w-full py-2 bg-white/10 hover:bg-white/20 text-[8px] font-black text-white uppercase tracking-widest rounded-xl transition-all border border-white/20">
+                                class="w-full py-2 bg-white/10 hover:bg-white/20 text-[7px] md:text-[8px] font-black text-white uppercase tracking-widest rounded-lg md:rounded-xl transition-all border border-white/20">
                                 View Full Profile
                             </button>
                         </div>
 
                         <button (click)="showQuickBalance = false"
-                            class="w-full py-4 bg-emerald-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg hover:bg-emerald-800 transition-all">
+                            class="w-full py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-lg hover:bg-emerald-800 transition-all">
                             Begin Ritual
                         </button>
                     </div>
 
                     <button (click)="selectedFeeling = null"
-                        class="w-full mt-4 text-[9px] font-black uppercase text-slate-400 hover:text-emerald-700 transition-colors">
+                        class="w-full mt-3 md:mt-4 text-[8px] md:text-[9px] font-black uppercase text-slate-400 hover:text-emerald-700 transition-colors">
                         Search another state
                     </button>
                 </div>

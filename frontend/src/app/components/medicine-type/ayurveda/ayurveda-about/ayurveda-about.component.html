@@ -5,18 +5,19 @@
             class="absolute top-0 right-0 w-[40rem] h-full bg-[#fcf9f1] rounded-l-[20rem] -z-10 blur-[100px] opacity-50">
         </div>
 
-        <div class="max-w-[90%] xl:max-w-7xl mx-auto md:mt-10 px-6 relative z-10 text-center">
-            <div class="space-y-6">
+        <div class="max-w-[90%] xl:max-w-7xl mx-auto px-4 md:px-6 mt-4 md:mt-8 relative z-10 text-center">
+            <div class="space-y-4 md:space-y-6">
                 <span
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-900 text-[9px] font-black uppercase tracking-[0.4em] rounded-full border border-emerald-100/50">
-                    <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                    class="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-emerald-50 text-emerald-900 text-[8px] md:text-[9px] font-black uppercase tracking-[0.4em] rounded-full border border-emerald-100/50">
+                    <span class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-emerald-600 animate-pulse"></span>
                     The Prime Intelligence
                 </span>
-                <h1 class="text-5xl md:text-6xl font-black text-[#1a1c1e] leading-[0.85] tracking-tighter">
-                    Principles of <br>
+                <h1
+                    class="text-3xl md:text-6xl font-black text-[#1a1c1e] leading-[1.1] md:leading-[0.85] tracking-tighter">
+                    Principles of
                     <span class="text-emerald-800 italic serif-font font-light">Existence.</span>
                 </h1>
-                <p class="text-gray-500 text-lg md:text-xl font-bold max-w-3xl mx-auto leading-tight italic serif-font">
+                <p class="text-gray-500 text-sm md:text-xl font-bold max-w-2xl mx-auto leading-tight italic serif-font">
                     "Ancient wisdom encoded for the modern human. Synchronize with the cosmic frequency."
                 </p>
             </div>
@@ -24,61 +25,63 @@
     </header>
 
     <!-- Ayurvedic Clock -->
-    <section class="w-full py-8 bg-[#fcf9f1]/60 relative border-b border-emerald-50/30">
-        <div class="max-w-[90%] xl:max-w-7xl mx-auto px-6 relative">
+    <section class="w-full py-6 md:py-8 bg-[#fcf9f1]/60 relative border-b border-emerald-50/30">
+        <div class="max-w-[90%] xl:max-w-7xl mx-auto px-4 md:px-6 relative">
             <div
-                class="bg-white rounded-[3rem] p-8 md:p-12 border border-emerald-50 shadow-xl relative overflow-hidden">
+                class="bg-white rounded-2xl md:rounded-[3rem] p-6 md:p-12 border border-emerald-50 shadow-xl relative overflow-hidden">
                 <div class="absolute -top-20 -right-20 w-[30rem] h-[30rem] bg-emerald-100/30 rounded-full blur-[120px]">
                 </div>
 
-                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                    <div class="lg:col-span-5 space-y-8">
-                        <div class="space-y-4">
+                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center text-left">
+                    <div class="lg:col-span-5 space-y-6 md:space-y-8">
+                        <div class="space-y-3 md:space-y-4">
                             <span
-                                class="text-emerald-700 font-black text-[9px] uppercase tracking-[0.4em] block">Circadian
+                                class="text-emerald-700 font-black text-[8px] md:text-[9px] uppercase tracking-[0.4em] block">Circadian
                                 Rhythm</span>
-                            <h2 class="text-4xl md:text-5xl font-black text-gray-950 tracking-tighter leading-[0.9]">
+                            <h2 class="text-3xl md:text-5xl font-black text-gray-950 tracking-tighter leading-[0.9]">
                                 The Biological <br><span class="text-emerald-800 italic serif-font font-light">Life
                                     Clock.</span></h2>
-                            <p class="text-gray-500 text-lg font-bold leading-tight max-w-md italic serif-font">
+                            <p
+                                class="text-gray-500 text-base md:text-lg font-bold leading-tight max-w-md italic serif-font">
                                 Synchronize your rhythm with the planetary pulse.</p>
                         </div>
 
-                        <div class="relative py-6 flex justify-center">
+                        <div class="relative py-4 md:py-6 flex justify-center">
                             <div
-                                class="w-64 h-64 rounded-full border-[16px] border-emerald-50 relative bg-white shadow-lg flex items-center justify-center">
-                                <div class="absolute inset-3 pointer-events-none">
+                                class="w-48 h-48 md:w-64 md:h-64 rounded-full border-[10px] md:border-[16px] border-emerald-50 relative bg-white shadow-lg flex items-center justify-center">
+                                <div class="absolute inset-2 md:inset-3 pointer-events-none">
                                     <div *ngFor="let m of [0,1,2,3,4,5,6,7,8,9,10,11]"
-                                        class="absolute top-0 left-1/2 w-1 h-full -translate-x-1/2 origin-center"
+                                        class="absolute top-0 left-1/2 w-0.5 md:w-1 h-full -translate-x-1/2 origin-center"
                                         [style.transform]="'rotate(' + (m * 30) + 'deg)'">
-                                        <div class="w-full h-4 bg-emerald-200/40 rounded-full"></div>
+                                        <div class="w-full h-3 md:h-4 bg-emerald-200/40 rounded-full"></div>
                                         <div class="h-[calc(100%-8px)]"></div>
-                                        <div class="w-full h-4 bg-emerald-200/40 rounded-full"></div>
+                                        <div class="w-full h-3 md:h-4 bg-emerald-200/40 rounded-full"></div>
                                     </div>
                                 </div>
 
-                                <div class="absolute bottom-1/2 left-1/2 w-2 h-[40%] bg-emerald-950 rounded-full origin-bottom transition-all duration-[1s] ease-out z-10"
+                                <div class="absolute bottom-1/2 left-1/2 w-1.5 md:w-2 h-[40%] bg-emerald-950 rounded-full origin-bottom transition-all duration-[1s] ease-out z-10"
                                     [style.transform]="'rotate(' + (selectedHour * 15) + 'deg)'">
                                     <div
-                                        class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-emerald-950 rounded-full shadow-lg border-2 border-white">
+                                        class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 bg-emerald-950 rounded-full shadow-lg border-2 border-white">
                                     </div>
-                                </div>
-
-                                <div class="w-5 h-5 bg-emerald-950 border-2 border-white rounded-full z-20 shadow-lg">
                                 </div>
 
                                 <div
-                                    class="absolute top-3/4 left-1/2 -translate-x-1/2 bg-emerald-950 text-emerald-50 px-5 py-2 rounded-xl text-lg font-black shadow-lg">
+                                    class="w-4 h-4 md:w-5 md:h-5 bg-emerald-950 border-2 border-white rounded-full z-20 shadow-lg">
+                                </div>
+
+                                <div
+                                    class="absolute top-3/4 left-1/2 -translate-x-1/2 bg-emerald-950 text-emerald-50 px-4 py-1.5 md:px-5 md:py-2 rounded-lg md:rounded-xl text-base md:text-lg font-black shadow-lg">
                                     {{ selectedHour | number:'2.0-0' }}:00
                                 </div>
                             </div>
                         </div>
 
-                        <div class="px-6 space-y-4">
+                        <div class="px-4 md:px-6 space-y-4">
                             <input type="range" min="0" max="23" [value]="selectedHour" (input)="updateClock($event)"
-                                class="w-full h-3 bg-emerald-100/50 rounded-full appearance-none cursor-pointer accent-emerald-950 focus:outline-none shadow-inner">
+                                class="w-full h-2 md:h-3 bg-emerald-100/50 rounded-full appearance-none cursor-pointer accent-emerald-950 focus:outline-none shadow-inner">
                             <div
-                                class="flex justify-between text-[9px] font-black text-emerald-950 uppercase tracking-[0.4em] px-1 opacity-50">
+                                class="flex justify-between text-[7px] md:text-[9px] font-black text-emerald-950 uppercase tracking-[0.3em] md:tracking-[0.4em] px-1 opacity-50">
                                 <span>Midnight</span>
                                 <span>Noon</span>
                                 <span>Twilight</span>
@@ -88,38 +91,40 @@
 
                     <div class="lg:col-span-7">
                         <div *ngIf="activeClockSlice"
-                            class="bg-[#fafafa]/40 backdrop-blur-xl rounded-[3rem] p-8 md:p-12 border border-white/60 shadow-lg animate-in slide-in-from-right duration-700">
-                            <div class="flex flex-col md:flex-row md:items-center gap-6 mb-8">
+                            class="bg-[#fafafa]/40 backdrop-blur-xl rounded-2xl md:rounded-[3rem] p-6 md:p-12 border border-white/60 shadow-lg animate-in slide-in-from-right duration-700">
+                            <div class="flex items-center gap-4 md:gap-6 mb-6 md:mb-8">
                                 <div
-                                    class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center text-4xl shadow-lg border border-emerald-50/50">
+                                    class="w-16 h-16 md:w-20 md:h-20 bg-white rounded-xl md:rounded-2xl flex items-center justify-center text-3xl md:text-4xl shadow-lg border border-emerald-50/50 flex-shrink-0">
                                     {{ activeClockSlice.icon }}
                                 </div>
-                                <div class="space-y-2">
+                                <div class="space-y-1 md:space-y-2">
                                     <span
-                                        class="text-[9px] font-black text-emerald-700 uppercase tracking-[0.4em] block">
+                                        class="text-[8px] md:text-[9px] font-black text-emerald-700 uppercase tracking-[0.4em] block">
                                         {{ activeClockSlice.dosha }} Phase
                                     </span>
-                                    <h3 class="text-3xl font-black text-gray-950 tracking-tighter leading-none">
+                                    <h3
+                                        class="text-2xl md:text-3xl font-black text-gray-950 tracking-tighter leading-none">
                                         {{ activeClockSlice.title }}
                                     </h3>
                                 </div>
                             </div>
 
-                            <p class="text-gray-600 leading-tight text-lg font-bold mb-8 max-w-2xl italic serif-font">
+                            <p
+                                class="text-gray-600 leading-tight text-base md:text-lg font-bold mb-6 md:mb-8 max-w-2xl italic serif-font">
                                 "{{ activeClockSlice.desc }}"
                             </p>
 
-                            <div class="space-y-6">
+                            <div class="space-y-4 md:space-y-6">
                                 <h4
                                     class="text-[9px] font-black text-gray-400 uppercase tracking-[0.5em] flex items-center gap-4">
-                                    <span class="w-10 h-[3px] bg-emerald-900 rounded-full"></span>
+                                    <span class="w-8 md:w-10 h-[2px] md:h-[3px] bg-emerald-900 rounded-full"></span>
                                     Protocols
                                 </h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                                     <div *ngFor="let act of activeClockSlice.activities"
-                                        class="flex items-center gap-4 px-6 py-4 bg-white border border-gray-100 rounded-2xl text-sm font-black text-gray-800 shadow-sm transition-all hover:bg-emerald-950 hover:text-white hover:translate-x-2 group cursor-default">
+                                        class="flex items-center gap-3 md:gap-4 px-4 md:px-6 py-3 md:py-4 bg-white border border-gray-100 rounded-xl md:rounded-2xl text-xs md:text-sm font-black text-gray-800 shadow-sm transition-all hover:bg-emerald-950 hover:text-white hover:translate-x-2 group cursor-default">
                                         <span
-                                            class="w-2.5 h-2.5 bg-emerald-500 rounded-full group-hover:scale-150 transition-transform shadow-md shadow-emerald-500/50"></span>
+                                            class="w-2 md:w-2.5 h-2 md:h-2.5 bg-emerald-500 rounded-full group-hover:scale-150 transition-transform shadow-md shadow-emerald-500/50"></span>
                                         {{ act }}
                                     </div>
                                 </div>
@@ -132,52 +137,59 @@
     </section>
 
     <!-- Five Elements -->
-    <section class="w-full py-12 bg-white relative overflow-hidden border-b border-gray-100">
-        <div class="max-w-[90%] xl:max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center space-y-3 mb-12">
-                <span class="text-emerald-700 font-black text-[9px] uppercase tracking-[0.5em] block">Cosmic
+    <section class="w-full py-8 md:py-12 bg-white relative overflow-hidden border-b border-gray-100">
+        <div class="max-w-[90%] xl:max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+            <div class="text-center space-y-2 md:space-y-3 mb-8 md:mb-12">
+                <span
+                    class="text-emerald-700 font-black text-[8px] md:text-[9px] uppercase tracking-[0.5em] block">Cosmic
                     Fabric</span>
-                <h2 class="text-4xl md:text-5xl font-black text-gray-950 tracking-tighter leading-[0.9]">Pancha <span
+                <h2 class="text-3xl md:text-5xl font-black text-gray-950 tracking-tighter leading-[0.9]">Pancha <span
                         class="serif-font italic font-light text-emerald-800">Mahabhuta.</span></h2>
-                <p class="text-gray-500 text-lg font-bold leading-tight max-w-2xl mx-auto italic serif-font">The five
+                <p class="text-gray-500 text-sm md:text-lg font-bold leading-tight max-w-2xl mx-auto italic serif-font">
+                    The five
                     primordial forces.</p>
             </div>
 
-            <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
+            <div
+                class="flex overflow-x-auto no-scrollbar items-center md:justify-center gap-3 md:gap-4 mb-8 md:mb-10 pb-4 -mx-4 px-4 md:mx-0 md:px-0">
                 <div *ngFor="let el of elementsData" (click)="activeElement = el"
-                    [ngClass]="activeElement.name === el.name ? 'border-emerald-600 bg-white shadow-lg -translate-y-3' : 'border-transparent bg-gray-50/80 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 hover:scale-105'"
-                    class="cursor-pointer group p-5 rounded-[3rem] border-2 transition-all duration-500 text-center">
-                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-500">{{ el.icon }}
+                    [ngClass]="activeElement.name === el.name ? 'border-emerald-600 bg-white shadow-lg -translate-y-2' : 'border-transparent bg-gray-50/80 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 hover:scale-105'"
+                    class="cursor-pointer group p-4 md:p-5 rounded-2xl md:rounded-[3rem] border-2 transition-all duration-500 text-center flex-shrink-0 w-28 md:w-auto">
+                    <div
+                        class="text-3xl md:text-4xl mb-2 md:mb-4 group-hover:scale-110 transition-transform duration-500">
+                        {{ el.icon }}
                     </div>
-                    <h3 class="text-xl font-black text-gray-950 leading-none">{{ el.name }}</h3>
-                    <p class="text-[9px] font-black text-emerald-700 uppercase tracking-widest mt-2 opacity-60">{{
+                    <h3 class="text-base md:text-xl font-black text-gray-950 leading-none">{{ el.name }}</h3>
+                    <p
+                        class="text-[8px] md:text-[9px] font-black text-emerald-700 uppercase tracking-widest mt-1 md:mt-2 opacity-60">
+                        {{
                         el.english }}</p>
                 </div>
             </div>
 
             <div *ngIf="activeElement"
-                class="bg-gray-950 rounded-[4rem] p-10 md:p-16 text-white relative overflow-hidden animate-in fade-in zoom-in duration-700 shadow-2xl border border-white/5">
+                class="bg-gray-950 rounded-2xl md:rounded-[4rem] p-6 md:p-16 text-white relative overflow-hidden animate-in fade-in zoom-in duration-700 shadow-2xl border border-white/5">
                 <div
                     class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-emerald-500/[0.12] rounded-full blur-[150px] -z-10 translate-x-1/2 -translate-y-1/2">
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                    <div class="lg:col-span-12 xl:col-span-7 space-y-8">
-                        <div class="space-y-5">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center text-left">
+                    <div class="lg:col-span-12 xl:col-span-7 space-y-6 md:space-y-8">
+                        <div class="space-y-4 md:space-y-5">
                             <span
-                                class="px-5 py-2 bg-emerald-500/20 text-emerald-400 rounded-full text-[9px] font-black uppercase tracking-[0.4em] border border-emerald-500/30">
+                                class="inline-flex px-4 py-1.5 md:px-5 md:py-2 bg-emerald-500/20 text-emerald-400 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-[0.4em] border border-emerald-500/30">
                                 Essence of {{ activeElement.name }}
                             </span>
-                            <h3 class="text-5xl md:text-6xl font-black tracking-tighter leading-[0.85]">{{
+                            <h3 class="text-4xl md:text-6xl font-black tracking-tighter leading-[0.85]">{{
                                 activeElement.name }}</h3>
                             <p
-                                class="text-gray-300 text-xl md:text-2xl font-bold leading-tight italic serif-font max-w-3xl">
+                                class="text-gray-300 text-base md:text-2xl font-bold leading-tight italic serif-font max-w-3xl">
                                 "{{ activeElement.desc }}"
                             </p>
                         </div>
-                        <div class="flex flex-wrap gap-3">
+                        <div class="flex flex-wrap gap-2 md:gap-3">
                             <span *ngFor="let qual of activeElement.qualities"
-                                class="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-base font-black text-emerald-50 transition-all hover:bg-white/15 hover:border-emerald-500/60">
+                                class="px-4 py-2 md:px-6 md:py-3 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl text-sm md:text-base font-black text-emerald-50 transition-all hover:bg-white/15 hover:border-emerald-500/60">
                                 {{ qual }}
                             </span>
                         </div>
@@ -185,12 +197,12 @@
 
                     <div class="lg:col-span-12 xl:col-span-5 relative group flex justify-center">
                         <div
-                            class="w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-emerald-500/20 flex items-center justify-center relative bg-emerald-500/[0.03] shadow-lg hover:scale-105 transition-transform duration-[1.5s]">
+                            class="w-48 h-48 md:w-80 md:h-80 rounded-full border-4 border-emerald-500/20 flex items-center justify-center relative bg-emerald-500/[0.03] shadow-lg hover:scale-105 transition-transform duration-[1.5s]">
                             <div
-                                class="absolute inset-6 rounded-full border border-emerald-500/10 animate-[pulse_3s_infinite]">
+                                class="absolute inset-4 md:inset-6 rounded-full border border-emerald-500/10 animate-[pulse_3s_infinite]">
                             </div>
                             <div
-                                class="text-[8rem] md:text-[10rem] drop-shadow-[0_0_60px_rgba(16,185,129,0.6)] group-hover:rotate-12 transition-transform duration-[2s] cursor-default">
+                                class="text-[5rem] md:text-[10rem] drop-shadow-[0_0_60px_rgba(16,185,129,0.6)] group-hover:rotate-12 transition-transform duration-[2s] cursor-default">
                                 {{ activeElement.icon }}
                             </div>
                         </div>
@@ -201,107 +213,114 @@
     </section>
 
     <!-- Panchakarma -->
-    <section class="w-full py-12 bg-[#fafaf8] relative">
-        <div class="max-w-[90%] xl:max-w-7xl mx-auto px-6">
-            <div class="text-center space-y-3 mb-12">
+    <section class="w-full py-8 md:py-12 bg-[#fafaf8] relative">
+        <div class="max-w-[90%] xl:max-w-7xl mx-auto px-4 md:px-6">
+            <div class="text-center space-y-3 mb-8 md:mb-12">
                 <span
-                    class="px-5 py-2 bg-emerald-950 text-white text-[9px] font-black uppercase tracking-[0.5em] rounded-full shadow-lg">Purification</span>
-                <h2 class="text-4xl md:text-5xl font-black text-gray-950 tracking-tighter leading-[0.9]">The Five <span
+                    class="px-4 py-1.5 md:px-5 md:py-2 bg-emerald-950 text-white text-[8px] md:text-[9px] font-black uppercase tracking-[0.5em] rounded-full shadow-lg">Purification</span>
+                <h2 class="text-3xl md:text-5xl font-black text-gray-950 tracking-tighter leading-[0.9]">The Five <span
                         class="serif-font italic font-light text-emerald-800">Actions.</span></h2>
-                <p class="text-gray-500 text-lg font-bold leading-tight max-w-2xl mx-auto italic serif-font">Five
+                <p class="text-gray-500 text-sm md:text-lg font-bold leading-tight max-w-2xl mx-auto italic serif-font">
+                    Five
                     precise interventions to re-calibrate your system.</p>
             </div>
 
-            <div class="grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                 <div
-                    class="bg-white p-8 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-3 transition-all duration-500 space-y-6 group">
+                    class="bg-white p-6 md:p-8 rounded-2xl md:rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-2 transition-all duration-500 space-y-4 md:space-y-6 group text-left">
                     <div
-                        class="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center text-4xl shadow-sm group-hover:scale-110 transition-transform duration-500">
+                        class="w-16 h-16 md:w-20 md:h-20 bg-blue-50 rounded-xl md:rounded-2xl flex items-center justify-center text-3xl md:text-4xl shadow-sm group-hover:scale-110 transition-transform duration-500">
                         🍵</div>
-                    <div class="space-y-2">
+                    <div class="space-y-1 md:space-y-2">
                         <h3 class="text-2xl md:text-3xl font-black text-gray-950 tracking-tighter">Vamana</h3>
-                        <p class="text-[9px] font-black text-blue-700 uppercase tracking-[0.3em]">Kapha Purification</p>
+                        <p class="text-[8px] md:text-[9px] font-black text-blue-700 uppercase tracking-[0.3em]">Kapha
+                            Purification</p>
                     </div>
-                    <p class="text-gray-500 text-base font-bold leading-tight italic serif-font">
+                    <p class="text-gray-500 text-sm md:text-base font-bold leading-tight italic serif-font">
                         "Resetting the respiratory field for absolute vitality."
                     </p>
                 </div>
 
                 <div
-                    class="bg-white p-8 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-3 transition-all duration-500 space-y-6 group">
+                    class="bg-white p-6 md:p-8 rounded-2xl md:rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-2 transition-all duration-500 space-y-4 md:space-y-6 group text-left">
                     <div
-                        class="w-20 h-20 bg-orange-50 rounded-2xl flex items-center justify-center text-4xl shadow-sm group-hover:scale-110 transition-transform duration-500">
+                        class="w-16 h-16 md:w-20 md:h-20 bg-orange-50 rounded-xl md:rounded-2xl flex items-center justify-center text-3xl md:text-4xl shadow-sm group-hover:scale-110 transition-transform duration-500">
                         🍯</div>
-                    <div class="space-y-2">
+                    <div class="space-y-1 md:space-y-2">
                         <h3 class="text-2xl md:text-3xl font-black text-gray-950 tracking-tighter">Virechana</h3>
-                        <p class="text-[9px] font-black text-orange-700 uppercase tracking-[0.3em]">Pitta Neutralization
+                        <p class="text-[8px] md:text-[9px] font-black text-orange-700 uppercase tracking-[0.3em]">Pitta
+                            Neutralization
                         </p>
                     </div>
-                    <p class="text-gray-500 text-base font-bold leading-tight italic serif-font">
+                    <p class="text-gray-500 text-sm md:text-base font-bold leading-tight italic serif-font">
                         "Optimizing hepatic and metabolic heat."
                     </p>
                 </div>
 
                 <div
-                    class="bg-white p-8 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-3 transition-all duration-500 space-y-6 group">
+                    class="bg-white p-6 md:p-8 rounded-2xl md:rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-2 transition-all duration-500 space-y-4 md:space-y-6 group text-left">
                     <div
-                        class="w-20 h-20 bg-emerald-50 rounded-2xl flex items-center justify-center text-4xl shadow-sm group-hover:scale-110 transition-transform duration-500">
+                        class="w-16 h-16 md:w-20 md:h-20 bg-emerald-50 rounded-xl md:rounded-2xl flex items-center justify-center text-3xl md:text-4xl shadow-sm group-hover:scale-110 transition-transform duration-500">
                         🥣</div>
-                    <div class="space-y-2">
+                    <div class="space-y-1 md:space-y-2">
                         <h3 class="text-2xl md:text-3xl font-black text-gray-950 tracking-tighter">Basti</h3>
-                        <p class="text-[9px] font-black text-emerald-700 uppercase tracking-[0.3em]">Vata Re-Grounding
+                        <p class="text-[8px] md:text-[9px] font-black text-emerald-700 uppercase tracking-[0.3em]">Vata
+                            Re-Grounding
                         </p>
                     </div>
-                    <p class="text-gray-500 text-base font-bold leading-tight italic serif-font">
+                    <p class="text-gray-500 text-sm md:text-base font-bold leading-tight italic serif-font">
                         "The sovereign treatment for the nervous system."
                     </p>
                 </div>
 
                 <div
-                    class="bg-white p-8 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-3 transition-all duration-500 space-y-6 group">
+                    class="bg-white p-6 md:p-8 rounded-2xl md:rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-2 transition-all duration-500 space-y-4 md:space-y-6 group text-left">
                     <div
-                        class="w-20 h-20 bg-indigo-50 rounded-2xl flex items-center justify-center text-4xl shadow-sm group-hover:scale-110 transition-transform duration-500">
+                        class="w-16 h-16 md:w-20 md:h-20 bg-indigo-50 rounded-xl md:rounded-2xl flex items-center justify-center text-3xl md:text-4xl shadow-sm group-hover:scale-110 transition-transform duration-500">
                         👃</div>
-                    <div class="space-y-2">
+                    <div class="space-y-1 md:space-y-2">
                         <h3 class="text-2xl md:text-3xl font-black text-gray-950 tracking-tighter">Nasya</h3>
-                        <p class="text-[9px] font-black text-indigo-700 uppercase tracking-[0.3em]">Cerebral Clarity</p>
+                        <p class="text-[8px] md:text-[9px] font-black text-indigo-700 uppercase tracking-[0.3em]">
+                            Cerebral Clarity</p>
                     </div>
-                    <p class="text-gray-500 text-base font-bold leading-tight italic serif-font">
+                    <p class="text-gray-500 text-sm md:text-base font-bold leading-tight italic serif-font">
                         "Expanding cognitive bandwidth and focus."
                     </p>
                 </div>
 
                 <div
-                    class="bg-white p-8 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-3 transition-all duration-500 space-y-6 group">
+                    class="bg-white p-6 md:p-8 rounded-2xl md:rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-2 transition-all duration-500 space-y-4 md:space-y-6 group text-left">
                     <div
-                        class="w-20 h-20 bg-red-50 rounded-2xl flex items-center justify-center text-4xl shadow-sm group-hover:scale-110 transition-transform duration-500">
+                        class="w-16 h-16 md:w-20 md:h-20 bg-red-50 rounded-xl md:rounded-2xl flex items-center justify-center text-3xl md:text-4xl shadow-sm group-hover:scale-110 transition-transform duration-500">
                         🩸</div>
-                    <div class="space-y-2">
+                    <div class="space-y-1 md:space-y-2">
                         <h3 class="text-2xl md:text-3xl font-black text-gray-950 tracking-tighter">Raktamokshana</h3>
-                        <p class="text-[9px] font-black text-red-700 uppercase tracking-[0.3em]">Circulatory Reset</p>
+                        <p class="text-[8px] md:text-[9px] font-black text-red-700 uppercase tracking-[0.3em]">
+                            Circulatory Reset</p>
                     </div>
-                    <p class="text-gray-500 text-base font-bold leading-tight italic serif-font">
+                    <p class="text-gray-500 text-sm md:text-base font-bold leading-tight italic serif-font">
                         "De-toxifying the river of life."
                     </p>
                 </div>
 
                 <div
-                    class="bg-emerald-950 p-8 rounded-[3rem] shadow-lg flex flex-col justify-between text-white group overflow-hidden relative border border-white/10">
+                    class="bg-emerald-950 p-6 md:p-8 rounded-2xl md:rounded-[3rem] shadow-lg flex flex-col justify-between text-white group overflow-hidden relative border border-white/10 min-h-[250px] md:min-h-auto text-left">
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-emerald-800 to-emerald-950 translate-y-full group-hover:translate-y-0 transition-transform duration-[1s]">
                     </div>
-                    <div class="relative z-10 space-y-6">
+                    <div class="relative z-10 space-y-4 md:space-y-6">
                         <div
-                            class="w-14 h-14 bg-white/15 rounded-xl flex items-center justify-center text-3xl shadow-lg">
+                            class="w-12 h-12 md:w-14 md:h-14 bg-white/15 rounded-xl flex items-center justify-center text-2xl md:text-3xl shadow-lg">
                             ⚡</div>
-                        <h3 class="text-3xl md:text-4xl font-black leading-tight tracking-tighter">Genetic
+                        <h3 class="text-2xl md:text-4xl font-black leading-tight tracking-tighter">Genetic
                             <br>Optimization.
                         </h3>
-                        <p class="text-emerald-100/70 text-base font-bold italic serif-font">"Consult for your specific
+                        <p class="text-emerald-100/70 text-sm md:text-base font-bold italic serif-font">"Consult for
+                            your specific
                             blueprint."</p>
                     </div>
                     <button (click)="goToFindDoctors()"
-                        class="relative z-10 w-full py-4 mt-6 bg-white text-emerald-950 font-black rounded-2xl text-[9px] uppercase tracking-[0.3em] shadow-lg hover:scale-105 active:scale-95 transition-all">
+                        class="relative z-10 w-full py-3 md:py-4 mt-6 bg-white text-emerald-950 font-black rounded-xl md:rounded-2xl text-[8px] md:text-[9px] uppercase tracking-[0.3em] shadow-lg hover:scale-105 active:scale-95 transition-all">
                         Consult Specialist
                     </button>
                 </div>
@@ -310,27 +329,33 @@
     </section>
 
     <!-- Philosophy Cards -->
-    <section class="max-w-[90%] xl:max-w-7xl mx-auto px-6 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+    <section class="max-w-[90%] xl:max-w-7xl mx-auto px-4 md:px-6 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 text-center">
             <div
-                class="group space-y-5 p-8 bg-orange-50/40 rounded-[3rem] border border-orange-100/50 hover:shadow-lg hover:-translate-y-2 transition-all duration-500">
-                <div class="text-4xl opacity-40 group-hover:scale-125 transition-transform duration-500">☯️</div>
-                <h3 class="text-2xl font-black text-gray-900 tracking-tight">Holistic</h3>
-                <p class="text-gray-500 text-sm font-bold leading-relaxed italic serif-font">Treating mind, body, and
+                class="group space-y-4 md:space-y-5 p-6 md:p-8 bg-orange-50/40 rounded-2xl md:rounded-[3rem] border border-orange-100/50 hover:shadow-lg hover:-translate-y-2 transition-all duration-500">
+                <div class="text-3xl md:text-4xl opacity-40 group-hover:scale-125 transition-transform duration-500">☯️
+                </div>
+                <h3 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Holistic</h3>
+                <p class="text-gray-500 text-xs md:text-sm font-bold leading-relaxed italic serif-font">Treating mind,
+                    body, and
                     spirit.</p>
             </div>
             <div
-                class="group space-y-5 p-8 bg-emerald-50/40 rounded-[3rem] border border-emerald-100/50 hover:shadow-lg hover:-translate-y-2 transition-all duration-500">
-                <div class="text-4xl opacity-40 group-hover:scale-125 transition-transform duration-500">🧬</div>
-                <h3 class="text-2xl font-black text-gray-900 tracking-tight">Unique</h3>
-                <p class="text-gray-500 text-sm font-bold leading-relaxed italic serif-font">Every individual is unique.
+                class="group space-y-4 md:space-y-5 p-6 md:p-8 bg-emerald-50/40 rounded-2xl md:rounded-[3rem] border border-emerald-100/50 hover:shadow-lg hover:-translate-y-2 transition-all duration-500">
+                <div class="text-3xl md:text-4xl opacity-40 group-hover:scale-125 transition-transform duration-500">🧬
+                </div>
+                <h3 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Unique</h3>
+                <p class="text-gray-500 text-xs md:text-sm font-bold leading-relaxed italic serif-font">Every individual
+                    is unique.
                 </p>
             </div>
             <div
-                class="group space-y-5 p-8 bg-blue-50/40 rounded-[3rem] border border-blue-100/50 hover:shadow-lg hover:-translate-y-2 transition-all duration-500">
-                <div class="text-4xl opacity-40 group-hover:scale-125 transition-transform duration-500">🛡️</div>
-                <h3 class="text-2xl font-black text-gray-900 tracking-tight">Protective</h3>
-                <p class="text-gray-500 text-sm font-bold leading-relaxed italic serif-font">Maintaining health before
+                class="group space-y-4 md:space-y-5 p-6 md:p-8 bg-blue-50/40 rounded-2xl md:rounded-[3rem] border border-blue-100/50 hover:shadow-lg hover:-translate-y-2 transition-all duration-500">
+                <div class="text-3xl md:text-4xl opacity-40 group-hover:scale-125 transition-transform duration-500">🛡️
+                </div>
+                <h3 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Protective</h3>
+                <p class="text-gray-500 text-xs md:text-sm font-bold leading-relaxed italic serif-font">Maintaining
+                    health before
                     disease arrives.</p>
             </div>
         </div>

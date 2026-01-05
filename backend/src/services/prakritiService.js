@@ -21,7 +21,6 @@ class PrakritiService {
                 .on('end', () => {
                     this.data = results;
                     this.extractQuestions();
-                    console.log(`Prakriti Service: Loaded ${this.data.length} records.`);
                     resolve(this.data);
                 })
                 .on('error', (err) => reject(err));

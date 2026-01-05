@@ -1,4 +1,4 @@
-const { validatePhone } = require('../utils/phoneValidator');
+const { validatePhone } = require('../../utils/phoneValidator');
 
 /**
  * Mock SMS service (for development without SMS provider)

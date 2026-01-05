@@ -17,11 +17,24 @@ export class YogaComponent implements OnInit {
   isAudioPlaying = false;
   visualizerBars = new Array(20).fill(0);
   loading = true;
+  activeCategory = 'All';
+  filteredSequences: Exercise[] = [];
+  categories = ['All', 'Foundational', 'Vinyasa', 'Hatha', 'Restorative', 'Power'];
+  currentSutra: { text: string, translation: string } | null = null;
+  activeSession: Exercise | null = null;
+
+  sutras = [
+    { text: 'Yogas Chitta Vritti Nirodhah', translation: 'Yoga is the cessation of the fluctuations of the mind.' },
+    { text: 'Abhyasa Vairagyabhyam Tan-nirodhah', translation: 'The fluctuations are stilled through practice and non-attachment.' },
+    { text: 'Sthira Sukham Asanam', translation: 'The posture should be steady and comfortable.' },
+    { text: 'Tapah Svadhyaya Ishvara Pranidhanani Kriya Yogah', translation: 'Discipline, self-study, and surrender to the divine constitute Kriya Yoga.' }
+  ];
 
   constructor(private ayurvedaService: AyurvedaService) { }
 
   ngOnInit(): void {
     this.loadYogaData();
+    this.currentSutra = this.sutras[Math.floor(Math.random() * this.sutras.length)];
   }
 
   loadYogaData(): void {
@@ -31,6 +44,7 @@ export class YogaComponent implements OnInit {
     this.ayurvedaService.getExercises(10, 'yoga').subscribe({
       next: (data) => {
         this.yogaSequences = data;
+        this.filteredSequences = data;
         this.loading = false;
       },
       error: (err) => {
@@ -43,6 +57,7 @@ export class YogaComponent implements OnInit {
     this.ayurvedaService.getExercises(10, 'meditation').subscribe({
       next: (data) => {
         this.meditationSessions = data;
+        if (data.length > 0) this.activeSession = data[0];
       },
       error: (err) => console.error('Error fetching meditations:', err)
     });
@@ -69,15 +84,41 @@ export class YogaComponent implements OnInit {
     this.visualizerBars = this.visualizerBars.map(() => Math.random() * 100);
     setTimeout(() => this.animateVisualizer(), 150);
   }
-  breathingState: 'inhale' | 'hold' | 'exhale' | 'ready' = 'ready';
+  breathingState: 'Inhale' | 'Hold' | 'Exhale' | 'Ready' = 'Ready';
   breathingTimer: any;
 
   startBreathing(): void {
-    this.breathingState = 'inhale';
-    // Mock logic for UI animation sync
-    setTimeout(() => this.breathingState = 'hold', 4000);
-    setTimeout(() => this.breathingState = 'exhale', 11000);
-    setTimeout(() => this.breathingState = 'ready', 19000);
+    if (this.breathingState !== 'Ready') return;
+
+    const cycle = () => {
+      // Inhale: 4 seconds
+      this.breathingState = 'Inhale';
+      setTimeout(() => {
+        // Hold: 7 seconds
+        this.breathingState = 'Hold';
+        setTimeout(() => {
+          // Exhale: 8 seconds
+          this.breathingState = 'Exhale';
+          setTimeout(() => {
+            this.breathingState = 'Ready';
+          }, 8000);
+        }, 7000);
+      }, 4000);
+    };
+
+    cycle();
+  }
+
+  filterByCategory(category: string): void {
+    this.activeCategory = category;
+    if (category === 'All') {
+      this.filteredSequences = this.yogaSequences;
+    } else {
+      this.filteredSequences = this.yogaSequences.filter(s =>
+        s.difficulty.toLowerCase().includes(category.toLowerCase()) ||
+        s.name.toLowerCase().includes(category.toLowerCase())
+      );
+    }
   }
 
   getEnergyLevel(difficulty: string): string {
@@ -96,5 +137,24 @@ export class YogaComponent implements OnInit {
       case 'meditation': return '✨';
       default: return '🌿';
     }
+  }
+
+  scrollToSection(sectionId: string): void {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  playSession(session: Exercise): void {
+    this.activeSession = session;
+    if (!this.isAudioPlaying) {
+      this.toggleAudio();
+    }
+  }
+
+  viewExercise(exercise: any): void {
+    console.log('Viewing exercise:', exercise);
+    // Future: router.navigate to details
   }
 }

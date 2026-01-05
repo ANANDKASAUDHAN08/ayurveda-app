@@ -264,16 +264,14 @@ html {
     }
 }
 
-/* Ensure the sub-nav icons look premium */
-/* .nav-icon {
-  font-family: "Font Awesome 6 Free" !important;
-  font-weight: 900 !important;
-  display: inline-block;
-  font-style: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  line-height: 1;
-} */
+.custom-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    display: none;
+}
 
 /* Mobile Sidebar Styling */
 .ayurveda-mobile-sidebar {

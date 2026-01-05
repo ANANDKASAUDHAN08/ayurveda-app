@@ -4,10 +4,20 @@
     font-family: 'Cormorant Garamond', serif !important;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 /* Journal Layout Styles */
 .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -37,4 +47,44 @@
 /* Premium Visual Polish */
 .group:hover {
     transform: translateY(-4px);
+}
+
+.grain-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    opacity: 0.04;
+    z-index: 5;
+    mix-blend-mode: multiply;
+}
+
+.floating-element {
+    position: absolute;
+    font-size: 2.5rem;
+    pointer-events: none;
+    filter: blur(2px);
+    opacity: 0.3;
+    animation: float 8s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-30px) rotate(15deg) scale(1.1);
+    }
+}
+
+.float-delay-1 {
+    animation-delay: 1s;
+}
+
+.float-delay-2 {
+    animation-delay: 3s;
 }

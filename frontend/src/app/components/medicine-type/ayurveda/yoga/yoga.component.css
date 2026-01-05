@@ -6,22 +6,27 @@
 
 /* Breathing Ring Logic */
 .breathing-ring {
-    transition: all 4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.breathing-ring.inhale {
+.breathing-ring.Inhale {
     transform: scale(1.4);
     background: rgba(16, 185, 129, 0.1);
+    transition-duration: 4s;
+    /* Match inhale time */
 }
 
-.breathing-ring.hold {
+.breathing-ring.Hold {
     transform: scale(1.4);
     background: rgba(16, 185, 129, 0.2);
+    transition-duration: 0.5s;
 }
 
-.breathing-ring.exhale {
+.breathing-ring.Exhale {
     transform: scale(1);
     background: transparent;
+    transition-duration: 8s;
+    /* Match exhale time */
 }
 
 /* Pulse Animation for the background */
@@ -53,10 +58,38 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    line-clamp: 2;
     overflow: hidden;
 }
 
 /* Depth shadow effect */
 .group:hover {
     box-shadow: 12px 12px 0px 0px #1a1c1e;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Animation utilities */
+.animate-in {
+    opacity: 0;
+    animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -1,0 +1,36 @@
+/* Animated underline effect for footer links */
+.footer-link-animated {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.footer-link-animated::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #10b981;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease-in-out;
+}
+
+.footer-link-animated:hover::after {
+    transform: scaleX(1);
+}
+
+@media (max-width: 767px) {
+    .footer-link-animated {
+        position: static;
+        display: inline;
+        white-space: normal;
+    }
+
+    .footer-link-animated::after {
+        display: none;
+    }
+}

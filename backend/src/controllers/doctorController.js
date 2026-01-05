@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 
-const emailService = require('../../services/email.service');
+const emailService = require('../services/email.service');
 const { generateVerificationToken, getTokenExpiration } = require('../../utils/tokenGenerator');
 
 // Configure Multer for image upload (Same as userController)

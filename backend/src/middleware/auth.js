@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken');
 
-module.exports = (req, res, next) => {
+/**
+ * Authenticate JWT token
+ */
+const authenticateToken = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
@@ -18,3 +21,23 @@ module.exports = (req, res, next) => {
         res.status(401).json({ message: 'Invalid token.' });
     }
 };
+
+/**
+ * Authorize admin role
+ */
+const authorizeAdmin = (req, res, next) => {
+    if (!req.user) {
+        return res.status(401).json({ message: 'Authentication required.' });
+    }
+
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Access denied. Admin privileges required.' });
+    }
+
+    next();
+};
+
+// Export both named functions and default for backward compatibility
+module.exports = authenticateToken;
+module.exports.authenticateToken = authenticateToken;
+module.exports.authorizeAdmin = authorizeAdmin;

@@ -1,13 +1,14 @@
 <div class="herb-library-container p-6 md:p-12 lg:p-16 animate-in fade-in duration-700 overflow-x-hidden">
     <!-- Header & Search -->
-    <div class="max-w-7xl mx-auto mb-12">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
-            <div class="space-y-4">
-                <span class="text-emerald-600 font-black uppercase tracking-widest text-xs">Knowledge Base</span>
-                <h2 class="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter">
+    <div class="max-w-7xl mx-auto mb-8 md:mb-12 mt-8 md:mt-0">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
+            <div class="space-y-2 md:space-y-4">
+                <span class="text-emerald-600 font-black uppercase tracking-widest text-[10px] md:text-xs">Knowledge
+                    Base</span>
+                <h2 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tighter leading-tight">
                     Herb <span class="serif-font italic font-light text-emerald-700">Encyclopedia</span>
                 </h2>
-                <p class="text-gray-600 max-w-lg font-medium leading-relaxed">
+                <p class="text-gray-600 max-w-lg font-medium leading-relaxed text-sm md:text-base">
                     Explore the ancient wisdom of nature. Discover the properties, benefits, and Ayurvedic profiles of
                     sacred healing herbs.
                 </p>
@@ -18,41 +19,41 @@
                 <div class="relative group flex-1 md:w-80">
                     <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()"
                         placeholder="Search herbs (e.g. Tulsi)..."
-                        class="w-full h-14 pl-12 pr-6 py-4 bg-white border-2 border-emerald-50 rounded-2xl focus:border-emerald-500 transition-all outline-none font-bold text-gray-800 shadow-lg shadow-emerald-900/5">
-                    <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-emerald-300"></i>
+                        class="w-full h-12 md:h-14 pl-10 md:pl-12 pr-6 py-4 bg-white border-2 border-emerald-50 rounded-xl md:rounded-2xl focus:border-emerald-500 transition-all outline-none font-bold text-gray-800 shadow-lg shadow-emerald-900/5 text-sm md:text-base">
+                    <i class="fas fa-search absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-emerald-300"></i>
                 </div>
             </div>
         </div>
 
         <!-- Filters Header -->
-        <div class="flex items-center justify-between mt-8 mb-6">
-            <h3 class="text-xl font-black text-gray-900">Filters</h3>
-            <span class="text-sm font-bold text-gray-600">
-                Total <span class="text-emerald-600">{{ totalResults }}</span> results found
+        <div class="flex items-center justify-between mt-6 md:mt-8 mb-4 md:mb-6">
+            <h3 class="text-lg md:text-xl font-black text-gray-900">Filters</h3>
+            <span class="text-xs md:text-sm font-bold text-gray-600">
+                Total <span class="text-emerald-600">{{ totalResults }}</span> results
             </span>
         </div>
 
-        <!-- Dosha Filters -->
-        <div class="flex flex-wrap gap-3">
+        <!-- Dosha Filters (Horizontal scroll on mobile) -->
+        <div class="flex overflow-x-auto no-scrollbar gap-2 md:gap-3 pb-2 -mx-2 px-2 md:mx-0 md:px-0 md:flex-wrap">
             <button (click)="filterByDosha('all')"
-                [class]="selectedDosha === 'all' ? 'bg-emerald-800 text-white shadow-lg shadow-emerald-900/10' : 'bg-white text-gray-600 hover:bg-emerald-50'"
-                class="px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all border border-emerald-50">
+                [class]="selectedDosha === 'all' ? 'bg-emerald-800 text-white shadow-lg shadow-emerald-900/10 border-emerald-800' : 'bg-white text-gray-600 hover:bg-emerald-50 border-emerald-50'"
+                class="px-4 md:px-6 py-2.5 md:py-3 rounded-lg md:rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all border whitespace-nowrap">
                 All Herbs
             </button>
             <button (click)="filterByDosha('Vata')"
-                [class]="selectedDosha === 'Vata' ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/10' : 'bg-white text-gray-600 hover:bg-blue-50'"
-                class="px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all border border-blue-50">
-                Vata Pacifying
+                [class]="selectedDosha === 'Vata' ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/10 border-blue-600' : 'bg-white text-gray-600 hover:bg-blue-50 border-blue-50'"
+                class="px-4 md:px-6 py-2.5 md:py-3 rounded-lg md:rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all border whitespace-nowrap">
+                Vata
             </button>
             <button (click)="filterByDosha('Pitta')"
-                [class]="selectedDosha === 'Pitta' ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/10' : 'bg-white text-gray-600 hover:bg-orange-50'"
-                class="px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all border border-orange-50">
-                Pitta Pacifying
+                [class]="selectedDosha === 'Pitta' ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/10 border-orange-600' : 'bg-white text-gray-600 hover:bg-orange-50 border-orange-50'"
+                class="px-4 md:px-6 py-2.5 md:py-3 rounded-lg md:rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all border whitespace-nowrap">
+                Pitta
             </button>
             <button (click)="filterByDosha('Kapha')"
-                [class]="selectedDosha === 'Kapha' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/10' : 'bg-white text-gray-600 hover:bg-emerald-50'"
-                class="px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all border border-emerald-50">
-                Kapha Pacifying
+                [class]="selectedDosha === 'Kapha' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/10 border-emerald-600' : 'bg-white text-gray-600 hover:bg-emerald-50 border-emerald-50'"
+                class="px-4 md:px-6 py-2.5 md:py-3 rounded-lg md:rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all border whitespace-nowrap">
+                Kapha
             </button>
         </div>
     </div>
@@ -73,74 +74,77 @@
         </div>
 
         <!-- Grid Cards -->
-        <div *ngIf="!loading && paginatedHerbs.length > 0" class="flex flex-col gap-16">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div *ngIf="!loading && paginatedHerbs.length > 0" class="flex flex-col gap-12">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
                 <div *ngFor="let herb of paginatedHerbs" (click)="selectHerb(herb)"
-                    class="bg-white rounded-[2.5rem] p-6 border border-emerald-50 hover:border-emerald-200 transition-all group cursor-pointer hover:-translate-y-2 shadow-xl shadow-emerald-900/[0.02] hover:shadow-emerald-900/10">
-                    <div class="aspect-square rounded-[2rem] overflow-hidden mb-6 relative">
+                    class="bg-white rounded-2xl md:rounded-[2.5rem] p-3 md:p-6 border border-emerald-100/80 hover:border-emerald-300 transition-all group cursor-pointer hover:-translate-y-1.5 shadow-md shadow-emerald-900/[0.03] hover:shadow-xl hover:shadow-emerald-900/10 flex flex-col h-fit overflow-hidden">
+
+                    <div
+                        class="w-full aspect-[16/10] md:aspect-video rounded-xl md:rounded-[1.8rem] overflow-hidden mb-3 md:mb-6 relative flex-shrink-0">
                         <img [src]="herb.image_url" [alt]="herb.name"
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                            class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                         </div>
 
                         <div *ngIf="herb.tridosha"
-                            class="absolute top-4 right-4 px-3 py-1 bg-purple-500 text-white text-[9px] font-black rounded-full uppercase tracking-tighter shadow-lg">
+                            class="absolute top-2 right-2 md:top-4 md:right-4 px-2 py-0.5 md:px-3 md:py-1 bg-purple-500 text-white text-[6px] md:text-[9px] font-black rounded-full uppercase tracking-tighter shadow-lg z-10">
                             ✨ Tridoshic
                         </div>
                     </div>
 
-                    <div class="space-y-4">
-                        <div>
-                            <span class="text-[10px] font-black text-emerald-600 uppercase tracking-widest block mb-1">
+                    <div class="space-y-1.5 md:space-y-4 flex flex-col grow min-w-0">
+                        <div class="min-w-0">
+                            <span
+                                class="text-[7px] md:text-[10px] font-black text-emerald-600 uppercase tracking-widest block mb-0.5 md:mb-1 truncate opacity-70">
                                 {{ herb.scientific_name }}
                             </span>
                             <h4
-                                class="text-xl font-black text-gray-900 leading-tight group-hover:text-emerald-800 transition-colors">
+                                class="text-xs md:text-xl font-black text-gray-900 leading-tight group-hover:text-emerald-800 transition-colors truncate md:whitespace-normal md:line-clamp-2">
                                 {{ herb.name }}
                             </h4>
                         </div>
 
-                        <p class="text-sm text-gray-500 leading-relaxed line-clamp-2">
+                        <p class="text-[9px] md:text-sm text-gray-500 leading-relaxed line-clamp-2 min-w-0 font-medium">
                             {{ herb.preview || herb.description }}
                         </p>
 
-                        <div class="flex items-center gap-2 pt-2 border-t border-emerald-50 mt-4">
+                        <div
+                            class="flex items-center gap-1 md:gap-2 pt-1.5 md:pt-4 border-t border-emerald-50 mt-1 md:mt-2">
                             <span *ngFor="let d of herb.pacify.slice(0, 2)" [class]="getDoshaClass(d)"
-                                class="px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest">
+                                class="px-1.5 py-0.5 md:px-2 md:py-1 rounded-md md:rounded-lg text-[6px] md:text-[9px] font-black uppercase tracking-widest whitespace-nowrap">
                                 {{ d }}
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- Enhanced Pagination Controls -->
+        <div *ngIf="totalPages > 1"
+            class="flex flex-col sm:flex-row items-center justify-between gap-3 pb-5 pt-3 border-t border-gray-100">
+            <p class="text-[#475569] font-medium text-xs sm:text-sm whitespace-nowrap order-2 sm:order-1">
+                Showing <span class="font-bold">{{ showingStart }} - {{ showingEnd }}</span> of
+                <span class="font-bold">{{ totalResults }}</span> herbs
+            </p>
 
-            <!-- Enhanced Pagination Controls -->
-            <div *ngIf="totalPages > 1"
-                class="flex flex-row items-center justify-between gap-6 pb-20 pt-10 border-t border-gray-100">
-                <p class="text-[#475569] font-medium text-sm whitespace-nowrap">
-                    Showing <span class="font-bold">{{ showingStart }} - {{ showingEnd }}</span> of
-                    <span class="font-bold">{{ totalResults }}</span> herbs
-                </p>
+            <div class="flex items-center gap-1.5 sm:gap-2 order-1 sm:order-2">
+                <button (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1"
+                    class="pagination-arrow disabled:opacity-30 disabled:cursor-not-allowed">
+                    <i class="fas fa-chevron-left text-xs sm:text-base"></i>
+                </button>
 
-                <div class="flex items-center gap-2">
-                    <button (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1"
-                        class="pagination-arrow disabled:opacity-30 disabled:cursor-not-allowed">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-
-                    <div class="flex gap-1.5">
-                        <button *ngFor="let p of pages" (click)="setPage(p)" [class.active]="currentPage === p"
-                            class="pagination-number">
-                            {{ p }}
-                        </button>
-                    </div>
-
-                    <button (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages"
-                        class="pagination-arrow disabled:opacity-30 disabled:cursor-not-allowed">
-                        <i class="fas fa-chevron-right"></i>
+                <div class="flex gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar py-1">
+                    <button *ngFor="let p of pages" (click)="setPage(p)" [class.active]="currentPage === p"
+                        class="pagination-number min-w-[32px] sm:min-w-[40px]">
+                        {{ p }}
                     </button>
                 </div>
+
+                <button (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages"
+                    class="pagination-arrow disabled:opacity-30 disabled:cursor-not-allowed">
+                    <i class="fas fa-chevron-right text-xs sm:text-base"></i>
+                </button>
             </div>
         </div>
     </div>

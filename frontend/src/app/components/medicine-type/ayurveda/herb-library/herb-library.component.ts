@@ -90,7 +90,8 @@ export class HerbLibraryComponent implements OnInit {
     }
 
     updateVisiblePages(): void {
-        const maxVisible = 7;
+        const isMobile = window.innerWidth < 640;
+        const maxVisible = isMobile ? 3 : 7;
         let start = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
         let end = Math.min(this.totalPages, start + maxVisible - 1);
 

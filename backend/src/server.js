@@ -79,6 +79,7 @@ app.use('/api/ayurveda', ayurvedaRoutes); // Ayurveda dashboard API
 app.use('/api/allopathy', require('./routes/allopathy')); // Allopathy dashboard API
 app.use('/api/favorites', require('./routes/favorite.routes')); // Favorites API
 app.use('/api/payment', require('./routes/paymentRoutes')); // Payment API
+app.use('/api/newsletter', require('./routes/newsletter.routes')); // Newsletter API
 
 
 // Test route
