@@ -3,9 +3,11 @@ import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild } from '@
 
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { HttpClient } from '@angular/common/http';
 import { ProfileService } from '../../shared/services/profile.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { PhoneVerificationModalComponent } from '../phone-verification-modal/phone-verification-modal.component';
 import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
 
@@ -77,6 +79,8 @@ export class ProfileComponent implements OnInit {
     private snackbar: SnackbarService,
     private http: HttpClient,
     private profileService: ProfileService,
+    private authService: AuthService,
+    private router: Router,
     private cdr: ChangeDetectorRef
   ) {
     this.profileForm = this.fb.group({
@@ -499,9 +503,10 @@ export class ProfileComponent implements OnInit {
     this.profileService.deleteAccount(this.isDoctor).subscribe({
       next: () => {
         this.snackbar.success('Account deleted successfully');
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        window.location.href = '/';
+        // Use AuthService logout to properly clear state
+        this.authService.logout();
+        // Redirect to home page
+        this.router.navigate(['/']);
       },
       error: () => {
         this.snackbar.error('Failed to delete account');

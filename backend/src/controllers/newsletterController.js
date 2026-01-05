@@ -6,13 +6,21 @@ const crypto = require('crypto');
  */
 exports.subscribe = async (req, res) => {
     try {
-        const { email } = req.body;
+        const { email, name } = req.body;
 
         // Validate email
         if (!email || !isValidEmail(email)) {
             return res.status(400).json({
                 success: false,
                 message: 'Please provide a valid email address.'
+            });
+        }
+
+        // Validate name
+        if (!name || name.trim().length < 2) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide your full name.'
             });
         }
 
@@ -35,8 +43,8 @@ exports.subscribe = async (req, res) => {
             } else {
                 // Reactivate subscription
                 await db.execute(
-                    'UPDATE newsletters SET status = ?, subscribed_at = NOW() WHERE email = ?',
-                    ['active', email]
+                    'UPDATE newsletters SET status = ?, name = ?, subscribed_at = NOW() WHERE email = ?',
+                    ['active', name.trim(), email]
                 );
 
                 return res.status(200).json({
@@ -48,13 +56,23 @@ exports.subscribe = async (req, res) => {
 
         // Insert new subscription
         await db.execute(
-            'INSERT INTO newsletters (email, unsubscribe_token) VALUES (?, ?)',
-            [email, unsubscribeToken]
+            'INSERT INTO newsletters (email, name, unsubscribe_token) VALUES (?, ?, ?)',
+            [email, name.trim(), unsubscribeToken]
         );
+
+        // Send welcome email (non-blocking)
+        try {
+            const emailService = require('../services/email.service');
+            await emailService.sendNewsletterWelcome(email, name.trim(), unsubscribeToken);
+            console.log(`✅ Newsletter welcome email sent to ${email}`);
+        } catch (emailError) {
+            console.error(`❌ Failed to send newsletter welcome email:`, emailError.message);
+            // Don't fail the subscription if email fails
+        }
 
         return res.status(201).json({
             success: true,
-            message: 'Thank you for subscribing! Check your inbox for confirmation.'
+            message: `Thank you, ${name.split(' ')[0]}! You've successfully subscribed to our newsletter.`
         });
 
     } catch (error) {
@@ -113,7 +131,7 @@ exports.getAllSubscribers = async (req, res) => {
     try {
         const { status } = req.query;
 
-        let query = 'SELECT id, email, subscribed_at, status FROM newsletters';
+        let query = 'SELECT id, email, name, subscribed_at, status FROM newsletters';
         const params = [];
 
         if (status) {

@@ -13,6 +13,7 @@ const auth = require('../middleware/auth');
 // Auth
 router.post('/auth/register', authController.register);
 router.post('/auth/login', authController.login);
+router.post('/users/resend-verification', authController.resendVerification);
 
 // Users
 router.get('/users/profile', auth, userController.getProfile);
@@ -23,6 +24,7 @@ router.delete('/users/profile', auth, userController.deleteAccount);
 
 // Doctors
 router.post('/doctors/register', doctorController.registerDoctor);
+router.post('/doctors/resend-verification', doctorController.resendVerification);
 router.put('/doctors/profile', auth, doctorController.updateDoctorProfile);
 router.put('/doctors/change-password', auth, doctorController.changePassword);
 router.put('/doctors/enable-2fa', auth, doctorController.enable2FA);

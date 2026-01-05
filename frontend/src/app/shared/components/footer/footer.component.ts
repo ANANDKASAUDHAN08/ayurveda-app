@@ -13,6 +13,7 @@ import { NewsletterService } from '../../services/newsletter.service';
 })
 export class FooterComponent {
   currentYear = new Date().getFullYear();
+  newsletterName: string = '';
   newsletterEmail: string = '';
   newsletterMessage: string = '';
   newsletterSuccess: boolean = false;
@@ -28,6 +29,12 @@ export class FooterComponent {
   }
 
   onNewsletterSubmit(): void {
+    if (!this.newsletterName || this.newsletterName.trim().length < 2) {
+      this.newsletterMessage = 'Please enter your full name.';
+      this.newsletterSuccess = false;
+      return;
+    }
+
     if (!this.newsletterEmail || !this.isValidEmail(this.newsletterEmail)) {
       this.newsletterMessage = 'Please enter a valid email address.';
       this.newsletterSuccess = false;
@@ -42,10 +49,11 @@ export class FooterComponent {
     this.isSubmitting = true;
     this.newsletterMessage = '';
 
-    this.newsletterService.subscribe(this.newsletterEmail).subscribe({
+    this.newsletterService.subscribe(this.newsletterEmail, this.newsletterName).subscribe({
       next: (response) => {
         this.newsletterMessage = response.message;
         this.newsletterSuccess = true;
+        this.newsletterName = '';
         this.newsletterEmail = '';
         this.isSubmitting = false;
 

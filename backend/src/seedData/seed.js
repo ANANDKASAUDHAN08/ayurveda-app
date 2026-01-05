@@ -1,7 +1,7 @@
-const sequelize = require('./config/database');
-const Doctor = require('./models/Doctor');
-const Slot = require('./models/Slot');
-const User = require('./models/User');
+const sequelize = require('../config/database');
+const Doctor = require('../models/Doctor');
+const Slot = require('../models/Slot');
+const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
 async function seed() {

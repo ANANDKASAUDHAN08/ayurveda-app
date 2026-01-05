@@ -105,14 +105,17 @@
         </div>
 
         <!-- Newsletter Subscription -->
-        <div class="border-t border-slate-700 mt-8 pt-8">
-            <div class="max-w-md mx-auto text-center">
+        <div class="border-t border-slate-700 mt-6 pt-6">
+            <div class="max-w-3xl mx-auto text-center">
                 <h3 class="text-white font-semibold text-lg mb-2">Subscribe to Our Newsletter</h3>
                 <p class="text-gray-400 text-sm mb-4">Stay updated with health tips, news, and exclusive offers.</p>
-                <form (ngSubmit)="onNewsletterSubmit()" class="flex flex-col sm:flex-row gap-3">
+                <form (ngSubmit)="onNewsletterSubmit()" class="flex flex-col md:flex-row gap-3">
+                    <input type="text" [(ngModel)]="newsletterName" name="name" placeholder="Enter your full name"
+                        required
+                        class="md:flex-1 px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-gray-400 text-sm" />
                     <input type="email" [(ngModel)]="newsletterEmail" name="email" placeholder="Enter your email"
                         required
-                        class="flex-1 px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-gray-400 text-sm" />
+                        class="md:flex-1 px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-gray-400 text-sm" />
                     <button type="submit" [disabled]="isSubmitting"
                         class="px-6 py-2 bg-emerald-500 text-white font-medium rounded-md hover:bg-emerald-600 transition-colors text-sm whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed">
                         {{ isSubmitting ? 'Subscribing...' : 'Subscribe' }}

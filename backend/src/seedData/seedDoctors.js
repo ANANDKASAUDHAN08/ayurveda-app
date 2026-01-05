@@ -1,7 +1,7 @@
 require('dotenv').config();
-const Doctor = require('./models/Doctor');
-const Slot = require('./models/Slot');
-const sequelize = require('./config/database');
+const Doctor = require('../models/Doctor');
+const Slot = require('../models/Slot');
+const sequelize = require('../config/database');
 
 // Comprehensive list of medical specializations
 const specializations = [

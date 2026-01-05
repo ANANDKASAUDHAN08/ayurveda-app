@@ -1,6 +1,6 @@
 const { sequelize } = require('./models/index');
-const Doctor = require('./models/Doctor');
-const Slot = require('./models/Slot');
+const Doctor = require('../models/Doctor');
+const Slot = require('../models/Slot');
 const { seedDoctors } = require('./seedDoctors');
 
 async function seed() {

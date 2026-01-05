@@ -35,7 +35,7 @@ export class NotificationService {
   constructor(private http: HttpClient, private authService: AuthService) {
     // Listen for auth state changes
     this.authService.authStatus$.subscribe(isLoggedIn => {
-      if (isLoggedIn) {
+      if (isLoggedIn && this.authService.getToken()) {
         this.startPolling();
       } else {
         this.stopPolling();
@@ -86,9 +86,11 @@ export class NotificationService {
   }
 
   refreshUnreadCount(): void {
-    if (this.authService.isLoggedIn()) {
+    // Only fetch if user has valid token
+    if (this.authService.isLoggedIn() && this.authService.getToken()) {
       this.getUnreadCount().subscribe({
         error: (err) => {
+          // Silently handle 401 errors
           if (err.status === 401) {
             this.unreadCountSubject.next(0);
           }
@@ -99,6 +101,9 @@ export class NotificationService {
 
   startPolling(): void {
     if (this.pollingSubscription) return; // Already polling
+
+    // Only start if user has valid token
+    if (!this.authService.getToken()) return;
 
     // Refresh unread count every 30 seconds
     this.pollingSubscription = interval(30000).subscribe(() => this.refreshUnreadCount());

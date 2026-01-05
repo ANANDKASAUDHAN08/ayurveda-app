@@ -85,10 +85,11 @@ exports.registerDoctor = async (req, res) => {
         }
 
         res.json({
-            token,
+            success: true,
+            message: 'Registration successful! Please check your email to verify your account before logging in.',
+            emailSent: true,
             user: { id: userId, name, email, role: 'doctor', emailVerified: false },
-            doctor: { id: doctorId, userId, name },
-            message: 'Registration successful! Please check your email to verify your account.'
+            doctor: { id: doctorId, userId, name }
         });
 
     } catch (err) {
@@ -299,6 +300,51 @@ exports.deleteAccount = async (req, res) => {
         res.json({ message: 'Doctor account deleted successfully' });
     } catch (err) {
         console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.resendVerification = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email || !emailService.validateEmail(email)) {
+            return res.status(400).json({ message: 'Valid email is required' });
+        }
+
+        // Find user
+        const [users] = await db.execute('SELECT * FROM users WHERE email = ? AND role = ?', [email, 'doctor']);
+        if (users.length === 0) {
+            return res.status(404).json({ message: 'Doctor not found' });
+        }
+
+        const user = users[0];
+
+        // Check if already verified
+        if (user.email_verified) {
+            return res.status(400).json({ message: 'Email is already verified' });
+        }
+
+        // Generate new verification token
+        const verificationToken = generateVerificationToken();
+        const tokenExpiration = getTokenExpiration();
+
+        // Update user with new token
+        await db.execute(
+            'UPDATE users SET email_verification_token = ?, token_expires_at = ? WHERE id = ?',
+            [verificationToken, tokenExpiration, user.id]
+        );
+
+        // Send verification email
+        try {
+            await emailService.sendVerificationEmail(email, user.name, verificationToken, 'doctor');
+            res.json({ message: 'Verification email sent successfully' });
+        } catch (emailError) {
+            console.error(`❌ Failed to send verification email:`, emailError.message);
+            res.status(500).json({ message: 'Failed to send verification email. Please try again later.' });
+        }
+    } catch (err) {
+        console.error('Resend verification error:', err);
         res.status(500).json({ message: 'Server error' });
     }
 };

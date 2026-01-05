@@ -113,6 +113,34 @@
                                             class="mt-1 text-xs text-red-400">Valid email is required</p>
                                     </div>
 
+                                    <!-- Email Verification Warning -->
+                                    <div *ngIf="showEmailVerificationWarning"
+                                        class="p-3 md:p-4 bg-amber-50 border-l-4 border-amber-500 text-amber-900 rounded-lg animate-fadeIn">
+                                        <div class="flex items-start justify-between gap-2 md:gap-3">
+                                            <div class="flex items-start gap-2 md:gap-3 flex-1">
+                                                <i
+                                                    class="fas fa-exclamation-triangle mt-0.5 text-amber-600 text-sm md:text-base"></i>
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-xs md:text-sm font-semibold">Email Verification
+                                                        Required</p>
+                                                    <p class="text-xs md:text-sm mt-1">Please check your inbox and click
+                                                        the
+                                                        verification link to activate your account.</p>
+                                                    <button (click)="resendVerificationEmail()" type="button"
+                                                        class="mt-2 md:mt-3 text-xs md:text-sm font-medium text-amber-700 hover:text-amber-900 underline inline-flex items-center gap-1">
+                                                        <i class="fas fa-redo text-xs"></i>
+                                                        <span class="hidden sm:inline">Resend Verification Email</span>
+                                                        <span class="sm:hidden">Resend Email</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <button (click)="dismissVerificationWarning()" type="button"
+                                                class="text-amber-600 hover:text-amber-900 flex-shrink-0 p-1">
+                                                <i class="fas fa-times text-sm md:text-base"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
                                     <div>
                                         <label for="login-password"
                                             class="block text-sm font-medium text-slate-900">Password</label>

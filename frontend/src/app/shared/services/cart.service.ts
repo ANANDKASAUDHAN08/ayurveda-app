@@ -59,10 +59,9 @@ export class CartService {
         private authService: AuthService,
         private snackbar: SnackbarService
     ) {
-        // Sync cart on load if logged in
-        // Using authStatus$ which emits true/false
+        // Sync cart on load if logged in with valid token
         this.authService.authStatus$.subscribe(isLoggedIn => {
-            if (isLoggedIn) {
+            if (isLoggedIn && this.authService.getToken()) {
                 this.refreshCart();
             } else {
                 this.cart$.next(this.emptyCart);
@@ -77,10 +76,19 @@ export class CartService {
 
     // Refresh cart from server
     refreshCart(): void {
+        // Only fetch if user has valid token
+        if (!this.authService.getToken()) {
+            this.cart$.next(this.emptyCart);
+            return;
+        }
+
         this.http.get<{ success: boolean; data: any }>(this.apiUrl)
             .pipe(
                 catchError(err => {
-                    console.error('Error fetching cart', err);
+                    // Silently handle 401 errors (user not authenticated)
+                    if (err.status !== 401) {
+                        console.error('Error fetching cart', err);
+                    }
                     return of({ success: false, data: null });
                 })
             )

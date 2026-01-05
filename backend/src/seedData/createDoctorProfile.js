@@ -1,7 +1,7 @@
 require('dotenv').config();
-const User = require('./models/User');
-const Doctor = require('./models/Doctor');
-const sequelize = require('./config/database');
+const User = require('../models/User');
+const Doctor = require('../models/Doctor');
+const sequelize = require('../config/database');
 
 async function createDoctorProfile() {
     try {

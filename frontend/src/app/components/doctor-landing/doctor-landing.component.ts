@@ -1,7 +1,7 @@
 import { environment } from '@env/environment';
 
 import { Component }
-from '@angular/core';
+  from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -31,6 +31,8 @@ export class DoctorLandingComponent {
   showRegisterPassword = false;
   isPasswordValid: boolean = false;
   isPasswordFocused: boolean = false;
+  showEmailVerificationWarning = false;
+  unverifiedEmail: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -98,7 +100,14 @@ export class DoctorLandingComponent {
         },
         error: (err) => {
           this.isLoading = false;
-          this.snackbar.error(err.error?.message || 'Login failed. Please check your credentials.');
+          // Check if error is due to unverified email
+          if (err.status === 403 && err.error?.emailVerified === false) {
+            this.showEmailVerificationWarning = true;
+            this.unverifiedEmail = this.loginForm.get('email')?.value;
+            this.snackbar.error('⚠️ Please verify your email before logging in. Check your inbox for the verification link.');
+          } else {
+            this.snackbar.error(err.error?.message || 'Login failed. Please check your credentials.');
+          }
         }
       });
     } else {
@@ -113,19 +122,12 @@ export class DoctorLandingComponent {
         .subscribe({
           next: (res) => {
             this.isLoading = false;
-            this.snackbar.success('Registration successful! Please configure your availability.');
+            this.snackbar.success('Registration successful! Please check your email to verify your account.');
 
-            // Auto-login after registration
-            this.authService.login({
-              email: this.registerForm.value.email,
-              password: this.registerForm.value.password
-            }).subscribe({
-              next: () => {
-                this.router.navigate(['/doctor/dashboard']);
-              },
-              error: () => {
-                this.switchTab('login');
-              }
+            // Switch to login tab and pre-fill email
+            this.switchTab('login');
+            this.loginForm.patchValue({
+              email: this.registerForm.value.email
             });
           },
           error: (err) => {
@@ -140,5 +142,22 @@ export class DoctorLandingComponent {
 
   onPasswordValidityChange(isValid: boolean): void {
     this.isPasswordValid = isValid;
+  }
+
+  dismissVerificationWarning() {
+    this.showEmailVerificationWarning = false;
+  }
+
+  resendVerificationEmail() {
+    if (!this.unverifiedEmail) return;
+
+    this.authService.resendVerification(this.unverifiedEmail, 'doctor').subscribe({
+      next: () => {
+        this.snackbar.success('✅ Verification email sent! Please check your inbox.');
+      },
+      error: (err: any) => {
+        this.snackbar.error(err.error?.message || 'Failed to send verification email.');
+      }
+    });
   }
 }

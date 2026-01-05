@@ -33,6 +33,8 @@ export class UserLandingComponent implements OnInit {
   showRegisterPassword = false;
   showConfirmPassword = false;
   isPasswordValid: boolean = false;
+  showEmailVerificationWarning = false;
+  unverifiedEmail: string = '';
   isPasswordFocused: boolean = false;
 
   constructor(
@@ -93,7 +95,14 @@ export class UserLandingComponent implements OnInit {
         },
         error: (err: any) => {
           this.isLoading = false;
-          this.snackbar.error(err.error?.message || 'Login failed. Please check your credentials.');
+          // Check if error is due to unverified email
+          if (err.status === 403 && err.error?.emailVerified === false) {
+            this.showEmailVerificationWarning = true;
+            this.unverifiedEmail = this.loginForm.get('email')?.value;
+            this.snackbar.error('⚠️ Please verify your email before logging in. Check your inbox for the verification link.');
+          } else {
+            this.snackbar.error(err.error?.message || 'Login failed. Please check your credentials.');
+          }
         }
       });
     } else {
@@ -119,26 +128,20 @@ export class UserLandingComponent implements OnInit {
     if (this.registerForm.valid) {
       this.isLoading = true;
       this.authService.register(this.registerForm.value).subscribe({
-        next: () => {
+        next: (res: any) => {
           this.isLoading = false;
-          this.snackbar.success('Registration successful! Logging you in...');
 
-          // Auto-login after registration
-          this.authService.login({
-            email: this.registerForm.get('email')?.value,
-            password: this.registerForm.get('password')?.value
-          }).subscribe({
-            next: () => {
-              this.router.navigate(['/user/find-doctors']);
-            },
-            error: () => {
-              // Fallback if auto-login fails
-              this.activeTab = 'login';
-              this.loginForm.patchValue({
-                email: this.registerForm.get('email')?.value
-              });
-            }
+          // Show success message about email verification
+          this.snackbar.success('Registration successful! Please check your email to verify your account.');
+
+          // Switch to login tab and pre-fill email
+          this.activeTab = 'login';
+          this.loginForm.patchValue({
+            email: this.registerForm.get('email')?.value
           });
+
+          // Clear registration form
+          this.registerForm.reset();
         },
         error: (err: any) => {
           this.isLoading = false;
@@ -158,5 +161,22 @@ export class UserLandingComponent implements OnInit {
 
   onPasswordValidityChange(isValid: boolean): void {
     this.isPasswordValid = isValid;
+  }
+
+  dismissVerificationWarning() {
+    this.showEmailVerificationWarning = false;
+  }
+
+  resendVerificationEmail() {
+    if (!this.unverifiedEmail) return;
+
+    this.authService.resendVerification(this.unverifiedEmail, 'user').subscribe({
+      next: () => {
+        this.snackbar.success('✅ Verification email sent! Please check your inbox.');
+      },
+      error: (err: any) => {
+        this.snackbar.error(err.error?.message || 'Failed to send verification email.');
+      }
+    });
   }
 }

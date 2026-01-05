@@ -18,9 +18,11 @@ export class NewsletterService {
 
     /**
      * Subscribe to newsletter
+     * @param email User's email address
+     * @param name User's full name
      */
-    subscribe(email: string): Observable<NewsletterResponse> {
-        return this.http.post<NewsletterResponse>(`${this.apiUrl}/subscribe`, { email });
+    subscribe(email: string, name: string): Observable<NewsletterResponse> {
+        return this.http.post<NewsletterResponse>(`${this.apiUrl}/subscribe`, { email, name });
     }
 
     /**

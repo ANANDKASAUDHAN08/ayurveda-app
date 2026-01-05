@@ -71,6 +71,11 @@ export class AuthService {
         this.authStatusSubject.next(false);
     }
 
+    resendVerification(email: string, userType: 'user' | 'doctor'): Observable<any> {
+        const endpoint = userType === 'doctor' ? '/doctors/resend-verification' : '/users/resend-verification';
+        return this.http.post(`${environment.apiUrl}${endpoint}`, { email });
+    }
+
     getToken(): string | null {
         return localStorage.getItem(this.tokenKey);
     }
