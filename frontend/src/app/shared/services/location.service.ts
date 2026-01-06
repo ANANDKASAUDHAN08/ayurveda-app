@@ -11,6 +11,7 @@ export interface UserLocation {
     formattedAddress: string;
     latitude: number;
     longitude: number;
+    isEstimated?: boolean;
 }
 
 @Injectable({
@@ -181,7 +182,8 @@ export class LocationService {
             displayName: 'Getting address...',
             formattedAddress: 'Getting address...',
             latitude: lat,
-            longitude: lng
+            longitude: lng,
+            isEstimated: true // Initial detection is always considered estimated
         }, true);
 
         // Upgrade to city name
@@ -192,6 +194,7 @@ export class LocationService {
 
             observable.subscribe({
                 next: (location) => {
+                    location.isEstimated = true; // Still marked as estimated if came from auto-detect
                     this.setLocation(location, true); // Save detected location
                 }
             });
@@ -204,6 +207,12 @@ export class LocationService {
     }
 
     setLocation(location: UserLocation, save: boolean = false): void {
+        // If location is manually selected (e.g. from search or popular cities), mark it as NOT estimated
+        if (!save && !location.isEstimated) {
+            // Internal call might not set it, but if it comes from a UI component manual action, 
+            // the component should ideally set isEstimated: false
+        }
+
         this.locationSubject.next(location);
 
         if (save) {

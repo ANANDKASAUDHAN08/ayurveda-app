@@ -1,6 +1,5 @@
 import { environment } from '@env/environment';
 import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,6 +9,7 @@ import { ProfileService } from '../../shared/services/profile.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { PhoneVerificationModalComponent } from '../phone-verification-modal/phone-verification-modal.component';
 import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
+import { ProfileExportService } from '../../shared/services/profile-export.service';
 
 interface ActivityItem {
   type: 'appointment' | 'profile_update' | 'account';
@@ -40,6 +40,7 @@ export class ProfileComponent implements OnInit {
   profileForm: FormGroup;
   isLoading = false;
   isLoadingProfile = false;
+  showExportMenu = false;
 
   showPasswordModal = false;
   show2FAModal = false;
@@ -47,6 +48,7 @@ export class ProfileComponent implements OnInit {
   newPassword = '';
   isPasswordValid: boolean = false;
   showPassword: boolean = false;
+  isPasswordFocused: boolean = false;
 
   selectedFile: File | null = null;
   imagePreview: string | null = null;
@@ -81,7 +83,8 @@ export class ProfileComponent implements OnInit {
     private profileService: ProfileService,
     private authService: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private profileExportService: ProfileExportService
   ) {
     this.profileForm = this.fb.group({
       name: ['', Validators.required],
@@ -102,7 +105,8 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.loadUser();
-    this.generateMockActivities();
+    this.loadActivityFeed(); // Load real activity feed
+    this.loadStats(); // Load real stats
   }
 
   loadUser() {
@@ -114,9 +118,6 @@ export class ProfileComponent implements OnInit {
 
     const localUser = JSON.parse(userStr);
     this.isDoctor = localUser.role === 'doctor';
-
-    // Set member since date (mock data - in real app, fetch from backend)
-    this.memberSince = new Date(2024, 0, 15); // Jan 15, 2024
 
     if (this.isDoctor) {
       // Add doctor specific controls
@@ -181,8 +182,10 @@ export class ProfileComponent implements OnInit {
               linkedin: myProfile.linkedin
             });
 
-            // Generate mock stats
-            this.generateDoctorStats();
+            // Member since from created_at
+            if (myProfile.created_at) {
+              this.memberSince = new Date(myProfile.created_at);
+            }
           }
           this.calculateProfileCompletion();
           setTimeout(() => {
@@ -232,17 +235,19 @@ export class ProfileComponent implements OnInit {
             this.isLoadingProfile = false;
           }, 1000);
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error loading user profile:', err);
+          this.isLoadingProfile = false;
+
+          if (err.status === 404) {
+            this.snackbar.error('Session expired or user not found. Please logout and login again.');
+          } else {
+            this.snackbar.error('Failed to load profile from server. Showing local data.');
+          }
+
           // Fallback to localStorage if API fails
           this.user = localUser;
-          this.profileForm.patchValue({
-            name: localUser.name,
-            email: localUser.email,
-            phone: localUser.phone || ''
-          });
           this.calculateProfileCompletion();
-          this.isLoadingProfile = false;
         }
       });
     }
@@ -295,12 +300,7 @@ export class ProfileComponent implements OnInit {
           this.isLoading = false;
           this.isEditing = false;
 
-          if (this.isDoctor) {
-            this.user = { ...this.user, ...res.user }; // Assuming backend returns updated user
-            // Update specific doctor fields if needed, or just rely on reloading
-          } else {
-            this.user = { ...this.user, ...res.user };
-          }
+          this.user = { ...this.user, ...res.user };
 
           // Update profile image if returned
           if (res.user && res.user.profile_image) {
@@ -316,7 +316,10 @@ export class ProfileComponent implements OnInit {
           this.selectedFile = null;
         },
         error: (err) => {
-          this.isLoading = false;
+          setTimeout(() => {
+            this.isLoading = false;
+          }, 1000);
+
           console.error('Update error:', err);
           this.snackbar.error('Failed to update profile');
         }
@@ -357,32 +360,21 @@ export class ProfileComponent implements OnInit {
     this.profileCompletion = Math.round((filledFields / fields.length) * 100);
   }
 
-  // Generate mock activity data
-  generateMockActivities() {
-    const now = new Date();
-    this.activities = [
-      {
-        type: 'appointment',
-        title: 'Consultation Completed',
-        description: 'Online consultation with Dr. Sharma',
-        date: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
-        icon: 'fa-calendar-check'
+  // Load real activity feed from backend
+  loadActivityFeed() {
+    this.http.get<any[]>(`${environment.apiUrl}/appointments/activity-feed`).subscribe({
+      next: (activities) => {
+        this.activities = activities.map(activity => ({
+          ...activity,
+          date: new Date(activity.date)
+        }));
       },
-      {
-        type: 'profile_update',
-        title: 'Profile Updated',
-        description: 'Updated contact information',
-        date: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
-        icon: 'fa-user-edit'
-      },
-      {
-        type: 'account',
-        title: 'Account Created',
-        description: 'Welcome to HealthConnect!',
-        date: this.memberSince || new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
-        icon: 'fa-user-plus'
+      error: (err) => {
+        console.error('Error loading activity feed:', err);
+        // Fallback to empty array
+        this.activities = [];
       }
-    ];
+    });
   }
 
   // Add new activity
@@ -401,14 +393,22 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  // Generate mock doctor stats
-  generateDoctorStats() {
-    this.stats = {
-      totalConsultations: Math.floor(Math.random() * 200) + 50,
-      upcomingAppointments: Math.floor(Math.random() * 10) + 1,
-      monthlyEarnings: Math.floor(Math.random() * 50000) + 20000,
-      rating: 4.5 + Math.random() * 0.4 // Between 4.5 and 4.9
-    };
+  // Load real stats from backend
+  loadStats() {
+    this.http.get<any>(`${environment.apiUrl}/appointments/stats`).subscribe({
+      next: (stats) => {
+        this.stats = {
+          totalConsultations: stats.totalConsultations || 0,
+          upcomingAppointments: stats.upcomingAppointments || 0,
+          monthlyEarnings: 0, // Can add this later if needed
+          rating: 0 // Can add this later if needed
+        };
+      },
+      error: (err) => {
+        console.error('Error loading stats:', err);
+        // Keep default zeros
+      }
+    });
   }
 
   // Format date helper
@@ -509,27 +509,42 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  // Download user data
-  downloadData() {
-    const userData = {
-      user: this.user,
-      profile: this.profileForm.value,
-      stats: this.isDoctor ? this.stats : null,
-      activities: this.activities,
-      exportDate: new Date().toISOString()
-    };
+  // Multi-Format Export Methods
+  toggleExportMenu() {
+    this.showExportMenu = !this.showExportMenu;
+  }
 
-    const dataStr = JSON.stringify(userData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = window.URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `healthconnect-data-${this.user?.name || 'user'}-${Date.now()}.json`;
-    link.click();
-    window.URL.revokeObjectURL(url);
+  // Close menu when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.export-container')) {
+      this.showExportMenu = false;
+    }
+  }
 
-    this.snackbar.success('Data downloaded successfully!');
-    this.addActivity('account', 'Data Downloaded', 'You downloaded your account data', new Date());
+  async exportData(format: 'pdf' | 'word' | 'text' | 'json') {
+    this.showExportMenu = false;
+    const data = this.profileExportService.prepareExportData(this.user, this.profileForm.value, this.isDoctor, this.stats);
+    const profileImage = this.user?.profile_image;
+
+    switch (format) {
+      case 'pdf':
+        await this.profileExportService.exportAsPDF(data, profileImage);
+        break;
+      case 'word':
+        await this.profileExportService.exportAsWord(data, profileImage);
+        break;
+      case 'text':
+        this.profileExportService.exportAsText(data);
+        break;
+      case 'json':
+        this.profileExportService.exportAsJSON(data);
+        break;
+    }
+
+    this.addActivity('account', 'Data Exported', `Profile exported as ${format.toUpperCase()}`, new Date());
+    this.snackbar.success(`Profile exported as ${format.toUpperCase()}!`);
   }
 
   // Format Date to IST (YYYY-MM-DD)

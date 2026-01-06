@@ -29,12 +29,13 @@ exports.getProfile = async (req, res) => {
     try {
         const userId = req.user.id;
 
-        // Fetch user profile with all new fields
+        // Fetch user profile with all fields including timestamps
         const [users] = await db.execute(`
             SELECT id, name, email, phone, role, 
                    gender, dob, blood_group, address, 
                    emergency_contact_name, emergency_contact_phone, 
-                   height, weight, allergies, profile_image 
+                   height, weight, allergies, profile_image,
+                   createdAt as created_at, updatedAt as updated_at
             FROM users WHERE id = ?`, [userId]);
 
         if (users.length === 0) {
@@ -71,7 +72,7 @@ exports.updateProfile = async (req, res) => {
             if (name !== undefined) { updates.push('name = ?'); params.push(name); }
             if (phone !== undefined) { updates.push('phone = ?'); params.push(phone); }
             if (gender !== undefined) { updates.push('gender = ?'); params.push(gender); }
-            if (dob !== undefined) { updates.push('dob = ?'); params.push(dob); }
+            if (dob !== undefined) { updates.push('dob = ?'); params.push(dob === '' ? null : dob); }
             if (blood_group !== undefined) { updates.push('blood_group = ?'); params.push(blood_group); }
             if (address !== undefined) { updates.push('address = ?'); params.push(address); }
             if (emergency_contact_name !== undefined) { updates.push('emergency_contact_name = ?'); params.push(emergency_contact_name); }
@@ -86,17 +87,19 @@ exports.updateProfile = async (req, res) => {
             }
 
             if (updates.length > 0) {
+                updates.push('updatedAt = NOW()'); // Track when profile was last updated
                 const query = `UPDATE users SET ${updates.join(', ')} WHERE id = ?`;
                 params.push(userId);
                 await db.execute(query, params);
             }
 
-            // Fetch updated user
+            // Fetch updated user with timestamps
             const [users] = await db.execute(`
                 SELECT id, name, email, phone, role, 
                        gender, dob, blood_group, address, 
                        emergency_contact_name, emergency_contact_phone, 
-                       height, weight, allergies, profile_image 
+                       height, weight, allergies, profile_image,
+                       createdAt as created_at, updatedAt as updated_at
                 FROM users WHERE id = ?`, [userId]);
 
             res.json({ message: 'Profile updated successfully', user: users[0] });

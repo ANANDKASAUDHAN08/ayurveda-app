@@ -9,8 +9,13 @@
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Delivering to
             </p>
             <p class="text-sm font-black text-slate-900 flex items-center gap-1.5 leading-tight">
-                <span *ngIf="!isDetecting" class="truncate max-w-[150px]">
+                <span *ngIf="!isDetecting" class="truncate max-w-[150px] flex items-center gap-1.5">
                     {{ selectedLocation || 'Select Location' }}
+                    <span *ngIf="getCurrentLocation()?.isEstimated"
+                        class="px-1.5 py-0.5 bg-amber-100 text-[8px] text-amber-700 rounded-md uppercase tracking-tighter"
+                        title="Location estimated based on IP">
+                        Estimated
+                    </span>
                 </span>
                 <span *ngIf="isDetecting" class="text-emerald-600 flex items-center gap-2">
                     <i class="fas fa-circle-notch fa-spin"></i>
@@ -50,17 +55,30 @@
             </div>
 
             <!-- Use Current Location -->
-            <button (click)="detectMyLocation()"
-                class="w-full group flex items-center gap-4 p-4 rounded-2xl border border-emerald-500/10 bg-emerald-500/5 hover:bg-emerald-500/10 transition-all text-left">
-                <div
-                    class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
-                    <i class="fas fa-crosshairs"></i>
+            <div class="space-y-2">
+                <button (click)="detectMyLocation()"
+                    class="w-full group flex items-center gap-4 p-4 rounded-2xl border border-emerald-500/10 bg-emerald-500/5 hover:bg-emerald-500/10 transition-all text-left">
+                    <div
+                        class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-crosshairs"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-black text-emerald-900">Use current location</p>
+                        <p class="text-[10px] font-bold text-emerald-600/60 uppercase tracking-widest">Detection via
+                            GPS/IP</p>
+                    </div>
+                </button>
+
+                <div *ngIf="getCurrentLocation()?.isEstimated"
+                    class="px-4 py-2 bg-amber-50 rounded-xl border border-amber-100 flex items-center justify-between animate-fade-in">
+                    <p class="text-[10px] font-bold text-amber-700">
+                        <i class="fas fa-info-circle mr-1"></i> Location is estimated
+                    </p>
+                    <button (click)="openMapModal()" class="text-[10px] font-black text-emerald-700 hover:underline">
+                        Not your location?
+                    </button>
                 </div>
-                <div>
-                    <p class="text-sm font-black text-emerald-900">Use current location</p>
-                    <p class="text-[10px] font-bold text-emerald-600/60 uppercase tracking-widest">Detection via GPS</p>
-                </div>
-            </button>
+            </div>
 
             <!-- Popular Cities Section -->
             <div class="space-y-4">

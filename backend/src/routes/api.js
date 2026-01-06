@@ -59,6 +59,10 @@ router.post('/appointments', auth, appointmentController.bookAppointment);
 router.get('/appointments', auth, appointmentController.getMyAppointments);
 router.post('/appointments/:id/cancel', auth, appointmentController.cancelAppointment);
 
+// Appointment Stats and Activity Feed
+router.get('/appointments/stats', auth, appointmentController.getStats);
+router.get('/appointments/activity-feed', auth, appointmentController.getActivityFeed);
+
 // New Enhanced Appointments
 router.post('/appointments/book', auth, appointmentControllerNew.bookAppointment);
 router.get('/appointments/user', auth, appointmentControllerNew.getUserAppointments);

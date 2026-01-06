@@ -1,64 +1,88 @@
-<div *ngIf="isOpen" class="fixed inset-0 z-[120] flex items-end justify-center" (click)="close()">
+<div *ngIf="isOpen" class="fixed inset-0 z-[120] flex items-end justify-center sm:items-center p-0 sm:p-4"
+    (click)="close()">
     <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-fade-in"></div>
     <div (click)="$event.stopPropagation()"
-        class="relative w-full max-w-md bg-white rounded-t-[32px] p-6 shadow-2xl animate-slide-in-up">
+        class="relative w-full max-w-md bg-white rounded-t-[32px] sm:rounded-[32px] shadow-2xl animate-slide-in-up flex flex-col max-h-[92vh] sm:max-h-[85vh]">
 
-        <!-- Handle -->
-        <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
+        <!-- Fixed Header Area -->
+        <div class="px-6 pt-5 pb-2">
+            <!-- Handle -->
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
+            <h2 class="text-xl font-black text-slate-900 mb-1">Select Your Location</h2>
+            <p class="text-xs text-slate-500 mb-4">Choose your city to see services near you</p>
+        </div>
 
-        <h2 class="text-xl font-black text-slate-900 mb-2">Select Your Location</h2>
-        <p class="text-sm text-slate-500 mb-6">Choose your city to see services near you</p>
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar">
+            <!-- Search Input -->
+            <div class="relative mb-6 group mt-6">
+                <i
+                    class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()"
+                    placeholder="Search for your city, area..."
+                    class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-800 placeholder:text-slate-400 font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all shadow-sm text-sm">
 
-        <!-- Search Input -->
-        <div class="relative mb-6 group">
-            <i
-                class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors"></i>
-            <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()"
-                placeholder="Search for your city, area..."
-                class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-800 placeholder:text-slate-400 font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all shadow-sm">
+                <!-- Predictions Dropdown -->
+                <div *ngIf="predictions.length > 0"
+                    class="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden max-h-60 overflow-y-auto z-10 animate-fade-in">
+                    <button *ngFor="let p of predictions" (click)="selectPrediction(p)"
+                        class="w-full px-4 py-3 text-left hover:bg-slate-50 flex items-center gap-3 border-b border-slate-50 last:border-none transition-colors">
+                        <div
+                            class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 text-slate-400">
+                            <i class="fas fa-map-marker-alt text-xs"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm font-bold text-slate-800 truncate">{{ p.structured_formatting.main_text }}
+                            </p>
+                            <p class="text-xs text-slate-500 truncate">{{ p.structured_formatting.secondary_text }}</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
 
-            <!-- Predictions Dropdown -->
-            <div *ngIf="predictions.length > 0"
-                class="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden max-h-60 overflow-y-auto z-10 animate-fade-in">
-                <button *ngFor="let p of predictions" (click)="selectPrediction(p)"
-                    class="w-full px-4 py-3 text-left hover:bg-slate-50 flex items-center gap-3 border-b border-slate-50 last:border-none transition-colors">
+            <!-- Current Location Area -->
+            <div class="space-y-2 mb-6">
+                <button (click)="detectLocation()"
+                    class="w-full flex items-center gap-4 p-3.5 bg-emerald-50 hover:bg-emerald-100 rounded-2xl transition-colors group">
                     <div
-                        class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 text-slate-400">
-                        <i class="fas fa-map-marker-alt text-xs"></i>
+                        class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
+                        <i class="fas fa-location-arrow text-sm"></i>
                     </div>
-                    <div class="min-w-0">
-                        <p class="text-sm font-bold text-slate-800 truncate">{{ p.structured_formatting.main_text }}</p>
-                        <p class="text-xs text-slate-500 truncate">{{ p.structured_formatting.secondary_text }}</p>
+                    <div class="text-left">
+                        <p class="text-sm font-bold text-slate-800">Use My Current Location</p>
+                        <p class="text-[9px] text-emerald-600 font-bold uppercase tracking-wider">Fast Detection</p>
                     </div>
+                </button>
+
+                <!-- Estimated Banner -->
+                <div *ngIf="getCurrentLocation()?.isEstimated"
+                    class="px-4 py-1 bg-amber-50 rounded-xl border border-amber-100 flex items-center justify-between animate-fade-in content-center">
+                    <p class="text-[10px] font-bold text-amber-700 m-0 leading-none flex items-center">
+                        <i class="fas fa-info-circle mr-1"></i> Location is estimated
+                    </p>
+                    <button (click)="openMap()"
+                        class="text-[10px] font-black text-emerald-700 hover:underline m-0 leading-none">
+                        Correct it?
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cities Grid -->
+            <div class="grid grid-cols-2 gap-2.5 mb-2">
+                <button *ngFor="let city of popularCities" (click)="selectCity(city)"
+                    class="p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl text-slate-700 font-bold text-sm transition-all border border-slate-100">
+                    {{ city.name }}
                 </button>
             </div>
         </div>
 
-        <!-- Current Location Button -->
-        <button (click)="detectLocation()"
-            class="w-full flex items-center gap-4 p-4 bg-emerald-50 hover:bg-emerald-100 rounded-2xl mb-8 transition-colors group">
-            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
-                <i class="fas fa-location-arrow"></i>
-            </div>
-            <div class="text-left">
-                <p class="font-bold text-slate-800">Use My Current Location</p>
-                <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Faster Response</p>
-            </div>
-        </button>
-
-        <!-- Cities Grid -->
-        <div class="grid grid-cols-2 gap-3 mb-8">
-            <button *ngFor="let city of popularCities" (click)="selectCity(city)"
-                class="p-4 bg-slate-50 hover:bg-slate-100 rounded-2xl text-slate-700 font-bold text-sm transition-all border border-slate-100">
-                {{ city.name }}
+        <!-- Fixed Footer Area -->
+        <div class="px-6 py-5 bg-white border-t border-slate-50 rounded-b-[32px]">
+            <button (click)="openMap()"
+                class="w-full py-4 bg-slate-900 text-white rounded-2xl font-black shadow-xl hover:bg-black transition-all flex items-center justify-center gap-3 active:scale-[0.98] transform transition-transform">
+                <i class="fas fa-map-marked-alt"></i>
+                Select on Map
             </button>
         </div>
-
-        <!-- Custom Location / Map -->
-        <button (click)="openMap()"
-            class="w-full py-4 bg-slate-900 text-white rounded-2xl font-black shadow-xl hover:bg-black transition-all flex items-center justify-center gap-3">
-            <i class="fas fa-map-marked-alt"></i>
-            Select on Map
-        </button>
     </div>
 </div>

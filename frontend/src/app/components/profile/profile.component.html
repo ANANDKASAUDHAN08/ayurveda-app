@@ -85,7 +85,9 @@
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3">
+                <!-- Action Buttons -->
+                <div class="flex items-center md:justify-between justify-end md:gap-2 gap-3">
+                    <!-- Profile Completion - Desktop Only -->
                     <div class="hidden md:flex flex-col items-end mr-4">
                         <div class="flex items-center gap-2 text-xs font-medium text-emerald-100/80 mb-1">
                             <span>Profile Completion</span>
@@ -97,15 +99,75 @@
                         </div>
                     </div>
 
-                    <button (click)="downloadData()"
-                        class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-all border border-white/10 flex items-center gap-2">
-                        <i class="fas fa-download"></i> <span class="hidden sm:inline">Data</span>
+                    <!-- Download Button with Multi-Format Menu -->
+                    <div class="relative export-container" [class.mobile-hide-on-edit]="isEditing">
+                        <button (click)="toggleExportMenu()"
+                            class="p-2 sm:px-3 sm:py-2 md:px-4 md:bg-white/20 hover:bg-white/10 text-white text-sm font-medium md:rounded-lg transition-all md:border md:border-white/10 flex items-center gap-2 mobile-action-btn">
+                            <i class="fas fa-download md:text-lg text-2xl mobile-icon"></i>
+                            <span class="hidden md:inline">Export</span>
+                            <i class="fas fa-chevron-down text-[10px] opacity-60 hidden md:inline"></i>
+                        </button>
+
+                        <!-- Export Dropdown Menu -->
+                        <div *ngIf="showExportMenu"
+                            class="absolute right-0 top-full mt-2 w-48 bg-white/90 backdrop-blur-xl border border-slate-200 rounded-2xl shadow-2xl z-[100] overflow-hidden animate-fade-in-up origin-top-right">
+                            <div class="py-2">
+                                <button (click)="exportData('pdf')"
+                                    class="w-full px-4 py-3 flex items-center gap-3 hover:bg-slate-50 transition-colors text-slate-700">
+                                    <div
+                                        class="h-8 w-8 rounded-lg bg-red-50 text-red-500 flex items-center justify-center">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <span class="text-sm font-semibold">Export as PDF</span>
+                                </button>
+                                <button (click)="exportData('word')"
+                                    class="w-full px-4 py-3 flex items-center gap-3 hover:bg-slate-50 transition-colors text-slate-700">
+                                    <div
+                                        class="h-8 w-8 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center">
+                                        <i class="fas fa-file-word"></i>
+                                    </div>
+                                    <span class="text-sm font-semibold">Export as Word</span>
+                                </button>
+                                <button (click)="exportData('text')"
+                                    class="w-full px-4 py-3 flex items-center gap-3 hover:bg-slate-50 transition-colors text-slate-700">
+                                    <div
+                                        class="h-8 w-8 rounded-lg bg-slate-50 text-slate-600 flex items-center justify-center">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <span class="text-sm font-semibold">Export as Text</span>
+                                </button>
+                                <button (click)="exportData('json')"
+                                    class="w-full px-4 py-3 flex items-center gap-3 hover:bg-slate-50 transition-colors text-slate-700">
+                                    <div
+                                        class="h-8 w-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                        <i class="fas fa-file-code"></i>
+                                    </div>
+                                    <span class="text-sm font-semibold">Export as JSON</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Button (when not editing) -->
+                    <button *ngIf="!isEditing" (click)="toggleEdit()"
+                        class="p-2 sm:px-4 sm:py-2 md:px-6 text-sm font-bold md:rounded-lg transition-all md:shadow-lg flex items-center gap-2 md:bg-emerald-500 text-white hover:bg-emerald-400 md:shadow-emerald-500/20 mobile-action-btn">
+                        <i class="fas fa-pen md:text-base mobile-icon"></i>
+                        <span class="hidden sm:inline">Edit</span>
                     </button>
-                    <button (click)="toggleEdit()"
-                        class="px-6 py-2 text-sm font-bold rounded-lg transition-all shadow-lg flex items-center gap-2"
-                        [ngClass]="isEditing ? 'bg-white text-emerald-900 hover:bg-emerald-50' : 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-emerald-500/20'">
-                        <i class="fas" [ngClass]="isEditing ? 'fa-times' : 'fa-pen'"></i>
-                        {{ isEditing ? 'Cancel' : 'Edit' }}
+
+                    <!-- Cancel Button (when editing) -->
+                    <button *ngIf="isEditing" (click)="toggleEdit()"
+                        class="p-2 sm:px-4 sm:py-2 md:px-6 text-sm font-bold md:rounded-lg transition-all md:shadow-lg flex items-center gap-2 md:bg-white text-white sm:text-slate-700 md:hover:bg-emerald-100 sm:hover:bg-slate-50 md:border mobile-action-btn">
+                        <i class="fas fa-times text-2xl md:text-base mobile-icon text-red-500"></i>
+                        <span class="hidden sm:inline">Cancel</span>
+                    </button>
+
+                    <!-- Save Changes Button (Visible on both mobile and desktop when editing) -->
+                    <button *ngIf="isEditing" (click)="saveProfile()" [disabled]="!profileForm.valid || isLoading"
+                        class="p-2 md:hidden md:px-6 md:py-2 bg-slate-900 text-white text-sm rounded-lg font-bold shadow-lg hover:bg-slate-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 mobile-action-btn ml-1">
+                        <!-- <i *ngIf="!isLoading" class="fas fa-check text-2xl md:text-base mobile-icon"></i> -->
+                        <!-- <i *ngIf="isLoading" class="fas fa-spinner fa-spin text-2xl md:text-base mobile-icon"></i> -->
+                        <span class="md:inline">{{ isLoading ? 'Saving...' : 'Save' }}</span>
                     </button>
                 </div>
             </div>
@@ -131,8 +193,8 @@
                         [ngClass]="activeTab === 'security' ? 'text-emerald-500' : 'text-slate-400'"></i> Security
                 </button>
 
-                <!-- Save Button -->
-                <div class="ml-auto flex items-center" *ngIf="isEditing">
+                <!-- Save Button - Desktop Only (moved from top) -->
+                <div class="hidden md:flex ml-auto items-center" *ngIf="isEditing">
                     <button (click)="saveProfile()" [disabled]="!profileForm.valid || isLoading"
                         class="px-6 py-2 bg-slate-900 text-white text-sm rounded-lg font-bold shadow-lg hover:bg-slate-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
                         <i *ngIf="!isLoading" class="fas fa-check-circle text-emerald-400"></i>
@@ -246,6 +308,51 @@
             <!-- RIGHT CONTENT (Scrollable) -->
             <main class="flex-1 overflow-y-auto bg-slate-50/50 p-4 md:p-6 lg:p-10 scroll-smooth">
                 <div class="w-full mx-auto">
+
+                    <!-- Mobile Stats Cards (visible only on mobile/tablet) -->
+                    <div class="lg:hidden mb-6">
+                        <div class="grid gap-3" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+                            <!-- Total Consultations -->
+                            <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200">
+                                <div class="flex flex-col">
+                                    <span class="text-xs font-bold text-slate-500 mb-1">Consultations</span>
+                                    <span class="text-xl md:text-2xl font-bold text-emerald-600">
+                                        {{ stats.totalConsultations }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Upcoming Appointments -->
+                            <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200">
+                                <div class="flex flex-col">
+                                    <span class="text-xs font-bold text-slate-500 mb-1">Upcoming</span>
+                                    <span class="text-xl md:text-2xl font-bold text-blue-600">
+                                        {{ stats.upcomingAppointments }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Member Since -->
+                            <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200">
+                                <div class="flex flex-col">
+                                    <span class="text-xs font-bold text-slate-500 mb-1">Member</span>
+                                    <span class="text-xs md:text-sm font-bold text-slate-800">
+                                        {{ getMemberSince() }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Profile Completion -->
+                            <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200">
+                                <div class="flex flex-col">
+                                    <span class="text-xs font-bold text-slate-500 mb-1">Profile</span>
+                                    <span class="text-xl md:text-2xl font-bold text-purple-600">
+                                        {{ profileCompletion }}%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- PROFILE TAB -->
                     <div *ngIf="activeTab === 'profile'" class="animate-fade-in space-y-8">
@@ -603,57 +710,58 @@
                     <!-- SECURITY TAB -->
                     <div *ngIf="activeTab === 'security'" class="animate-fade-in max-w-3xl mx-auto space-y-4">
                         <div
-                            class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between group hover:border-emerald-200 transition-colors">
-                            <div class="flex items-center gap-6">
+                            class="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4 group hover:border-emerald-200 transition-colors">
+                            <div class="flex items-center gap-4 md:gap-6">
                                 <div
-                                    class="h-16 w-16 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-2xl">
+                                    class="h-12 w-12 md:h-16 md:w-16 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-xl md:text-2xl flex-shrink-0">
                                     <i class="fas fa-key"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-slate-800 text-lg">Change Password</h4>
-                                    <p class="text-slate-500">Update your password regularly to keep your account
-                                        secure.
-                                    </p>
+                                    <h4 class="font-bold text-slate-800 text-base md:text-lg">Change Password</h4>
+                                    <p class="text-slate-500 text-sm">Update your password regularly to keep your
+                                        account secure.</p>
                                 </div>
                             </div>
                             <button (click)="changePassword()"
-                                class="px-6 py-3 bg-white border border-slate-200 rounded-xl text-slate-700 font-bold hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
+                                class="w-full md:w-auto px-6 py-3 bg-white border border-slate-200 rounded-xl text-slate-700 font-bold hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
                                 Update
                             </button>
                         </div>
 
                         <div
-                            class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between group hover:border-emerald-200 transition-colors">
-                            <div class="flex items-center gap-6">
+                            class="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4 group hover:border-emerald-200 transition-colors">
+                            <div class="flex items-center gap-4 md:gap-6">
                                 <div
-                                    class="h-16 w-16 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-2xl">
+                                    class="h-12 w-12 md:h-16 md:w-16 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-xl md:text-2xl flex-shrink-0">
                                     <i class="fas fa-shield-alt"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-slate-800 text-lg">Two-Factor Authentication</h4>
-                                    <p class="text-slate-500">Add an extra layer of security to your account.</p>
+                                    <h4 class="font-bold text-slate-800 text-base md:text-lg">Two-Factor Authentication
+                                    </h4>
+                                    <p class="text-slate-500 text-sm">Add an extra layer of security to your account.
+                                    </p>
                                 </div>
                             </div>
                             <button (click)="enable2FA()"
-                                class="px-6 py-3 bg-white border border-slate-200 rounded-xl text-slate-700 font-bold hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
+                                class="w-full md:w-auto px-6 py-3 bg-white border border-slate-200 rounded-xl text-slate-700 font-bold hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
                                 Enable
                             </button>
                         </div>
 
                         <div
-                            class="bg-red-50 p-8 rounded-2xl border border-red-100 flex items-center justify-between mt-8">
-                            <div class="flex items-center gap-6">
+                            class="bg-red-50 p-4 md:p-8 rounded-2xl border border-red-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-8">
+                            <div class="flex items-center gap-4 md:gap-6">
                                 <div
-                                    class="h-16 w-16 rounded-2xl bg-red-100 text-red-500 flex items-center justify-center text-2xl">
+                                    class="h-12 w-12 md:h-16 md:w-16 rounded-2xl bg-red-100 text-red-500 flex items-center justify-center text-xl md:text-2xl flex-shrink-0">
                                     <i class="fas fa-exclamation-triangle"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-red-800 text-lg">Delete Account</h4>
-                                    <p class="text-red-600">Permanently remove your account and all data.</p>
+                                    <h4 class="font-bold text-red-800 text-base md:text-lg">Delete Account</h4>
+                                    <p class="text-red-600 text-sm">Permanently remove your account and all data.</p>
                                 </div>
                             </div>
                             <button (click)="deleteAccount()"
-                                class="px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-200">
+                                class="w-full md:w-auto px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-200">
                                 Delete
                             </button>
                         </div>
@@ -663,17 +771,19 @@
             </main>
         </div>
 
-        <!-- Modals (Kept same logic, updated styling) -->
-        <div *ngIf="showPasswordModal"
+        <!-- 1 Change Password Modal -->
+        <div *ngIf="showPasswordModal" (click)="showPasswordModal = false"
             class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fade-in-up p-8">
-                <h3 class="text-2xl font-bold text-slate-900 mb-6">Change Password</h3>
+            <div (click)="$event.stopPropagation()"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fade-in-up p-4 md:p-8">
+                <h3 class="text-xl md:text-2xl font-bold text-slate-900 mb-4 md:mb-6">Change Password</h3>
 
                 <!-- Password Input with Show/Hide and Clear -->
                 <div class="relative mb-4">
                     <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="newPassword"
-                        autocomplete="new-password" name="new-password"
-                        class="w-full px-4 py-3 pr-20 border border-slate-200 rounded-xl focus:border-emerald-500 outline-none transition-colors"
+                        autocomplete="new-password" name="new-password" (focus)="isPasswordFocused = true"
+                        (blur)="isPasswordFocused = false"
+                        class="w-full px-4 py-3 pr-20 border border-slate-200 rounded-xl focus:border-emerald-500 outline-none transition-colors text-base"
                         placeholder="New Password">
 
                     <!-- Clear Button -->
@@ -688,62 +798,66 @@
                         <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
                     </button>
                 </div>
+
                 <!-- Password Strength Indicator -->
-                <app-password-strength-indicator [password]="newPassword"
-                    (validityChange)="onPasswordValidityChange($event)">
-                </app-password-strength-indicator>
+                <div class="relative">
+                    <app-password-strength-indicator [password]="newPassword" [isFocused]="isPasswordFocused"
+                        mode="compact" (validityChange)="onPasswordValidityChange($event)">
+                    </app-password-strength-indicator>
+                </div>
+
                 <!-- Buttons with More Spacing -->
-                <div class="flex justify-end gap-3 mt-6">
+                <div class="flex justify-end gap-2 md:gap-3 mt-6">
                     <button (click)="showPasswordModal = false"
-                        class="px-6 py-2.5 text-slate-500 font-bold hover:bg-slate-50 rounded-lg transition-colors">
+                        class="px-4 md:px-6 py-3 text-slate-500 font-bold hover:bg-slate-50 rounded-lg transition-colors text-sm md:text-base">
                         Cancel
                     </button>
                     <button (click)="confirmChangePassword()" [disabled]="!isPasswordValid || !newPassword"
-                        class="px-8 py-2.5 bg-slate-900 text-white rounded-lg font-bold hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                        Update Password
+                        class="px-4 md:px-8 py-3 bg-slate-900 text-white rounded-lg font-bold hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base">
+                        Update
                     </button>
                 </div>
             </div>
         </div>
 
-
         <!-- 2 Factor Authentication Modal -->
-        <div *ngIf="show2FAModal"
+        <div *ngIf="show2FAModal" (click)="show2FAModal = false"
             class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-            <div
-                class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fade-in-up p-8 text-center">
+            <div (click)="$event.stopPropagation()"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fade-in-up p-4 md:p-8 text-center">
                 <div
-                    class="h-20 w-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-600 text-3xl">
+                    class="h-16 w-16 md:h-20 md:w-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 text-emerald-600 text-2xl md:text-3xl">
                     <i class="fas fa-shield-alt"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-900 mb-2">Enable 2FA?</h3>
-                <p class="text-slate-500 mb-8">This will add an extra layer of security to your account.</p>
-                <div class="flex justify-center gap-4">
+                <h3 class="text-xl md:text-2xl font-bold text-slate-900 mb-2">Enable 2FA?</h3>
+                <p class="text-slate-500 text-sm md:text-base mb-6 md:mb-8">This will add an extra layer of security to
+                    your account.</p>
+                <div class="flex justify-center gap-2 md:gap-3">
                     <button (click)="show2FAModal = false"
-                        class="px-6 py-2.5 text-slate-500 font-bold hover:bg-slate-50 rounded-lg transition-colors">Cancel</button>
+                        class="px-4 md:px-6 py-3 text-slate-500 font-bold hover:bg-slate-50 rounded-lg transition-colors text-sm md:text-base">Cancel</button>
                     <button (click)="confirmEnable2FA()"
-                        class="px-8 py-2.5 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 transition-colors">Enable</button>
+                        class="px-4 md:px-8 py-3 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 transition-colors text-sm md:text-base">Enable</button>
                 </div>
             </div>
         </div>
 
         <!-- Delete Account Modal -->
-        <div *ngIf="showDeleteModal"
+        <div *ngIf="showDeleteModal" (click)="showDeleteModal = false"
             class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-            <div
-                class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fade-in-up p-8 text-center">
+            <div (click)="$event.stopPropagation()"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fade-in-up p-4 md:p-8 text-center">
                 <div
-                    class="h-20 w-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 text-red-600 text-3xl">
+                    class="h-16 w-16 md:h-20 md:w-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 text-red-600 text-2xl md:text-3xl">
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-900 mb-2">Delete Account?</h3>
-                <p class="text-slate-500 mb-8">This action cannot be undone. Are you sure?</p>
-                <div class="flex justify-center gap-4">
+                <h3 class="text-xl md:text-2xl font-bold text-slate-900 mb-2">Delete Account?</h3>
+                <p class="text-slate-500 text-sm md:text-base mb-6 md:mb-8">This action cannot be undone. Are you sure?
+                </p>
+                <div class="flex justify-center gap-2 md:gap-3">
                     <button (click)="showDeleteModal = false"
-                        class="px-6 py-2.5 text-slate-500 font-bold hover:bg-slate-50 rounded-lg transition-colors">Cancel</button>
+                        class="px-4 md:px-6 py-3 text-slate-500 font-bold hover:bg-slate-50 rounded-lg transition-colors text-sm md:text-base">Cancel</button>
                     <button (click)="confirmDeleteAccount()"
-                        class="px-8 py-2.5 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors">Delete
-                        Permanently</button>
+                        class="px-4 md:px-8 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors text-sm md:text-base">Delete</button>
                 </div>
             </div>
         </div>

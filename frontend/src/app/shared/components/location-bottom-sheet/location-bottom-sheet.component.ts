@@ -31,6 +31,10 @@ export class LocationBottomSheetComponent {
 
     constructor(private locationService: LocationService) { }
 
+    getCurrentLocation() {
+        return this.locationService.getCurrentLocation();
+    }
+
     close() {
         this.closeRequested.emit();
         this.searchQuery = '';

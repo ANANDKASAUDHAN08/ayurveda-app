@@ -25,3 +25,12 @@
         transform: translateY(0);
     }
 }
+
+.custom-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    display: none;
+}

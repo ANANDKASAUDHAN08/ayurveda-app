@@ -5,8 +5,10 @@
     </div>
     <div class="flex-1 min-w-0">
         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5">Delivering to</p>
-        <p class="text-sm font-black text-slate-800 truncate leading-none">
+        <p class="text-sm font-black text-slate-800 truncate leading-none flex items-center gap-2">
             {{ selectedLocation || 'Detecting...' }}
+            <span *ngIf="isEstimated"
+                class="px-1 py-0.5 bg-amber-100 text-[7px] text-amber-700 rounded-sm uppercase tracking-tighter">Estimated</span>
         </p>
     </div>
     <i class="fas fa-chevron-down text-slate-300 text-[10px]"></i>

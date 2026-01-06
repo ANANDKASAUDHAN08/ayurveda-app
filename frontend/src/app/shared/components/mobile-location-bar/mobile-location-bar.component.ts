@@ -12,6 +12,7 @@ import { LocationService } from '../../services/location.service';
 })
 export class MobileLocationBarComponent implements OnInit, OnDestroy {
     selectedLocation: string = '';
+    isEstimated: boolean = false;
     private locationSubscription?: Subscription;
 
     constructor(private locationService: LocationService) { }
@@ -19,13 +20,16 @@ export class MobileLocationBarComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.locationSubscription = this.locationService.location$.subscribe(location => {
             this.selectedLocation = location ? (location.displayName || location.city) : 'Select Location';
+            this.isEstimated = !!location?.isEstimated;
         });
 
         const stored = this.locationService.getStoredLocation();
         if (stored) {
             this.selectedLocation = stored.displayName || stored.city;
+            this.isEstimated = !!stored.isEstimated;
         } else {
             this.selectedLocation = 'Select Location';
+            this.isEstimated = false;
         }
     }
 

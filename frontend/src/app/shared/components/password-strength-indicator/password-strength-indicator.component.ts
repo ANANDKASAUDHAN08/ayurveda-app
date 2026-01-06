@@ -20,6 +20,7 @@ export interface PasswordRequirements {
 export class PasswordStrengthIndicatorComponent implements OnChanges, OnDestroy {
     @Input() password: string = '';
     @Input() isFocused: boolean = false; // NEW: Track if input is focused
+    @Input() mode: 'detailed' | 'compact' = 'detailed'; // NEW: Display mode
     @Output() validityChange = new EventEmitter<boolean>();
 
     isVisible: boolean = false; // NEW: Control visibility
