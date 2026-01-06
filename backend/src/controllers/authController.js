@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const db = require('../config/database');
 const emailService = require('../services/email.service');
 const { generateVerificationToken, getTokenExpiration } = require('../../utils/tokenGenerator');
@@ -139,5 +140,116 @@ exports.resendVerification = async (req, res) => {
     } catch (err) {
         console.error('Resend verification error:', err);
         res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Forgot Password - Request password reset
+exports.forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email || !emailService.validateEmail(email)) {
+            return res.status(400).json({ message: 'Valid email is required' });
+        }
+
+        // Find user
+        const [users] = await db.execute('SELECT * FROM users WHERE email = ? AND role = ?', [email, 'user']);
+
+        // For security, don't reveal if email exists
+        if (users.length === 0) {
+            return res.json({ message: 'If an account exists with that email, you will receive a password reset link shortly.' });
+        }
+
+        const user = users[0];
+
+        // Generate secure reset token using crypto
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const tokenExpiration = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
+
+        // Save reset token to database
+        await db.execute(
+            'UPDATE users SET reset_password_token = ?, reset_token_expires_at = ? WHERE id = ?',
+            [resetToken, tokenExpiration, user.id]
+        );
+
+        // Send password reset email
+        try {
+            await emailService.sendPasswordResetEmail(email, user.name, resetToken, 'user');
+        } catch (emailError) {
+            console.error(`❌ Failed to send password reset email:`, emailError.message);
+        }
+
+        res.json({ message: 'If an account exists with that email, you will receive a password reset link shortly.' });
+    } catch (err) {
+        console.error('Forgot password error:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Reset Password - Update password with valid token
+exports.resetPassword = async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+
+        if (!token || !newPassword) {
+            return res.status(400).json({ message: 'Token and new password are required' });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+        }
+
+        // Find user with valid token
+        const [users] = await db.execute(
+            'SELECT * FROM users WHERE reset_password_token = ? AND reset_token_expires_at > NOW()',
+            [token]
+        );
+
+        if (users.length === 0) {
+            return res.status(400).json({ message: 'Invalid or expired password reset token' });
+        }
+
+        const user = users[0];
+
+        // Hash new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        // Update password and clear reset token
+        await db.execute(
+            'UPDATE users SET password = ?, reset_password_token = NULL, reset_token_expires_at = NULL WHERE id = ?',
+            [hashedPassword, user.id]
+        );
+
+        res.json({ message: 'Password reset successful! You can now login with your new password.' });
+    } catch (err) {
+        console.error('Reset password error:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Verify Reset Token - Check if token is valid
+exports.verifyResetToken = async (req, res) => {
+    try {
+        const { token } = req.params;
+
+        if (!token) {
+            return res.status(400).json({ valid: false, message: 'Token is required' });
+        }
+
+        // Check if token exists and hasn't expired
+        const [users] = await db.execute(
+            'SELECT id, name, email FROM users WHERE reset_password_token = ? AND reset_token_expires_at > NOW()',
+            [token]
+        );
+
+        if (users.length === 0) {
+            return res.json({ valid: false, message: 'Invalid or expired token' });
+        }
+
+        res.json({ valid: true, user: { name: users[0].name, email: users[0].email } });
+    } catch (err) {
+        console.error('Verify reset token error:', err);
+        res.status(500).json({ valid: false, message: 'Server error' });
     }
 };

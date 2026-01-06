@@ -186,7 +186,6 @@ export class FavoritesPageComponent implements OnInit, OnDestroy {
     }
 
     onBookingConfirmed(bookingData: any) {
-        console.log('Booking confirmed in favorites:', bookingData);
         // Maybe show a success snackbar here
         this.closeBooking();
     }

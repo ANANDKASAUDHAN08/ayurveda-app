@@ -130,12 +130,10 @@ export class SettingsComponent implements OnInit {
           alert('Settings saved successfully!');
         },
         error: (error) => {
-          console.error('Failed to save settings to backend:', error);
           alert('Settings saved locally, but failed to sync with server.');
         }
       });
     } else {
-      console.log('Settings saved to localStorage (user not logged in)');
       alert('Settings saved locally!');
     }
   }

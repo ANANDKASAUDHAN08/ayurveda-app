@@ -64,7 +64,6 @@ exports.subscribe = async (req, res) => {
         try {
             const emailService = require('../services/email.service');
             await emailService.sendNewsletterWelcome(email, name.trim(), unsubscribeToken);
-            console.log(`✅ Newsletter welcome email sent to ${email}`);
         } catch (emailError) {
             console.error(`❌ Failed to send newsletter welcome email:`, emailError.message);
             // Don't fail the subscription if email fails

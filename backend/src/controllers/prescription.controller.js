@@ -4,11 +4,6 @@ const path = require('path');
 const fs = require('fs');
 
 class PrescriptionController {
-    // Create tables if they don't exist (MySQL version - skip, tables already created via migration)
-    static async initializeTables() {
-        console.log('✅ Prescription tables should be created via migration');
-    }
-
     // GET /api/prescriptions - List user's prescriptions
     static async getAllPrescriptions(req, res) {
         try {

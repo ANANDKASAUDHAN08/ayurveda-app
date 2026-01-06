@@ -2,11 +2,10 @@ import { environment } from '@env/environment';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
-
 
 @Component({
   selector: 'app-user-landing',
@@ -15,6 +14,7 @@ import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/pa
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
+    FormsModule,
     PasswordStrengthIndicatorComponent
   ],
   templateUrl: './user-landing.component.html'
@@ -35,6 +35,11 @@ export class UserLandingComponent implements OnInit {
   isPasswordValid: boolean = false;
   showEmailVerificationWarning = false;
   unverifiedEmail: string = '';
+
+  // Forgot Password
+  showForgotPasswordModal = false;
+  forgotPasswordEmail = '';
+  forgotPasswordSubmitting = false;
   isPasswordFocused: boolean = false;
 
   constructor(
@@ -165,6 +170,38 @@ export class UserLandingComponent implements OnInit {
 
   dismissVerificationWarning() {
     this.showEmailVerificationWarning = false;
+  }
+
+  // Forgot Password Methods
+  openForgotPasswordModal() {
+    this.showForgotPasswordModal = true;
+    this.forgotPasswordEmail = this.loginForm.get('email')?.value || '';
+  }
+
+  closeForgotPasswordModal() {
+    this.showForgotPasswordModal = false;
+    this.forgotPasswordEmail = '';
+    this.forgotPasswordSubmitting = false;
+  }
+
+  submitForgotPassword() {
+    if (!this.forgotPasswordEmail || !this.forgotPasswordEmail.includes('@')) {
+      this.snackbar.error('Please enter a valid email address');
+      return;
+    }
+
+    this.forgotPasswordSubmitting = true;
+    this.authService.forgotPassword(this.forgotPasswordEmail, 'user').subscribe({
+      next: (response) => {
+        this.forgotPasswordSubmitting = false;
+        this.snackbar.success(response.message || 'Password reset link sent to your email!');
+        this.closeForgotPasswordModal();
+      },
+      error: (error) => {
+        this.forgotPasswordSubmitting = false;
+        this.snackbar.error(error.error?.message || 'Failed to send reset link');
+      }
+    });
   }
 
   resendVerificationEmail() {

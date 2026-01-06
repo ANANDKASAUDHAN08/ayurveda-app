@@ -69,7 +69,6 @@ export class ContactComponent {
       this.isSubmitting = true;
       // Simulate API call
       setTimeout(() => {
-        console.log('Form Submitted:', this.contactForm.value);
         this.isSubmitting = false;
         this.submitSuccess = true;
         this.contactForm.reset();

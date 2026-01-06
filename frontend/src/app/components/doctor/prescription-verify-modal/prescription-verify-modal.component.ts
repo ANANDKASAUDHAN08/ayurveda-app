@@ -62,7 +62,6 @@ export class PrescriptionVerifyModalComponent implements OnInit {
     if (this.prescription.upload_file_path) {
       // Construct the raw file URL
       this.rawFileUrl = `${environment.apiUrl.replace('/api', '')}/${this.prescription.upload_file_path}`;
-      console.log('Prescription file URL:', this.rawFileUrl);
       const ext = this.prescription.upload_file_path.split('.').pop()?.toLowerCase();
 
       if (ext === 'pdf') {

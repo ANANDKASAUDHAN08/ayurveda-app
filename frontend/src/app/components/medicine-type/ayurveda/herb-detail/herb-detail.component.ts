@@ -14,7 +14,6 @@ export class HerbDetailComponent {
     @Output() close = new EventEmitter<void>();
 
     onClose(): void {
-        console.log(this.herb);
         this.close.emit();
         document.body.style.overflow = 'auto';
     }

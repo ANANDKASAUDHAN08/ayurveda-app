@@ -67,7 +67,6 @@ class ShareController {
                     });
 
                     emailSent = true;
-                    console.log(`✅ Share email sent to ${recipient_email}`);
                 } catch (emailError) {
                     console.error('❌ Failed to send email:', emailError);
                     // Don't fail the request if email fails - share link still created

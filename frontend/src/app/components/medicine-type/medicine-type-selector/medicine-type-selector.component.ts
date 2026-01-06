@@ -26,13 +26,10 @@ export class MedicineTypeSelectorComponent implements OnInit {
   loadData(): void {
     // Get all medicine types from service
     this.medicineTypes = this.medicineTypeService.getAllTypes();
-    console.log('📊 Medicine Types:', this.medicineTypes);
     this.loading = false;
   }
 
   selectType(typeId: MedicineType): void {
-    console.log('✅ Selected medicine type:', typeId);
-
     // Save selection to service (persists to localStorage)
     this.medicineTypeService.setMedicineType(typeId);
 

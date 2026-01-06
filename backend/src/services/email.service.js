@@ -33,7 +33,6 @@ async function sendEmail(options) {
     };
 
     const result = await sgMail.send(msg);
-    console.log('✅ Email sent successfully:', result[0].headers['x-message-id']);
     return { success: true, messageId: result[0].headers['x-message-id'] };
   } catch (error) {
     console.error('❌ Email sending error:', error.message);
@@ -621,12 +620,140 @@ async function testConnection() {
     if (!process.env.SENDGRID_API_KEY) {
       throw new Error('SendGrid API key not configured');
     }
-    console.log('✅ Email service is ready to send emails (SendGrid configured)');
     return { success: true };
   } catch (error) {
     console.error('❌ Email service configuration error:', error.message);
     return { success: false, error: error.message };
   }
+}
+
+/**
+ * Send password reset email
+ * @param {string} to - Recipient email address
+ * @param {string} name - Recipient name
+ * @param {string} resetToken - Password reset token
+ * @param {string} userType - 'user' or 'doctor'
+ * @returns {Promise<object>} - Result of email sending
+ */
+async function sendPasswordResetEmail(to, name, resetToken, userType = 'user') {
+  const appUrl = process.env.APP_URL || 'http://localhost:4200';
+  const resetUrl = `${appUrl}/reset-password?token=${resetToken}&type=${userType}`;
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Reset Your Password</title>
+    </head>
+    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fa;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f7fa; padding: 40px 0;">
+        <tr>
+          <td align="center">
+            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+              
+              <!-- Header -->
+              <tr>
+                <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center;">
+                  <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 600;">
+                    🔐 Reset Your Password
+                  </h1>
+                </td>
+              </tr>
+              
+              <!-- Content -->
+              <tr>
+                <td style="padding: 40px 30px;">
+                  <p style="margin: 0 0 20px; color: #2d3748; font-size: 16px; line-height: 1.6;">
+                    Hi <strong>${name}</strong>,
+                  </p>
+                  
+                  <p style="margin: 0 0 20px; color: #4a5568; font-size: 15px; line-height: 1.6;">
+                    We received a request to reset your password for your Health Connect account. 
+                    Click the button below to create a new password:
+                  </p>
+                  
+                  <!-- Reset Button -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
+                    <tr>
+                      <td align="center">
+                        <a href="${resetUrl}" 
+                           style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(102, 126, 234, 0.4);">
+                          Reset My Password
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                  
+                  <!-- Additional Info -->
+                  <div style="background-color: #fff5f5; border-left: 4px solid #f56565; padding: 16px; border-radius: 6px; margin: 30px 0;">
+                    <p style="margin: 0; color: #742a2a; font-size: 14px; line-height: 1.5;">
+                      <strong>⚠️ Important:</strong> This link will expire in <strong>1 hour</strong> for security reasons.
+                    </p>
+                  </div>
+                  
+                  <p style="margin: 20px 0 0; color: #718096; font-size: 14px; line-height: 1.6;">
+                    If the button doesn't work, copy and paste this link into your browser:
+                  </p>
+                  <p style="margin: 10px 0; word-break: break-all;">
+                    <a href="${resetUrl}" style="color: #667eea; text-decoration: none; font-size: 13px;">
+                      ${resetUrl}
+                    </a>
+                  </p>
+                  
+                  <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+                  
+                  <p style="margin: 0; color: #718096; font-size: 13px; line-height: 1.5;">
+                    <strong>Didn't request this?</strong><br>
+                    If you didn't request a password reset, you can safely ignore this email. 
+                    Your password will remain unchanged.
+                  </p>
+                </td>
+              </tr>
+              
+              <!-- Footer -->
+              <tr>
+                <td style="background-color: #f7fafc; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0;">
+                  <p style="margin: 0 0 10px; color: #a0aec0; font-size: 13px;">
+                    This is an automated email from Health Connect
+                  </p>
+                  <p style="margin: 0; color: #cbd5e0; font-size: 12px;">
+                    © ${new Date().getFullYear()} Health Connect. All rights reserved.
+                  </p>
+                </td>
+              </tr>
+              
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
+
+  const text = `
+    Hi ${name},
+
+    We received a request to reset your password for your Health Connect account.
+    
+    Click the link below to reset your password:
+    ${resetUrl}
+    
+    This link will expire in 1 hour for security reasons.
+    
+    If you didn't request a password reset, you can safely ignore this email.
+    
+    Best regards,
+    Health Connect Team
+  `;
+
+  return sendEmail({
+    to,
+    subject: '🔐 Reset Your Password - Health Connect',
+    html,
+    text
+  });
 }
 
 // Export functions
@@ -637,5 +764,6 @@ module.exports = {
   sendVerificationEmail,
   sendPrescriptionShare,
   sendNewsletterWelcome,
+  sendPasswordResetEmail,
   testConnection
 };

@@ -11,26 +11,17 @@ async function columnExists(table, column) {
 
 async function migrate() {
     try {
-        console.log('Starting Geolocation Migration (MySQL Compatible)...');
-
         const tables = ['hospitals', 'pharmacies', 'doctors'];
 
         for (const table of tables) {
-            console.log(`Checking table: ${table}`);
-
             if (!(await columnExists(table, 'latitude'))) {
-                console.log(`Adding latitude to ${table}...`);
                 await db.execute(`ALTER TABLE ${table} ADD COLUMN latitude DECIMAL(10, 8)`);
             }
 
             if (!(await columnExists(table, 'longitude'))) {
-                console.log(`Adding longitude to ${table}...`);
                 await db.execute(`ALTER TABLE ${table} ADD COLUMN longitude DECIMAL(11, 8)`);
             }
         }
-
-        // 4. Seed Dummy Data for testing (Delhi area)
-        console.log('Seeding dummy coordinates...');
 
         // Update some hospitals
         await db.execute('UPDATE hospitals SET latitude = 28.6139, longitude = 77.2090 WHERE id % 3 = 0');

@@ -262,14 +262,12 @@ export class ProfileComponent implements OnInit {
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      console.log('File selected:', file.name);
       this.selectedFile = file;
 
       // Create preview
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
-        console.log('Preview generated');
         this.cdr.detectChanges(); // Force update
       };
       reader.readAsDataURL(file);
@@ -457,7 +455,6 @@ export class ProfileComponent implements OnInit {
   }
 
   confirmChangePassword() {
-    console.log('Confirm Change Password clicked');
     if (this.newPassword && this.newPassword.length >= 6) {
       this.profileService.changePassword(this.isDoctor, this.newPassword).subscribe({
         next: () => {
@@ -476,7 +473,6 @@ export class ProfileComponent implements OnInit {
 
   // Enable 2FA
   enable2FA() {
-    console.log('Enable 2FA clicked');
     this.show2FAModal = true;
   }
 
@@ -495,7 +491,6 @@ export class ProfileComponent implements OnInit {
 
   // Delete account
   deleteAccount() {
-    console.log('Delete Account clicked');
     this.showDeleteModal = true;
   }
 

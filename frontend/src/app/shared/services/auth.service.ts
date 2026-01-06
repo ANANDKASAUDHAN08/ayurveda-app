@@ -76,6 +76,24 @@ export class AuthService {
         return this.http.post(`${environment.apiUrl}${endpoint}`, { email });
     }
 
+    // Forgot Password - Request password reset
+    forgotPassword(email: string, userType: 'user' | 'doctor'): Observable<any> {
+        const endpoint = userType === 'doctor' ? '/doctors/forgot-password' : '/auth/forgot-password';
+        return this.http.post(`${environment.apiUrl}${endpoint}`, { email });
+    }
+
+    // Reset Password - Update password with token
+    resetPassword(token: string, newPassword: string, userType: 'user' | 'doctor'): Observable<any> {
+        const endpoint = userType === 'doctor' ? '/doctors/reset-password' : '/auth/reset-password';
+        return this.http.post(`${environment.apiUrl}${endpoint}`, { token, newPassword });
+    }
+
+    // Verify Reset Token - Check if token is valid
+    verifyResetToken(token: string, userType: 'user' | 'doctor'): Observable<any> {
+        const endpoint = userType === 'doctor' ? `/doctors/verify-reset-token/${token}` : `/auth/verify-reset-token/${token}`;
+        return this.http.get(`${environment.apiUrl}${endpoint}`);
+    }
+
     getToken(): string | null {
         return localStorage.getItem(this.tokenKey);
     }

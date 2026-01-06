@@ -32,6 +32,7 @@ import { SearchResultsComponent } from './pages/search-results/search-results.co
 import { MedicalDevicesComponent } from './components/medical-devices/medical-devices.component';
 import { MedicinesComponent } from './components/medicines/medicines.component';
 import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { HealthPlansComponent } from './components/health-plans/health-plans.component';
 import { LabTestsComponent } from './components/lab-tests/lab-tests.component';
 import { CareerComponent } from './components/career/career.component';
@@ -97,6 +98,7 @@ export const routes: Routes = [
 
     // Email verification (public - no auth required)
     { path: 'verify-email', component: VerifyEmailComponent },
+    { path: 'reset-password', component: ResetPasswordComponent },
 
     // Shared prescription view (public - no auth required)
     {

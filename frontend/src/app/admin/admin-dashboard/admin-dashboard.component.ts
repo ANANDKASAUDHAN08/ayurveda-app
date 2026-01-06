@@ -29,7 +29,6 @@ export class AdminDashboardComponent implements OnInit {
 
     loadStats() {
         this.loading = true;
-        console.log('Starting to load dashboard stats...');
 
         forkJoin({
             featuredDoctors: this.adminService.getFeaturedDoctors(),
@@ -38,7 +37,6 @@ export class AdminDashboardComponent implements OnInit {
             pharmacies: this.adminService.getPharmacies()
         }).subscribe({
             next: (results: any) => {
-                console.log('Dashboard stats loaded:', results);
                 this.stats.featuredDoctors = results.featuredDoctors?.featuredDoctors?.length || 0;
                 this.stats.articles = results.articles?.articles?.length || 0;
                 this.stats.hospitals = results.hospitals?.hospitals?.length || 0;
