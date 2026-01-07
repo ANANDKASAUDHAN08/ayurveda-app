@@ -479,6 +479,7 @@ export class ProfileComponent implements OnInit {
   twoFactorSetup: any = null;
   twoFactorCode = '';
   isVerifying2FA = false;
+  isSecretCopied = false;
 
   enable2FA() {
     this.isLoading = true;
@@ -494,6 +495,21 @@ export class ProfileComponent implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  copySecret() {
+    if (this.twoFactorSetup?.secret) {
+      navigator.clipboard.writeText(this.twoFactorSetup.secret).then(() => {
+        this.isSecretCopied = true;
+        this.snackbar.success('Secret key copied to clipboard');
+        setTimeout(() => {
+          this.isSecretCopied = false;
+        }, 2000);
+      }).catch(err => {
+        console.error('Could not copy text: ', err);
+        this.snackbar.error('Failed to copy secret key');
+      });
+    }
   }
 
   confirmEnable2FA() {

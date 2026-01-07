@@ -17,7 +17,7 @@ async function generatePrescriptionPDF(prescription, outputPath) {
                 margin: 50,
                 info: {
                     Title: `Prescription #${prescription.id}`,
-                    Author: 'Ayurveda Healthcare',
+                    Author: 'HealthConnect',
                     Subject: 'Medical Prescription'
                 }
             });
@@ -29,7 +29,7 @@ async function generatePrescriptionPDF(prescription, outputPath) {
             // Header - Logo and Title
             doc.fontSize(24)
                 .fillColor('#059669')
-                .text('AYURVEDA HEALTHCARE', { align: 'center' })
+                .text('HEALTHCONNECT', { align: 'center' })
                 .fontSize(12)
                 .fillColor('#666')
                 .text('Digital Prescription', { align: 'center' })

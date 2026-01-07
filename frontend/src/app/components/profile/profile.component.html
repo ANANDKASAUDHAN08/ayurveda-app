@@ -887,10 +887,16 @@
                                 Manual Entry Key
                             </label>
                             <div
-                                class="bg-slate-50 px-4 py-2 rounded-lg border border-slate-200 flex items-center justify-between">
+                                class="bg-slate-50 px-4 py-2 rounded-lg border border-slate-200 flex items-center justify-between group/key">
                                 <code class="text-emerald-700 font-bold tracking-wider">
                                     {{ twoFactorSetup.secret }}
                                 </code>
+                                <button (click)="copySecret()" type="button"
+                                    class="p-2 text-slate-400 hover:text-emerald-600 transition-colors flex items-center gap-2"
+                                    [title]="isSecretCopied ? 'Copied!' : 'Copy to clipboard'">
+                                    <i class="fas"
+                                        [ngClass]="isSecretCopied ? 'fa-check text-emerald-500' : 'fa-copy'"></i>
+                                </button>
                             </div>
                         </div>
 
