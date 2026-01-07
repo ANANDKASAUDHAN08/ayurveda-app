@@ -149,6 +149,12 @@
                     {{ 'nav.emergency' | translate }}
                 </a>
 
+                <!-- Install App Button -->
+                <button *ngIf="showInstallButton$ | async" (click)="installApp()"
+                    class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-xl text-sm font-bold hover:bg-emerald-600 hover:text-white transition-all shadow-sm">
+                    <i class="fas fa-download"></i>
+                </button>
+
                 <!-- Search Trigger -->
                 <button (click)="toggleSearchOverlay()"
                     class="p-2.5 hover:bg-slate-100 rounded-xl text-slate-600 transition-all" aria-label="Search">

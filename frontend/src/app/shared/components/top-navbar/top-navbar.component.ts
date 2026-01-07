@@ -12,6 +12,7 @@ import { NotificationBellComponent } from '../../../components/shared/notificati
 import { LocationSelectorComponent } from '../location-selector/location-selector.component';
 import { LocationService, UserLocation } from '../../services/location.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
+import { PwaInstallService } from '../../services/pwa-install.service';
 
 @Component({
   selector: 'app-top-navbar',
@@ -72,13 +73,17 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   // Location State
   private locationSubscription?: Subscription;
 
+  // PWA Install State
+  showInstallButton$ = this.pwaInstallService.showInstallButton$;
+
   constructor(
     public router: Router,
     public authService: AuthService,
     private cartService: CartService,
     private searchService: SearchService,
     private snackbarService: SnackbarService,
-    public locationService: LocationService
+    public locationService: LocationService,
+    private pwaInstallService: PwaInstallService
   ) { }
 
   ngOnInit() {
@@ -502,5 +507,9 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     if (this.careDropdownOpen && !target.closest('.care-dropdown-container')) {
       this.careDropdownOpen = false;
     }
+  }
+
+  installApp() {
+    this.pwaInstallService.installApp();
   }
 }

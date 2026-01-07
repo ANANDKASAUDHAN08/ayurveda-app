@@ -45,7 +45,8 @@ export class TranslationService {
                 'pharmacies': 'Pharmacies',
                 'nearby': 'Nearby Care',
                 'patient_login': 'Patient Login',
-                'doctor_login': 'Doctor Login'
+                'doctor_login': 'Doctor Login',
+                'install_app': 'Install App'
             },
             'search': {
                 'placeholder': 'Search doctors, medicines or tests...',
@@ -146,7 +147,8 @@ export class TranslationService {
                 'pharmacies': 'फार्मेसी',
                 'nearby': 'पास की देखभाल',
                 'patient_login': 'मरीज लॉगिन',
-                'doctor_login': 'डॉक्टर लॉगिन'
+                'doctor_login': 'डॉक्टर लॉगिन',
+                'install_app': 'ऐप इंस्टॉल करें'
             },
             'search': {
                 'placeholder': 'डॉक्टर, दवाएं या टेस्ट खोजें...',

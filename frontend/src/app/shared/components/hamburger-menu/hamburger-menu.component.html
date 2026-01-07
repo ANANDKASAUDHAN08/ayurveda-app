@@ -183,6 +183,20 @@
         <!-- Divider -->
         <div class="border-t border-slate-200 my-2"></div>
 
+        <!-- Section 4.5: App Installation -->
+        <div *ngIf="showInstallButton$ | async" class="px-6 pt-4 pb-2">
+            <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider">App</h3>
+        </div>
+        <button *ngIf="showInstallButton$ | async" (click)="installApp()"
+            class="w-full flex items-center gap-4 px-6 py-4 hover:bg-emerald-50 active:bg-emerald-100 transition-colors">
+            <i class="fas fa-download text-emerald-600 w-5"></i>
+            <span class="text-slate-700 font-bold">Install App</span>
+            <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
+        </button>
+
+        <!-- Divider -->
+        <div *ngIf="showInstallButton$ | async" class="border-t border-slate-200 my-2"></div>
+
         <!-- Section 5: Emergency -->
         <div class="px-6 pt-4 pb-2">
             <h3 class="text-xs font-black text-red-400 uppercase tracking-wider">Emergency</h3>

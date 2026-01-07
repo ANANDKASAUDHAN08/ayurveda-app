@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
+import { PwaInstallService } from '../../services/pwa-install.service';
 interface MenuItem {
   title: string;
   icon: string;
@@ -40,11 +41,13 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy, OnChanges {
   private authSubscription?: Subscription;
 
   showLoginDropdown = false;
+  showInstallButton$ = this.pwaInstallService.showInstallButton$;
 
   constructor(
     public authService: AuthService,
     private router: Router,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private pwaInstallService: PwaInstallService
   ) { }
 
   ngOnInit() {
@@ -128,5 +131,10 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy, OnChanges {
     this.authService.logout();
     this.closeMenu();
     this.router.navigate(['/']);
+  }
+
+  installApp() {
+    this.pwaInstallService.installApp();
+    this.closeMenu();
   }
 }
