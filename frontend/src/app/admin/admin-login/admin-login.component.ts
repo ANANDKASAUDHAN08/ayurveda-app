@@ -101,8 +101,12 @@ export class AdminLoginComponent {
 
         this.authService.login(credentials).subscribe({
             next: (response) => {
-                // Check if user is admin
-                if (response.user.role === 'admin') {
+                this.loading = false;
+                if (response.require2FA) {
+                    this.show2FAChallenge = true;
+                    this.pendingLoginData = { userId: response.userId, role: response.role };
+                    this.snackbarService.show('Two-factor authentication required', 'info');
+                } else if (response.user.role === 'admin') {
                     this.snackbarService.show('Welcome back, Admin!', 'success');
                     this.router.navigate(['/admin/dashboard']);
                 } else {
@@ -110,13 +114,36 @@ export class AdminLoginComponent {
                     localStorage.removeItem('user');
                     localStorage.removeItem('token');
                 }
-                this.loading = false;
             },
             error: (error) => {
                 const msg = error.error?.message || 'Invalid credentials';
                 this.errorMessage = msg;
                 this.snackbarService.show(msg, 'error');
                 this.loading = false;
+            }
+        });
+    }
+
+    show2FAChallenge = false;
+    twoFactorCode = '';
+    pendingLoginData: any = null;
+
+    verify2FA() {
+        if (!this.twoFactorCode || this.twoFactorCode.length !== 6) {
+            this.snackbarService.show('Please enter a 6-digit code', 'error');
+            return;
+        }
+
+        this.loading = true;
+        this.authService.verify2FALogin(this.pendingLoginData.userId, this.pendingLoginData.role, this.twoFactorCode).subscribe({
+            next: (res: any) => {
+                this.loading = false;
+                this.snackbarService.show('2FA Verification successful!', 'success');
+                this.router.navigate(['/admin/dashboard']);
+            },
+            error: (err: any) => {
+                this.loading = false;
+                this.snackbarService.show(err.error?.message || 'Invalid 2FA code', 'error');
             }
         });
     }

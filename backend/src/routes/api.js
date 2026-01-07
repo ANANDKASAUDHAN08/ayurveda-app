@@ -8,6 +8,7 @@ const appointmentController = require('../controllers/appointmentController');
 const slotControllerNew = require('../controllers/slotControllerNew');
 const appointmentControllerNew = require('../controllers/appointmentControllerNew');
 const labTestController = require('../controllers/labTestController');
+const twoFactorController = require('../controllers/twoFactorController');
 const auth = require('../middleware/auth');
 
 // Auth
@@ -22,8 +23,13 @@ router.get('/auth/verify-reset-token/:token', authController.verifyResetToken);
 router.get('/users/profile', auth, userController.getProfile);
 router.put('/users/profile', auth, userController.updateProfile);
 router.put('/users/change-password', auth, userController.changePassword);
-router.put('/users/enable-2fa', auth, userController.enable2FA);
 router.delete('/users/profile', auth, userController.deleteAccount);
+
+// 2FA Management
+router.get('/auth/2fa/setup', auth, twoFactorController.setup2FA);
+router.post('/auth/2fa/verify-setup', auth, twoFactorController.verify2FASetup);
+router.post('/auth/2fa/disable', auth, twoFactorController.disable2FA);
+router.post('/auth/2fa/verify-login', twoFactorController.verify2FALogin);
 
 // Doctors
 router.post('/doctors/register', doctorController.registerDoctor);
@@ -31,6 +37,7 @@ router.post('/doctors/resend-verification', doctorController.resendVerification)
 router.post('/doctors/forgot-password', doctorController.forgotPassword);
 router.post('/doctors/reset-password', doctorController.resetPassword);
 router.get('/doctors/verify-reset-token/:token', doctorController.verifyResetToken);
+router.get('/doctors/profile', auth, doctorController.getProfile);
 router.put('/doctors/profile', auth, doctorController.updateDoctorProfile);
 router.put('/doctors/change-password', auth, doctorController.changePassword);
 router.put('/doctors/enable-2fa', auth, doctorController.enable2FA);

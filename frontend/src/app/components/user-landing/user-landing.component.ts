@@ -1,8 +1,9 @@
 import { environment } from '@env/environment';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../shared/services/auth.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
@@ -19,7 +20,7 @@ import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/pa
   ],
   templateUrl: './user-landing.component.html'
 })
-export class UserLandingComponent implements OnInit {
+export class UserLandingComponent implements OnInit, OnDestroy {
   @ViewChild('emailInput') emailInput!: ElementRef;
   @ViewChild('nameInput') nameInput!: ElementRef;
 
@@ -41,6 +42,7 @@ export class UserLandingComponent implements OnInit {
   forgotPasswordEmail = '';
   forgotPasswordSubmitting = false;
   isPasswordFocused: boolean = false;
+  private authSub: Subscription | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -64,7 +66,29 @@ export class UserLandingComponent implements OnInit {
   }
 
   ngOnInit() {
-    // No OAuth handling needed - backend redirects to /home
+    // Check if already logged in (for manual refresh or direct access)
+    if (this.authService.isLoggedIn() && this.authService.getRole() === 'user') {
+      this.router.navigate(['/user/dashboard']);
+      return;
+    }
+
+    // Listen for auth status changes (for cross-tab sync)
+    this.authSub = this.authService.authStatus$.subscribe(isLoggedIn => {
+      if (isLoggedIn && this.authService.getRole() === 'user') {
+        // Only redirect if we're not already in the middle of a 2FA flow in THIS tab
+        // Or if we were, but now we're fully logged in elsewhere
+        if (!this.show2FAChallenge) {
+          this.snackbar.success('Session detected. Redirecting...');
+          this.router.navigate(['/user/dashboard']);
+        }
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.authSub) {
+      this.authSub.unsubscribe();
+    }
   }
 
   signInWithGoogle() {
@@ -84,13 +108,21 @@ export class UserLandingComponent implements OnInit {
     this.showLoginPassword = !this.showLoginPassword;
   }
 
+  show2FAChallenge = false;
+  twoFactorCode = '';
+  pendingLoginData: any = null;
+
   onLoginSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true;
       this.authService.login(this.loginForm.value).subscribe({
         next: (res: any) => {
           this.isLoading = false;
-          if (res.user && res.user.role === 'user') {
+          if (res.require2FA) {
+            this.show2FAChallenge = true;
+            this.pendingLoginData = { userId: res.userId, role: res.role };
+            this.snackbar.info('Two-factor authentication required');
+          } else if (res.user && res.user.role === 'user') {
             this.snackbar.success('Login successful!');
             this.router.navigate(['/user/dashboard']);
           } else {
@@ -113,6 +145,26 @@ export class UserLandingComponent implements OnInit {
     } else {
       this.loginForm.markAllAsTouched();
     }
+  }
+
+  verify2FALogin() {
+    if (!this.twoFactorCode || this.twoFactorCode.length !== 6) {
+      this.snackbar.error('Please enter a 6-digit code');
+      return;
+    }
+
+    this.isLoading = true;
+    this.authService.verify2FALogin(this.pendingLoginData.userId, this.pendingLoginData.role, this.twoFactorCode).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        this.snackbar.success('2FA Verification successful!');
+        this.router.navigate(['/user/dashboard']);
+      },
+      error: (err: any) => {
+        this.isLoading = false;
+        this.snackbar.error(err.error?.message || 'Invalid 2FA code');
+      }
+    });
   }
 
   // --- Register Logic ---

@@ -3,8 +3,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <!-- Header -->
         <div class="mb-6 sm:mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">Settings</h1>
-            <p class="text-slate-600">Customize your app experience</p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">{{ 'settings.title' | translate }}</h1>
+            <p class="text-slate-600">{{ 'settings.subtitle' | translate }}</p>
         </div>
 
         <!-- Settings Container -->
@@ -19,7 +19,7 @@
                             [class.text-slate-600]="activeTab !== 'appearance'"
                             class="w-full text-left px-4 py-3 rounded-xl transition-all font-bold flex items-center gap-3 text-sm sm:text-base hover:bg-white">
                             <i class="fas fa-palette w-5 text-center"></i>
-                            <span>Appearance</span>
+                            <span>{{ 'settings.appearance' | translate }}</span>
                         </button>
                         <button (click)="activeTab = 'notifications'" [class.bg-white]="activeTab === 'notifications'"
                             [class.text-emerald-600]="activeTab === 'notifications'"
@@ -27,7 +27,7 @@
                             [class.text-slate-600]="activeTab !== 'notifications'"
                             class="w-full text-left px-4 py-3 rounded-xl transition-all font-bold flex items-center gap-3 text-sm sm:text-base hover:bg-white">
                             <i class="fas fa-bell w-5 text-center"></i>
-                            <span>Notifications</span>
+                            <span>{{ 'settings.notifications' | translate }}</span>
                         </button>
                         <button (click)="activeTab = 'language'" [class.bg-white]="activeTab === 'language'"
                             [class.text-emerald-600]="activeTab === 'language'"
@@ -35,7 +35,7 @@
                             [class.text-slate-600]="activeTab !== 'language'"
                             class="w-full text-left px-4 py-3 rounded-xl transition-all font-bold flex items-center gap-3 text-sm sm:text-base hover:bg-white">
                             <i class="fas fa-globe w-5 text-center"></i>
-                            <span>Language & Region</span>
+                            <span>{{ 'settings.language_region' | translate }}</span>
                         </button>
                         <button (click)="activeTab = 'preferences'" [class.bg-white]="activeTab === 'preferences'"
                             [class.text-emerald-600]="activeTab === 'preferences'"
@@ -43,7 +43,7 @@
                             [class.text-slate-600]="activeTab !== 'preferences'"
                             class="w-full text-left px-4 py-3 rounded-xl transition-all font-bold flex items-center gap-3 text-sm sm:text-base hover:bg-white">
                             <i class="fas fa-sliders-h w-5 text-center"></i>
-                            <span>Preferences</span>
+                            <span>{{ 'settings.preferences' | translate }}</span>
                         </button>
                     </nav>
                 </aside>
@@ -53,12 +53,14 @@
                     <!-- Appearance Tab -->
                     <div *ngIf="activeTab === 'appearance'"
                         class="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Appearance</h2>
-                        <p class="text-slate-600 mb-6 sm:mb-8">Customize how the app looks and feels</p>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">{{ 'settings.appearance' |
+                            translate }}</h2>
+                        <p class="text-slate-600 mb-6 sm:mb-8">{{ 'settings.subtitle' | translate }}</p>
 
                         <!-- Theme Selection -->
                         <div class="mb-8">
-                            <label class="block text-sm font-bold text-slate-700 mb-4">Theme</label>
+                            <label class="block text-sm font-bold text-slate-700 mb-4">{{ 'settings.theme' | translate
+                                }}</label>
                             <div class="grid grid-cols-3 gap-3 sm:gap-4 max-w-md">
                                 <button (click)="setTheme('light')" [class.ring-2]="settings.theme === 'light'"
                                     [class.ring-emerald-500]="settings.theme === 'light'"
@@ -67,7 +69,8 @@
                                         class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 bg-white rounded-lg border border-slate-200 flex items-center justify-center">
                                         <i class="fas fa-sun text-lg sm:text-xl text-amber-500"></i>
                                     </div>
-                                    <div class="text-xs sm:text-sm font-bold text-slate-700">Light</div>
+                                    <div class="text-xs sm:text-sm font-bold text-slate-700">{{ 'settings.theme_light' |
+                                        translate }}</div>
                                 </button>
                                 <button (click)="setTheme('dark')" [class.ring-2]="settings.theme === 'dark'"
                                     [class.ring-emerald-500]="settings.theme === 'dark'"
@@ -76,7 +79,8 @@
                                         class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 bg-slate-900 rounded-lg flex items-center justify-center">
                                         <i class="fas fa-moon text-lg sm:text-xl text-blue-400"></i>
                                     </div>
-                                    <div class="text-xs sm:text-sm font-bold text-slate-700">Dark</div>
+                                    <div class="text-xs sm:text-sm font-bold text-slate-700">{{ 'settings.theme_dark' |
+                                        translate }}</div>
                                 </button>
                                 <button (click)="setTheme('system')" [class.ring-2]="settings.theme === 'system'"
                                     [class.ring-emerald-500]="settings.theme === 'system'"
@@ -85,7 +89,8 @@
                                         class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 bg-gradient-to-br from-white to-slate-900 rounded-lg flex items-center justify-center">
                                         <i class="fas fa-desktop text-lg sm:text-xl text-slate-500"></i>
                                     </div>
-                                    <div class="text-xs sm:text-sm font-bold text-slate-700">System</div>
+                                    <div class="text-xs sm:text-sm font-bold text-slate-700">{{ 'settings.theme_system'
+                                        | translate }}</div>
                                 </button>
                             </div>
                         </div>
@@ -93,23 +98,27 @@
                         <!-- Display Settings -->
                         <div class="space-y-6">
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-3">Font Size</label>
+                                <label class="block text-sm font-bold text-slate-700 mb-3">{{ 'settings.font_size' |
+                                    translate }}</label>
                                 <div class="flex items-center gap-4">
-                                    <span class="text-xs text-slate-500 font-medium w-12">Small</span>
+                                    <span class="text-xs text-slate-500 font-medium w-12">{{ 'common.small' | translate
+                                        }}</span>
                                     <input type="range" min="12" max="18" step="2" [(ngModel)]="settings.fontSize"
                                         class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
-                                    <span class="text-xs text-slate-500 font-medium w-12 text-right">Large</span>
+                                    <span class="text-xs text-slate-500 font-medium w-12 text-right">{{ 'common.large' |
+                                        translate }}</span>
                                 </div>
-                                <div class="mt-2 text-sm text-slate-600">Current: <span
+                                <div class="mt-2 text-sm text-slate-600">{{ 'common.current' | translate }}: <span
                                         class="font-bold">{{settings.fontSize}}px</span></div>
                             </div>
 
                             <div
                                 class="flex items-center justify-between p-4 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-100">
                                 <div>
-                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Compact Mode</h4>
-                                    <p class="text-xs sm:text-sm text-slate-500">Use a denser layout to show more
-                                        content</p>
+                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">{{ 'settings.compact_mode'
+                                        | translate }}</h4>
+                                    <p class="text-xs sm:text-sm text-slate-500">{{ 'settings.compact_mode_desc' |
+                                        translate }}</p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" [(ngModel)]="settings.compactMode" class="sr-only peer">
@@ -122,9 +131,10 @@
                             <div
                                 class="flex items-center justify-between p-4 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-100">
                                 <div>
-                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Reduce Motion</h4>
-                                    <p class="text-xs sm:text-sm text-slate-500">Minimize animations for better
-                                        accessibility</p>
+                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">{{
+                                        'settings.reduce_motion' | translate }}</h4>
+                                    <p class="text-xs sm:text-sm text-slate-500">{{ 'settings.reduce_motion_desc' |
+                                        translate }}</p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" [(ngModel)]="settings.reduceMotion" class="sr-only peer">
@@ -139,7 +149,8 @@
                     <!-- Notifications Tab -->
                     <div *ngIf="activeTab === 'notifications'"
                         class="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Notifications</h2>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">{{ 'settings.notifications' |
+                            translate }}</h2>
                         <p class="text-slate-600 mb-6 sm:mb-8">Control how and when you receive updates</p>
 
                         <div class="space-y-4 sm:space-y-6">
@@ -149,11 +160,12 @@
                                 <div class="flex-1 pr-4">
                                     <div class="flex items-center gap-2 mb-1">
                                         <i class="fas fa-envelope text-emerald-600"></i>
-                                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">Email Notifications
+                                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">{{
+                                            'settings.notif_email' | translate }}
                                         </h4>
                                     </div>
-                                    <p class="text-xs sm:text-sm text-slate-500">Receive appointment and order updates
-                                        via email</p>
+                                    <p class="text-xs sm:text-sm text-slate-500">{{ 'settings.notif_email_desc' |
+                                        translate }}</p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" [(ngModel)]="notifications.email" class="sr-only peer">
@@ -169,9 +181,11 @@
                                 <div class="flex-1 pr-4">
                                     <div class="flex items-center gap-2 mb-1">
                                         <i class="fas fa-sms text-blue-600"></i>
-                                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">SMS Notifications</h4>
+                                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">{{
+                                            'settings.notif_sms' | translate }}</h4>
                                     </div>
-                                    <p class="text-xs sm:text-sm text-slate-500">Critical alerts and OTPs on your phone
+                                    <p class="text-xs sm:text-sm text-slate-500">{{ 'settings.notif_sms_desc' |
+                                        translate }}
                                     </p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
@@ -188,11 +202,12 @@
                                 <div class="flex-1 pr-4">
                                     <div class="flex items-center gap-2 mb-1">
                                         <i class="fas fa-mobile-alt text-purple-600"></i>
-                                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">Push Notifications
+                                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">{{
+                                            'settings.notif_push' | translate }}
                                         </h4>
                                     </div>
-                                    <p class="text-xs sm:text-sm text-slate-500">Browser notifications for real-time
-                                        updates</p>
+                                    <p class="text-xs sm:text-sm text-slate-500">{{ 'settings.notif_push_desc' |
+                                        translate }}</p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" [(ngModel)]="notifications.push" class="sr-only peer">
@@ -208,10 +223,12 @@
                                 <div class="flex-1 pr-4">
                                     <div class="flex items-center gap-2 mb-1">
                                         <i class="fas fa-gift text-pink-600"></i>
-                                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">Promotions & Offers
+                                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">{{
+                                            'settings.notif_promo' | translate }}
                                         </h4>
                                     </div>
-                                    <p class="text-xs sm:text-sm text-slate-500">New features and seasonal discounts</p>
+                                    <p class="text-xs sm:text-sm text-slate-500">{{ 'settings.notif_promo_desc' |
+                                        translate }}</p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" [(ngModel)]="notifications.promotions" class="sr-only peer">
@@ -226,18 +243,21 @@
                                 class="p-4 sm:p-6 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl sm:rounded-2xl border border-purple-100">
                                 <div class="flex items-center gap-2 mb-4">
                                     <i class="fas fa-moon text-purple-600"></i>
-                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Quiet Hours</h4>
+                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">{{ 'settings.quiet_hours'
+                                        | translate }}</h4>
                                 </div>
-                                <p class="text-xs sm:text-sm text-slate-600 mb-4">Don't send notifications during these
-                                    hours</p>
+                                <p class="text-xs sm:text-sm text-slate-600 mb-4">{{ 'settings.quiet_hours_desc' |
+                                    translate }}</p>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-2">Start Time</label>
+                                        <label class="block text-xs font-bold text-slate-700 mb-2">{{
+                                            'settings.start_time' | translate }}</label>
                                         <input type="time" [(ngModel)]="notifications.quietStart"
                                             class="w-full px-3 py-2 text-sm rounded-lg border border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-50 outline-none">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-2">End Time</label>
+                                        <label class="block text-xs font-bold text-slate-700 mb-2">{{
+                                            'settings.end_time' | translate }}</label>
                                         <input type="time" [(ngModel)]="notifications.quietEnd"
                                             class="w-full px-3 py-2 text-sm rounded-lg border border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-50 outline-none">
                                     </div>
@@ -249,13 +269,14 @@
                     <!-- Language & Region Tab -->
                     <div *ngIf="activeTab === 'language'"
                         class="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Language & Region</h2>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">{{ 'settings.language_region' |
+                            translate }}</h2>
                         <p class="text-slate-600 mb-6 sm:mb-8">Customize language and regional settings</p>
 
                         <div class="space-y-6">
                             <div>
                                 <label class="block text-sm font-bold text-slate-700 mb-3">Language</label>
-                                <select [(ngModel)]="language.selected"
+                                <select [(ngModel)]="language.selected" (change)="onLanguageChange()"
                                     class="w-full max-w-md px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 outline-none bg-slate-50 text-sm sm:text-base">
                                     <option value="en">English</option>
                                     <option value="hi">हिन्दी (Hindi)</option>
@@ -267,7 +288,8 @@
                             </div>
 
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-3">Date Format</label>
+                                <label class="block text-sm font-bold text-slate-700 mb-3">{{ 'settings.date_format' |
+                                    translate }}</label>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl">
                                     <button (click)="language.dateFormat = 'DD/MM/YYYY'"
                                         [class.ring-2]="language.dateFormat === 'DD/MM/YYYY'"
@@ -291,7 +313,8 @@
                             </div>
 
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-3">Time Format</label>
+                                <label class="block text-sm font-bold text-slate-700 mb-3">{{ 'settings.time_format' |
+                                    translate }}</label>
                                 <div class="grid grid-cols-2 gap-3 max-w-md">
                                     <button (click)="language.timeFormat = '12h'"
                                         [class.ring-2]="language.timeFormat === '12h'"
@@ -309,7 +332,8 @@
                             </div>
 
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-3">Timezone</label>
+                                <label class="block text-sm font-bold text-slate-700 mb-3">{{ 'settings.timezone' |
+                                    translate }}</label>
                                 <select [(ngModel)]="language.timezone"
                                     class="w-full max-w-md px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 outline-none bg-slate-50 text-sm sm:text-base">
                                     <option value="Asia/Kolkata">Asia/Kolkata (IST +5:30)</option>
@@ -321,7 +345,8 @@
                             </div>
 
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-3">Currency</label>
+                                <label class="block text-sm font-bold text-slate-700 mb-3">{{ 'settings.currency' |
+                                    translate }}</label>
                                 <select [(ngModel)]="language.currency"
                                     class="w-full max-w-md px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 outline-none bg-slate-50 text-sm sm:text-base">
                                     <option value="INR">₹ Indian Rupee (INR)</option>
@@ -337,16 +362,19 @@
                     <!-- Preferences Tab -->
                     <div *ngIf="activeTab === 'preferences'"
                         class="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">App Preferences</h2>
-                        <p class="text-slate-600 mb-6 sm:mb-8">Control app behavior and privacy settings</p>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">{{ 'settings.preferences' |
+                            translate }}</h2>
+                        <p class="text-slate-600 mb-6 sm:mb-8">{{ 'settings.subtitle' | translate }}</p>
 
                         <div class="space-y-4 sm:space-y-6">
                             <div
                                 class="flex items-center justify-between p-4 sm:p-6 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-100">
                                 <div class="flex-1 pr-4">
-                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Auto-refresh Dashboard
+                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">{{ 'settings.auto_refresh'
+                                        | translate }}
                                     </h4>
-                                    <p class="text-xs sm:text-sm text-slate-500">Automatically update appointment data
+                                    <p class="text-xs sm:text-sm text-slate-500">{{ 'settings.auto_refresh_desc' |
+                                        translate }}
                                     </p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
@@ -360,8 +388,10 @@
                             <div
                                 class="flex items-center justify-between p-4 sm:p-6 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-100">
                                 <div class="flex-1 pr-4">
-                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Remember Last Search</h4>
-                                    <p class="text-xs sm:text-sm text-slate-500">Save your previous search filters</p>
+                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">{{
+                                        'settings.remember_search' | translate }}</h4>
+                                    <p class="text-xs sm:text-sm text-slate-500">{{ 'settings.remember_search_desc' |
+                                        translate }}</p>
                                 </div>
                                 <label class="relative inline-flex items-centers cursor-pointer">
                                     <input type="checkbox" [(ngModel)]="preferences.rememberSearch"
@@ -373,23 +403,25 @@
                             </div>
 
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-3">Default Search Radius</label>
+                                <label class="block text-sm font-bold text-slate-700 mb-3">{{ 'settings.search_radius' |
+                                    translate }}</label>
                                 <div class="flex items-center gap-4">
                                     <span class="text-xs text-slate-500 font-medium w-12">5 km</span>
                                     <input type="range" min="5" max="50" step="5" [(ngModel)]="preferences.searchRadius"
                                         class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
                                     <span class="text-xs text-slate-500 font-medium w-12 text-right">50 km</span>
                                 </div>
-                                <div class="mt-2 text-sm text-slate-600">Current: <span
+                                <div class="mt-2 text-sm text-slate-600">{{ 'common.current' | translate }}: <span
                                         class="font-bold">{{preferences.searchRadius}} km</span></div>
                             </div>
 
                             <div
                                 class="flex items-center justify-between p-4 sm:p-6 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-100">
                                 <div class="flex-1 pr-4">
-                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Share Usage Data</h4>
-                                    <p class="text-xs sm:text-sm text-slate-500">Help us improve by sharing anonymous
-                                        usage data</p>
+                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">{{ 'settings.share_data' |
+                                        translate }}</h4>
+                                    <p class="text-xs sm:text-sm text-slate-500">{{ 'settings.share_data_desc' |
+                                        translate }}</p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" [(ngModel)]="preferences.shareData" class="sr-only peer">
@@ -402,9 +434,10 @@
                             <div
                                 class="flex items-center justify-between p-4 sm:p-6 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-100">
                                 <div class="flex-1 pr-4">
-                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Location Tracking</h4>
-                                    <p class="text-xs sm:text-sm text-slate-500">Enable location for better doctor
-                                        recommendations</p>
+                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">{{
+                                        'settings.location_tracking' | translate }}</h4>
+                                    <p class="text-xs sm:text-sm text-slate-500">{{ 'settings.location_tracking_desc' |
+                                        translate }}</p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" [(ngModel)]="preferences.locationTracking"
@@ -422,7 +455,7 @@
                         <button (click)="saveSettings()"
                             class="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl sm:rounded-2xl font-bold transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl flex items-center gap-2 text-sm sm:text-base">
                             <i class="fas fa-save"></i>
-                            <span>Save Changes</span>
+                            <span>{{ 'common.save' | translate }}</span>
                         </button>
                     </div>
                 </main>

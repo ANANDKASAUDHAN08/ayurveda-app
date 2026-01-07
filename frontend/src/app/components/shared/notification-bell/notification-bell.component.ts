@@ -43,6 +43,8 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
     if (this.showDropdown) {
+      // Refresh unread count immediately
+      this.notificationService.refreshUnreadCount();
       this.loadRecentNotifications();
     }
   }

@@ -4,9 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../shared/services/auth.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
+
+import { OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-doctor-landing',
@@ -21,7 +24,7 @@ import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/pa
   ],
   templateUrl: './doctor-landing.component.html'
 })
-export class DoctorLandingComponent {
+export class DoctorLandingComponent implements OnInit, OnDestroy {
   activeTab: 'login' | 'register' = 'login';
   loginForm: FormGroup;
   registerForm: FormGroup;
@@ -37,6 +40,7 @@ export class DoctorLandingComponent {
   showForgotPasswordModal = false;
   forgotPasswordEmail = '';
   forgotPasswordSubmitting = false;
+  private authSub: Subscription | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -60,7 +64,28 @@ export class DoctorLandingComponent {
   }
 
   ngOnInit() {
-    // No OAuth handling needed - backend redirects to /home
+    // Check if already logged in (for manual refresh or direct access)
+    if (this.authService.isLoggedIn() && this.authService.getRole() === 'doctor') {
+      this.router.navigate(['/doctor/dashboard']);
+      return;
+    }
+
+    // Listen for auth status changes (for cross-tab sync)
+    this.authSub = this.authService.authStatus$.subscribe(isLoggedIn => {
+      if (isLoggedIn && this.authService.getRole() === 'doctor') {
+        // Only redirect if we're not already in the middle of a 2FA flow in THIS tab
+        if (!this.show2FAChallenge) {
+          this.snackbar.success('Session detected. Redirecting...');
+          this.router.navigate(['/doctor/dashboard']);
+        }
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.authSub) {
+      this.authSub.unsubscribe();
+    }
   }
 
   switchTab(tab: 'login' | 'register') {
@@ -88,13 +113,21 @@ export class DoctorLandingComponent {
     this.showRegisterPassword = !this.showRegisterPassword;
   }
 
+  show2FAChallenge = false;
+  twoFactorCode = '';
+  pendingLoginData: any = null;
+
   onLoginSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true;
       this.authService.login(this.loginForm.value).subscribe({
-        next: (res) => {
+        next: (res: any) => {
           this.isLoading = false;
-          if (res.user.role === 'doctor') {
+          if (res.require2FA) {
+            this.show2FAChallenge = true;
+            this.pendingLoginData = { userId: res.userId, role: res.role };
+            this.snackbar.info('Two-factor authentication required');
+          } else if (res.user.role === 'doctor') {
             this.snackbar.success('Welcome back, Doctor!');
             this.router.navigate(['/doctor/dashboard']);
           } else {
@@ -117,6 +150,26 @@ export class DoctorLandingComponent {
     } else {
       this.loginForm.markAllAsTouched();
     }
+  }
+
+  verify2FALogin() {
+    if (!this.twoFactorCode || this.twoFactorCode.length !== 6) {
+      this.snackbar.error('Please enter a 6-digit code');
+      return;
+    }
+
+    this.isLoading = true;
+    this.authService.verify2FALogin(this.pendingLoginData.userId, this.pendingLoginData.role, this.twoFactorCode).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        this.snackbar.success('2FA Verification successful!');
+        this.router.navigate(['/doctor/dashboard']);
+      },
+      error: (err: any) => {
+        this.isLoading = false;
+        this.snackbar.error(err.error?.message || 'Invalid 2FA code');
+      }
+    });
   }
 
   onRegisterSubmit() {

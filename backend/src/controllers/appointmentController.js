@@ -1,4 +1,5 @@
 const db = require('../config/database');
+const NotificationController = require('./notification.controller');
 
 exports.bookAppointment = async (req, res) => {
     try {
@@ -37,6 +38,27 @@ exports.bookAppointment = async (req, res) => {
             'UPDATE slots SET isBooked = TRUE, lockedUntil = NULL, lockedBy = NULL WHERE id = ?',
             [slotId]
         );
+
+        // Get doctor info for notification
+        const [doctors] = await db.execute('SELECT name FROM doctors WHERE id = ?', [slot.doctorId]);
+        const doctorName = doctors[0]?.name || 'Doctor';
+
+        // Send appointment confirmation notification to user
+        try {
+            await NotificationController.createNotification({
+                user_id: userId,
+                type: 'appointment_booked',
+                category: 'appointments',
+                title: 'Appointment Booked Successfully!',
+                message: `Your appointment with Dr. ${doctorName} has been confirmed for ${new Date(slot.startTime).toLocaleDateString()} at ${new Date(slot.startTime).toLocaleTimeString()}.`,
+                related_id: appointmentId,
+                related_type: 'appointment',
+                action_url: `/appointments/${appointmentId}`,
+                priority: 'normal'
+            });
+        } catch (notifError) {
+            console.error('Failed to create appointment notification:', notifError.message);
+        }
 
         res.json({
             message: 'Appointment booked successfully',
@@ -125,6 +147,26 @@ exports.cancelAppointment = async (req, res) => {
 
         // Free Slot
         await db.execute('UPDATE slots SET isBooked = FALSE WHERE id = ?', [appointment.slotId]);
+
+        // Get doctor info for notification
+        const [doctors] = await db.execute('SELECT name FROM doctors WHERE id = ?', [appointment.doctorId]);
+        const doctorName = doctors[0]?.name || 'Doctor';
+
+        // Send cancellation notification
+        try {
+            await NotificationController.createNotification({
+                user_id: userId,
+                type: 'appointment_cancelled',
+                category: 'appointments',
+                title: 'Appointment Cancelled',
+                message: `Your appointment with Dr. ${doctorName} scheduled for ${new Date(slot.startTime).toLocaleDateString()} has been cancelled.`,
+                related_id: id,
+                related_type: 'appointment',
+                priority: 'normal'
+            });
+        } catch (notifError) {
+            console.error('Failed to create cancellation notification:', notifError.message);
+        }
 
         res.json({ message: 'Appointment cancelled' });
     } catch (err) {

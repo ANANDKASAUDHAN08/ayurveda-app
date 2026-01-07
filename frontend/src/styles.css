@@ -15,6 +15,154 @@ body {
 }
 
 /* ================================
+   DARK MODE - COMPREHENSIVE STYLES
+   ================================ */
+html.dark body {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+}
+
+/* 
+   EXTREMELY ROBUST OVERRIDES
+*/
+html.dark [class*="bg-white"],
+html.dark [class*="bg-gray-"],
+html.dark [class*="bg-slate-"],
+html.dark [class*="bg-emerald-50"],
+html.dark [class*="bg-blue-50"],
+html.dark [class*="bg-purple-50"],
+html.dark [class*="bg-teal-50"],
+html.dark [class*="bg-opacity-"],
+html.dark .medicine-card,
+html.dark .service-card,
+html.dark .category-card,
+html.dark .deal-card,
+html.dark .trust-badge,
+html.dark .quick-action-card,
+html.dark .dashboard-container,
+html.dark .settings-container,
+html.dark .glass,
+html.dark nav,
+html.dark header,
+html.dark .top-nav,
+html.dark aside,
+html.dark .sidebar,
+html.dark main,
+html.dark .main-content,
+html.dark section.bg-white,
+html.dark section.bg-slate-50,
+html.dark .page-header {
+  background-color: #1e293b !important;
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Force dark background for the whole page */
+html.dark .bg-slate-50,
+html.dark .bg-gray-50 {
+  background-color: #0f172a !important;
+}
+
+/* Dropdown & Glass Refinement */
+html.dark .glass,
+html.dark [class*="backdrop-blur"],
+html.dark .dropdown-menu,
+html.dark [role="menu"] {
+  background-color: rgba(30, 41, 59, 0.85) !important;
+  background: rgba(30, 41, 59, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Animated Hero Gradient Fix */
+html.dark .bg-gradient-animate {
+  background: linear-gradient(-45deg,
+      #0f172a,
+      #1e293b,
+      #1e1b4b,
+      #312e81) !important;
+  background-size: 400% 400% !important;
+}
+
+/* Headers & Banners contrast */
+html.dark .bg-emerald-50,
+html.dark .bg-teal-50 {
+  background-color: #064e3b !important;
+  /* Dark emerald */
+  color: #d1fae5 !important;
+}
+
+html.dark [class*="text-emerald-"],
+html.dark [class*="text-teal-"] {
+  color: #34d399 !important;
+}
+
+/* Explicit Fix for Medicine Cards (Healing Path) */
+html.dark .medicine-card {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+}
+
+/* Ensure headings and text are visible everywhere */
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6,
+html.dark p,
+html.dark span,
+html.dark li,
+html.dark i,
+html.dark label,
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-slate-700,
+html.dark .text-slate-600,
+html.dark .text-gray-900,
+html.dark .text-gray-800,
+html.dark .text-gray-700 {
+  color: #f1f5f9 !important;
+}
+
+/* Keep accent colors but ensure they are readable */
+html.dark .text-blue-600,
+html.dark .text-blue-500 {
+  color: #60a5fa !important;
+}
+
+html.dark .text-purple-600,
+html.dark .text-purple-500 {
+  color: #c084fc !important;
+}
+
+/* Input Fields & Textareas */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #334155 !important;
+}
+
+html.dark input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Cards shadows refinement */
+html.dark .shadow-sm,
+html.dark .shadow,
+html.dark .shadow-md,
+html.dark .shadow-lg,
+html.dark .shadow-xl {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4) !important;
+}
+
+
+/* ================================
    MICRO-ANIMATIONS & POLISH
    ================================ */
 

@@ -279,7 +279,10 @@
                                 class="h-8 w-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
                                 <i class="fas fa-key text-xs"></i>
                             </div>
-                            <span class="text-sm font-semibold text-slate-700">Change Password</span>
+                            <span class="text-sm font-semibold text-slate-700">
+                                {{ (user?.oauth_provider === 'google' && !user?.hasPassword) ? 'Add Password' : 'Change
+                                Password' }}
+                            </span>
                         </button>
 
                         <!-- 2 Factor -->
@@ -289,7 +292,10 @@
                                 class="h-8 w-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
                                 <i class="fas fa-shield-alt text-xs"></i>
                             </div>
-                            <span class="text-sm font-semibold text-slate-700">Enable 2FA</span>
+                            <span class="text-sm font-semibold text-slate-700">{{ user?.two_factor_enabled ? 'Manage
+                                2FA' : 'Enable 2FA' }}</span>
+                            <span *ngIf="user?.two_factor_enabled"
+                                class="ml-auto text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">ACTIVE</span>
                         </button>
 
                         <!-- Delete Account -->
@@ -717,20 +723,24 @@
                                     <i class="fas fa-key"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-slate-800 text-base md:text-lg">Change Password</h4>
-                                    <p class="text-slate-500 text-sm">Update your password regularly to keep your
-                                        account secure.</p>
+                                    <h4 class="font-bold text-slate-800 text-base md:text-lg">{{ (user?.oauth_provider
+                                        === 'google' && !user?.hasPassword) ? 'Add Password' : 'Change Password' }}</h4>
+                                    <p class="text-slate-500 text-sm">{{ (user?.oauth_provider === 'google' &&
+                                        !user?.hasPassword) ? 'Set a password to login with your email and password in
+                                        the future.' : 'Update your password regularly to keep your account secure.' }}
+                                    </p>
                                 </div>
                             </div>
                             <button (click)="changePassword()"
                                 class="w-full md:w-auto px-6 py-3 bg-white border border-slate-200 rounded-xl text-slate-700 font-bold hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
-                                Update
+                                {{ (user?.oauth_provider === 'google' && !user?.hasPassword) ? 'Add' : 'Update' }}
                             </button>
                         </div>
 
                         <div
-                            class="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4 group hover:border-emerald-200 transition-colors">
-                            <div class="flex items-center gap-4 md:gap-6">
+                            class="bg-white p-5 md:p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-6 group hover:border-emerald-200 transition-colors">
+                            <!-- Icon & Title Section -->
+                            <div class="flex flex-row items-center gap-4 md:gap-6">
                                 <div
                                     class="h-12 w-12 md:h-16 md:w-16 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-xl md:text-2xl flex-shrink-0">
                                     <i class="fas fa-shield-alt"></i>
@@ -742,10 +752,17 @@
                                     </p>
                                 </div>
                             </div>
-                            <button (click)="enable2FA()"
-                                class="w-full md:w-auto px-6 py-3 bg-white border border-slate-200 rounded-xl text-slate-700 font-bold hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
-                                Enable
-                            </button>
+                            <!-- Badge & Action Button Section -->
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                                <span *ngIf="user?.two_factor_enabled"
+                                    class="inline-flex items-center text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100">
+                                    <i class="fas fa-check-circle mr-2"></i> Enabled
+                                </span>
+                                <button (click)="enable2FA()"
+                                    class="w-full sm:w-auto px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10 active:scale-95 text-center">
+                                    {{ user?.two_factor_enabled ? 'Manage Security' : 'Enable 2FA' }}
+                                </button>
+                            </div>
                         </div>
 
                         <div
@@ -776,7 +793,8 @@
             class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
             <div (click)="$event.stopPropagation()"
                 class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fade-in-up p-4 md:p-8">
-                <h3 class="text-xl md:text-2xl font-bold text-slate-900 mb-4 md:mb-6">Change Password</h3>
+                <h3 class="text-xl md:text-2xl font-bold text-slate-900 mb-4 md:mb-6">{{ (user?.oauth_provider ===
+                    'google' && !user?.hasPassword) ? 'Set Password' : 'Change Password' }}</h3>
 
                 <!-- Password Input with Show/Hide and Clear -->
                 <div class="relative mb-4">
@@ -788,13 +806,14 @@
 
                     <!-- Clear Button -->
                     <button *ngIf="newPassword" (click)="newPassword = ''" type="button"
-                        class="absolute right-12 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-slate-600 transition-colors">
+                        (mousedown)="$event.preventDefault()"
+                        class="absolute right-12 top-1 p-2 text-slate-400 hover:text-slate-600 transition-colors">
                         <i class="fas fa-times-circle"></i>
                     </button>
 
                     <!-- Show/Hide Password Toggle -->
-                    <button (click)="showPassword = !showPassword" type="button"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-slate-600 transition-colors">
+                    <button (click)="showPassword = !showPassword" type="button" (mousedown)="$event.preventDefault()"
+                        class="absolute right-3 top-1 p-2 text-slate-400 hover:text-slate-600 transition-colors">
                         <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
                     </button>
                 </div>
@@ -808,11 +827,12 @@
 
                 <!-- Buttons with More Spacing -->
                 <div class="flex justify-end gap-2 md:gap-3 mt-6">
-                    <button (click)="showPasswordModal = false"
+                    <button (click)="showPasswordModal = false" (mousedown)="$event.preventDefault()"
                         class="px-4 md:px-6 py-3 text-slate-500 font-bold hover:bg-slate-50 rounded-lg transition-colors text-sm md:text-base">
                         Cancel
                     </button>
                     <button (click)="confirmChangePassword()" [disabled]="!isPasswordValid || !newPassword"
+                        (mousedown)="$event.preventDefault()"
                         class="px-4 md:px-8 py-3 bg-slate-900 text-white rounded-lg font-bold hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base">
                         Update
                     </button>
@@ -824,20 +844,92 @@
         <div *ngIf="show2FAModal" (click)="show2FAModal = false"
             class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
             <div (click)="$event.stopPropagation()"
-                class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fade-in-up p-4 md:p-8 text-center">
-                <div
-                    class="h-16 w-16 md:h-20 md:w-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 text-emerald-600 text-2xl md:text-3xl">
-                    <i class="fas fa-shield-alt"></i>
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fade-in-up p-5 md:p-8 text-center scroll-smooth overflow-y-auto max-h-[90vh] scrollbar-hide">
+
+                <div class="flex items-center justify-center gap-4 mb-4">
+                    <div
+                        class="h-12 w-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-xl flex-shrink-0">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold text-slate-900">
+                        {{ user?.two_factor_enabled ? 'Disable 2FA?' : 'Enable 2FA' }}
+                    </h3>
                 </div>
-                <h3 class="text-xl md:text-2xl font-bold text-slate-900 mb-2">Enable 2FA?</h3>
-                <p class="text-slate-500 text-sm md:text-base mb-6 md:mb-8">This will add an extra layer of security to
-                    your account.</p>
-                <div class="flex justify-center gap-2 md:gap-3">
-                    <button (click)="show2FAModal = false"
-                        class="px-4 md:px-6 py-3 text-slate-500 font-bold hover:bg-slate-50 rounded-lg transition-colors text-sm md:text-base">Cancel</button>
-                    <button (click)="confirmEnable2FA()"
-                        class="px-4 md:px-8 py-3 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 transition-colors text-sm md:text-base">Enable</button>
-                </div>
+
+                <ng-container *ngIf="!user?.two_factor_enabled; else disableSection">
+                    <p class="text-slate-500 text-sm mb-4">Scan the QR code below with your authenticator app (e.g.,
+                        Google Authenticator) to enable Two-Factor Authentication.</p>
+
+                    <!-- New Instruction/Warning Box -->
+                    <div
+                        class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-6 flex items-start gap-3 text-left animate-fade-in shadow-sm">
+                        <i class="fas fa-exclamation-triangle text-amber-500 mt-0.5"></i>
+                        <div class="space-y-1">
+                            <p class="text-[11px] text-amber-900 leading-relaxed font-bold uppercase tracking-wider">
+                                New Secret Key Generated
+                            </p>
+                            <p class="text-[11px] text-amber-800 leading-relaxed font-medium">
+                                If you previously had 2FA active for this account, please <strong>delete the old
+                                    entry</strong> from your authenticator app first. Using the old code will not work.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- QR Code and Secret -->
+                    <div *ngIf="twoFactorSetup" class="mb-6 space-y-4 animate-fade-in">
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 inline-block shadow-inner">
+                            <img [src]="twoFactorSetup.qrCodeUrl" alt="2FA QR Code"
+                                class="h-40 w-40 md:h-48 md:w-48 mx-auto rounded-lg">
+                        </div>
+
+                        <div class="text-left">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">
+                                Manual Entry Key
+                            </label>
+                            <div
+                                class="bg-slate-50 px-4 py-2 rounded-lg border border-slate-200 flex items-center justify-between">
+                                <code class="text-emerald-700 font-bold tracking-wider">
+                                    {{ twoFactorSetup.secret }}
+                                </code>
+                            </div>
+                        </div>
+
+                        <!-- Verification Input -->
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-slate-700 block text-left">
+                                Enter 6-digit Verification Code
+                            </label>
+                            <input type="text" [(ngModel)]="twoFactorCode" maxlength="6"
+                                class="w-full px-4 py-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center text-2xl font-bold tracking-[0.5em] text-emerald-900 focus:bg-white focus:border-emerald-500 outline-none transition-all shadow-sm"
+                                placeholder="000000">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center gap-3">
+                        <button (click)="show2FAModal = false" [disabled]="isVerifying2FA"
+                            class="flex-1 px-4 py-3 text-slate-500 font-bold hover:bg-slate-50 rounded-xl transition-colors">Cancel</button>
+                        <button (click)="confirmEnable2FA()" [disabled]="twoFactorCode.length !== 6 || isVerifying2FA"
+                            class="flex-1 px-4 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20 disabled:opacity-50 flex items-center justify-center gap-2">
+                            <i *ngIf="isVerifying2FA" class="fas fa-spinner fa-spin"></i>
+                            <span>{{ isVerifying2FA ? 'Verifying...' : 'Enable 2FA' }}</span>
+                        </button>
+                    </div>
+                </ng-container>
+
+                <ng-template #disableSection>
+                    <p class="text-slate-500 text-sm mb-6">Are you sure you want to disable Two-Factor Authentication?
+                        This will make your account less secure.</p>
+
+                    <div class="flex justify-center gap-3">
+                        <button (click)="show2FAModal = false"
+                            class="flex-1 px-4 py-3 text-slate-500 font-bold hover:bg-slate-50 rounded-xl transition-colors">Cancel</button>
+                        <button (click)="confirmDisable2FA()" [disabled]="isLoading"
+                            class="flex-1 px-4 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20 flex items-center justify-center gap-2">
+                            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
+                            <span>Disable 2FA</span>
+                        </button>
+                    </div>
+                </ng-template>
             </div>
         </div>
 

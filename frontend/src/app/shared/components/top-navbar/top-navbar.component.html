@@ -35,14 +35,14 @@
             <div class="hidden lg:flex items-center gap-7">
                 <!-- Home -->
                 <a routerLink="/" class="nav-link text-slate-800 hover:text-emerald-600 transition-colors">
-                    Home
+                    {{ 'nav.home' | translate }}
                 </a>
 
                 <!-- Shop Dropdown -->
                 <div class="relative shop-dropdown-container">
                     <button (click)="toggleShopDropdown()"
                         class="nav-link text-slate-800 hover:text-emerald-600 transition-colors flex items-center gap-2">
-                        Shop
+                        {{ 'nav.shop' | translate }}
                         <i [class]="shopDropdownOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
                             class="text-[10px]"></i>
                     </button>
@@ -52,22 +52,22 @@
                         <a routerLink="/medicines" (click)="shopDropdownOpen = false"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all">
                             <i class="fas fa-pills text-teal-600 w-5"></i>
-                            <span class="text-sm font-medium text-slate-700">Medicines</span>
+                            <span class="text-sm font-medium text-slate-700">{{ 'nav.medicines' | translate }}</span>
                         </a>
                         <a routerLink="/medical-devices" (click)="shopDropdownOpen = false"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all">
                             <i class="fas fa-laptop-medical text-blue-600 w-5"></i>
-                            <span class="text-sm font-medium text-slate-700">Medical Devices</span>
+                            <span class="text-sm font-medium text-slate-700">{{ 'nav.devices' | translate }}</span>
                         </a>
                         <a routerLink="/lab-tests" (click)="shopDropdownOpen = false"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all">
                             <i class="fas fa-microscope text-indigo-600 w-5"></i>
-                            <span class="text-sm font-medium text-slate-700">Lab Tests</span>
+                            <span class="text-sm font-medium text-slate-700">{{ 'nav.lab_tests' | translate }}</span>
                         </a>
                         <a routerLink="/health-plans" (click)="shopDropdownOpen = false"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all">
                             <i class="fas fa-shield-heart text-pink-600 w-5"></i>
-                            <span class="text-sm font-medium text-slate-700">Health Plans</span>
+                            <span class="text-sm font-medium text-slate-700">{{ 'nav.plans' | translate }}</span>
                         </a>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                 <div class="relative care-dropdown-container">
                     <button (click)="toggleCareDropdown()"
                         class="nav-link text-slate-800 hover:text-emerald-600 transition-colors flex items-center gap-2">
-                        Find Care
+                        {{ 'nav.find_care' | translate }}
                         <i [class]="careDropdownOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
                             class="text-[10px]"></i>
                     </button>
@@ -85,22 +85,22 @@
                         <a routerLink="/find-doctors" (click)="careDropdownOpen = false"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all">
                             <i class="fas fa-user-md text-emerald-600 w-5"></i>
-                            <span class="text-sm font-bold text-slate-700">Doctors</span>
+                            <span class="text-sm font-bold text-slate-700">{{ 'nav.doctors' | translate }}</span>
                         </a>
                         <a routerLink="/hospitals" (click)="careDropdownOpen = false"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all">
                             <i class="fas fa-hospital text-red-600 w-5"></i>
-                            <span class="text-sm font-bold text-slate-700">Hospitals</span>
+                            <span class="text-sm font-bold text-slate-700">{{ 'nav.hospitals' | translate }}</span>
                         </a>
                         <a routerLink="/pharmacies" (click)="careDropdownOpen = false"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all">
                             <i class="fas fa-prescription-bottle-alt text-teal-600 w-5"></i>
-                            <span class="text-sm font-bold text-slate-700">Pharmacies</span>
+                            <span class="text-sm font-bold text-slate-700">{{ 'nav.pharmacies' | translate }}</span>
                         </a>
                         <a routerLink="/nearby-services" (click)="careDropdownOpen = false"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all border-t border-slate-50 mt-1">
                             <i class="fas fa-map-marked-alt text-emerald-600 w-5"></i>
-                            <span class="text-sm font-black text-emerald-700">Nearby Care</span>
+                            <span class="text-sm font-black text-emerald-700">{{ 'nav.nearby' | translate }}</span>
                         </a>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
                 <div *ngIf="isLoggedIn" class="relative my-health-dropdown-container">
                     <button (click)="toggleMyHealthDropdown()"
                         class="nav-link text-slate-800 hover:text-emerald-600 transition-colors flex items-center gap-2">
-                        My Health
+                        {{ 'nav.my_health' | translate }}
                         <i [class]="myHealthDropdownOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
                             class="text-[10px]"></i>
                     </button>
@@ -118,17 +118,17 @@
                         <a (click)="navigateToDashboard()"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all cursor-pointer">
                             <i class="fas fa-columns text-emerald-600 w-5"></i>
-                            <span class="text-sm font-bold text-slate-700">Dashboard</span>
+                            <span class="text-sm font-bold text-slate-700">{{ 'nav.dashboard' | translate }}</span>
                         </a>
                         <a (click)="navigateToOrders()"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all cursor-pointer">
                             <i class="fas fa-box text-orange-600 w-5"></i>
-                            <span class="text-sm font-bold text-slate-700">My Orders</span>
+                            <span class="text-sm font-bold text-slate-700">{{ 'nav.orders' | translate }}</span>
                         </a>
                         <a (click)="navigateToProfile()"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all cursor-pointer">
                             <i class="fas fa-id-card text-purple-600 w-5"></i>
-                            <span class="text-sm font-bold text-slate-700">My Profile</span>
+                            <span class="text-sm font-bold text-slate-700">{{ 'nav.profile' | translate }}</span>
                         </a>
                     </div>
                 </div>
@@ -146,7 +146,7 @@
                 <!-- ADD SOS HERE -->
                 <a routerLink="/emergency"
                     class="hidden md:block px-4 py-1.5 bg-red-50 text-red-600 rounded-xl text-sm font-black hover:bg-red-600 hover:text-white transition-all animate-pulse shadow-sm">
-                    Emergency SOS
+                    {{ 'nav.emergency' | translate }}
                 </a>
 
                 <!-- Search Trigger -->
@@ -182,30 +182,43 @@
                     <div *ngIf="profileMenuOpen"
                         class="absolute top-full right-0 mt-4 w-56 glass rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up z-[110]">
                         <ng-container *ngIf="isLoggedIn; else guestMenu">
-                            <div class="px-4 py-3 border-b border-slate-100 bg-slate-50/50">
-                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Account</p>
-                                <p class="text-sm font-bold text-slate-900 truncate">{{ userName }}</p>
+                            <div class="px-5 py-4 border-b border-slate-50 bg-slate-50/50">
+                                <p class="text-sm font-bold text-slate-900 truncate">{{userName}}</p>
+                                <p class="text-[10px] text-slate-500 font-medium uppercase tracking-wider mt-0.5">{{
+                                    'nav.profile' | translate }}</p>
                             </div>
-                            <div class="p-2">
-                                <a (click)="navigateToProfile()"
-                                    class="flex items-center gap-3 px-3 py-2.5 hover:bg-emerald-50 rounded-xl transition-all cursor-pointer">
-                                    <i class="fas fa-user-circle text-emerald-600"></i>
-                                    <span class="text-sm font-medium text-slate-700">Profile Settings</span>
-                                </a>
-                                <a (click)="navigateToSettings()"
-                                    class="flex items-center gap-3 px-3 py-2.5 hover:bg-emerald-50 rounded-xl transition-all cursor-pointer">
-                                    <i class="fas fa-cog text-slate-500"></i>
-                                    <span class="text-sm font-medium text-slate-700">Preferences</span>
-                                </a>
-                                <a (click)="navigateToFavorites()"
-                                    class="flex items-center gap-3 px-3 py-2.5 hover:bg-emerald-50 rounded-xl transition-all cursor-pointer">
-                                    <i class="fas fa-heart text-red-500"></i>
-                                    <span class="text-sm font-medium text-slate-700">My Favorites</span>
-                                </a>
+                            <div class="py-2">
+                                <button (click)="navigateToDashboard()"
+                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
+                                    <i class="fas fa-home w-4 text-center text-emerald-600"></i>
+                                    {{ 'nav.dashboard' | translate }}
+                                </button>
+                                <button (click)="navigateToProfile()"
+                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
+                                    <i class="fas fa-user-circle w-4 text-center text-emerald-600"></i>
+                                    {{ 'nav.profile' | translate }}
+                                </button>
+                                <button (click)="navigateToOrders()"
+                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
+                                    <i class="fas fa-shopping-bag w-4 text-center text-emerald-600"></i>
+                                    {{ 'nav.orders' | translate }}
+                                </button>
+                                <button (click)="navigateToFavorites()"
+                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
+                                    <i class="fas fa-heart w-4 text-center text-red-500"></i>
+                                    {{ 'nav.favorites' | translate }}
+                                </button>
+                            </div>
+                            <div class="py-2 border-t border-slate-50">
+                                <button (click)="navigateToSettings()"
+                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
+                                    <i class="fas fa-cog w-4 text-center text-slate-400"></i>
+                                    {{ 'nav.settings' | translate }}
+                                </button>
                                 <button (click)="logout()"
-                                    class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-red-50 text-red-600 rounded-xl transition-all mt-1">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    <span class="text-sm font-bold">Logout</span>
+                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors flex items-center gap-3">
+                                    <i class="fas fa-sign-out-alt w-4 text-center"></i>
+                                    {{ 'nav.logout' | translate }}
                                 </button>
                             </div>
                         </ng-container>
@@ -214,12 +227,14 @@
                                 <a routerLink="/for-users" (click)="profileMenuOpen = false"
                                     class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all">
                                     <i class="fas fa-user text-emerald-600"></i>
-                                    <span class="text-sm font-medium text-slate-700">Patient Login</span>
+                                    <span class="text-sm font-medium text-slate-700">{{ 'nav.patient_login' | translate
+                                        }}</span>
                                 </a>
                                 <a routerLink="/for-doctors" (click)="profileMenuOpen = false"
                                     class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all border-t border-slate-50">
                                     <i class="fas fa-user-md text-emerald-600"></i>
-                                    <span class="text-sm font-medium text-slate-700">Doctor Login</span>
+                                    <span class="text-sm font-medium text-slate-700">{{ 'nav.doctor_login' | translate
+                                        }}</span>
                                 </a>
                             </div>
                         </ng-template>
@@ -245,7 +260,7 @@
                 <div class="relative flex items-center">
                     <i class="fas fa-search absolute left-5 text-slate-400 text-xl"></i>
                     <input id="search-overlay-input" type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()"
-                        (keyup.enter)="performSearch()" placeholder="Search for doctors, medicines, tests..."
+                        (keyup.enter)="performSearch()" [placeholder]="'search.placeholder' | translate"
                         class="w-full pl-14 pr-6 py-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 text-lg text-slate-900 placeholder-slate-400 transition-all"
                         autofocus>
                     <button (click)="toggleSearchOverlay()" class="ml-4 p-2 text-slate-400 hover:text-slate-600">
@@ -258,7 +273,8 @@
             <div class="max-h-[60vh] overflow-y-auto custom-scrollbar p-6">
                 <!-- Autocomplete Suggestions -->
                 <div *ngIf="searchQuery.length >= 2 && suggestions.length > 0">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 px-2">Suggestions</h3>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 px-2">{{
+                        'search.suggestions' | translate }}</h3>
                     <div class="grid grid-cols-1 gap-2">
                         <button *ngFor="let item of suggestions" (click)="selectSuggestion(item)"
                             class="flex items-center justify-between p-4 hover:bg-emerald-50 rounded-2xl transition-all group">
@@ -280,9 +296,10 @@
                 <!-- Recent Searches -->
                 <div *ngIf="searchQuery.length === 0 && searchHistory.length > 0">
                     <div class="flex items-center justify-between mb-4 px-2">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Recent Searches</h3>
-                        <button (click)="clearHistory()" class="text-xs font-bold text-red-500 hover:text-red-600">Clear
-                            All</button>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{ 'search.recent' |
+                            translate }}</h3>
+                        <button (click)="clearHistory()" class="text-xs font-bold text-red-500 hover:text-red-600">{{
+                            'search.clear' | translate }}</button>
                     </div>
                     <div class="flex flex-wrap gap-2">
                         <button *ngFor="let term of searchHistory" (click)="searchFromHistory(term)"
@@ -295,7 +312,8 @@
 
                 <!-- Popular Searches -->
                 <div *ngIf="searchQuery.length === 0 && popularSearches.length > 0" class="mt-8">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 px-2">Popular Right Now
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 px-2">{{ 'search.popular'
+                        | translate }}
                     </h3>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                         <button *ngFor="let term of popularSearches" (click)="searchPopular(term)"
@@ -311,7 +329,7 @@
                     <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-search-minus text-3xl text-slate-300"></i>
                     </div>
-                    <p class="text-slate-500 font-medium">No results found for "{{ searchQuery }}"</p>
+                    <p class="text-slate-500 font-medium">{{ 'search.no_results' | translate }} "{{ searchQuery }}"</p>
                 </div>
             </div>
         </div>
@@ -332,7 +350,7 @@
         <div class="p-6 border-b border-slate-100 flex items-center justify-between">
             <h2 class="text-xl font-black text-slate-900 flex items-center gap-3">
                 <i class="fas fa-shopping-basket text-emerald-500"></i>
-                Your Basket
+                {{ 'cart.title' | translate }}
             </h2>
             <button (click)="toggleCartSidebar()" class="p-2 hover:bg-slate-100 rounded-xl transition-all">
                 <i class="fas fa-times text-slate-400"></i>
@@ -381,11 +399,11 @@
                     <div class="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mb-6">
                         <i class="fas fa-shopping-cart text-3xl text-emerald-500"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-800 mb-2">Basket is empty</h3>
-                    <p class="text-sm text-slate-500 mb-8 max-w-[200px]">Looks like you haven't added anything yet!</p>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">{{ 'cart.empty' | translate }}</h3>
+                    <p class="text-sm text-slate-500 mb-8 max-w-[200px]">{{ 'cart.empty_desc' | translate }}</p>
                     <button (click)="toggleCartSidebar()"
                         class="px-8 py-3 bg-emerald-500 text-white rounded-2xl font-bold shadow-lg shadow-emerald-200 hover:bg-emerald-600 transition-all">
-                        Start Shopping
+                        {{ 'cart.start_shopping' | translate }}
                     </button>
                 </div>
             </ng-template>
@@ -395,23 +413,23 @@
         <div *ngIf="cart?.items?.length > 0" class="p-6 bg-slate-50 border-t border-slate-100 space-y-4">
             <div class="space-y-2">
                 <div class="flex justify-between text-sm">
-                    <span class="text-slate-500 font-medium">Subtotal</span>
+                    <span class="text-slate-500 font-medium">{{ 'cart.subtotal' | translate }}</span>
                     <span class="text-slate-900 font-bold">₹{{ cart.subtotal.toFixed(2) }}</span>
                 </div>
                 <div class="flex justify-between text-sm">
-                    <span class="text-slate-500 font-medium">Delivery</span>
+                    <span class="text-slate-500 font-medium">{{ 'cart.delivery' | translate }}</span>
                     <span class="text-slate-900 font-bold" [class.text-emerald-600]="cart.delivery === 0">
-                        {{ cart.delivery === 0 ? 'FREE' : '₹' + cart.delivery.toFixed(2) }}
+                        {{ cart.delivery === 0 ? ('cart.free' | translate) : '₹' + cart.delivery.toFixed(2) }}
                     </span>
                 </div>
                 <div class="flex justify-between text-lg pt-2 border-t border-slate-200">
-                    <span class="text-slate-900 font-black">Total</span>
+                    <span class="text-slate-900 font-black">{{ 'cart.total' | translate }}</span>
                     <span class="text-emerald-600 font-black">₹{{ cart.total.toFixed(2) }}</span>
                 </div>
             </div>
             <button routerLink="/cart" (click)="toggleCartSidebar()"
                 class="w-full py-4 bg-emerald-500 text-white rounded-2xl font-black shadow-xl shadow-emerald-200 hover:bg-emerald-600 transition-all flex items-center justify-center gap-3">
-                Proceed to Checkout
+                {{ 'cart.checkout' | translate }}
                 <i class="fas fa-arrow-right"></i>
             </button>
         </div>

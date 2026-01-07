@@ -26,6 +26,21 @@ export class ThemeService {
 
     private getSavedTheme(): Theme {
         if (typeof window === 'undefined') return 'light';
+
+        // Try to get from app_settings first (sync with Settings page)
+        const appSettings = localStorage.getItem('app_settings');
+        if (appSettings) {
+            try {
+                const parsed = JSON.parse(appSettings);
+                if (parsed.settings && parsed.settings.theme) {
+                    return parsed.settings.theme as Theme;
+                }
+            } catch (e) {
+                console.error('Failed to parse app_settings for theme retrieval', e);
+            }
+        }
+
+        // Fallback to app_theme key
         const saved = localStorage.getItem(this.THEME_KEY);
         return (saved as Theme) || 'light';
     }

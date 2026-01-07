@@ -29,12 +29,14 @@ exports.getProfile = async (req, res) => {
     try {
         const userId = req.user.id;
 
-        // Fetch user profile with all fields including timestamps
+        // Fetch user profile with all fields including timestamps and password status
         const [users] = await db.execute(`
             SELECT id, name, email, phone, role, 
                    gender, dob, blood_group, address, 
                    emergency_contact_name, emergency_contact_phone, 
                    height, weight, allergies, profile_image,
+                   oauth_provider, two_factor_enabled,
+                   (password IS NOT NULL AND password != '') as hasPassword,
                    createdAt as created_at, updatedAt as updated_at
             FROM users WHERE id = ?`, [userId]);
 
@@ -99,6 +101,8 @@ exports.updateProfile = async (req, res) => {
                        gender, dob, blood_group, address, 
                        emergency_contact_name, emergency_contact_phone, 
                        height, weight, allergies, profile_image,
+                       oauth_provider, two_factor_enabled,
+                       (password IS NOT NULL AND password != '') as hasPassword,
                        createdAt as created_at, updatedAt as updated_at
                 FROM users WHERE id = ?`, [userId]);
 
@@ -119,13 +123,13 @@ exports.changePassword = async (req, res) => {
             return res.status(400).json({ message: 'Password must be at least 6 characters' });
         }
 
-        // In a real app, we would hash the password here
-        // const hashedPassword = await bcrypt.hash(newPassword, 10);
+        // Properly hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-        // For this demo, we'll just store it as is (NOT SECURE for production)
-        await db.execute('UPDATE users SET password = ? WHERE id = ?', [newPassword, userId]);
+        await db.execute('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, userId]);
 
-        res.json({ message: 'Password changed successfully' });
+        res.json({ message: 'Password updated successfully' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });

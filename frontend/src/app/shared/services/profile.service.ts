@@ -21,13 +21,7 @@ export class ProfileService {
     // --- Profile Operations ---
 
     getProfile(isDoctor: boolean): Observable<any> {
-        const url = isDoctor ? this.doctorApiUrl : `${this.userApiUrl}/profile`;
-        // Note: Doctor profile fetch in component was fetching ALL doctors and finding by ID.
-        // Ideally, backend should support /api/doctors/profile for the logged-in doctor.
-        // For now, I will mirror the component's logic or provide the specific endpoint if it exists.
-        // Looking at component: 
-        // User: ${environment.apiUrl}/users/profile
-        // Doctor: ${environment.apiUrl}/doctors (and then filter)
+        const url = `${this.getBaseUrl(isDoctor)}/profile`;
         return this.http.get<any>(url);
     }
 

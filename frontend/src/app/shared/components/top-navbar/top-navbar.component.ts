@@ -11,6 +11,7 @@ import { SnackbarService } from '../../services/snackbar.service';
 import { NotificationBellComponent } from '../../../components/shared/notification-bell/notification-bell.component';
 import { LocationSelectorComponent } from '../location-selector/location-selector.component';
 import { LocationService, UserLocation } from '../../services/location.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-top-navbar',
@@ -20,7 +21,8 @@ import { LocationService, UserLocation } from '../../services/location.service';
     RouterModule,
     FormsModule,
     NotificationBellComponent,
-    LocationSelectorComponent
+    LocationSelectorComponent,
+    TranslatePipe
   ],
   templateUrl: './top-navbar.component.html',
   styleUrl: './top-navbar.component.css'

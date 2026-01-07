@@ -1,4 +1,5 @@
 const db = require('../config/database');
+const NotificationController = require('./notification.controller');
 
 // Get all emergency contacts for a user
 exports.getEmergencyContacts = async (req, res) => {
@@ -55,6 +56,20 @@ exports.addEmergencyContact = async (req, res) => {
                 priority_order
             }
         });
+
+        // Send notification for emergency contact update
+        try {
+            await NotificationController.createNotification({
+                user_id: userId,
+                type: 'emergency_contact_updated',
+                category: 'emergency',
+                title: 'Emergency Contact Added',
+                message: `${name} has been added to your emergency contacts.`,
+                priority: 'normal'
+            });
+        } catch (notifError) {
+            console.error('Failed to create emergency contact notification:', notifError.message);
+        }
     } catch (error) {
         console.error('Error adding emergency contact:', error);
         res.status(500).json({ error: 'Failed to add emergency contact' });
@@ -284,6 +299,20 @@ exports.logEmergencyCall = async (req, res) => {
        VALUES (?, ?, ?, ?, ?)`,
             [userId, call_type, called_number, location_lat || null, location_lng || null]
         );
+
+        // Send SOS alert notification
+        try {
+            await NotificationController.createNotification({
+                user_id: userId,
+                type: 'sos_alert_sent',
+                category: 'emergency',
+                title: 'SOS Alert Sent',
+                message: `Emergency ${call_type} call logged. Stay safe! Help has been notified.`,
+                priority: 'urgent'
+            });
+        } catch (notifError) {
+            console.error('Failed to create SOS notification:', notifError.message);
+        }
 
         res.json({ message: 'Emergency call logged successfully' });
     } catch (error) {

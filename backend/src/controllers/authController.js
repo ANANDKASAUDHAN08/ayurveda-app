@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const db = require('../config/database');
 const emailService = require('../services/email.service');
 const { generateVerificationToken, getTokenExpiration } = require('../../utils/tokenGenerator');
+const NotificationController = require('./notification.controller');
 
 exports.register = async (req, res) => {
     try {
@@ -52,11 +53,25 @@ exports.register = async (req, res) => {
             console.error(`❌ Verification email failed for ${email}:`, emailError.message);
         }
 
+        // Create welcome notification
+        try {
+            await NotificationController.createNotification({
+                user_id: userId,
+                type: 'account_created',
+                category: 'security',
+                title: 'Welcome to HealthConnect!',
+                message: `Hi ${name}, welcome to HealthConnect! We're excited to have you on board. Explore our services and start your health journey with us.`,
+                priority: 'normal'
+            });
+        } catch (notifError) {
+            console.error('Failed to create welcome notification:', notifError.message);
+        }
+
         res.json({
             success: true,
             message: 'Registration successful! Please check your email to verify your account before logging in.',
             emailSent: true,
-            user: { id: userId, name, email, role: userRole, emailVerified: false }
+            user: { id: userId, name, email, role: userRole, emailVerified: false, hasPassword: true, oauth_provider: null }
         });
     } catch (err) {
         console.error('Registration error:', err);
@@ -84,14 +99,35 @@ exports.login = async (req, res) => {
             });
         }
 
+        if (!user.password) {
+            return res.status(400).json({ message: 'Account is connected via Google. Please login with Google or reset your password to create one.' });
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+
+        // Check if 2FA is enabled
+        if (user.two_factor_enabled) {
+            return res.json({
+                require2FA: true,
+                userId: user.id,
+                role: user.role,
+                message: 'Two-factor authentication required'
+            });
+        }
 
         const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'your-random-secret-key-anand-infinityMan', { expiresIn: '1h' });
 
         res.json({
             token,
-            user: { id: user.id, name: user.name, email: user.email, role: user.role }
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                hasPassword: !!user.password,
+                oauth_provider: user.oauth_provider
+            }
         });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
@@ -220,6 +256,20 @@ exports.resetPassword = async (req, res) => {
             'UPDATE users SET password = ?, reset_password_token = NULL, reset_token_expires_at = NULL WHERE id = ?',
             [hashedPassword, user.id]
         );
+
+        // Create password change notification
+        try {
+            await NotificationController.createNotification({
+                user_id: user.id,
+                type: 'password_changed',
+                category: 'security',
+                title: 'Password Changed Successfully',
+                message: 'Your password has been changed successfully. If you did not make this change, please contact support immediately.',
+                priority: 'high'
+            });
+        } catch (notifError) {
+            console.error('Failed to create password change notification:', notifError.message);
+        }
 
         res.json({ message: 'Password reset successful! You can now login with your new password.' });
     } catch (err) {

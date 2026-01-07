@@ -59,32 +59,35 @@ import { HealthArticlesListComponent } from './pages/health-articles/health-arti
 import { FavoritesPageComponent } from './pages/favorites/favorites-page.component';
 
 export const routes: Routes = [
-    // Public routes
-    { path: 'home', component: HomeComponent, canActivate: [StrictLogoutGuard] },
+    // Public routes (accessible to everyone)
+    { path: 'home', component: HomeComponent },
     { path: 'articles', component: HealthArticlesListComponent },
     { path: 'favorites', component: FavoritesPageComponent },
-    // Admin Routes
+
+    // Guest-only routes (login/registration pages)
     { path: 'for-doctors', component: DoctorLandingComponent, canActivate: [StrictLogoutGuard] },
     { path: 'for-users', component: UserLandingComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'hospitals', component: HospitalsComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'pharmacies', component: PharmaciesComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'find-doctors', component: DoctorListComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'medicines', component: MedicinesComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'medical-devices', component: MedicalDevicesComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'health-plans', component: HealthPlansComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'lab-tests', component: LabTestsComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'career', component: CareerComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'about-us', component: AboutUsComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'help-support', component: HelpSupportComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'contact', component: ContactComponent, canActivate: [StrictLogoutGuard] },
-    { path: 'wellness', component: AyurvedaWellnessComponent, canActivate: [StrictLogoutGuard] },
+
+    // Public service pages
+    { path: 'hospitals', component: HospitalsComponent },
+    { path: 'pharmacies', component: PharmaciesComponent },
+    { path: 'find-doctors', component: DoctorListComponent },
+    { path: 'medicines', component: MedicinesComponent },
+    { path: 'medical-devices', component: MedicalDevicesComponent },
+    { path: 'health-plans', component: HealthPlansComponent },
+    { path: 'lab-tests', component: LabTestsComponent },
+    { path: 'career', component: CareerComponent },
+    { path: 'about-us', component: AboutUsComponent },
+    { path: 'help-support', component: HelpSupportComponent },
+    { path: 'contact', component: ContactComponent },
+    { path: 'wellness', component: AyurvedaWellnessComponent },
     { path: 'emergency', component: EmergencyHubComponent }, // Emergency services - no auth required for quick access
     { path: 'first-aid', component: FirstAidGuideComponent }, // First Aid Guide - no auth required
     { path: 'nearby-hospitals', component: NearbyHospitalsComponent }, // Nearby Hospitals - no auth required
     { path: 'emergency-history', component: EmergencyCallHistoryComponent }, // Call History - requires auth
 
     // Medicine Type System (Phase 12)
-    { path: 'landing', component: LandingPageComponent, canActivate: [StrictLogoutGuard] }, // Common landing page
+    { path: 'landing', component: LandingPageComponent }, // Common landing page
     { path: 'choose-type', component: MedicineTypeSelectorComponent }, // Medicine type selector
     { path: 'ayurveda', component: AyurvedaDashboardComponent }, // Ayurveda dashboard
     { path: 'ayurveda/search', component: AyurvedaSearchComponent },

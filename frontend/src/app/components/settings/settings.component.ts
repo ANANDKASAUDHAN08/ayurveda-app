@@ -2,14 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { TranslationService } from '../../shared/services/translation.service';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { ThemeService, Theme } from '../../shared/services/theme.service';
 import { SettingsService, UserSettings } from '../../shared/services/settings.service';
 import { AuthService } from '../../shared/services/auth.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, TranslatePipe],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css'
 })
@@ -51,7 +54,9 @@ export class SettingsComponent implements OnInit {
   constructor(
     private themeService: ThemeService,
     private settingsService: SettingsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackbarService: SnackbarService,
+    private translationService: TranslationService
   ) { }
 
   ngOnInit() {
@@ -65,6 +70,10 @@ export class SettingsComponent implements OnInit {
   setTheme(theme: Theme) {
     this.settings.theme = theme;
     this.themeService.setTheme(theme);
+  }
+
+  onLanguageChange() {
+    this.translationService.setLanguage(this.language.selected);
   }
 
   loadSettings() {
@@ -87,6 +96,11 @@ export class SettingsComponent implements OnInit {
 
         // Apply theme
         this.themeService.setTheme(this.settings.theme);
+
+        // Apply language
+        if (this.language.selected) {
+          this.translationService.setLanguage(this.language.selected);
+        }
       },
       error: (error) => {
         console.error('Failed to load settings from backend:', error);
@@ -122,19 +136,38 @@ export class SettingsComponent implements OnInit {
     // Always save to localStorage
     localStorage.setItem('app_settings', JSON.stringify(allSettings));
 
+    // Show specific snackbar message based on active tab
+    let messageKey = '';
+    switch (this.activeTab) {
+      case 'appearance':
+        messageKey = 'settings.save_appearance';
+        break;
+      case 'notifications':
+        messageKey = 'settings.save_notifications';
+        break;
+      case 'language':
+        messageKey = 'settings.save_language';
+        break;
+      case 'preferences':
+        messageKey = 'settings.save_preferences';
+        break;
+    }
+
+    const message = this.translationService.translate(messageKey);
+
     // Save to backend if logged in
     if (this.authService.isLoggedIn()) {
       this.settingsService.updateUserSettings(allSettings).subscribe({
         next: (response) => {
           console.log('Settings saved to backend:', response);
-          alert('Settings saved successfully!');
+          this.snackbarService.show(`✓ ${message}`, 'success');
         },
         error: (error) => {
-          alert('Settings saved locally, but failed to sync with server.');
+          this.snackbarService.show(this.translationService.translate('settings.sync_error'), 'error');
         }
       });
     } else {
-      alert('Settings saved locally!');
+      this.snackbarService.show(`✓ ${message}`, 'success');
     }
   }
 }

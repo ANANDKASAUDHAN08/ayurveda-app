@@ -1,6 +1,6 @@
 import { environment } from '@env/environment';
 
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LocationService } from './location.service';
@@ -18,14 +18,17 @@ export class AuthService {
 
     constructor(
         private http: HttpClient,
-        private locationService: LocationService
+        private locationService: LocationService,
+        private ngZone: NgZone
     ) {
         // Listen for storage changes (manual token clearing or cross-tab logout)
         if (typeof window !== 'undefined') {
             window.addEventListener('storage', (event) => {
-                if (event.key === 'auth_token') {
-                    const hasToken = !!event.newValue;
-                    this.authStatusSubject.next(hasToken);
+                if (event.key === 'auth_token' || event.key === 'user') {
+                    this.ngZone.run(() => {
+                        const hasToken = this.isLoggedIn();
+                        this.authStatusSubject.next(hasToken);
+                    });
                 }
             });
             // Check periodically if token was removed in current tab
@@ -34,7 +37,9 @@ export class AuthService {
                 const currentAuthStatus = this.authStatusSubject.value;
 
                 if (hasToken !== currentAuthStatus) {
-                    this.authStatusSubject.next(hasToken);
+                    this.ngZone.run(() => {
+                        this.authStatusSubject.next(hasToken);
+                    });
                 }
             }, 2000); // Check every 2 seconds
         }
@@ -52,17 +57,20 @@ export class AuthService {
     login(credentials: any): Observable<any> {
         return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
             tap((res: any) => {
-                this.setSession(res);
-                this.authStatusSubject.next(true);
-                // Detect location on success
-                this.locationService.detectLocation();
+                if (res.token) {
+                    this.setSession(res);
+                    this.authStatusSubject.next(true);
+                    // Detect location on success
+                    this.locationService.detectLocation();
+                }
             })
         );
     }
 
     private setSession(authResult: any) {
-        localStorage.setItem(this.tokenKey, authResult.token);
+        // Set user first so role is available when auth_token triggers storage event in other tabs
         localStorage.setItem('user', JSON.stringify(authResult.user));
+        localStorage.setItem(this.tokenKey, authResult.token);
     }
 
     logout() {
@@ -114,5 +122,29 @@ export class AuthService {
     getRole(): string {
         const user = this.getUser();
         return user ? user.role : '';
+    }
+
+    // 2FA Methods
+    setup2FA(): Observable<any> {
+        return this.http.get(`${environment.apiUrl}/auth/2fa/setup`);
+    }
+
+    verify2FASetup(code: string): Observable<any> {
+        return this.http.post(`${environment.apiUrl}/auth/2fa/verify-setup`, { code });
+    }
+
+    disable2FA(): Observable<any> {
+        return this.http.post(`${environment.apiUrl}/auth/2fa/disable`, {});
+    }
+
+    verify2FALogin(userId: number, role: string, code: string): Observable<any> {
+        return this.http.post(`${environment.apiUrl}/auth/2fa/verify-login`, { userId, role, code }).pipe(
+            tap((res: any) => {
+                this.setSession(res);
+                this.authStatusSubject.next(true);
+                // Detect location on success
+                this.locationService.detectLocation();
+            })
+        );
     }
 }

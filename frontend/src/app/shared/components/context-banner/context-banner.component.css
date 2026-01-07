@@ -14,6 +14,7 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -48,9 +49,12 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.1);
   }
@@ -180,18 +184,20 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    currentColor 50%, 
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      currentColor 50%,
+      transparent 100%);
   animation: shimmer 3s ease-in-out infinite;
 }
 
 @keyframes shimmer {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.5;
   }
+
   50% {
     opacity: 1;
   }
@@ -291,5 +297,52 @@
   .toggle-btn,
   .clear-btn {
     justify-content: center;
+  }
+}
+
+/* DARK MODE SUPPORT */
+:host-context(html.dark) .context-banner[data-type="ayurveda"] {
+  background: linear-gradient(135deg, #064e3b 0%, #1e293b 100%);
+  border-color: #10b981;
+  color: #d1fae5;
+}
+
+:host-context(html.dark) .context-banner[data-type="homeopathy"] {
+  background: linear-gradient(135deg, #581c87 0%, #1e293b 100%);
+  border-color: #a855f7;
+  color: #f3e8ff;
+}
+
+:host-context(html.dark) .context-banner[data-type="allopathy"] {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e293b 100%);
+  border-color: #3b82f6;
+  color: #dbeafe;
+}
+
+:host-context(html.dark) .quick-switch {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+:host-context(html.dark) .switch-btn,
+:host-context(html.dark) .toggle-btn,
+:host-context(html.dark) .clear-btn {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+}
+
+:host-context(html.dark) .toggle-btn.active {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+:host-context(html.dark) .switch-btn:hover {
+  background: #334155;
+}
+
+/* Ensure mobile header in dark mode */
+@media (max-width: 768px) {
+  :host-context(html.dark) .banner-right {
+    background: transparent;
   }
 }

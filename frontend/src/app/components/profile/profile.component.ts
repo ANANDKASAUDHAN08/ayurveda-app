@@ -142,16 +142,19 @@ export class ProfileComponent implements OnInit {
 
       // Fetch doctor profile from API
       this.profileService.getProfile(true).subscribe({
-        next: (doctors) => {
-          const myProfile = doctors.find((d: any) => d.userId === localUser.id);
+        next: (response) => {
+          const myProfile = response.doctor;
           if (myProfile) {
             // Update user data
             this.user = {
               id: localUser.id,
               name: myProfile.name,
-              email: localUser.email,
+              email: myProfile.email,
               phone: myProfile.phone,
-              role: localUser.role
+              role: myProfile.role,
+              hasPassword: myProfile.hasPassword,
+              oauth_provider: myProfile.oauth_provider,
+              profile_image: myProfile.image
             };
 
             // Update localStorage
@@ -160,7 +163,7 @@ export class ProfileComponent implements OnInit {
             // Populate form with doctor profile data
             this.profileForm.patchValue({
               name: myProfile.name,
-              email: localUser.email,
+              email: myProfile.email,
               phone: myProfile.phone || '',
               // Doctor specific
               specialization: myProfile.specialization,
@@ -182,9 +185,9 @@ export class ProfileComponent implements OnInit {
               linkedin: myProfile.linkedin
             });
 
-            // Member since from created_at
-            if (myProfile.created_at) {
-              this.memberSince = new Date(myProfile.created_at);
+            // Member since from user_created_at
+            if (myProfile.user_created_at) {
+              this.memberSince = new Date(myProfile.user_created_at);
             }
           }
           this.calculateProfileCompletion();
@@ -458,12 +461,13 @@ export class ProfileComponent implements OnInit {
     if (this.newPassword && this.newPassword.length >= 6) {
       this.profileService.changePassword(this.isDoctor, this.newPassword).subscribe({
         next: () => {
-          this.snackbar.success('Password changed successfully!');
-          this.addActivity('account', 'Password Changed', 'You updated your account password', new Date());
+          this.snackbar.success(this.user?.hasPassword ? 'Password changed successfully!' : 'Password added successfully!');
+          this.addActivity('account', this.user?.hasPassword ? 'Password Changed' : 'Password Added', 'You updated your account password', new Date());
           this.showPasswordModal = false;
+          this.loadUser(); // Reload user to update hasPassword status
         },
         error: () => {
-          this.snackbar.error('Failed to change password');
+          this.snackbar.error('Failed to update password');
         }
       });
     } else {
@@ -472,19 +476,63 @@ export class ProfileComponent implements OnInit {
   }
 
   // Enable 2FA
+  twoFactorSetup: any = null;
+  twoFactorCode = '';
+  isVerifying2FA = false;
+
   enable2FA() {
-    this.show2FAModal = true;
+    this.isLoading = true;
+    this.authService.setup2FA().subscribe({
+      next: (res) => {
+        this.twoFactorSetup = res;
+        this.show2FAModal = true;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.snackbar.error('Failed to initiate 2FA setup');
+        console.error(err);
+      }
+    });
   }
 
   confirmEnable2FA() {
-    this.profileService.enable2FA(this.isDoctor).subscribe({
+    if (!this.twoFactorCode || this.twoFactorCode.length !== 6) {
+      this.snackbar.error('Please enter a valid 6-digit code');
+      return;
+    }
+
+    this.isVerifying2FA = true;
+    this.authService.verify2FASetup(this.twoFactorCode).subscribe({
       next: () => {
         this.snackbar.success('Two-Factor Authentication enabled!');
         this.addActivity('account', '2FA Enabled', 'Two-factor authentication activated', new Date());
         this.show2FAModal = false;
+        this.twoFactorCode = '';
+        this.twoFactorSetup = null;
+        this.isVerifying2FA = false;
+        this.loadUser(); // Reload to update status
+      },
+      error: (err) => {
+        this.isVerifying2FA = false;
+        this.snackbar.error(err.error?.message || 'Failed to verify 2FA code');
+      }
+    });
+  }
+
+  confirmDisable2FA() {
+    this.isLoading = true;
+    this.authService.disable2FA().subscribe({
+      next: () => {
+        this.snackbar.success('Two-Factor Authentication disabled');
+        this.addActivity('account', '2FA Disabled', 'Two-factor authentication deactivated', new Date());
+        this.show2FAModal = false;
+        this.isLoading = false;
+        this.loadUser();
       },
       error: () => {
-        this.snackbar.error('Failed to enable 2FA');
+        this.isLoading = false;
+        this.snackbar.error('Failed to disable 2FA');
       }
     });
   }

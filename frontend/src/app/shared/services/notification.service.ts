@@ -105,8 +105,8 @@ export class NotificationService {
     // Only start if user has valid token
     if (!this.authService.getToken()) return;
 
-    // Refresh unread count every 30 seconds
-    this.pollingSubscription = interval(30000).subscribe(() => this.refreshUnreadCount());
+    // Refresh unread count every 10 seconds for better responsiveness
+    this.pollingSubscription = interval(10000).subscribe(() => this.refreshUnreadCount());
     // Initial load
     this.refreshUnreadCount();
   }
@@ -120,58 +120,103 @@ export class NotificationService {
 
   getNotificationIcon(type: string): string {
     const iconMap: { [key: string]: string } = {
-      // Prescription
-      'prescription_verified': 'fa-check-circle',
-      'prescription_rejected': 'fa-times-circle',
-      'prescription_expiring': 'fa-clock',
-      'prescription_expired': 'fa-exclamation-triangle',
-      'new_prescription_uploaded': 'fa-file-medical',
+      // Security & Account
+      'account_created': 'fa-user-plus',
+      'password_changed': 'fa-key',
+      'email_changed': 'fa-envelope-open',
+      'two_factor_enabled': 'fa-shield-alt',
+      'suspicious_login': 'fa-exclamation-triangle',
 
-      // Refill
-      'refill_approved': 'fa-check-circle',
-      'refill_rejected': 'fa-times-circle',
-      'refill_requested': 'fa-pills',
-      'refill_reminder': 'fa-bell',
+      // Orders & Payments
+      'order_confirmed': 'fa-shopping-cart',
+      'order_shipped': 'fa-shipping-fast',
+      'order_delivered': 'fa-box-open',
+      'order_cancelled': 'fa-ban',
+      'payment_success': 'fa-check-circle',
+      'payment_failed': 'fa-times-circle',
+      'refund_processed': 'fa-undo',
+      'invoice_generated': 'fa-file-invoice',
+      'payment_reminder': 'fa-money-bill',
 
-      // Appointment
+      // Appointments
       'appointment_booked': 'fa-calendar-check',
       'appointment_confirmed': 'fa-calendar-plus',
       'appointment_cancelled': 'fa-calendar-times',
       'appointment_rescheduled': 'fa-calendar',
       'appointment_reminder': 'fa-clock',
+      'appointment_completed': 'fa-check-double',
       'new_appointment_request': 'fa-calendar-alt',
 
-      // Profile
+      // Prescriptions
+      'prescription_uploaded': 'fa-file-medical',
+      'prescription_verified': 'fa-check-circle',
+      'prescription_rejected': 'fa-times-circle',
+      'prescription_expiring': 'fa-clock',
+      'prescription_expired': 'fa-exclamation-triangle',
+      'refill_approved': 'fa-check-circle',
+      'refill_rejected': 'fa-times-circle',
+      'refill_requested': 'fa-pills',
+      'refill_reminder': 'fa-bell',
+
+      // Lab Tests & Reports
+      'lab_test_scheduled': 'fa-flask',
+      'sample_collection_reminder': 'fa-vial',
+      'test_results_ready': 'fa-file-medical-alt',
+      'report_uploaded': 'fa-file-upload',
+
+      // Doctor-Specific
+      'new_patient_request': 'fa-user-plus',
+      'patient_cancelled': 'fa-user-times',
+      'new_review_received': 'fa-star',
+      'earnings_updated': 'fa-coins',
+      'slot_filled': 'fa-calendar-check',
+
+      // Cart & Shopping
+      'cart_reminder': 'fa-shopping-basket',
+      'price_drop': 'fa-arrow-down',
+      'stock_alert': 'fa-boxes',
+      'offer_alert': 'fa-tags',
+
+      // Health Records
+      'record_shared': 'fa-share-alt',
+      'vaccination_reminder': 'fa-syringe',
+      'health_goal_milestone': 'fa-trophy',
+
+      // Emergency Services
+      'emergency_contact_updated': 'fa-address-book',
+      'sos_alert_sent': 'fa-exclamation-circle',
+      'ambulance_dispatched': 'fa-ambulance',
+
+      // Health Reminders
+      'medication_reminder': 'fa-pills',
+      'checkup_reminder': 'fa-heartbeat',
+      'follow_up_required': 'fa-stethoscope',
+
+      // Engagement
+      'article_published': 'fa-newspaper',
+      'doctor_available': 'fa-user-md',
+      'health_tip': 'fa-lightbulb',
+
+      // System
+      'new_feature': 'fa-star',
+      'system_maintenance': 'fa-tools',
+      'security_alert': 'fa-shield-alt',
+      'account_update': 'fa-user-cog',
+
+      // Legacy/Profile
       'profile_verified': 'fa-user-check',
       'profile_rejected': 'fa-user-times',
       'profile_update_required': 'fa-user-edit',
       'doctor_verification_approved': 'fa-user-md',
       'doctor_verification_rejected': 'fa-user-times',
 
-      // Health
-      'medication_reminder': 'fa-pills',
-      'checkup_reminder': 'fa-heartbeat',
-      'follow_up_reminder': 'fa-stethoscope',
-
       // Messaging
       'new_message': 'fa-envelope',
       'message_reply': 'fa-reply',
 
-      // Payment
-      'payment_success': 'fa-check-circle',
-      'payment_failed': 'fa-times-circle',
-      'invoice_generated': 'fa-file-invoice',
-      'payment_reminder': 'fa-money-bill',
-
-      // Emergency
+      // Emergency/Critical
       'emergency_alert': 'fa-exclamation-triangle',
       'critical_update': 'fa-exclamation-circle',
-
-      // System
-      'system_maintenance': 'fa-tools',
-      'new_feature': 'fa-star',
-      'security_alert': 'fa-shield-alt',
-      'account_update': 'fa-user-cog',
 
       // Default
       'default': 'fa-bell'
@@ -181,15 +226,63 @@ export class NotificationService {
   }
 
   getNotificationColor(type: string): string {
-    if (type.includes('rejected') || type.includes('failed') || type.includes('expired')) {
-      return 'text-red-600';
-    } else if (type.includes('verified') || type.includes('approved') || type.includes('success')) {
-      return 'text-green-600';
-    } else if (type.includes('reminder') || type.includes('expiring')) {
-      return 'text-yellow-600';
-    } else if (type.includes('emergency') || type.includes('critical') || type.includes('alert')) {
+    // Emergency & Critical (Red)
+    if (type.includes('emergency') || type.includes('critical') || type.includes('alert') ||
+      type.includes('sos') || type.includes('ambulance') || type.includes('suspicious')) {
       return 'text-red-700';
     }
+
+    // Failures & Rejections (Red)
+    if (type.includes('rejected') || type.includes('failed') || type.includes('expired') ||
+      type.includes('cancelled') && !type.includes('patient_cancelled')) {
+      return 'text-red-600';
+    }
+
+    // Success & Approvals (Green)
+    if (type.includes('verified') || type.includes('approved') || type.includes('success') ||
+      type.includes('confirmed') || type.includes('completed') || type.includes('delivered') ||
+      type.includes('milestone')) {
+      return 'text-green-600';
+    }
+
+    // Warnings & Reminders (Amber/Yellow)
+    if (type.includes('reminder') || type.includes('expiring') || type.includes('pending') ||
+      type.includes('cart_reminder') || type.includes('sample_collection')) {
+      return 'text-amber-600';
+    }
+
+    // Orders & Payments (Blue)
+    if (type.includes('order_') || type.includes('shipped') || type.includes('refund')) {
+      return 'text-blue-600';
+    }
+
+    // Lab Tests & Reports (Purple)
+    if (type.includes('lab_') || type.includes('test_') || type.includes('report_') || type.includes('results')) {
+      return 'text-purple-600';
+    }
+
+    // Doctor-Specific (Indigo)
+    if (type.includes('patient_') || type.includes('earnings') || type.includes('slot_') || type.includes('review')) {
+      return 'text-indigo-600';
+    }
+
+    // Shopping & Offers (Emerald)
+    if (type.includes('price_drop') || type.includes('stock_alert') || type.includes('offer_')) {
+      return 'text-emerald-600';
+    }
+
+    // Security & Account (Slate)
+    if (type.includes('password_') || type.includes('email_') || type.includes('two_factor') ||
+      type.includes('account_') || type.includes('security_')) {
+      return 'text-slate-700';
+    }
+
+    // Engagement & Tips (Cyan)
+    if (type.includes('article_') || type.includes('health_tip') || type.includes('doctor_available')) {
+      return 'text-cyan-600';
+    }
+
+    // Default (Blue)
     return 'text-blue-600';
   }
 }

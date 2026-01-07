@@ -176,7 +176,9 @@ export class HomeComponent implements OnInit {
           email: payload.email,
           role: payload.role,
           name: payload.name || payload.email.split('@')[0],
-          avatar_url: payload.avatar_url
+          avatar_url: payload.avatar_url,
+          oauth_provider: payload.oauth_provider,
+          hasPassword: payload.hasPassword
         };
         localStorage.setItem('user', JSON.stringify(user));
       } catch (e) {

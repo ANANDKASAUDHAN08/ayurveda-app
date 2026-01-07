@@ -88,7 +88,7 @@ exports.registerDoctor = async (req, res) => {
             success: true,
             message: 'Registration successful! Please check your email to verify your account before logging in.',
             emailSent: true,
-            user: { id: userId, name, email, role: 'doctor', emailVerified: false },
+            user: { id: userId, name, email, role: 'doctor', emailVerified: false, hasPassword: true, oauth_provider: null },
             doctor: { id: doctorId, userId, name }
         });
 
@@ -164,6 +164,30 @@ exports.getDoctorById = async (req, res) => {
     }
 };
 
+exports.getProfile = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        // Fetch doctor profile joined with user data
+        const [doctors] = await db.execute(`
+            SELECT d.*, u.email, u.role, u.oauth_provider, u.two_factor_enabled,
+                   (u.password IS NOT NULL AND u.password != '') as hasPassword,
+                   u.createdAt as user_created_at
+            FROM doctors d
+            JOIN users u ON d.userId = u.id
+            WHERE d.userId = ?`, [userId]);
+
+        if (doctors.length === 0) {
+            return res.status(404).json({ message: 'Doctor profile not found' });
+        }
+
+        res.json({ doctor: doctors[0] });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 exports.updateDoctorProfile = async (req, res) => {
     upload(req, res, async function (err) {
         if (err instanceof multer.MulterError) {
@@ -225,8 +249,15 @@ exports.updateDoctorProfile = async (req, res) => {
                 await db.execute(query, params);
             }
 
-            // Fetch updated doctor
-            const [updatedDoctors] = await db.execute('SELECT * FROM doctors WHERE id = ?', [doctorId]);
+            // Fetch updated doctor profile joined with user data
+            const [updatedDoctors] = await db.execute(`
+                SELECT d.*, u.email, u.role, u.oauth_provider, u.two_factor_enabled,
+                       (u.password IS NOT NULL AND u.password != '') as hasPassword,
+                       u.createdAt as user_created_at
+                FROM doctors d
+                JOIN users u ON d.userId = u.id
+                WHERE d.id = ?`, [doctorId]);
+
             const doctor = updatedDoctors[0];
 
             // Auto-verify if profile is complete (required fields filled)
@@ -240,7 +271,13 @@ exports.updateDoctorProfile = async (req, res) => {
             if (isProfileComplete && !doctor.isVerified) {
                 await db.execute('UPDATE doctors SET isVerified = TRUE WHERE id = ?', [doctorId]);
                 // Fetch again to get updated verification status
-                const [verifiedDoctors] = await db.execute('SELECT * FROM doctors WHERE id = ?', [doctorId]);
+                const [verifiedDoctors] = await db.execute(`
+                    SELECT d.*, u.email, u.role, u.oauth_provider, u.two_factor_enabled,
+                           (u.password IS NOT NULL AND u.password != '') as hasPassword,
+                           u.createdAt as user_created_at
+                    FROM doctors d
+                    JOIN users u ON d.userId = u.id
+                    WHERE d.id = ?`, [doctorId]);
                 res.json({
                     message: 'Profile updated and verified successfully!',
                     doctor: verifiedDoctors[0]
@@ -264,13 +301,13 @@ exports.changePassword = async (req, res) => {
             return res.status(400).json({ message: 'Password must be at least 6 characters' });
         }
 
-        // In a real app, hash password
-        // const hashedPassword = await bcrypt.hash(newPassword, 10);
+        // Properly hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-        // Demo: update plain text (NOT SECURE)
-        await db.execute('UPDATE users SET password = ? WHERE id = ?', [newPassword, userId]);
+        await db.execute('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, userId]);
 
-        res.json({ message: 'Password changed successfully' });
+        res.json({ message: 'Password updated successfully' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });

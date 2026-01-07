@@ -1,4 +1,5 @@
 const db = require('../config/database');
+const NotificationController = require('./notification.controller');
 
 // Generate unique order number
 function generateOrderNumber() {
@@ -110,6 +111,23 @@ exports.placeOrder = async (req, res) => {
 
         // Commit transaction
         await connection.commit();
+
+        // Send order confirmation notification
+        try {
+            await NotificationController.createNotification({
+                user_id: userId,
+                type: 'order_confirmed',
+                category: 'orders',
+                title: 'Order Placed Successfully!',
+                message: `Your order #${order_number} has been placed successfully. Total amount: ₹${final_amount.toFixed(2)}`,
+                related_id: orderId,
+                related_type: 'order',
+                action_url: `/orders/${orderId}`,
+                priority: 'normal'
+            });
+        } catch (notifError) {
+            console.error('Failed to create order confirmation notification:', notifError.message);
+        }
 
         res.status(201).json({
             success: true,
@@ -293,6 +311,23 @@ exports.cancelOrder = async (req, res) => {
 
         await connection.commit();
 
+        // Send cancellation notification
+        try {
+            await NotificationController.createNotification({
+                user_id: userId,
+                type: 'order_cancelled',
+                category: 'orders',
+                title: 'Order Cancelled',
+                message: `Your order #${order.order_number} has been cancelled successfully.`,
+                related_id: orderId,
+                related_type: 'order',
+                action_url: `/orders/${orderId}`,
+                priority: 'normal'
+            });
+        } catch (notifError) {
+            console.error('Failed to create order cancellation notification:', notifError.message);
+        }
+
         res.json({
             success: true,
             message: 'Order cancelled successfully'
@@ -351,6 +386,61 @@ exports.updateOrderStatus = async (req, res) => {
         `, [orderId, status, message || `Order status updated to ${status}`]);
 
         await connection.commit();
+
+        // Send status update notifications
+        try {
+            const [orderInfo] = await connection.execute(
+                'SELECT user_id, order_number FROM orders WHERE id = ?',
+                [orderId]
+            );
+
+            if (orderInfo.length > 0) {
+                const { user_id, order_number } = orderInfo[0];
+                let notifType, notifTitle, notifMessage, priority = 'normal';
+
+                switch (status) {
+                    case 'confirmed':
+                        notifType = 'order_confirmed';
+                        notifTitle = 'Order Confirmed!';
+                        notifMessage = `Your order #${order_number} has been confirmed and is being processed.`;
+                        break;
+                    case 'shipped':
+                        notifType = 'order_shipped';
+                        notifTitle = 'Order Shipped!';
+                        notifMessage = `Great news! Your order #${order_number} has been shipped and is on its way.`;
+                        break;
+                    case 'delivered':
+                        notifType = 'order_delivered';
+                        notifTitle = 'Order Delivered!';
+                        notifMessage = `Your order #${order_number} has been delivered. Thank you for shopping with us!`;
+                        break;
+                    case 'cancelled':
+                        notifType = 'order_cancelled';
+                        notifTitle = 'Order Cancelled';
+                        notifMessage = `Your order #${order_number} has been cancelled.`;
+                        priority = 'high';
+                        break;
+                    default:
+                        break;
+                }
+
+                if (notifType) {
+                    await NotificationController.createNotification({
+                        user_id,
+                        type: notifType,
+                        category: 'orders',
+                        title: notifTitle,
+                        message: notifMessage,
+                        related_id: orderId,
+                        related_type: 'order',
+                        action_url: `/orders/${orderId}`,
+                        priority
+                    });
+                }
+            }
+        } catch (notifError) {
+            console.error('Failed to create order status notification:', notifError.message);
+        }
 
         res.json({
             success: true,
