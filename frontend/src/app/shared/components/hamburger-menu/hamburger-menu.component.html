@@ -3,7 +3,7 @@
 </div>
 <!-- Menu Drawer -->
 <div *ngIf="isOpen"
-    class="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-[200] shadow-2xl md:hidden overflow-y-auto pb-20"
+    class="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-[200] shadow-2xl md:hidden overflow-y-auto pb-5"
     [@slideIn]>
 
     <!-- Header (Logo & Name) -->
@@ -27,7 +27,7 @@
     </div>
 
     <!-- 2. Login Section - Improved Styling -->
-    <div *ngIf="!authService.isLoggedIn()">
+    <!-- <div *ngIf="!authService.isLoggedIn()">
         <button (click)="toggleLoginDropdown()"
             class="w-[90%] mx-auto py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black rounded-xl shadow-lg shadow-emerald-200/50 flex items-center justify-between px-6 active:scale-95 transition-all mb-4 mt-2">
             <span class="flex items-center gap-3">
@@ -58,7 +58,7 @@
                 <i class="fas fa-arrow-right text-blue-300 group-hover:translate-x-1 transition-transform mr-2"></i>
             </button>
         </div>
-    </div>
+    </div> -->
 
     <!-- User Info (if logged in) -->
     <div *ngIf="authService.isLoggedIn()" class="p-1 bg-slate-50 border-b border-slate-200">
@@ -91,6 +91,32 @@
             class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors">
             <i class="fas fa-map-marker-alt text-emerald-600 w-5"></i>
             <span class="text-slate-700">Nearby Care</span>
+            <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
+        </a>
+
+        <!-- Divider -->
+        <div class="border-t border-slate-200 my-2"></div>
+
+        <!-- Section: Medical Traditions -->
+        <div class="px-6 pt-4 pb-2">
+            <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider">Medical Traditions</h3>
+        </div>
+        <a routerLink="/ayurveda" (click)="closeMenu()"
+            class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+            <i class="fas fa-leaf text-emerald-600 w-5"></i>
+            <span class="text-slate-700">Ayurveda</span>
+            <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
+        </a>
+        <a routerLink="/allopathic" (click)="closeMenu()"
+            class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+            <i class="fas fa-capsules text-emerald-600 w-5"></i>
+            <span class="text-slate-700">Allopathic</span>
+            <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
+        </a>
+        <a routerLink="/homeopathy" (click)="closeMenu()"
+            class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+            <i class="fas fa-flask text-emerald-600 w-5"></i>
+            <span class="text-slate-700">Homeopathy</span>
             <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
         </a>
 
@@ -211,7 +237,7 @@
 
     <!-- Login/Logout Section -->
     <div class="px-4 py-3 border-t border-slate-200">
-        <div *ngIf="authService.isLoggedIn()" class="px-6 py-6 border-t border-slate-100 bg-slate-50/50 mt-auto">
+        <div *ngIf="authService.isLoggedIn()" class="px-6 py-0 mt-auto">
             <button (click)="logout()"
                 class="w-full h-11 bg-red-500 text-white rounded-xl font-black shadow-lg shadow-red-100 flex items-center justify-center gap-3 active:scale-95 transition-all text-sm">
                 <i class="fas fa-power-off"></i>

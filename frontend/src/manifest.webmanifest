@@ -1,8 +1,8 @@
 {
     "name": "HealthConnect Platform",
-    "short_name": "HealthConnect",
-    "theme_color": "#059669",
-    "background_color": "#ffffff",
+    "short_name": "Health Connect",
+    "theme_color": "#10b981",
+    "background_color": "#10b981",
     "display": "standalone",
     "scope": "/",
     "start_url": "/",

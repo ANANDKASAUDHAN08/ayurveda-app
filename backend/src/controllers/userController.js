@@ -54,8 +54,10 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
     upload(req, res, async function (err) {
         if (err instanceof multer.MulterError) {
+            console.error('Multer error:', err);
             return res.status(400).json({ message: 'File upload error: ' + err.message });
         } else if (err) {
+            console.error('Upload error:', err);
             return res.status(400).json({ message: err.message });
         }
 

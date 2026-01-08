@@ -319,12 +319,11 @@ export class ProfileComponent implements OnInit {
           this.selectedFile = null;
         },
         error: (err) => {
-          setTimeout(() => {
-            this.isLoading = false;
-          }, 1000);
+          this.isLoading = false;
+          this.selectedFile = null;
 
           console.error('Update error:', err);
-          this.snackbar.error('Failed to update profile');
+          this.snackbar.error(err.error?.message || 'Failed to update profile');
         }
       });
     } else {

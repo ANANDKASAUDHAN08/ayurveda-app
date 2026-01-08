@@ -59,23 +59,16 @@ export class BottomNavigationComponent implements OnInit, OnDestroy {
   }
 
   updateNavItems() {
-    if (this.isLoggedIn) {
-      // Logged in: Show Home, SOS, Cart (with badge), Profile
-      this.navItems = [
-        { icon: 'fas fa-home', label: 'Home', route: '/' },
-        { icon: 'fas fa-ambulance', label: 'SOS', route: '/emergency', isEmergency: true },
-        { icon: 'fas fa-shopping-cart', label: 'Cart', route: '/cart', badge: this.cartCount },
-        { icon: 'fas fa-user', label: 'Profile', route: '/user/profile' }
-      ];
-    } else {
-      // Not logged in: Show Home, SOS, Medicine, Login
-      this.navItems = [
-        { icon: 'fas fa-home', label: 'Home', route: '/' },
-        { icon: 'fas fa-ambulance', label: 'SOS', route: '/emergency', isEmergency: true },
-        { icon: 'fas fa-pills', label: 'Medicine', route: '/medicines' },
-        { icon: 'fas fa-sign-in-alt', label: 'Login', route: '/for-users' }
-      ];
-    }
+    this.navItems = [
+      { icon: 'fas fa-home', label: 'Home', route: '/' },
+      { icon: 'fas fa-pills', label: 'Medicines', route: '/medicines' },
+      // { icon: 'fas fa-clipboard-list', label: 'My Orders', route: '/orders' },
+      {
+        icon: this.isLoggedIn ? 'fas fa-user' : 'fas fa-sign-in-alt',
+        label: this.isLoggedIn ? 'Profile' : 'Login',
+        route: this.isLoggedIn ? '/user/profile' : '/for-users'
+      }
+    ];
   }
 
   updateActiveRoute() {

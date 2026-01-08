@@ -2,12 +2,9 @@
 <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-50 md:hidden safe-area-bottom">
     <div class="flex justify-around items-center h-16 px-2">
         <!-- Regular Nav Items -->
-        <a *ngFor="let item of navItems" [routerLink]="item.label !== 'Login' ? item.route : null"
+        <a *ngFor="let item of navItems" [routerLink]="item.label === 'Login' ? null : item.route"
             (click)="item.label === 'Login' ? toggleLoginDropdown($event) : null"
-            [class.text-red-600]="item.isEmergency && isActive(item.route)"
-            [class.text-red-500]="item.isEmergency && !isActive(item.route)"
-            [class.text-emerald-600]="!item.isEmergency && isActive(item.route)"
-            [class.text-slate-600]="!item.isEmergency && !isActive(item.route)" [class.animate-pulse]="item.isEmergency"
+            [class.text-emerald-600]="isActive(item.route)" [class.text-slate-600]="!isActive(item.route)"
             class="flex flex-col items-center justify-center flex-1 py-2 relative transition-colors cursor-pointer">
             <!-- Icon -->
             <i [class]="item.icon + ' text-xl'"></i>
