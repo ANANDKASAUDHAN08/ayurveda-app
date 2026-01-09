@@ -33,20 +33,36 @@ const PORT = process.env.PORT || 3000;
 const allowedOrigins = [
     process.env.APP_URL,
     process.env.FRONTEND_URL,
-    'https://healthconnect-zeta.vercel.app'
+    'https://healthconnect-zeta.vercel.app',
+    'https://healthconnect-6s0ig7c0r-anand-kasaudhans-projects.vercel.app'
 ].filter(Boolean).map(url => url.replace(/\/$/, ""));
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin.replace(/\/$/, "")) !== -1) {
-            callback(null, true);
-        } else {
-            console.log('CORS blocked origin:', origin);
-            callback(new Error('Not allowed by CORS'));
+        // Allow requests with no origin (like mobile apps or curl)
+        if (!origin) {
+            return callback(null, true);
         }
+
+        // Remove trailing slash from origin
+        const cleanOrigin = origin.replace(/\/$/, "");
+
+        // Check if origin is in allowed list
+        if (allowedOrigins.indexOf(cleanOrigin) !== -1) {
+            return callback(null, true);
+        }
+
+        // Allow all Vercel preview deployments
+        if (cleanOrigin.includes('.vercel.app')) {
+            return callback(null, true);
+        }
+
+        console.log('CORS blocked origin:', origin);
+        callback(new Error('Not allowed by CORS'));
     },
     credentials: true
 }));
+
 app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'));
 

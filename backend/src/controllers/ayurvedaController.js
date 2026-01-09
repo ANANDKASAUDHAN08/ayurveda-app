@@ -257,7 +257,7 @@ exports.getRituals = async (req, res) => {
             params.push(timeOfDay);
         }
 
-        query += ' ORDER BY FIELD(time_of_day, "Morning", "Afternoon", "Evening", "Night"), id ASC';
+        query += ' ORDER BY FIELD(time_of_day, \'Morning\', \'Afternoon\', \'Evening\', \'Night\'), id ASC';
 
         const [rituals] = await db.query(query, params);
 
