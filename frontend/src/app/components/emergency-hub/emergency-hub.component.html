@@ -374,6 +374,54 @@
             </div>
         </div>
 
+        <!-- Nearby Health Centres Card - NEW -->
+        <div class="mb-8 mt-8" *ngIf="nearbyCentres.length > 0">
+            <div
+                class="bg-gradient-to-br from-orange-50 to-white rounded-2xl sm:rounded-3xl border border-orange-200 shadow-lg overflow-hidden">
+                <div class="p-6 sm:p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-md sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fas fa-house-medical text-orange-600 -mt-6 md:mt-0"></i>
+                            Nearest Public Health Centres
+                        </h3>
+                        <button (click)="viewAllHealthCentres()"
+                            class="self-start sm:self-auto text-xs sm:text-sm font-bold text-orange-600 hover:text-orange-700 bg-orange-100 hover:bg-orange-200 px-4 py-2 rounded-full transition-all flex items-center gap-1.5">
+                            View All
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div *ngFor="let centre of nearbyCentres"
+                            class="bg-white p-4 rounded-xl border border-orange-100 shadow-sm hover:shadow-md transition-all group">
+                            <div class="flex justify-between items-start mb-2">
+                                <span
+                                    class="text-[10px] font-black uppercase tracking-wider text-orange-400 bg-orange-50 px-2 py-0.5 rounded">
+                                    {{centre.facility_type}}
+                                </span>
+                                <span class="text-xs font-bold text-emerald-600">
+                                    <i class="fas fa-location-arrow"></i>
+                                    {{ (centre.distance !== null && centre.distance !== undefined) ? (centre.distance |
+                                    number:'1.1-1') + ' km' : 'Distance N/A' }}
+                                </span>
+                            </div>
+                            <h4
+                                class="font-bold text-slate-900 mb-1 group-hover:text-orange-600 transition-colors truncate">
+                                {{centre.facility_name}}
+                            </h4>
+                            <p class="text-xs text-slate-500 mb-4 line-clamp-2">
+                                <i class="fas fa-map-marker-alt mr-1"></i> {{centre.facility_address !== 'NA' ?
+                                centre.facility_address : centre.district_name}}
+                            </p>
+                            <button (click)="getDirections(centre)"
+                                class="w-full py-2 bg-slate-100 hover:bg-orange-600 hover:text-white text-slate-600 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-directions"></i> Get Directions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Safety Tips - Full Width at Bottom -->
         <div class="mt-8 bg-blue-50 border border-blue-200 rounded-2xl p-6">
             <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2">

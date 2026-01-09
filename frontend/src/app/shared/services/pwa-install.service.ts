@@ -11,8 +11,8 @@ export class PwaInstallService {
 
     constructor() {
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent the mini-infobar from appearing on mobile
-            e.preventDefault();
+            // Let the browser show its own install banner if it wants
+            // e.preventDefault();
             // Stash the event so it can be triggered later.
             this.deferredPrompt = e;
             // Update UI notify binary value of show install banner

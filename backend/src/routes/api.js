@@ -85,5 +85,7 @@ const nearbyController = require('../controllers/nearbyController');
 router.get('/nearby/hospitals', nearbyController.getNearbyHospitals);
 router.get('/nearby/pharmacies', nearbyController.getNearbyPharmacies);
 router.get('/nearby/doctors', nearbyController.getNearbyDoctors);
+router.get('/nearby/health-centres', nearbyController.getNearbyHealthCentres);
+router.get('/nearby/search-districts', nearbyController.searchHealthCentresByDistrict);
 
 module.exports = router;

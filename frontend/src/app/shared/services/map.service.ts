@@ -66,6 +66,22 @@ export class MapService {
         return this.http.get(`${this.apiUrl}/doctors`, { params });
     }
 
+    getNearbyHealthCentres(lat?: number, lng?: number, radius: number = 15, district?: string): Observable<any> {
+        let params = new HttpParams().set('radius', radius.toString());
+        if (district) {
+            params = params.set('district', district);
+        }
+        if (lat && lng) {
+            params = params.set('lat', lat.toString()).set('lng', lng.toString());
+        }
+        return this.http.get(`${this.apiUrl}/health-centres`, { params });
+    }
+
+    searchDistricts(query: string): Observable<any> {
+        const params = new HttpParams().set('query', query);
+        return this.http.get(`${this.apiUrl}/search-districts`, { params });
+    }
+
     // Distance calculation (Haversine)
     calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
         const R = 6371; // km

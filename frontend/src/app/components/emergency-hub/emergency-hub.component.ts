@@ -11,6 +11,7 @@ import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-
 import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
 import { LocationService, UserLocation } from '../../shared/services/location.service';
 import { Subscription } from 'rxjs';
+import { MapService } from '../../shared/services/map.service';
 
 @Component({
   selector: 'app-emergency-hub',
@@ -25,6 +26,8 @@ export class EmergencyHubComponent implements OnInit {
   currentLocation: UserLocation | null = null;
   ambulanceNumber = '108'; // India emergency number
   isLoggedIn = false;
+  nearbyCentres: any[] = [];
+  loadingCentres = false;
   private locationSub: Subscription | null = null;
 
   // Modal states
@@ -37,6 +40,7 @@ export class EmergencyHubComponent implements OnInit {
     private locationService: LocationService, // Added
     private authService: AuthService,
     private snackbar: SnackbarService,
+    private mapService: MapService,
     private router: Router
   ) { }
 
@@ -58,8 +62,36 @@ export class EmergencyHubComponent implements OnInit {
       this.currentLocation = location;
       if (!location) {
         this.locationService.detectLocation();
+      } else {
+        this.loadNearestCentres();
       }
     });
+  }
+
+  loadNearestCentres() {
+    if (!this.currentLocation) return;
+    this.loadingCentres = true;
+    this.mapService.getNearbyHealthCentres(this.currentLocation.latitude, this.currentLocation.longitude, 20).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.nearbyCentres = res.data.slice(0, 3); // Top 3
+        }
+        this.loadingCentres = false;
+      },
+      error: (err) => {
+        console.error('Error loading nearby centres:', err);
+        this.loadingCentres = false;
+      }
+    });
+  }
+
+  getDirections(item: any) {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${item.latitude},${item.longitude}`;
+    window.open(url, '_blank');
+  }
+
+  viewAllHealthCentres() {
+    this.router.navigate(['/nearby-services'], { queryParams: { type: 'health-centre' } });
   }
 
   // Open location picker modal

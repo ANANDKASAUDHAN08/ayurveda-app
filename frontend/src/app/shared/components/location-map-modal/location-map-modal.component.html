@@ -65,12 +65,20 @@
 
             <!-- Map Container - Ensure visible height on both mobile and desktop -->
             <div class="relative w-full overflow-hidden h-[300px] sm:h-[400px]">
-                <google-map [height]="'100%'" [width]="'100%'" [center]="center" [zoom]="zoom" [options]="mapOptions"
-                    (mapClick)="onMapClick($event)" class="google-map-element">
+                <google-map *ngIf="apiLoaded" [height]="'100%'" [width]="'100%'" [center]="center" [zoom]="zoom"
+                    [options]="mapOptions" (mapClick)="onMapClick($event)" class="google-map-element">
                     <map-marker *ngIf="hasLocation" [position]="markerPosition" [options]="markerOptions"
                         (mapDragend)="onMarkerDragEnd($event)">
                     </map-marker>
                 </google-map>
+
+                <div *ngIf="!apiLoaded" class="w-full h-full flex items-center justify-center bg-gray-50">
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fas fa-spinner fa-spin text-emerald-500"></i>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Loading Map
+                            Interface...</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Selected Location Info - More compact -->

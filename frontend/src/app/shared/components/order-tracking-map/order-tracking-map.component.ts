@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { OrderService } from '../../services/order.service';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { interval, Subscription } from 'rxjs';
+import { GoogleMapsLoaderService } from '../../services/google-maps-loader.service';
 
 @Component({
   selector: 'app-order-tracking-map',
@@ -29,8 +30,7 @@ export class OrderTrackingMapComponent implements OnInit, OnDestroy, AfterViewIn
     icon: {
       url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
       scaledSize: { width: 40, height: 40 } as any // Using simple icon for now
-    },
-    animation: google.maps.Animation.DROP
+    }
   };
 
   customerMarkerOptions: google.maps.MarkerOptions = {
@@ -44,10 +44,21 @@ export class OrderTrackingMapComponent implements OnInit, OnDestroy, AfterViewIn
 
   trackingData: any = null;
   loading = true;
+  apiLoaded = false;
 
-  constructor(private orderService: OrderService) { }
+  constructor(
+    private orderService: OrderService,
+    private googleLoader: GoogleMapsLoaderService
+  ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.googleLoader.isLoaded$.subscribe(loaded => {
+      this.apiLoaded = loaded;
+      if (loaded) {
+        this.driverMarkerOptions.animation = google.maps.Animation.DROP;
+      }
+    });
+  }
 
   ngAfterViewInit() {
     this.startTracking();

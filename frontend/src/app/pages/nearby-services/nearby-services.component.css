@@ -40,13 +40,47 @@
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
 }
 
-/* Responsive adjust */
-@media (max-width: 1024px) {
-    .h-\[calc\(100vh-64px\)\] {
+/* Mobile legend animation */
+.animate-fade-in {
+    animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hide location button on mobile maps */
+@media (max-width: 1023px) {
+
+    .block.lg\:hidden google-map ::ng-deep button[title="Show your location"],
+    .block.lg\:hidden google-map ::ng-deep div[title="Show your location"] {
+        display: none !important;
+    }
+}
+
+@media (max-width: 1023px) {
+
+    .md\:h-\[calc\(100vh-64px\)\] {
+        height: auto !important;
+        min-height: 100vh;
+    }
+
+    .nearby-sidebar {
+        width: 100%;
         height: auto;
     }
 
-    #map {
-        height: 60vh;
+    .nearby-list-section {
+        height: auto !important;
+        overflow: visible !important;
+        flex: none !important;
     }
 }

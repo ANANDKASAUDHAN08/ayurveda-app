@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { GoogleMapsModule, GoogleMap, MapMarker } from '@angular/google-maps';
 import { UserLocation, LocationService } from '../../services/location.service';
 import { HttpClient } from '@angular/common/http';
+import { GoogleMapsLoaderService } from '../../services/google-maps-loader.service';
 
 @Component({
     selector: 'app-location-map-modal',
@@ -38,11 +39,16 @@ export class LocationMapModalComponent implements OnInit, OnChanges {
 
     // Search properties
     searchQuery: string = '';
-    predictions: google.maps.places.AutocompletePrediction[] = [];
+    predictions: any[] = []; // Using any to avoid issues if types or namespace not yet ready
+    apiLoaded: boolean = false;
 
 
 
-    constructor(private locationService: LocationService, private http: HttpClient) { }
+    constructor(
+        private locationService: LocationService,
+        private http: HttpClient,
+        private googleLoader: GoogleMapsLoaderService
+    ) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['isOpen'] && changes['isOpen'].currentValue === true) {
@@ -51,6 +57,10 @@ export class LocationMapModalComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        this.googleLoader.isLoaded$.subscribe(loaded => {
+            this.apiLoaded = loaded;
+        });
+
         if (this.isOpen) {
             this.initializeMap();
         }

@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MapService, Location } from '../../shared/services/map.service';
+import { MapService } from '../../shared/services/map.service';
 import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { LocationService } from '../../shared/services/location.service';
+import { GoogleMapsLoaderService } from '../../shared/services/google-maps-loader.service';
 
 @Component({
   selector: 'app-nearby-services',
@@ -14,6 +15,8 @@ import { LocationService } from '../../shared/services/location.service';
   styleUrl: './nearby-services.component.css'
 })
 export class NearbyServicesComponent implements OnInit {
+  @ViewChild('districtSearchContainer') districtSearchContainer!: ElementRef;
+
   // Map Options
   center: google.maps.LatLngLiteral = { lat: 28.6139, lng: 77.2090 }; // Delhi
   zoom = 13;
@@ -25,34 +28,64 @@ export class NearbyServicesComponent implements OnInit {
   userLocation: { lat: number; lng: number } | null = null;
   items: any[] = [];
   filteredItems: any[] = [];
-  selectedType: 'hospital' | 'pharmacy' | 'doctor' = 'hospital';
+  selectedType: 'hospital' | 'pharmacy' | 'doctor' | 'health-centre' = 'hospital';
   selectedItem: any | null = null;
   loading = false;
   searchQuery = '';
+  districtQuery = '';
+  districtSuggestions: any[] = [];
+  searchMode: 'nearby' | 'district' = 'nearby';
+  apiLoaded = false;
+
+  // Pagination
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  showMobileLegend: boolean = false;
+  Math = Math;
 
   // Markers
   markers: any[] = [];
   userMarkerPosition: google.maps.LatLngLiteral | null = null;
   userMarkerOptions: google.maps.MarkerOptions = {
-    icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 10,
-      fillColor: '#2563eb',
-      fillOpacity: 1,
-      strokeWeight: 2,
-      strokeColor: '#ffffff',
-    },
     title: 'You are here'
   };
 
   constructor(
     private mapService: MapService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private googleLoader: GoogleMapsLoaderService,
+    private elementRef: ElementRef
   ) { }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (this.districtSearchContainer && !this.districtSearchContainer.nativeElement.contains(event.target)) {
+      this.districtSuggestions = [];
+    }
+  }
 
   ngOnInit() {
     this.loading = true;
+    this.googleLoader.isLoaded$.subscribe(loaded => {
+      this.apiLoaded = loaded;
+      if (loaded) {
+        this.initUserMarkerOptions();
+        this.updateMarkers(); // Refresh markers with google namespace available
+      }
+    });
     this.setupLocationAndData();
+  }
+
+  private initUserMarkerOptions() {
+    if (typeof google === 'undefined') return;
+    this.userMarkerOptions.icon = {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 10,
+      fillColor: '#2563eb',
+      fillOpacity: 1,
+      strokeWeight: 2,
+      strokeColor: '#ffffff'
+    };
   }
 
   private setupLocationAndData() {
@@ -91,6 +124,13 @@ export class NearbyServicesComponent implements OnInit {
       case 'doctor':
         obs = this.mapService.getNearbyDoctors(lat, lng);
         break;
+      case 'health-centre':
+        if (this.searchMode === 'district' && this.districtQuery) {
+          obs = this.mapService.getNearbyHealthCentres(lat, lng, 20, this.districtQuery);
+        } else {
+          obs = this.mapService.getNearbyHealthCentres(lat, lng);
+        }
+        break;
     }
 
     obs.subscribe({
@@ -99,6 +139,28 @@ export class NearbyServicesComponent implements OnInit {
           this.items = res.data.map((item: any) => ({ ...item, type: this.selectedType }));
           this.onSearch(); // Apply initial filter
           this.updateMarkers();
+
+          // Update map center and zoom when district search returns results
+          if (this.searchMode === 'district' && this.items.length > 0) {
+            // Find the first item with valid coordinates
+            const itemWithCoords = this.items.find(item =>
+              item.latitude && item.longitude &&
+              !isNaN(parseFloat(String(item.latitude))) &&
+              !isNaN(parseFloat(String(item.longitude)))
+            );
+
+            if (itemWithCoords) {
+              this.center = {
+                lat: parseFloat(String(itemWithCoords.latitude)),
+                lng: parseFloat(String(itemWithCoords.longitude))
+              };
+              this.zoom = 12; // Zoom to show district area
+            }
+          } else if (this.searchMode === 'nearby' && this.userLocation) {
+            // Reset to user location when switching back to nearby mode
+            this.center = this.userLocation;
+            this.zoom = 13;
+          }
         }
         this.loading = false;
       },
@@ -109,9 +171,41 @@ export class NearbyServicesComponent implements OnInit {
     });
   }
 
-  toggleType(type: 'hospital' | 'pharmacy' | 'doctor') {
+  toggleType(type: 'hospital' | 'pharmacy' | 'doctor' | 'health-centre') {
     if (this.selectedType === type) return;
     this.selectedType = type;
+    this.searchQuery = '';
+    this.districtQuery = '';
+    this.districtSuggestions = [];
+    if (type !== 'health-centre') {
+      this.searchMode = 'nearby';
+    }
+    this.loadNearby();
+  }
+
+  onDistrictInput() {
+    if (this.districtQuery.length < 2) {
+      this.districtSuggestions = [];
+      return;
+    }
+    this.mapService.searchDistricts(this.districtQuery).subscribe(res => {
+      if (res.success) {
+        this.districtSuggestions = res.data;
+      }
+    });
+  }
+
+  selectDistrict(district: any) {
+    this.districtQuery = district.district_name;
+    this.districtSuggestions = [];
+    this.searchMode = 'district';
+    this.loadNearby();
+  }
+
+  clearDistrictSearch() {
+    this.districtQuery = '';
+    this.districtSuggestions = [];
+    this.searchMode = 'nearby';
     this.loadNearby();
   }
 
@@ -125,6 +219,47 @@ export class NearbyServicesComponent implements OnInit {
         (item.address && item.address.toLowerCase().includes(q))
       );
     }
+    this.currentPage = 1; // Reset to page 1 when searching
+  }
+
+  // Pagination computed property
+  get paginatedItems() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredItems.slice(startIndex, endIndex);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredItems.length / this.itemsPerPage);
+  }
+
+  // Pagination methods
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.scrollToTop();
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.scrollToTop();
+    }
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.scrollToTop();
+    }
+  }
+
+  scrollToTop() {
+    const listSection = document.querySelector('.nearby-list-section');
+    if (listSection) {
+      listSection.scrollTop = 0;
+    }
   }
 
   private updateMarkers() {
@@ -137,14 +272,15 @@ export class NearbyServicesComponent implements OnInit {
         // Assign colors based on type
         const iconUrl = item.type === 'hospital'
           ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-          : (item.type === 'pharmacy' ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+          : (item.type === 'pharmacy' ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' :
+            (item.type === 'health-centre' ? 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'));
 
         return {
           position: { lat: lat, lng: lng },
           title: item.name,
           options: {
             icon: iconUrl,
-            animation: google.maps.Animation.DROP,
+            animation: (typeof google !== 'undefined') ? google.maps.Animation.DROP : 0,
             title: item.name
           },
           data: item
