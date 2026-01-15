@@ -144,9 +144,9 @@ exports.getHospitals = async (req, res) => {
 
         if (category) {
             if (category === 'NABH') {
-                query += ' AND data_source = "NABH"';
+                query += " AND data_source = 'NABH'";
             } else if (category === 'Specialty') {
-                query += ' AND data_source = "Specialty"';
+                query += " AND data_source = 'Specialty'";
             }
         }
 
@@ -241,7 +241,7 @@ exports.getStaticPage = async (req, res) => {
 // Get unique cities, states, and specialties for filters
 exports.getHospitalFilters = async (req, res) => {
     try {
-        const [states] = await pool.query('SELECT DISTINCT state FROM (SELECT state FROM nabh_hospitals UNION SELECT state FROM hospitals_with_specialties) as combined WHERE state IS NOT NULL AND state != "" ORDER BY state');
+        const [states] = await pool.query("SELECT DISTINCT state FROM (SELECT state FROM nabh_hospitals UNION SELECT state FROM hospitals_with_specialties) as combined WHERE state IS NOT NULL AND state != '' ORDER BY state");
 
         // Extract unique specialties from both tables
         const [nabhSpec] = await pool.query('SELECT specialties FROM nabh_hospitals WHERE specialties IS NOT NULL');
