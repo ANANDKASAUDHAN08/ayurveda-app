@@ -24,4 +24,3 @@ Thumbs.db
 # Large files
 backend/data/allopathy/medicine_data.csv
 backend/data/allopathy/medicine_dataset.csv
-backend/exports/
