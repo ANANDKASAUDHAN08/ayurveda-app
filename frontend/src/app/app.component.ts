@@ -16,6 +16,9 @@ import { LocationBottomSheetComponent } from './shared/components/location-botto
 import { LocationMapModalComponent } from './shared/components/location-map-modal/location-map-modal.component';
 import { FabMenuComponent } from './shared/components/fab-menu/fab-menu.component';
 import { GoogleMapsLoaderService } from './shared/services/google-maps-loader.service';
+import { ChatbotComponent } from './shared/components/chatbot/chatbot.component';
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
+import { UpdateNotificationComponent } from './shared/components/update-notification/update-notification.component';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +36,9 @@ import { GoogleMapsLoaderService } from './shared/services/google-maps-loader.se
     OfflineIndicatorComponent,
     FabMenuComponent,
     LocationBottomSheetComponent,
-    LocationMapModalComponent
+    LocationMapModalComponent,
+    ChatbotComponent,
+    UpdateNotificationComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -48,6 +53,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   isLocationSheetOpen = false;
   showMapModal = false;
   mapsLoaded$ = this.googleMapsLoader.isLoaded$;
+  showUpdateNotification = false;
 
   // Subscriptions for cleanup
   private routerSubscription?: Subscription;
@@ -59,7 +65,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private authService: AuthService,
     public locationService: LocationService,
-    private googleMapsLoader: GoogleMapsLoaderService
+    private googleMapsLoader: GoogleMapsLoaderService,
+    private swUpdate: SwUpdate
   ) { }
 
   ngOnInit(): void {
@@ -110,6 +117,26 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
+
+    // Check for PWA updates
+    if (this.swUpdate.isEnabled) {
+      // Check for updates when the app initializes
+      this.swUpdate.versionUpdates.pipe(
+        filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY')
+      ).subscribe(() => {
+        // New version available - show visual notification
+        this.showUpdateNotification = true;
+      });
+
+      // Check for updates every 5 minutes
+      setInterval(() => {
+        this.swUpdate.checkForUpdate().then(() => {
+          console.log('Checked for updates');
+        }).catch(err => {
+          console.error('Error checking for updates:', err);
+        });
+      }, 5 * 60 * 1000); // 5 minutes
+    }
 
   }
 
@@ -178,6 +205,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   onLocationFromMap(location: UserLocation) {
     this.locationService.setLocation(location, true); // Map selection is persistent
     this.locationService.toggleMap(false);
+  }
+
+  onUpdateApp() {
+    // User clicked "Update Now" - reload the page to get the latest version
+    window.location.reload();
+  }
+
+  onDismissUpdate() {
+    // User clicked "Later" - hide the notification
+    this.showUpdateNotification = false;
   }
 
   ngOnDestroy(): void {

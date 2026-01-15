@@ -3,7 +3,7 @@ const path = require('path');
 const csv = require('csv-parser');
 const db = require('../src/config/database');
 
-const csvPath = path.join(__dirname, '../data/geocode_health_centre.csv');
+const csvPath = path.join(__dirname, '../data/hospitals/geocode_health_centre.csv');
 const BATCH_SIZE = 1000;
 
 async function seedHealthCentres() {

@@ -41,6 +41,55 @@
             </div>
         </div>
 
+        <!-- App Update Notification -->
+        <div *ngIf="updateAvailable" class="mb-4">
+            <div
+                class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl shadow-lg border-2 border-emerald-400 p-5 text-white relative overflow-hidden">
+                <!-- Decorative Background Pattern -->
+                <div class="absolute top-0 right-0 opacity-20">
+                    <i class="fa-solid fa-download text-9xl"></i>
+                </div>
+
+                <div class="relative z-10">
+                    <div class="flex items-start gap-4">
+                        <!-- Icon -->
+                        <div class="flex-shrink-0">
+                            <div
+                                class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center animate-pulse">
+                                <i class="fa-solid fa-sparkles text-2xl text-white"></i>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <h3 class="text-lg font-bold">New App Version Available!</h3>
+                                <span
+                                    class="px-2 py-0.5 bg-white/30 backdrop-blur-sm rounded-full text-xs font-semibold">
+                                    SYSTEM
+                                </span>
+                            </div>
+                            <p class="text-white/90 text-sm mb-3">
+                                We've released a new version with exciting features and improvements. Update now to get
+                                the best experience!
+                            </p>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <button (click)="updateApp()"
+                                    class="px-5 py-2.5 bg-white text-emerald-600 hover:bg-emerald-50 rounded-lg font-semibold text-sm transition-all shadow-md hover:shadow-lg hover:scale-105 flex items-center gap-2">
+                                    <i class="fa-solid fa-refresh"></i>
+                                    Update Now
+                                </button>
+                                <span class="text-xs text-white/75 flex items-center gap-1">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <span *ngIf="updateDetectedAt">{{ timeAgo(updateDetectedAt.toISOString()) }}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Unread Count Badge -->
         <div *ngIf="unreadCount > 0" class="mb-4">
             <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center gap-2">

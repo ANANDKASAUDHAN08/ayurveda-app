@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { SearchService } from '../../services/search.service';
 import { SnackbarService } from '../../services/snackbar.service';
-import { NotificationBellComponent } from '../../../components/shared/notification-bell/notification-bell.component';
+import { NotificationBellComponent } from '../notification-bell/notification-bell.component';
 import { LocationSelectorComponent } from '../location-selector/location-selector.component';
 import { LocationService, UserLocation } from '../../services/location.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
@@ -438,6 +438,12 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
       this.router.navigate(['/user/profile']);
     }
     this.profileMenuOpen = false;
+  }
+
+  navigateToBilling() {
+    this.router.navigate(['/user/billing']);
+    this.profileMenuOpen = false;
+    this.myHealthDropdownOpen = false;
   }
 
   navigateToSettings() {

@@ -110,4 +110,10 @@ export class AdminService {
     updateStaticPage(id: number, data: any): Observable<any> {
         return this.http.put(`${this.baseUrl}/static-pages/${id}`, data);
     }
+
+    // ==================== CHATBOT MANAGEMENT ====================
+
+    getChatbotStats(): Observable<any> {
+        return this.http.get(`${this.baseUrl}/chatbot/stats`);
+    }
 }

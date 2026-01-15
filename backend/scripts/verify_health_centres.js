@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
 
-const csvPath = path.join(__dirname, '../data/geocode_health_centre.csv');
+const csvPath = path.join(__dirname, '../data/hospitals/geocode_health_centre.csv');
 
 async function verify() {
     let lineCount = 0;

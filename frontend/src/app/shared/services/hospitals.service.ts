@@ -19,7 +19,8 @@ export interface Hospital {
   has_icu: boolean;
   beds_available: number;
   rating: number;
-  distance?: number; // Added by frontend after API call
+  distance?: number;
+  data_source?: 'NABH' | 'Specialty';
 }
 
 @Injectable({

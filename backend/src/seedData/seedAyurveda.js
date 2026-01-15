@@ -182,7 +182,7 @@ async function seedAyurveda() {
         }
 
         // 7. Seed Herbs from herb.json
-        const herbDataPath = path.join(__dirname, '../data/herb.json');
+        const herbDataPath = path.join(__dirname, '../../data/ayurveda/herb.json');
         let herbs = [];
         try {
             const rawData = fs.readFileSync(herbDataPath, 'utf8');

@@ -1,44 +1,50 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SearchService, SearchResult } from '../../shared/services/search.service';
-import { CartService } from '../../shared/services/cart.service';
+import { SearchResult } from '../../shared/services/search.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { ProductDetailModalComponent } from '../product-detail-modal/product-detail-modal.component';
-import { MedicineTypeService, MedicineType, FilterMode } from '../../shared/services/medicine-type.service';
-import { ContextBannerComponent } from '../../shared/components/context-banner/context-banner.component';
+
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
 
 @Component({
   selector: 'app-medicines',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProductDetailModalComponent, ContextBannerComponent, MobileLocationBarComponent],
+  imports: [CommonModule, FormsModule, ProductDetailModalComponent, MobileLocationBarComponent],
   templateUrl: './medicines.component.html',
   styleUrls: ['./medicines.component.css']
 })
-export class MedicinesComponent implements OnInit {
+export class MedicinesComponent implements OnInit, OnDestroy {
   medicines: SearchResult[] = [];
-  allMedicines: SearchResult[] = []; // Store all medicines for client-side filtering
+  allMedicines: SearchResult[] = [];
   loading = false;
-  addingToCart: { [key: string]: boolean } = {};
   selectedProduct: SearchResult | null = null;
-
-  // Expose Math for template
   Math = Math;
 
   // Pagination
   currentPage = 1;
   itemsPerPage = 20;
   totalMedicines = 0;
+  totalPages = 0;
+  private apiUrl = environment.apiUrl;
 
   // Filters
   searchQuery = '';
   selectedCategory = '';
+  selectedManufacturer = '';
   categories: string[] = [];
+  manufacturers: string[] = [];
   sortBy = 'name_asc';
+  minPrice: number | null = null;
+  maxPrice: number | null = null;
+
+  // Suggestions
+  suggestions: any[] = [];
+  showSuggestions = false;
 
   sortOptions = [
     { value: 'name_asc', label: 'Name (A-Z)' },
@@ -47,124 +53,185 @@ export class MedicinesComponent implements OnInit {
     { value: 'price_desc', label: 'Price (High to Low)' }
   ];
 
-  // Medicine type context
-  currentMedicineType: MedicineType | 'all' = 'all';
+  // UI State
+  showCategoryDropdown = false;
+  isSearching = false;
+  showMobileFilters = false;
+  activeDropdown: 'sort' | 'price' | 'manufacturer' | null = null;
+
+  // Medicine type context - Local state only
+  currentMedicineType: 'all' | 'allopathy' | 'ayurveda' | 'homeopathy' = 'all';
+  medicineTypes: ('all' | 'allopathy' | 'ayurveda' | 'homeopathy')[] = ['all', 'allopathy', 'ayurveda', 'homeopathy'];
   private destroy$ = new Subject<void>();
 
   constructor(
-    private searchService: SearchService,
-    private cartService: CartService,
     private snackbarService: SnackbarService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private medicineTypeService: MedicineTypeService
+    private http: HttpClient,
   ) { }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.activeDropdown = null;
+    this.showCategoryDropdown = false;
+    this.showSuggestions = false;
+  }
 
   ngOnInit() {
     this.loadCategories();
+    this.loadManufacturers();
+    this.currentMedicineType = 'all';
+    this.loadMedicines();
+  }
 
-    // Track medicine type changes and reapply filtering
-    this.medicineTypeService.getCurrentType().pipe(takeUntil(this.destroy$)).subscribe(type => {
-      this.currentMedicineType = type;
-      this.applyMedicineTypeFilter(); // Refilter when type changes
-    });
-
-    // Check for query params
-    this.route.queryParams.subscribe(params => {
-      this.searchQuery = params['q'] || '';
-      this.selectedCategory = params['category'] || '';
-      this.sortBy = params['sortBy'] || 'name_asc';
-      this.loadMedicines();
-    });
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadCategories() {
-    this.categories = this.searchService.getCategories();
+    this.http.get<{ success: boolean; data: string[] }>(`${this.apiUrl}/medicines/categories`)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.categories = res.data;
+          }
+        },
+        error: (err) => console.error('Error loading categories:', err)
+      });
+  }
+
+  loadManufacturers() {
+    this.http.get<{ success: boolean; data: string[] }>(`${this.apiUrl}/medicines/manufacturers`)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.manufacturers = res.data;
+          }
+        },
+        error: (err) => console.error('Error loading manufacturers:', err)
+      });
   }
 
   loadMedicines() {
     this.loading = true;
+    this.isSearching = true;
 
-    this.searchService.searchProducts({
-      q: this.searchQuery,
-      type: 'medicine',
-      category: this.selectedCategory,
-      sortBy: this.sortBy,
-      page: this.currentPage,
-      limit: this.itemsPerPage
-    }).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.allMedicines = response.data.results;
-          this.applyMedicineTypeFilter(); // Apply client-side medicine type filtering
-          this.totalMedicines = this.medicines.length; // Update with filtered count
-        }
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-        this.snackbarService.show('Failed to load medicines', 'error');
-      }
-    });
-  }
+    let params = new HttpParams()
+      .set('page', this.currentPage.toString())
+      .set('limit', this.itemsPerPage.toString())
+      .set('sortBy', this.sortBy);
 
-  // Client-side filtering by medicine type based on keywords
-  applyMedicineTypeFilter() {
-    if (this.currentMedicineType === 'all') {
-      this.medicines = [...this.allMedicines];
-      return;
+    if (this.currentMedicineType && this.currentMedicineType !== 'all') {
+      params = params.set('medicineSystem', this.currentMedicineType);
+    }
+    if (this.selectedCategory) {
+      params = params.set('category', this.selectedCategory);
+    }
+    if (this.selectedManufacturer) {
+      params = params.set('manufacturer', this.selectedManufacturer);
+    }
+    if (this.searchQuery) {
+      params = params.set('q', this.searchQuery);
+    }
+    if (this.minPrice !== null) {
+      params = params.set('minPrice', this.minPrice.toString());
+    }
+    if (this.maxPrice !== null) {
+      params = params.set('maxPrice', this.maxPrice.toString());
     }
 
-    // Keywords to identify medicine types
-    const ayurvedaKeywords = ['ayur', 'herbal', 'natural', 'churna', 'ashwagandha', 'triphala', 'brahmi', 'tulsi', 'neem', 'amla', 'guduchi', 'shatavari'];
-    const homeopathyKeywords = ['homeo', 'dilution', 'arnica', 'belladonna', 'bryonia', 'chamomilla', 'pulsatilla', 'nux vomica', 'rhus tox'];
-    const allopathyKeywords = ['tablet', 'capsule', 'syrup', 'injection', 'antibiotic', 'paracetamol', 'ibuprofen', 'aspirin', 'mg', 'ml'];
-
-    this.medicines = this.allMedicines.filter(medicine => {
-      const searchText = `${medicine.name} ${medicine.description || ''} ${medicine.category || ''}`.toLowerCase();
-
-      switch (this.currentMedicineType) {
-        case 'ayurveda':
-          return ayurvedaKeywords.some(keyword => searchText.includes(keyword));
-        case 'homeopathy':
-          return homeopathyKeywords.some(keyword => searchText.includes(keyword));
-        case 'allopathy':
-          return allopathyKeywords.some(keyword => searchText.includes(keyword));
-        default:
-          return true;
-      }
-    });
+    this.http.get<{ success: boolean; data: any }>(`${this.apiUrl}/medicines`, { params })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.medicines = res.data.results;
+            this.totalMedicines = res.data.pagination.total;
+            this.totalPages = res.data.pagination.totalPages;
+          }
+          this.loading = false;
+          this.isSearching = false;
+        },
+        error: (err) => {
+          console.error('Error loading medicines:', err);
+          this.loading = false;
+          this.isSearching = false;
+          this.snackbarService.show('Failed to load medicines', 'error');
+        }
+      });
   }
 
-  get paginatedMedicines() {
-    return this.medicines;
+  selectMedicineType(type: 'all' | 'allopathy' | 'ayurveda' | 'homeopathy') {
+    this.currentMedicineType = type;
+    this.currentPage = 1;
+    this.loadMedicines();
   }
 
-  get totalPages() {
-    return Math.ceil(this.totalMedicines / this.itemsPerPage);
+  onSearchInput() {
+    if (this.searchQuery.length >= 2) {
+      this.showSuggestions = true;
+      this.http.get<{ success: boolean; data: any[] }>(`${this.apiUrl}/medicines/suggestions`, {
+        params: new HttpParams().set('q', this.searchQuery)
+      })
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(res => {
+          if (res.success) {
+            this.suggestions = res.data;
+          }
+        });
+    } else {
+      this.showSuggestions = false;
+      this.suggestions = [];
+    }
   }
 
-  get pageNumbers(): number[] {
-    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  selectSuggestion(suggestion: any) {
+    this.searchQuery = suggestion.name;
+    this.showSuggestions = false;
+    this.onSearch(); // Explicitly trigger search when a suggestion is selected
   }
 
-  addToCart(medicine: SearchResult) {
-    const key = `medicine-${medicine.id}`;
-    this.addingToCart[key] = true;
-
-    this.cartService.addItem({
-      id: String(medicine.id),
-      name: medicine.name,
-      type: 'medicine',
-      price: medicine.price || 0,
-      quantity: 1,
-      image: ''
-    });
-
+  hideSuggestionsWithDelay() {
     setTimeout(() => {
-      this.addingToCart[key] = false;
-      this.snackbarService.show(`${medicine.name} added to cart!`, 'success');
-    }, 300);
+      this.showSuggestions = false;
+    }, 200);
+  }
+
+  onSearch() {
+    this.showSuggestions = false;
+    this.currentPage = 1;
+    this.loadMedicines();
+  }
+
+  applyFilters() {
+    this.currentPage = 1;
+    this.loadMedicines();
+  }
+
+  selectCategory(category: string) {
+    this.selectedCategory = this.selectedCategory === category ? '' : category;
+    this.currentPage = 1;
+    this.loadMedicines();
+  }
+
+  selectManufacturer(manufacturer: string) {
+    this.selectedManufacturer = this.selectedManufacturer === manufacturer ? '' : manufacturer;
+    this.currentPage = 1;
+    this.loadMedicines();
+  }
+
+  clearFilters() {
+    this.searchQuery = '';
+    this.selectedCategory = '';
+    this.selectedManufacturer = '';
+    this.currentMedicineType = 'all';
+    this.sortBy = 'name_asc';
+    this.minPrice = null;
+    this.maxPrice = null;
+    this.currentPage = 1;
+    this.loadMedicines();
   }
 
   openDetails(medicine: SearchResult) {
@@ -175,66 +242,77 @@ export class MedicinesComponent implements OnInit {
     this.selectedProduct = null;
   }
 
-  addToCartFromModal(medicine: SearchResult) {
-    this.addToCart(medicine);
-    this.closeDetails();
-  }
-
-  applyFilters() {
-    this.currentPage = 1; // Reset to first page when filters change
-    this.router.navigate([], {
-      queryParams: {
-        q: this.searchQuery || null,
-        category: this.selectedCategory || null,
-        sortBy: this.sortBy,
-        page: 1
-      },
-      queryParamsHandling: 'merge'
-    });
-  }
-
-  clearFilters() {
-    this.searchQuery = '';
-    this.selectedCategory = '';
-    this.sortBy = 'name_asc';
-    this.currentPage = 1;
-    this.loadMedicines();
-  }
-
-  goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
       this.loadMedicines();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
-  nextPage() {
-    this.goToPage(this.currentPage + 1);
-  }
-
   previousPage() {
-    this.goToPage(this.currentPage - 1);
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadMedicines();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
-  // Context banner actions
-  onToggleFilter() {
-    // Filter mode toggle not implemented in service
-    this.applyMedicineTypeFilter();
+  goToPage(page: number) {
+    this.currentPage = page;
+    this.loadMedicines();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  onClearFilter() {
-    // Set to default type
-    this.currentMedicineType = 'all';
-    this.applyMedicineTypeFilter();
+  get pageNumbers(): number[] {
+    const pages = [];
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, this.currentPage - 2);
+    let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage < maxVisiblePages - 1) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
-  onSwitchType(type: MedicineType) {
-    this.medicineTypeService.setMedicineType(type);
+  hasActiveFilters(): boolean {
+    return !!(
+      this.searchQuery ||
+      this.selectedCategory ||
+      this.selectedManufacturer ||
+      this.maxPrice !== null ||
+      this.currentMedicineType !== 'all'
+    );
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  selectPrice(price: number | null) {
+    this.maxPrice = price;
+    this.activeDropdown = null;
+    this.applyFilters();
+  }
+
+  getSortLabel(): string {
+    const option = this.sortOptions.find(o => o.value === this.sortBy);
+    return option ? option.label : 'Sort By';
+  }
+
+  selectSort(value: string) {
+    this.sortBy = value;
+    this.activeDropdown = null;
+    this.applyFilters();
+  }
+
+  toggleDropdown(name: 'sort' | 'price' | 'manufacturer') {
+    if (this.activeDropdown === name) {
+      this.activeDropdown = null;
+    } else {
+      this.activeDropdown = name;
+      this.showSuggestions = false;
+    }
   }
 }

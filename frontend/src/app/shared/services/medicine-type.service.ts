@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-export type MedicineType = 'ayurveda' | 'homeopathy' | 'allopathy';
+export type MedicineType = 'all' | 'ayurveda' | 'homeopathy' | 'allopathy';
 export type FilterMode = 'strict' | 'inclusive' | 'all';
 
 
@@ -110,7 +110,7 @@ export class MedicineTypeService {
         } catch (error) {
             console.error('Error reading stored medicine type:', error);
         }
-        return 'ayurveda'; // Default
+        return 'all'; // Default
     }
 
     /**

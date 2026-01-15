@@ -1,0 +1,105 @@
+[
+    {
+        "id": 598,
+        "name": "Avastin 100mg Injection",
+        "manufacturer": "Roche Products India Pvt Ltd",
+        "price": 32250,
+        "type": "allopathy",
+        "composition": "Bevacizumab (100mg)",
+        "storage": "Store in a refrigerator (2 - 8°C). Do not freeze.",
+        "is_discontinued": false,
+        "introduction": "Avastin 100mg Injection is an anticancer medication. It is used in the treatment of cancer of colon and rectum, non-small cell lung cancer, kidney cancer, brain tumor, ovarian and cervical cancer. It helps to prevent the growth of new blood vessels that feed tumors and stops tumors from growing.",
+        "uses": [
+            "Cancer of colon and rectum",
+            "Ovarian cancer",
+            "Cervical cancer",
+            "Kidney cancer",
+            "Brain tumor",
+            "Non-small cell lung cancer"
+        ],
+        "benefits": [
+            {
+                "title": "In Cancer of colon and rectum",
+                "description": "Cancer of the colon and rectum affects the large intestine (colon) or its end portion (rectum) and usually begins as small, noncancerous polyps. Over time, these may become cancerous, leading to symptoms like blood in stool, changes in bowel habits, and weight loss. If not diagnosed early, the cancer can spread to other organs such as the liver or lungs. Avastin 100mg Injection helps by blocking the growth of new blood vessels that feed the tumor, thereby slowing its growth. This improves the effectiveness of other cancer treatments and may extend survival in patients with advanced colorectal cancer."
+            }
+        ],
+        "side_effects": {
+            "common": [
+                "Nosebleeds",
+                "Headache",
+                "High blood pressure",
+                "Inflammation of the nose",
+                "Protein in urine",
+                "Taste change",
+                "Dry skin",
+                "Hemorrhage",
+                "Increased lacrimation",
+                "Back pain",
+                "Exfoliative dermatitis"
+            ],
+            "advice": "Most side effects do not require any medical attention and disappear as your body adjusts to the medicine. Consult your doctor if they persist or if you\u2019re worried about them"
+        },
+        "safety_advice": [
+            {
+                "category": "Alcohol",
+                "tag": "CONSULT YOUR DOCTOR",
+                "advice": "It is not known whether it is safe to consume alcohol with Avastin 100mg Injection. Please consult your doctor."
+            },
+            {
+                "category": "Pregnancy",
+                "tag": "CONSULT YOUR DOCTOR",
+                "advice": "The safety of Avastin 100mg Injection during pregnancy has not been established. There are no adequate and well-controlled studies in pregnant women, and animal data on reproductive toxicity are insufficient. Your doctor will weigh the benefits and any potential risks before prescribing."
+            },
+            {
+                "category": "Breast feeding",
+                "tag": "CONSULT YOUR DOCTOR",
+                "advice": "Avastin 100mg Injection may be unsafe to use during breastfeeding. Limited human data suggests that the drug may pass into the breastmilk and harm the baby. It should be used only if the expected benefit outweighs the potential risk. Please consult your doctor."
+            },
+            {
+                "category": "Driving",
+                "tag": "UNSAFE",
+                "advice": "Avastin 100mg Injection may cause side effects that could affect your ability to drive. Sleepiness and fainting have been reported with Avastin 100mg Injection and this may impair your ability to drive."
+            },
+            {
+                "category": "Kidney",
+                "tag": "SAFE IF PRESCRIBED",
+                "advice": "Avastin 100mg Injection is probably safe to use in patients with kidney disease. Limited data suggest dose adjustment may not be needed."
+            },
+            {
+                "category": "Liver",
+                "tag": "SAFE IF PRESCRIBED",
+                "advice": "Avastin 100mg Injection is probably safe to use in patients with liver disease. Limited data suggest dose adjustment may not be needed."
+            }
+        ],
+        "substitutes": [
+            {
+                "name": "Avastimab 100mg Injection",
+                "manufacturer": "RPG Life Sciences Ltd",
+                "price": 18200
+            },
+            {
+                "name": "Bevnexxa 100mg Injection",
+                "manufacturer": "Celon Laboratories Ltd",
+                "price": 10800
+            }
+        ],
+        "how_it_works": "Avastin 100mg Injection is a anti-angiogenic medication. It works by blocking a protein called vascular endothelial growth factor (VEGF). This stops the formation of blood vessels that bring oxygen and nutrients to cancerous cells.",
+        "quick_tips": [
+            "Avastin 100mg Injection is an effective, first-line option when used together with other medicines for certain types of cancers such as colorectal, lung, cervical, and kidney cancers.",
+            "Inform your doctor if you notice any unusual bleeding or bleeding that doesn't stop easily."
+        ],
+        "fact_box": {
+            "Chemical Class": "Peptides",
+            "Habit Forming": "No",
+            "Therapeutic Class": "ANTI NEOPLASTICS",
+            "Action Class": "Vascular Endothelial Growth Factor (VEGF) Inhibitors"
+        },
+        "interactions": [
+            {
+                "drug": "Yellow fever virus",
+                "severity": "Severe",
+                "advice": "Concomitant use is not recommended. There must be a gap of six months between these."
+            }
+        ]
+    }
+]

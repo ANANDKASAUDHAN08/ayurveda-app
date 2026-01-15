@@ -1,0 +1,1404 @@
+{
+    "Cardiology": {
+        "title": "Cardiology",
+        "definition": "The medical specialty dedicated to the study of the heart and blood vessels. Derived from 'kardiā' (heart) and 'logia' (study).",
+        "scope": [
+            "Congenital heart defects",
+            "Coronary Artery Disease (CAD)",
+            "Heart Failure",
+            "Electrophysiology (Heart Rhythm)"
+        ],
+        "how_it_works": "Cardiologists manage the heart's plumbing (hemodynamics) and wiring (electrical system). They use ultrasound and electrical mapping to detect structural or rhythmic failures.",
+        "procedures": {
+            "diagnostic": [
+                "Electrocardiogram (ECG)",
+                "Echocardiogram",
+                "Stress Test",
+                "Cardiac MRI"
+            ],
+            "surgical_interventional": [
+                "Angioplasty",
+                "Stenting",
+                "Pacemaker Implantation",
+                "TAVR (Valve Replacement)"
+            ]
+        },
+        "modern_innovations": "Artificial Intelligence for ECG interpretation and minimally invasive valve repairs.",
+        "subspecialties": [
+            "Interventional Cardiology",
+            "Electrophysiology",
+            "Heart Failure Specialist"
+        ],
+        "when_to_consult": [
+            "Unexplained chest pain",
+            "Shortness of breath",
+            "Palpitations",
+            "Severe dizziness"
+        ],
+        "fun_fact": "A blue whale's heart is the size of a bumper car."
+    },
+    "ENT_Otolaryngology": {
+        "title": "ENT (Otolaryngology)",
+        "definition": "Focuses on the medical and surgical management of the head and neck, specifically sensory organs and breathing passages.",
+        "scope": [
+            "Hearing and Balance",
+            "Sinus and Allergy",
+            "Voice and Swallowing",
+            "Head and Neck Cancer"
+        ],
+        "how_it_works": "ENTs use precision endoscopy to visualize internal cavities and treat the intersection of respiratory airflow and sensory processing.",
+        "procedures": {
+            "diagnostic": [
+                "Nasal Endoscopy",
+                "Audiometry",
+                "VNG (Balance Test)"
+            ],
+            "surgical_interventional": [
+                "Tonsillectomy",
+                "FESS (Sinus Surgery)",
+                "Cochlear Implants",
+                "Septoplasty"
+            ]
+        },
+        "modern_innovations": "Biological treatments for nasal polyps and 3D-printed ear implants.",
+        "subspecialties": [
+            "Otology",
+            "Rhinology",
+            "Laryngology",
+            "Pediatric ENT"
+        ],
+        "when_to_consult": [
+            "Persistent hoarseness",
+            "Sudden hearing loss",
+            "Chronic sinus pressure",
+            "Neck lumps"
+        ],
+        "fun_fact": "Your nose can remember 50,000 different scents."
+    },
+    "Ophthalmology": {
+        "title": "Ophthalmology",
+        "definition": "A surgical and medical specialty focused on the eye and its surrounding structures.",
+        "scope": [
+            "Vision correction",
+            "Cataract management",
+            "Glaucoma",
+            "Retinal diseases"
+        ],
+        "how_it_works": "Ophthalmologists use high-resolution laser scanning (OCT) to map the retina and ultra-precise microsurgery to restore sight.",
+        "procedures": {
+            "diagnostic": [
+                "OCT Scanning",
+                "Tonometry (Pressure)",
+                "Retinal Imaging"
+            ],
+            "surgical_interventional": [
+                "Cataract Surgery",
+                "LASIK/PRK",
+                "Vitrectomy (Retinal Repair)",
+                "Corneal Transplant"
+            ]
+        },
+        "modern_innovations": "Gene therapy for inherited blindness and robotic-assisted eye surgery.",
+        "subspecialties": [
+            "Retina Specialist",
+            "Cornea Specialist",
+            "Glaucoma Specialist",
+            "Oculoplastics"
+        ],
+        "when_to_consult": [
+            "Sudden loss of vision",
+            "New flashes or floaters",
+            "Double vision",
+            "Severe eye pain"
+        ],
+        "fun_fact": "The eye's lens is quicker than any camera lens."
+    },
+    "Gastroenterology": {
+        "title": "Gastroenterology",
+        "definition": "Focused on the digestive system, including the GI tract, liver, and pancreas.",
+        "scope": [
+            "Esophageal health",
+            "Gastric ulcers",
+            "Hepatology (Liver)",
+            "Colon health",
+            "IBD/IBS"
+        ],
+        "how_it_works": "Gastroenterologists use endoscopic visualization and chemical analysis to manage nutrient absorption and metabolic function.",
+        "procedures": {
+            "diagnostic": [
+                "Endoscopy (EGD)",
+                "Colonoscopy",
+                "Capsule Endoscopy",
+                "FibroScan (Liver)"
+            ],
+            "surgical_interventional": [
+                "Polypectomy",
+                "ERCP (Gallstone removal)",
+                "Esophageal Dilation"
+            ]
+        },
+        "modern_innovations": "AI-assisted colonoscopy for better polyp detection and fecal transplants for recurrent infections.",
+        "subspecialties": [
+            "Hepatology",
+            "Neuro-gastroenterology (Motility)",
+            "Interventional Endoscopy"
+        ],
+        "when_to_consult": [
+            "Chronic abdominal pain",
+            "Blood in stools",
+            "Jaundice",
+            "Frequent heartburn"
+        ],
+        "fun_fact": "The small intestine is about 20 feet long."
+    },
+    "Dermatology": {
+        "title": "Dermatology",
+        "definition": "The specialty concerning the skin, hair, and nails.",
+        "scope": [
+            "Skin Cancer",
+            "Inflammatory diseases (Eczema/Psoriasis)",
+            "Hair loss",
+            "Allergies",
+            "Cosmetic health"
+        ],
+        "how_it_works": "Dermatologists use visual patterns and 'dermoscopy' to identify cellular abnormalities and target them with clinical pharmacology.",
+        "procedures": {
+            "diagnostic": [
+                "Skin Biopsy",
+                "Dermoscopy",
+                "Patch Testing"
+            ],
+            "surgical_interventional": [
+                "Mohs Surgery (for Cancer)",
+                "Cryosurgery",
+                "Cyst/Mole Excision",
+                "Laser treatment"
+            ]
+        },
+        "modern_innovations": "Teledermatology for rapid remote diagnosis and biologics that clear 100% of psoriasis.",
+        "subspecialties": [
+            "Pediatric Dermatology",
+            "Dermatopathology",
+            "Mohs Surgery"
+        ],
+        "when_to_consult": [
+            "Changing moles (ABCDE)",
+            "Persistent rashes",
+            "Severe acne scarring",
+            "Suspicious growths"
+        ],
+        "fun_fact": "Your skin completely replaces itself every 28-30 days."
+    },
+    "Urology": {
+        "title": "Urology",
+        "definition": "Deals with diseases of the urinary tract (men and women) and the male reproductive system.",
+        "scope": [
+            "Kidney health",
+            "Bladder disorders",
+            "Prostate health",
+            "Male infertility",
+            "Stone management"
+        ],
+        "how_it_works": "Urologists combine 'plumbing' (clearing obstructions) with advanced oncology and robotic surgical techniques.",
+        "procedures": {
+            "diagnostic": [
+                "Cystoscopy",
+                "Urodynamics",
+                "Prostate Biopsy",
+                "Renal Ultrasound"
+            ],
+            "surgical_interventional": [
+                "Kidney Stone Removal",
+                "TURP",
+                "Vasectomy",
+                "Robotic Prostatectomy"
+            ]
+        },
+        "modern_innovations": "Robotic surgery (Da Vinci) for precise prostate removal and laser lithotripsy for stones.",
+        "subspecialties": [
+            "Urologic Oncology",
+            "Pediatric Urology",
+            "Andrology"
+        ],
+        "when_to_consult": [
+            "Blood in urine",
+            "Painful urination",
+            "Lump in testicles",
+            "Flank pain"
+        ],
+        "fun_fact": "The bladder can stretch to hold about 16 ounces of fluid."
+    },
+    "Neurology": {
+        "title": "Neurology",
+        "definition": "The medical specialty focused on the brain and nervous system.",
+        "scope": [
+            "Seizures/Epilepsy",
+            "Stroke",
+            "Memory (Alzheimer's)",
+            "Movement (Parkinson's)",
+            "Migraines"
+        ],
+        "how_it_works": "Neurologists evaluate the body's 'electrical wiring'. They use neuroimaging and electrophysiology to diagnose miscommunications in the brain.",
+        "procedures": {
+            "diagnostic": [
+                "MRI/CT Brain",
+                "EEG (Brain waves)",
+                "EMG (Nerve/Muscle test)",
+                "Lumbar Puncture"
+            ],
+            "surgical_interventional": [
+                "Migraine Injections",
+                "Stroke management (Thrombolysis)"
+            ]
+        },
+        "modern_innovations": "Brain-computer interfaces and new monoclonal antibodies for Alzheimer's disease.",
+        "subspecialties": [
+            "Stroke Neurology",
+            "Epileptology",
+            "Neuromuscular Medicine"
+        ],
+        "when_to_consult": [
+            "Severe migraines",
+            "Chronic numbness",
+            "Memory loss",
+            "Seizures or tremors"
+        ],
+        "fun_fact": "The brain has no pain receptors; brain surgery can be done while you are awake."
+    },
+    "General_Surgery": {
+        "title": "General Surgery",
+        "definition": "A surgical specialty focusing on abdominal contents and the digestive tract.",
+        "scope": [
+            "Abdominal organs",
+            "Breast surgery",
+            "Endocrine glands",
+            "Hernia repair",
+            "Trauma surgery"
+        ],
+        "how_it_works": "General surgeons are masters of 'Open and Laparoscopic' access. They use small incisions and cameras to remove infection or tumors.",
+        "procedures": {
+            "diagnostic": [
+                "Laparoscopy",
+                "Fine Needle Aspiration",
+                "Biopsy"
+            ],
+            "surgical_interventional": [
+                "Appendectomy",
+                "Cholecystectomy (Gallbladder)",
+                "Hernia Repair",
+                "Mastectomy"
+            ]
+        },
+        "modern_innovations": "Single-incision laparoscopic surgery and fluorescence-guided tumor removal.",
+        "subspecialties": [
+            "Trauma",
+            "Colorectal",
+            "Breast Surgery"
+        ],
+        "when_to_consult": [
+            "Sharp abdominal pain",
+            "Lumps in breast or tissue",
+            "Visible hernias",
+            "Gallstones"
+        ],
+        "fun_fact": "Laparoscopy is often called 'keyhole' surgery because incisions are tiny."
+    },
+    "Nephrology": {
+        "title": "Nephrology",
+        "definition": "The specialty dedicated to kidney function and renal diseases.",
+        "scope": [
+            "Chronic Kidney Disease (CKD)",
+            "Hypertension",
+            "Electrolyte balance",
+            "Dialysis",
+            "Transplant care"
+        ],
+        "how_it_works": "Nephrologists act as 'chemical engineers' for the blood, balancing minerals and filtering waste when the kidneys fail.",
+        "procedures": {
+            "diagnostic": [
+                "GFR Calculation",
+                "Kidney Biopsy",
+                "Renal Ultrasound",
+                "Urine Analysis"
+            ],
+            "surgical_interventional": [
+                "Hemodialysis",
+                "Peritoneal Dialysis",
+                "Catheter Placement"
+            ]
+        },
+        "modern_innovations": "Wearable artificial kidneys and xenotransplantation (pig-to-human kidney trials).",
+        "subspecialties": [
+            "Transplant Nephrology",
+            "Interventional Nephrology",
+            "Pediatric Nephrology"
+        ],
+        "when_to_consult": [
+            "Foamy urine",
+            "Swelling in ankles/feet",
+            "Uncontrolled BP",
+            "High creatinine levels"
+        ],
+        "fun_fact": "Your kidneys filter all your blood about 40 times a day."
+    },
+    "Pediatrics": {
+        "title": "Pediatrics",
+        "definition": "Medical care of infants, children, and adolescents.",
+        "scope": [
+            "Growth and Development",
+            "Infections",
+            "Immunizations",
+            "Behavioral health",
+            "Adolescent medicine"
+        ],
+        "how_it_works": "Pediatricians treat a body in a state of rapid change. They monitor milestones and use age-specific diagnostic logic.",
+        "procedures": {
+            "diagnostic": [
+                "Developmental Screening",
+                "Neonatal tests",
+                "Vision/Hearing checks"
+            ],
+            "surgical_interventional": [
+                "Vaccinations",
+                "Wound repair",
+                "Circumcision"
+            ]
+        },
+        "modern_innovations": "Neonatal genetic screening for 100+ conditions and child-friendly medical devices.",
+        "subspecialties": [
+            "Neonatology",
+            "Pediatric Cardiology",
+            "Adolescent Medicine"
+        ],
+        "when_to_consult": [
+            "High fever in infants",
+            "Developmental delays",
+            "Chronic asthma/allergies",
+            "Puberty issues"
+        ],
+        "fun_fact": "Children have 100 more bones than adults (they fuse later)."
+    },
+    "Psychiatry": {
+        "title": "Psychiatry",
+        "definition": "Focused on diagnosing and treating mental, emotional, and behavioral disorders.",
+        "scope": [
+            "Mood and Anxiety",
+            "Psychosis",
+            "Addiction",
+            "Eating disorders",
+            "Cognitive health"
+        ],
+        "how_it_works": "Psychiatrists balance brain chemistry using pharmacology and integrate behavioral therapy to reprogram thought patterns.",
+        "procedures": {
+            "diagnostic": [
+                "Psychiatric Evaluation",
+                "Mental Status Exam",
+                "Psychological Testing"
+            ],
+            "surgical_interventional": [
+                "Medication Management",
+                "Psychotherapy",
+                "TMS (Magnetic Therapy)",
+                "ECT"
+            ]
+        },
+        "modern_innovations": "Personalized psychiatry using DNA markers and Vagus Nerve Stimulation.",
+        "subspecialties": [
+            "Addiction Psychiatry",
+            "Geriatric Psychiatry",
+            "Forensic Psychiatry"
+        ],
+        "when_to_consult": [
+            "Persistent hopelessness",
+            "Severe panic attacks",
+            "Hallucinations",
+            "Self-harm thoughts"
+        ],
+        "fun_fact": "Your brain uses 20% of your body's total energy despite being 2% of its weight."
+    },
+    "Orthopedics": {
+        "title": "Orthopedic Surgery",
+        "definition": "The specialty concerned with the skeletal system and musculoskeletal function.",
+        "scope": [
+            "Trauma/Fractures",
+            "Joint replacement",
+            "Sports Medicine",
+            "Spine surgery",
+            "Bone tumors"
+        ],
+        "how_it_works": "Orthopedists are the 'structural engineers' of the body. They use mechanical fixation and resurfacing to restore mobility.",
+        "procedures": {
+            "diagnostic": [
+                "X-ray/CT/MRI",
+                "Arthroscopy (Diagnostic)",
+                "Bone Density Scan"
+            ],
+            "surgical_interventional": [
+                "Joint Replacement",
+                "ACL Reconstruction",
+                "Spinal Fusion",
+                "Fracture Fixation"
+            ]
+        },
+        "modern_innovations": "3D-printed custom joint implants and stem cell injections for cartilage repair.",
+        "subspecialties": [
+            "Sports Medicine",
+            "Hand Surgery",
+            "Pediatric Orthopedics",
+            "Spine"
+        ],
+        "when_to_consult": [
+            "Severe joint pain",
+            "Suspected fractures",
+            "Limited mobility",
+            "Spine weakness"
+        ],
+        "fun_fact": "The femur is stronger than concrete."
+    },
+    "Endocrinology": {
+        "title": "Endocrinology",
+        "definition": "Deals with the endocrine system and hormones.",
+        "scope": [
+            "Diabetes",
+            "Thyroid health",
+            "Metabolism/Obesity",
+            "Adrenal/Pituitary glands",
+            "Hormonal imbalances"
+        ],
+        "how_it_works": "Endocrinologists are 'system regulators'. They monitor chemical feedback loops to restore hormonal balance.",
+        "procedures": {
+            "diagnostic": [
+                "Hormone Panels",
+                "Thyroid Ultrasound",
+                "FNA Biopsy",
+                "Glucose Testing"
+            ],
+            "surgical_interventional": [
+                "Insulin Pump setups",
+                "Hormone Replacement",
+                "Medicated ablation"
+            ]
+        },
+        "modern_innovations": "Closed-loop 'Artificial Pancreas' and new once-weekly weight loss medications.",
+        "subspecialties": [
+            "Pediatric Endocrinology",
+            "Reproductive Endocrinology",
+            "Endocrine Oncology"
+        ],
+        "when_to_consult": [
+            "Unexplained weight changes",
+            "Constant thirst",
+            "Heat/Cold intolerance",
+            "Fertility issues"
+        ],
+        "fun_fact": "Hormones can trigger changes in just a few micro-grams."
+    },
+    "Neuro_Surgery": {
+        "title": "Neurosurgery",
+        "definition": "Surgical treatment of the nervous system (brain, spine, nerves).",
+        "scope": [
+            "Brain Tumors",
+            "Aneurysms",
+            "Spinal Stenosis",
+            "Functional (Parkinson's/Epilepsy)",
+            "Trauma"
+        ],
+        "how_it_works": "Neurosurgeons operate on highly sensitive tissue using micro-surgical tools and intraoperative navigation.",
+        "procedures": {
+            "diagnostic": [
+                "Angiography",
+                "Myelography",
+                "Biopsy"
+            ],
+            "surgical_interventional": [
+                "Craniotomy",
+                "Microdiscectomy",
+                "DBS Implants",
+                "VP Shunts"
+            ]
+        },
+        "modern_innovations": "Gamma Knife (radiation surgery) and laser interstitial thermal therapy for tumors.",
+        "subspecialties": [
+            "Neuro-oncology",
+            "Cerebrovascular Surgery",
+            "Pediatric Neurosurgery"
+        ],
+        "when_to_consult": [
+            "Suspected brain tumor",
+            "Severe spinal disc herniation",
+            "Thunderclap headache",
+            "Failed spinal treatments"
+        ],
+        "fun_fact": "Brain surgery can be painless because the brain itself lacks pain nerves."
+    },
+    "Physiotherapy": {
+        "title": "Physiotherapy",
+        "definition": "Helps patients restore and maximize strength, function, and movement.",
+        "scope": [
+            "Rehab after surgery",
+            "Sports recovery",
+            "Stroke rehab",
+            "Chronic pain management",
+            "Gait correction"
+        ],
+        "how_it_works": "Physiotherapists use 'mechanical medicine'—controlled movement and exercise—to trigger the body's natural healing.",
+        "procedures": {
+            "diagnostic": [
+                "Gait Analysis",
+                "ROM Testing",
+                "Functional Screening"
+            ],
+            "surgical_interventional": [
+                "Therapeutic Exercise",
+                "Manual Therapy",
+                "Dry Needling",
+                "Ultrasound Therapy"
+            ]
+        },
+        "modern_innovations": "Exoskeletons for spinal cord injury rehab and VR-guided physical therapy.",
+        "subspecialties": [
+            "Sports PT",
+            "Geriatric PT",
+            "Neurological PT",
+            "Women's Health PT"
+        ],
+        "when_to_consult": [
+            "After orthopedic surgery",
+            "Chronic back/joint pain",
+            "Recovery from stroke",
+            "Sports injuries"
+        ],
+        "fun_fact": "Exercise is the only 'medicine' that has zero negative side effects when prescribed correctly."
+    },
+    "Dentistry": {
+        "title": "Dentistry",
+        "definition": "Professional care of teeth, gums, and the oral cavity.",
+        "scope": [
+            "Cavity repair",
+            "Gum health",
+            "Orthodontics (Braces)",
+            "Root canals",
+            "Oral surgery"
+        ],
+        "how_it_works": "Dentists focus on the 'gateway' to health, using mechanical removal of decay and bio-compatible reconstructions.",
+        "procedures": {
+            "diagnostic": [
+                "Dental X-rays",
+                "Intraoral Scanning",
+                "Oral Cancer Screen"
+            ],
+            "surgical_interventional": [
+                "Fillings",
+                "Root Canals",
+                "Implants",
+                "Extractions",
+                "Braces"
+            ]
+        },
+        "modern_innovations": "3D-printed crowns while you wait and laser-based cavity removal without drills.",
+        "subspecialties": [
+            "Orthodontics",
+            "Periodontics",
+            "Endodontics",
+            "Oral & Maxillofacial Surgery"
+        ],
+        "when_to_consult": [
+            "Frequent toothaches",
+            "Bleeding gums",
+            "TMJ pain",
+            "Sensitivity",
+            "Routine checkups"
+        ],
+        "fun_fact": "Tooth enamel is the hardest substance in your entire body."
+    },
+    "Plastic_Surgery": {
+        "title": "Plastic Surgery",
+        "definition": "Surgical specialty involving restoration, reconstruction, or alteration of the human body.",
+        "scope": [
+            "Burn care",
+            "Trauma reconstruction",
+            "Cleft palate",
+            "Breast reconstruction",
+            "Cosmetic surgery"
+        ],
+        "how_it_works": "Plastic surgeons are masters of tissue handling, moving skin and muscle (flaps) to restore both form and function.",
+        "procedures": {
+            "diagnostic": [
+                "3D Imaging",
+                "CT Flap Mapping"
+            ],
+            "surgical_interventional": [
+                "Skin Grafting",
+                "Flap Surgery",
+                "Rhinoplasty",
+                "Facelift",
+                "Augmentation"
+            ]
+        },
+        "modern_innovations": "Bio-engineered skin substitutes and hair follicle cloning for restoration.",
+        "subspecialties": [
+            "Burn Surgery",
+            "Hand Surgery",
+            "Craniofacial Surgery",
+            "Aesthetic Surgery"
+        ],
+        "when_to_consult": [
+            "Post-cancer reconstruction",
+            "Severe scarring",
+            "Congenital abnormalities",
+            "Hand injuries"
+        ],
+        "fun_fact": "'Plastic' comes from 'plastikos' meaning 'to mold'."
+    },
+    "General_Medicine": {
+        "title": "General Medicine",
+        "definition": "Prevention, diagnosis, and treatment of internal diseases in adults.",
+        "scope": [
+            "Chronic disease care",
+            "Diagnostic puzzles",
+            "Preventive checkups",
+            "Infections",
+            "Global patient health"
+        ],
+        "how_it_works": "Internists are the 'medical detectives'. They look at the whole person to connect dots across different organ systems.",
+        "procedures": {
+            "diagnostic": [
+                "Physical Exam",
+                "Comprehensive Blood Labs",
+                "Holistic Screening"
+            ],
+            "surgical_interventional": [
+                "Vaccination",
+                "Medication Titration",
+                "Lifestyle Coordination"
+            ]
+        },
+        "modern_innovations": "Pharmacogenomics (testing which drugs fit your DNA) and AI-assisted diagnosis.",
+        "subspecialties": [
+            "Geriatrics",
+            "Infectious Disease",
+            "Hospital Medicine"
+        ],
+        "when_to_consult": [
+            "Annual wellness exams",
+            "Complex symptoms",
+            "Chronic disease management",
+            "Acute viral illness"
+        ],
+        "fun_fact": "Internists are often called 'The Doctor's Doctor'."
+    },
+    "Gynaecology": {
+        "title": "Gynaecology & Obstetrics",
+        "definition": "Focuses on female reproductive health and pregnancy/childbirth.",
+        "scope": [
+            "Menstrual health",
+            "Fertility/Infertility",
+            "Pregnancy/Delivery",
+            "Menopause",
+            "GYN Oncology"
+        ],
+        "how_it_works": "OB/GYNs manage health throughout life cycles, using ultrasound and microscopic screening (Pap) to prevent and treat disease.",
+        "procedures": {
+            "diagnostic": [
+                "Pap Smear",
+                "Pelvic Ultrasound",
+                "Colposcopy"
+            ],
+            "surgical_interventional": [
+                "C-Section",
+                "Hysterectomy",
+                "IUD Placement",
+                "Laparoscopy"
+            ]
+        },
+        "modern_innovations": "NIPT (Non-invasive fetal DNA testing) and robotic hysterectomy.",
+        "subspecialties": [
+            "Maternal-Fetal Medicine",
+            "Reproductive Endocrinology",
+            "GYN Oncology"
+        ],
+        "when_to_consult": [
+            "Annual pelvic exams",
+            "Pregnancy planning",
+            "Irregular periods",
+            "Menopause symptoms"
+        ],
+        "fun_fact": "Babies in the womb can taste the flavors of the food their mother eats."
+    },
+    "Radiology": {
+        "title": "Radiology",
+        "definition": "Imaging used to diagnose and treat diseases inside the body.",
+        "scope": [
+            "Interpretive Imaging",
+            "Interventional Radiology",
+            "Radiation Therapy",
+            "Nuclear Medicine"
+        ],
+        "how_it_works": "Radiologists use magnetic fields, X-rays, and sound waves to peer inside the body without an incision.",
+        "procedures": {
+            "diagnostic": [
+                "MRI",
+                "CT Scan",
+                "Ultrasound",
+                "PET Scan",
+                "X-ray"
+            ],
+            "surgical_interventional": [
+                "Image-guided Biopsy",
+                "Angiography",
+                "Stent placement",
+                "Aspiration"
+            ]
+        },
+        "modern_innovations": "AI that identifies strokes or cancers faster than human radiologists and Theranostics (radio-ligands).",
+        "subspecialties": [
+            "Neuroradiology",
+            "Musculoskeletal Radiology",
+            "Interventional Radiology"
+        ],
+        "when_to_consult": [
+            "Typically referred by another doctor for scans",
+            "Need specialized minimally invasive treatment",
+            "Second opinion on existing scans"
+        ],
+        "fun_fact": "The first X-ray ever taken was of the inventor's wife's hand (she saw her skeleton)."
+    },
+    "Oncology": {
+        "title": "Oncology",
+        "definition": "The study and treatment of tumors and cancer.",
+        "scope": [
+            "Solid Tumors",
+            "Blood Cancers",
+            "Genetics",
+            "Palliative Care",
+            "Side effect management"
+        ],
+        "how_it_works": "Oncologists use a 'Targeted approach'. They identify the genetic mutations driving a tumor and use drugs to block those specific life-paths.",
+        "procedures": {
+            "diagnostic": [
+                "Liquid Biopsy",
+                "PET/CT Staging",
+                "Genetic Profiling"
+            ],
+            "surgical_interventional": [
+                "Chemotherapy",
+                "Immunotherapy",
+                "Radiation",
+                "Stem Cell Transplant"
+            ]
+        },
+        "modern_innovations": "CAR-T Cell therapy and personalized cancer vaccines.",
+        "subspecialties": [
+            "Medical",
+            "Surgical",
+            "Radiation Oncology"
+        ],
+        "when_to_consult": [
+            "Unexplained weight loss",
+            "Persistent lumps",
+            "Changes in bowel habits",
+            "Persistent cough"
+        ],
+        "fun_fact": "More people are surviving cancer today than at any point in human history."
+    },
+    "Pulmonology": {
+        "title": "Pulmonology",
+        "definition": "Deals with diseases involving the respiratory system.",
+        "scope": [
+            "Asthma/COPD",
+            "Pneumonia/TB",
+            "Lung Cancer",
+            "Sleep Apnea",
+            "Lung Fibrosis"
+        ],
+        "how_it_works": "Pulmonologists focus on 'Gas Exchange' efficiency and airway mechanics using flow-rate analysis and pressure sensing.",
+        "procedures": {
+            "diagnostic": [
+                "Spirometry",
+                "Bronchoscopy",
+                "HRCT"
+            ],
+            "surgical_interventional": [
+                "Venting",
+                "CPAP",
+                "Airway stenting"
+            ]
+        },
+        "modern_innovations": "Robotic Bronchoscopy and targeted therapy for Pulmonary Fibrosis.",
+        "subspecialties": [
+            "Interventional Pulmonology",
+            "Sleep Medicine"
+        ],
+        "when_to_consult": [
+            "Chronic cough",
+            "Shortness of breath",
+            "Coughing blood",
+            "Severe wheezing"
+        ],
+        "fun_fact": "Lungs can float on water; they are the only human organs that can."
+    },
+    "Rheumatology": {
+        "title": "Rheumatology",
+        "definition": "Focused on rheumatic diseases and autoimmune disorders.",
+        "scope": [
+            "Joints (Arthritis/RA)",
+            "Lupus",
+            "Gout",
+            "Vasculitis",
+            "Osteoporosis"
+        ],
+        "how_it_works": "Rheumatologists manage the 'Internal Civil War'. They use biologics to calm the immune system's attack on the body's own tissues.",
+        "procedures": {
+            "diagnostic": [
+                "ANA Screen",
+                "Joint Aspiration",
+                "Imaging US"
+            ],
+            "surgical_interventional": [
+                "Infusions",
+                "Joint Injections"
+            ]
+        },
+        "modern_innovations": "JAK Inhibitors (oral biologics) and precision medicine for Lupus.",
+        "subspecialties": [
+            "Pediatric Rheumatology"
+        ],
+        "when_to_consult": [
+            "Symmetric joint pain",
+            "Morning stiffness > 30 mins",
+            "Positive auto-antibodies"
+        ],
+        "fun_fact": "Gout was once known as the 'Disease of Kings' due to its link with rich diets."
+    },
+    "Haematology": {
+        "title": "Haematology",
+        "definition": "Study of blood-forming organs and blood disorders.",
+        "scope": [
+            "Anemia",
+            "Clotting/Hemophilia",
+            "Leukemia/Lymphoma",
+            "Sickle Cell",
+            "Platelet issues"
+        ],
+        "how_it_works": "Hematologists analyze the 'Fluid Organ'. They diagnose chemical and cellular defects in oxygen transport and immunity.",
+        "procedures": {
+            "diagnostic": [
+                "CBC/Smear",
+                "Bone Marrow Biopsy",
+                "Coagulation tests"
+            ],
+            "surgical_interventional": [
+                "Transfusion",
+                "Apheresis",
+                "Bone Marrow Transplant"
+            ]
+        },
+        "modern_innovations": "CRISPR gene therapy for Sickle Cell and Thalassemia.",
+        "subspecialties": [
+            "Haemato-Oncology",
+            "Transfusion Medicine"
+        ],
+        "when_to_consult": [
+            "Easy bruising",
+            "Extreme fatigue",
+            "Painless swollen nodes",
+            "Recurrent blood clots"
+        ],
+        "fun_fact": "You have about 6 quarts of blood in your body."
+    },
+    "Anesthesiology": {
+        "title": "Anesthesiology",
+        "definition": "Pain relief and care for patients before, during, and after surgery.",
+        "scope": [
+            "General Anesthesia",
+            "Regional/Local Numbing",
+            "Critical Care",
+            "Pain Clinics"
+        ],
+        "how_it_works": "Anesthesiologists are 'Guardian Angels'. They monitor every vital sign while temporarily suspending consciousness for surgery.",
+        "procedures": {
+            "diagnostic": [
+                "Risk Grading",
+                "Monitoring TEE"
+            ],
+            "surgical_interventional": [
+                "Intubation",
+                "Spinal/Epidural",
+                "Nerve Blocks"
+            ]
+        },
+        "modern_innovations": "Smart Monitoring (BIS) for brain depth and ultra-low dose spinal blocks.",
+        "subspecialties": [
+            "Pain Medicine",
+            "Obstetrical",
+            "Pediatric Anesthesia"
+        ],
+        "when_to_consult": [
+            "Preparation for surgery",
+            "Chronic intractable pain",
+            "Pain-free labor"
+        ],
+        "fun_fact": "Modern anesthesia only became common in the mid-1800s."
+    },
+    "Emergency_Medicine": {
+        "title": "Emergency Medicine",
+        "definition": "Immediate treatment of acutely ill or injured patients.",
+        "scope": [
+            "Trauma",
+            "Cardiac Arrest",
+            "Stroke",
+            "Poisoning",
+            "Acute Infection"
+        ],
+        "how_it_works": "ER doctors use 'Rapid Triage'. They secure the ABCs (Airway, Breathing, Circulation) to stabilize the patient during the 'Golden Hour'.",
+        "procedures": {
+            "diagnostic": [
+                "FAST Ultrasound",
+                "STAT Labs",
+                "Trauma CT"
+            ],
+            "surgical_interventional": [
+                "CPR",
+                "Thoracotomy",
+                "Intubation",
+                "Resuscitation"
+            ]
+        },
+        "modern_innovations": "Mobile Stroke Units and rapid blood-banking for trauma.",
+        "subspecialties": [
+            "Toxicology",
+            "Disaster Medicine",
+            "Wilderness Med"
+        ],
+        "when_to_consult": [
+            "Severe chest pain",
+            "Sudden breathlessness",
+            "Severe trauma",
+            "Slurred speech"
+        ],
+        "fun_fact": "EM became its own specialty only in the 1960s."
+    },
+    "Critical_Care": {
+        "title": "Critical Care (Intensivist)",
+        "definition": "Care for patients with life-threatening illness or injury (ICU).",
+        "scope": [
+            "Shock",
+            "Organ failure",
+            "Severe Sepsis",
+            "Advanced Trauma",
+            "Life support"
+        ],
+        "how_it_works": "Intensivists manage complete 'Organ Support'. They use machines to take over for failing lungs, kidneys, or hearts while the body heals.",
+        "procedures": {
+            "diagnostic": [
+                "Arterial Lines",
+                "Hemodynamics"
+            ],
+            "surgical_interventional": [
+                "Ventilation",
+                "CRRT (Dialysis)",
+                "ECMO"
+            ]
+        },
+        "modern_innovations": "AI-based sepsis predictive alarms and non-invasive cardiac output monitoring.",
+        "subspecialties": [
+            "NICU",
+            "PICU",
+            "Neuro-ICU"
+        ],
+        "when_to_consult": [
+            "Inability to breathe on own",
+            "Altered consciousness",
+            "Multi-organ failure"
+        ],
+        "fun_fact": "The first ICU was created in Copenhagen in 1953."
+    },
+    "Bariatric_Surgery": {
+        "title": "Bariatric Surgery",
+        "definition": "Surgical treatment for obesity and associated metabolic diseases.",
+        "scope": [
+            "Morbid Obesity",
+            "Diabetes resolution",
+            "Sleeve Gastrectomy",
+            "Gastric Bypass"
+        ],
+        "how_it_works": "Bariatric surgery causes 'Hormonal Shifts'. It alters the gut's chemical signaling to reduce hunger and improve metabolism.",
+        "procedures": {
+            "diagnostic": [
+                "Psychological screen",
+                "Metabolic labs"
+            ],
+            "surgical_interventional": [
+                "Gastric Sleeve",
+                "Bypass",
+                "Revision surgery"
+            ]
+        },
+        "modern_innovations": "Scarless surgery and long-acting gastric bypass alternatives.",
+        "subspecialties": [
+            "Metabolic Surgery"
+        ],
+        "when_to_consult": [
+            "BMI > 40",
+            "Obesity-linked Diabetes",
+            "Failed life-style changes"
+        ],
+        "fun_fact": "Bariatric surgery can put Type 2 Diabetes into remission within days."
+    },
+    "Diabetology": {
+        "title": "Diabetology",
+        "definition": "Focused on the study and treatment of diabetes mellitus.",
+        "scope": [
+            "Insulin Resistance",
+            "Hormonal Sugar imbalance",
+            "Pump Technology",
+            "Prevention"
+        ],
+        "how_it_works": "Diabetologists manage 'Sugar Homeostasis'. They use real-time tech to match insulin delivery to the body's internal state.",
+        "procedures": {
+            "diagnostic": [
+                "HbA1c",
+                "CGM Setup"
+            ],
+            "surgical_interventional": [
+                "Insulin Titration",
+                "Foot Ulcer management"
+            ]
+        },
+        "modern_innovations": "Artificial Pancreas CLOSED-LOOP systems and semanal GLP-1 shots.",
+        "subspecialties": [
+            "Diabetic Podiatry"
+        ],
+        "when_to_consult": [
+            "New diagnosis",
+            "Brittle diabetes (high/low swings)",
+            "Foot numbness"
+        ],
+        "fun_fact": "Ancient Egyptians described diabetic symptoms in 1500 BC."
+    },
+    "Pathology": {
+        "title": "Pathology",
+        "definition": "The study of the causes and effects of diseases via tissue analysis.",
+        "scope": [
+            "Biopsies",
+            "Fluid analysis",
+            "Autopsy",
+            "Genetics",
+            "Clinical labs"
+        ],
+        "how_it_works": "Pathologists provide the 'Final Verdict'. They view disease at its most fundamental, cellular level to dictate treatment.",
+        "procedures": {
+            "diagnostic": [
+                "Microscopy",
+                "Frozen Section",
+                "Molecular profiling"
+            ],
+            "surgical_interventional": [
+                "Biopsy Processing"
+            ]
+        },
+        "modern_innovations": "Digital Pathology and Genomic Sequencing of tumors.",
+        "subspecialties": [
+            "Forensic",
+            "Molecular",
+            "Dermatopathology"
+        ],
+        "when_to_consult": [
+            "Typically referred after a biopsy is performed"
+        ],
+        "fun_fact": "70% of hospital diagnosis relies on pathology."
+    },
+    "Kayachikitsa": {
+        "title": "Kayachikitsa (Ayurvedic Internal Medicine)",
+        "definition": "The foundational branch of Ayurveda dealing with internal medicine and holistic healing of the whole body ('Kaya').",
+        "scope": [
+            "Metabolic disorders",
+            "Chronic immunity issues",
+            "Digestive health",
+            "Mental well-being",
+            "Skin and Respiratory care"
+        ],
+        "how_it_works": "Kayachikitsa focuses on 'Agni' (digestive fire) and 'Dosha' balance. It treats the root cause of systemic disease by correcting metabolic errors through herbs, diet, and lifestyle.",
+        "procedures": {
+            "diagnostic": [
+                "Nadi Pariksha (Pulse)",
+                "Jihva Pariksha (Tongue)",
+                "Prakriti Analysis"
+            ],
+            "surgical_interventional": [
+                "Shamana (Herbal balancing)",
+                "Deepana-Pachana (Metabolic correction)"
+            ]
+        },
+        "modern_relevance": "Directly correlates with modern Internal Medicine but adds a focus on bio-energetics and preventive metabolism.",
+        "when_to_consult": [
+            "Chronic metabolic issues",
+            "Low immunity",
+            "Lifestyle diseases like high sugar or BP",
+            "Systemic inflammatory conditions"
+        ],
+        "fun_fact": "In Ayurveda, the gut is considered the 'second brain' and the seat of all health."
+    },
+    "Shalya_Tantra": {
+        "title": "Shalya Tantra (Ayurvedic Surgery)",
+        "definition": "The branch of Ayurveda dedicated to surgical and para-surgical interventions, pioneered by Sushruta.",
+        "scope": [
+            "Anorectal disorders (Piles/Fistula)",
+            "Wound management",
+            "Fractures",
+            "Abscesses",
+            "Foreign body removal"
+        ],
+        "how_it_works": "Shalya Tantra uses specialized 'para-surgical' methods like medicated threads (Ksharasutra) and thermal cautery to treat complex conditions without extensive cutting.",
+        "procedures": {
+            "diagnostic": [
+                "Marma analysis (Vital points)",
+                "Wound staging"
+            ],
+            "surgical_interventional": [
+                "Kshara Sutra Therapy",
+                "Agnikarma (Thermal therapy)",
+                "Jalaukavacharana (Leech therapy)"
+            ]
+        },
+        "modern_relevance": "Kshara Sutra is globally recognized for having lower recurrence rates in fistula treatment than modern surgery.",
+        "when_to_consult": [
+            "Hemorrhoids, Fistula-in-ano",
+            "Non-healing ulcers",
+            "Chronic pain requiring thermal therapy"
+        ],
+        "fun_fact": "Sushruta (600 BC) is recognized by the world as the 'Father of Plastic Surgery' for his nose reconstruction techniques."
+    },
+    "Shalakya_Tantra": {
+        "title": "Shalakya Tantra (Ayurvedic ENT & Eye)",
+        "definition": "Specialized branch for diseases above the clavicle (Urdhvajatru), covering eyes, ears, nose, and throat.",
+        "scope": [
+            "Ophthalmology (Netra)",
+            "Otorhinolaryngology (ENT)",
+            "Dentistry",
+            "Headaches/Migraines"
+        ],
+        "how_it_works": "Uses specialized local therapies (Kriya Kalpas) like eye pooling and nasal drops to deliver medicine directly to the sensory organs.",
+        "procedures": {
+            "diagnostic": [
+                "Sensory organ examination"
+            ],
+            "surgical_interventional": [
+                "Netra Tarpana (Eye pooling)",
+                "Nasya (Nasal drops)",
+                "Karnapoorana (Ear oiling)"
+            ]
+        },
+        "modern_relevance": "Highly effective for chronic sinusitis and degenerative eye conditions where modern drops have limited effect.",
+        "when_to_consult": [
+            "Chronic sinusitis",
+            "Weakening vision",
+            "Hearing issues or Tinnitus",
+            "Recurrent headaches"
+        ],
+        "fun_fact": "Nasya is considered the 'gateway to the brain' in Ayurveda, directly impacting the pituitary gland."
+    },
+    "Agada_Tantra": {
+        "title": "Agada Tantra (Toxicology)",
+        "definition": "Branch dealing with the diagnosis and management of poisons (natural, artificial, and cumulative).",
+        "scope": [
+            "Food incompatibility (Viruddhahara)",
+            "Insect/Snake venom",
+            "Environmental toxins",
+            "Chemical toxicity"
+        ],
+        "how_it_works": "Focuses on 'Vishahara' (poison-removing) herbs that neutralize toxins at the cellular level and prevent blood contamination.",
+        "procedures": {
+            "diagnostic": [
+                "Toxin identification"
+            ],
+            "surgical_interventional": [
+                "Visha-hara Lepa (Antitoxic pastes)",
+                "Blood purification"
+            ]
+        },
+        "modern_relevance": "Extremely relevant for 'bio-accumulation' of pesticides and heavy metals in the modern food chain.",
+        "when_to_consult": [
+            "Chronic allergies due to food combinations",
+            "History of chemical exposure",
+            "Slow-healing toxic bites"
+        ],
+        "fun_fact": "Ayurveda describes 'Dushi Visha' (latent poison) which stays in the body for years before causing disease."
+    },
+    "Prasuti_Tantra": {
+        "title": "Prasuti Tantra (Ayurvedic OB-GYN)",
+        "definition": "Dedicated to women's reproductive health, pregnancy care, and childbirth.",
+        "scope": [
+            "Antenatal care (Garbhini Paricharya)",
+            "Infertility",
+            "Menstrual health (Stri-roga)",
+            "Postnatal recovery"
+        ],
+        "how_it_works": "Focuses on the 'Artava' (hormonal/reproductive fluid) and preparing the 'Kshetra' (field/uterus) for healthy conception.",
+        "procedures": {
+            "diagnostic": [
+                "Follicular monitoring",
+                "Hormonal balance check"
+            ],
+            "surgical_interventional": [
+                "Yoniprakshalana (Local douche)",
+                "Uttarabasti (Uterine enema)"
+            ]
+        },
+        "modern_relevance": "Known for 'Garbha Sanskar'—the science of positive prenatal influence on the baby's psychology.",
+        "when_to_consult": [
+            "PCOD/PCOS",
+            "Infertility",
+            "Planning for a healthy pregnancy",
+            "Post-delivery weakness"
+        ],
+        "fun_fact": "Ayurvedic texts describe detailed monthly dietary changes to match fetal development 2500 years ago."
+    },
+    "Kaumarabhritya": {
+        "title": "Kaumarabhritya (Ayurvedic Pediatrics)",
+        "definition": "The branch concerned with child-care, from neonatal to adolescent stages.",
+        "scope": [
+            "Neonatal care",
+            "Developmental milestones",
+            "Childhood immunity",
+            "Nutritional disorders"
+        ],
+        "how_it_works": "Emphasizes 'Lehana' (immunity boosters) and the purification of breast milk (Stanya Shodhana) to ensure infant health.",
+        "procedures": {
+            "diagnostic": [
+                "Pulse analysis in children",
+                "Growth milestone tracking"
+            ],
+            "surgical_interventional": [
+                "Suvarnaprashana (Gold drops for immunity)",
+                "Herbal baths"
+            ]
+        },
+        "modern_relevance": "Growing global demand for Ayurvedic immunity boosters (Suvarnaprashana) to prevent recurrent child infections.",
+        "when_to_consult": [
+            "Low immunity in children",
+            "Feeding issues",
+            "Delayed milestones",
+            "Chronic childhood allergies"
+        ],
+        "fun_fact": "Suvarnaprashana is given specifically during 'Pushya Nakshatra' (an auspicious star) for maximum potency."
+    },
+    "Panchakarma": {
+        "title": "Panchakarma (Detoxification Therapy)",
+        "definition": "The cornerstone of Ayurveda: Five bio-cleansing procedures that remove deep-seated toxins (Ama) from the body.",
+        "scope": [
+            "Total body detox",
+            "Chronic disease reversal",
+            "Longevity",
+            "Mental clarity"
+        ],
+        "how_it_works": "Follows a three-step process: Preparation (loosening toxins), Main Action (expulsion), and After-care (rebuilding fire).",
+        "procedures": {
+            "diagnostic": [
+                "Ama identification",
+                "Strength assessment"
+            ],
+            "surgical_interventional": [
+                "Vamana (Emesis)",
+                "Virechana (Purgation)",
+                "Basti (Enema)",
+                "Nasya",
+                "Raktamokshana"
+            ]
+        },
+        "modern_relevance": "Scientifically proven to reduce systemic inflammation and lipid peroxides (oxidative stress markers).",
+        "when_to_consult": [
+            "Chronic autoimmune issues",
+            "High stress and mental fog",
+            "Preparing for a new stage of life",
+            "Systemic metabolic blocks"
+        ],
+        "fun_fact": "Panchakarma doesn't just treat the body; it is often described as 'shedding an old skin' for the mind too."
+    },
+    "Rasayana": {
+        "title": "Rasayana (Rejuvenation & Anti-aging)",
+        "definition": "Specialty focusing on longevity, revitalization of tissues, and slowing down the aging process.",
+        "scope": [
+            "Geriatric care",
+            "Immunity enhancement",
+            "Memory/Intellect boosting",
+            "Cellular repair"
+        ],
+        "how_it_works": "Focuses on providing optimum nutrition ('Rasa') to even the smallest cells of the body to prevent premature decay.",
+        "procedures": {
+            "diagnostic": [
+                "Ojas (Vital energy) assessment"
+            ],
+            "surgical_interventional": [
+                "Kuti Praveshika (Indoor seclusion therapy)",
+                "Vatatapika (Outdoor therapy)"
+            ]
+        },
+        "modern_relevance": "Aligns with 'Geroscience' or the study of biological aging, emphasizing antioxidants and adaptogens.",
+        "when_to_consult": [
+            "Age-related memory decline",
+            "Chronic weakness/Fatigue",
+            "Post-illness recovery",
+            "Desire for long-term health"
+        ],
+        "fun_fact": "Rasayana practitioners in ancient times were said to live well over 100 years with full physical vigor."
+    },
+    "Vajikarana": {
+        "title": "Vajikarana (Reproductive & Sexual Health)",
+        "definition": "The branch of Ayurveda concerned with sexual health, virility, and the quality of progeny.",
+        "scope": [
+            "Infertility (Male/Female)",
+            "Sexual dysfunction",
+            "Vigor and Performance",
+            "Genetic quality of offspring"
+        ],
+        "how_it_works": "Nourishes the 'Shukra Dhatu' (reproductive tissue) which is considered the essence of all other body tissues.",
+        "procedures": {
+            "diagnostic": [
+                "Shukra analysis",
+                "Hormonal feedback check"
+            ],
+            "surgical_interventional": [
+                "Aphrodisiac herbal formulations",
+                "Strengthening oil massages"
+            ]
+        },
+        "modern_relevance": "Integrates psycho-sexual counseling with natural testosterone/progesterone support.",
+        "when_to_consult": [
+            "Planning for a child",
+            "Erectile issues or low libido",
+            "Post-reproduction vitality needs"
+        ],
+        "fun_fact": "Vajikarana comes from 'Vaji' (Horse)—the ultimate symbol of strength and speed in ancient texts."
+    },
+    "Svasthavritta": {
+        "title": "Svasthavritta (Preventive & Social Medicine)",
+        "definition": "The science of maintaining the health of a healthy person through daily and seasonal regimens.",
+        "scope": [
+            "Lifestyle management",
+            "Yoga & Pranyama",
+            "Dietetics (Ahara)",
+            "Environmental health"
+        ],
+        "how_it_works": "Uses 'Rhythms' (Dinacharya/Ritucharya) to align the human body with the cycles of nature, preventing disease before it manifests.",
+        "procedures": {
+            "diagnostic": [
+                "Lifestyle audit",
+                "Seasonal vulnerability check"
+            ],
+            "surgical_interventional": [
+                "Yoga protocols",
+                "Personalized daily routines",
+                "Dietary prescriptions"
+            ]
+        },
+        "modern_relevance": "Direct precursor to modern 'Lifestyle Medicine' and circadian rhythm research.",
+        "when_to_consult": [
+            "Desire for disease-free living",
+            "Poor sleep or stress habits",
+            "Seasonal allergies",
+            "Weight management"
+        ],
+        "fun_fact": "Ayurveda describes the 'Brahma Muhurta' (4:00 AM - 6:00 AM) as the most potent time for brain productivity."
+    }
+}

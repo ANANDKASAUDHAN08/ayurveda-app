@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NotificationService, Notification } from '../../../shared/services/notification.service';
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-notifications-page',
@@ -26,6 +28,10 @@ export class NotificationsPageComponent implements OnInit {
   totalCount = 0;
   unreadCount = 0;
 
+  // App update notification
+  updateAvailable = false;
+  updateDetectedAt: Date | null = null;
+
   categories = [
     { value: 'all', label: 'All' },
     { value: 'prescription', label: 'Prescriptions' },
@@ -34,16 +40,41 @@ export class NotificationsPageComponent implements OnInit {
     { value: 'profile', label: 'Profile' },
     { value: 'health', label: 'Health' },
     { value: 'payment', label: 'Payments' },
-    { value: 'system', label: 'System' }
+    { value: 'system', label: 'System' },
+    { value: 'update', label: 'App Updates' }
   ];
 
-  constructor(public notificationService: NotificationService) { }
+  constructor(
+    public notificationService: NotificationService,
+    private swUpdate: SwUpdate
+  ) { }
 
   ngOnInit() {
     this.loadNotifications();
     this.notificationService.unreadCount$.subscribe(count => {
       this.unreadCount = count;
     });
+
+    // Check for app updates
+    if (this.swUpdate.isEnabled) {
+      // Check if update is already available
+      this.swUpdate.versionUpdates.pipe(
+        filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY')
+      ).subscribe(() => {
+        this.updateAvailable = true;
+        this.updateDetectedAt = new Date();
+      });
+
+      // Check for updates immediately
+      this.swUpdate.checkForUpdate().then(updateFound => {
+        if (updateFound) {
+          this.updateAvailable = true;
+          this.updateDetectedAt = new Date();
+        }
+      }).catch(err => {
+        console.error('Error checking for updates:', err);
+      });
+    }
   }
 
   loadNotifications() {
@@ -117,5 +148,10 @@ export class NotificationsPageComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  updateApp() {
+    // Reload the app to get the latest version
+    window.location.reload();
   }
 }

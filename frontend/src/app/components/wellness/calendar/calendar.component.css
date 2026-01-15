@@ -1,0 +1,214 @@
+/* Base Styles & Transitions */
+:host {
+    display: block;
+}
+
+.transition-all {
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Calendar Grid Optimization */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background-color: rgba(226, 232, 240, 0.4);
+    gap: 1.5px;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
+.calendar-day {
+    min-height: 80px;
+    transition: all 0.2s ease;
+}
+
+.calendar-day:hover:not(.selected-day) {
+    background-color: #f1f5f9 !important;
+    /* slate-100 */
+}
+
+@media (max-width: 640px) {
+    .calendar-day {
+        min-height: 50px;
+        padding: 0.25rem !important;
+    }
+}
+
+/* Theme Specifics */
+.indigo-style {
+    accent-color: #4f46e5;
+}
+
+.checklist-item-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.checklist-item-checkbox:checked {
+    background-color: #10b981;
+    border-color: #10b981;
+}
+
+.checklist-item-checkbox.indigo-style:checked {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+}
+
+/* Custom Scrollbar for Toggle */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Heatmap & Glows */
+.heatmap-level-1 {
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+.heatmap-level-2 {
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+.heatmap-level-3 {
+    background-color: rgba(16, 185, 129, 0.2);
+}
+
+.heatmap-level-4 {
+    background-color: rgba(16, 185, 129, 0.3);
+}
+
+.heatmap-level-5 {
+    background-color: rgba(16, 185, 129, 0.4);
+}
+
+/* Animations */
+@keyframes rotate-slow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-rotate-slow {
+    animation: rotate-slow 12s linear infinite;
+}
+
+/* Responsive Utilities */
+@media (max-width: 1024px) {
+    .intelligence-strip {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Glassmorphism Refinements */
+.backdrop-blur-xl {
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+/* Button & Interactive States */
+button {
+    outline: none;
+    user-select: none;
+}
+
+.active-glow-emerald {
+    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+}
+
+.active-glow-indigo {
+    box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+}
+
+.timeline-scroll {
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 12px;
+}
+
+.timeline-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.timeline-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.timeline-scroll::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+
+.timeline-scroll::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+}
+
+.selection-glow-emerald {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+.selection-glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.hover-detail-box {
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.2);
+}
+
+/* Heatmap Density Levels */
+.ayurveda-view .heatmap-level-1 {
+    background-color: rgba(16, 185, 129, 0.05) !important;
+}
+
+.ayurveda-view .heatmap-level-2 {
+    background-color: rgba(16, 185, 129, 0.10) !important;
+}
+
+.ayurveda-view .heatmap-level-3 {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+.ayurveda-view .heatmap-level-4 {
+    background-color: rgba(16, 185, 129, 0.20) !important;
+}
+
+.ayurveda-view .heatmap-level-5 {
+    background-color: rgba(16, 185, 129, 0.25) !important;
+}
+
+.allopathy-view .heatmap-level-1 {
+    background-color: rgba(59, 130, 246, 0.05) !important;
+}
+
+.allopathy-view .heatmap-level-2 {
+    background-color: rgba(59, 130, 246, 0.10) !important;
+}
+
+.allopathy-view .heatmap-level-3 {
+    background-color: rgba(59, 130, 246, 0.15) !important;
+}
+
+.allopathy-view .heatmap-level-4 {
+    background-color: rgba(59, 130, 246, 0.20) !important;
+}
+
+.allopathy-view .heatmap-level-5 {
+    background-color: rgba(59, 130, 246, 0.25) !important;
+}
+
+/* Serfont Utility */
+.serif-font {
+    font-family: 'Playfair Display', serif;
+}

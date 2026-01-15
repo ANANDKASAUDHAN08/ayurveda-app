@@ -12,11 +12,28 @@ export interface SearchResult {
     name: string;
     description: string;
     price?: number;
+    mrp?: number;
     category?: string;
     stock?: number;
     stock_quantity?: number;
     image_url?: string;
     product_type: 'medicine' | 'device' | 'doctor' | 'hospital' | 'pharmacy';
+    manufacturer?: string;
+    composition?: string;
+    storage?: string;
+    introduction?: string;
+    uses?: string[];
+    benefits?: { title: string; description: string }[];
+    side_effects?: { common: string[]; advice: string };
+    side_effects_list?: string;
+    safety_advice?: { category: string; tag: string; advice: string }[];
+    substitutes?: any;
+    how_it_works?: string;
+    quick_tips?: string[];
+    fact_box?: { [key: string]: string };
+    interactions?: { drug: string; severity: string; advice: string }[];
+    drug_interactions?: string;
+    review_percent?: { excellent: number; average: number; poor: number };
 }
 
 export interface SearchResponse {
@@ -48,6 +65,7 @@ export interface SearchFilters {
     sortBy?: string;
     page?: number;
     limit?: number;
+    medicineSystem?: string;
 }
 
 @Injectable({
@@ -133,6 +151,10 @@ export class SearchService {
             query,
             resultsCount
         });
+    }
+
+    getMedicineById(id: number): Observable<{ success: boolean; data: SearchResult }> {
+        return this.http.get<{ success: boolean; data: SearchResult }>(`${API_URL}/allopathy/medicine/${id}`);
     }
 
     getSearchHistory(): string[] {

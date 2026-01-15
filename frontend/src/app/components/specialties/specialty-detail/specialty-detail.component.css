@@ -1,0 +1,93 @@
+.detail-container {
+    scroll-behavior: smooth;
+}
+
+.active-section {
+    background-color: white;
+    color: #059669 !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+aside button {
+    transition: all 0.3s ease;
+}
+
+aside button:hover {
+    transform: translateX(4px);
+}
+
+h1,
+h2,
+h3 {
+    letter-spacing: -0.025em;
+}
+
+section,
+header {
+    scroll-margin-top: 100px;
+}
+
+@media (max-width: 1024px) {
+
+    section,
+    header {
+        scroll-margin-top: 150px;
+    }
+}
+
+.custom-scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.custom-scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+main>* {
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+header {
+    animation-delay: 0.1s;
+}
+
+#how-it-works {
+    animation-delay: 0.2s;
+}
+
+#procedures {
+    animation-delay: 0.3s;
+}
+
+#consult {
+    animation-delay: 0.4s;
+}
+
+#innovations {
+    animation-delay: 0.5s;
+}
+
+#references {
+    animation-delay: 0.6s;
+}
+
+aside button {
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+aside button:hover {
+    transform: translateX(4px);
+}

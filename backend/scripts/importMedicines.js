@@ -12,7 +12,7 @@ const db = require('../src/config/database');
  * CSV Columns: id, name, price(₹), Is_discontinued, manufacturer_name, type, pack_size, composition
  */
 
-const CSV_FILE = path.join(__dirname, '../data/indian-medicines.csv');
+const CSV_FILE = path.join(__dirname, '../data/allopathy/indian-medicines.csv');
 const BATCH_SIZE = 500; // Import in batches for performance
 
 // Placeholder images based on medicine type

@@ -1,0 +1,414 @@
+<div class="detail-container min-h-screen bg-slate-50">
+
+    <!-- Back Button & Breadcrumbs -->
+    <div
+        class="sticky top-[64px] z-30 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm transition-none">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <!-- Breadcrumbs -->
+            <nav class="hidden lg:flex items-center text-sm font-medium text-slate-500 mb-2">
+                <a routerLink="/home" class="hover:text-emerald-600 font-bold">Home</a>
+                <i class="fas fa-chevron-right mx-3 text-[10px]"></i>
+                <a routerLink="/specialties" class="hover:text-emerald-600 font-bold">Specialties</a>
+                <i class="fas fa-chevron-right mx-3 text-[10px]"></i>
+                <span class="text-slate-900">{{details?.title}}</span>
+            </nav>
+
+            <!-- Mobile/Desktop Top Bar Actions -->
+            <div class="flex items-center justify-between">
+                <button routerLink="/specialties"
+                    class="md:hidden flex items-center text-emerald-600 font-bold hover:text-emerald-700 transition-colors">
+                    All Specialties
+                </button>
+                <!-- Mobile Menu Trigger -->
+                <button (click)="toggleMobileMenu()" *ngIf="!loading && details"
+                    class="lg:hidden flex items-center gap-2 bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-100 text-slate-700 font-bold text-sm hover:shadow-md transition-all active:scale-95">
+                    <i class="fas fa-bars-staggered text-emerald-600"></i> Sections
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex flex-col items-center justify-center py-40">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-emerald-500"></div>
+        <p class="mt-4 text-slate-500">Retrieving specialized knowledge...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!loading && error" class="text-center py-40">
+        <div class="text-6xl text-rose-300 mb-6">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-slate-800">Specialty Not Found</h2>
+        <p class="text-slate-500 mt-2">The requested medical specialty information could not be found.</p>
+        <button routerLink="/specialties"
+            class="mt-8 px-8 py-3 bg-emerald-600 text-white rounded-full font-bold hover:bg-emerald-700 transition-all">
+            Return to Index
+        </button>
+    </div>
+
+    <!-- Mobile Bottom Sheet Navigation -->
+    <div *ngIf="showMobileMenu"
+        class="lg:hidden fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-sm transition-opacity"
+        (click)="toggleMobileMenu()">
+    </div>
+
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-[2.5rem] shadow-[0_-20px_50px_-12px_rgba(0,0,0,0.15)] transition-transform duration-500 transform border-t border-slate-100 pb-10"
+        [ngClass]="showMobileMenu ? 'translate-y-0' : 'translate-y-full'">
+
+        <!-- Handle for dragging feel -->
+        <div class="flex justify-center pt-4 pb-2" (click)="toggleMobileMenu()">
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full"></div>
+        </div>
+
+        <div class="px-8 pt-4">
+            <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-8 text-center">Navigate Sections
+            </h4>
+
+            <div class="grid grid-cols-2 gap-4">
+                <button (click)="scrollToSection('overview')"
+                    class="flex flex-col items-center justify-center p-4 rounded-3xl bg-slate-50 hover:bg-emerald-50 transition-colors group">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-white shadow-sm text-emerald-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-info-circle text-xl"></i>
+                    </div>
+                    <span class="text-xs font-bold text-slate-700">Overview</span>
+                </button>
+
+                <button (click)="scrollToSection('how-it-works')"
+                    class="flex flex-col items-center justify-center p-4 rounded-3xl bg-slate-50 hover:bg-blue-50 transition-colors group">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-white shadow-sm text-blue-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-sync text-xl"></i>
+                    </div>
+                    <span class="text-xs font-bold text-slate-700">Mechanism</span>
+                </button>
+
+                <button (click)="scrollToSection('procedures')"
+                    class="flex flex-col items-center justify-center p-4 rounded-3xl bg-slate-50 hover:bg-amber-50 transition-colors group">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-white shadow-sm text-amber-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-stethoscope text-xl"></i>
+                    </div>
+                    <span class="text-xs font-bold text-slate-700">Procedures</span>
+                </button>
+
+                <button (click)="scrollToSection('consult')"
+                    class="flex flex-col items-center justify-center p-4 rounded-3xl bg-slate-50 hover:bg-rose-50 transition-colors group">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-white shadow-sm text-rose-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-bell text-xl"></i>
+                    </div>
+                    <span class="text-xs font-bold text-slate-700">Consult</span>
+                </button>
+
+                <button (click)="scrollToSection('innovations')"
+                    class="flex flex-col items-center justify-center p-4 rounded-3xl bg-slate-50 hover:bg-emerald-50 transition-colors group">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-white shadow-sm text-emerald-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-lightbulb text-xl"></i>
+                    </div>
+                    <span class="text-xs font-bold text-slate-700">Innovations</span>
+                </button>
+
+                <button (click)="scrollToSection('references')"
+                    class="flex flex-col items-center justify-center p-4 rounded-3xl bg-slate-50 hover:bg-indigo-50 transition-colors group">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-white shadow-sm text-indigo-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-book-open text-xl"></i>
+                    </div>
+                    <span class="text-xs font-bold text-slate-700">Sources</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div *ngIf="!loading && details"
+        class="max-w-7xl mx-auto px-4 pt-4 pb-12 lg:pt-12 lg:pb-12 grid grid-cols-1 lg:grid-cols-4 gap-12">
+
+        <!-- Sidebar Navigation -->
+        <aside class="hidden lg:block lg:col-span-1">
+            <div class="sticky top-40 space-y-2">
+                <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 px-4">Sections</h4>
+                <button (click)="scrollToSection('overview')"
+                    class="w-full text-left px-4 py-3 rounded-xl hover:bg-white hover:text-emerald-600 hover:shadow-sm transition-all text-slate-600 font-medium active-section">
+                    {{isAyurvedic() ? 'Ayurvedic' : 'Modern'}} Scientific Overview
+                </button>
+                <button (click)="scrollToSection('how-it-works')"
+                    class="w-full text-left px-4 py-3 rounded-xl hover:bg-white hover:text-emerald-600 hover:shadow-sm transition-all text-slate-600 font-medium">
+                    {{isAyurvedic() ? 'Ayurvedic' : 'Modern'}} Mechanism of Care
+                </button>
+                <button (click)="scrollToSection('procedures')"
+                    class="w-full text-left px-4 py-3 rounded-xl hover:bg-white hover:text-emerald-600 hover:shadow-sm transition-all text-slate-600 font-medium">
+                    Procedures & Tests
+                </button>
+                <button (click)="scrollToSection('consult')"
+                    class="w-full text-left px-4 py-3 rounded-xl hover:bg-white hover:text-emerald-600 hover:shadow-sm transition-all text-slate-600 font-medium">
+                    When to Consult
+                </button>
+                <button (click)="scrollToSection('innovations')"
+                    class="w-full text-left px-4 py-3 rounded-xl hover:bg-white hover:text-emerald-600 hover:shadow-sm transition-all text-slate-600 font-medium">
+                    Modern Innovations
+                </button>
+                <button (click)="scrollToSection('references')"
+                    class="w-full text-left px-4 py-3 rounded-xl hover:bg-white hover:text-emerald-600 hover:shadow-sm transition-all text-slate-600 font-medium">
+                    Sources & References
+                </button>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="lg:col-span-3">
+
+            <!-- Header Section -->
+            <header id="overview" class="mb-10 lg:mb-12">
+                <div class="flex flex-row items-center text-left mb-6 lg:mb-8">
+                    <div class="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl flex items-center justify-center text-3xl lg:text-4xl shadow-md lg:shadow-sm shrink-0"
+                        [ngClass]="isAyurvedic() ? 'bg-emerald-600 text-white' : 'bg-blue-600 text-white'">
+                        <i [class]="isAyurvedic() ? 'fas fa-leaf' : 'fas fa-dna'"></i>
+                    </div>
+                    <div class="ml-5 lg:ml-8">
+                        <span
+                            class="text-[10px] lg:text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2 inline-block shadow-sm"
+                            [ngClass]="isAyurvedic() ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'">
+                            {{ isAyurvedic() ? 'Ayurvedic Branch' : 'Modern Medical Discipline' }}
+                        </span>
+                        <h1 class="text-2xl lg:text-5xl font-black text-slate-900 leading-tight">
+                            {{details.title}}
+                        </h1>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white rounded-[2rem] p-6 lg:p-10 shadow-sm border border-slate-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 lg:p-8 opacity-5 text-7xl lg:text-9xl">
+                        <i [class]="isAyurvedic() ? 'fas fa-leaf' : 'fas fa-dna'"></i>
+                    </div>
+                    <h2 class="text-lg lg:text-xl font-bold text-slate-800 mb-4">Official Definition</h2>
+                    <p class="text-base lg:text-lg text-slate-600 leading-relaxed mb-8">{{details.definition}}</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xs lg:text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Core
+                                Scope</h3>
+                            <ul class="space-y-3">
+                                <li *ngFor="let item of details.scope"
+                                    class="flex items-start text-slate-700 font-medium text-sm lg:text-base">
+                                    <i class="fas fa-check-circle text-emerald-500 mt-1 mr-3 lg:mr-4"></i>
+                                    <span>{{item}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div *ngIf="details.subspecialties">
+                            <h3 class="text-xs lg:text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">
+                                Subspecialties</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span *ngFor="let sub of details.subspecialties"
+                                    class="bg-slate-50 text-slate-600 px-3 py-1.5 lg:px-4 lg:py-2 rounded-xl text-xs lg:text-sm font-semibold border border-slate-100">
+                                    {{sub}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- How it Works Section -->
+            <section id="how-it-works" class="mb-10 lg:mb-12">
+                <h2 class="text-xl lg:text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                    <span
+                        class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mr-3 text-xs lg:text-sm">01</span>
+                    How it Works: The Mechanism
+                </h2>
+                <div
+                    class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-[2rem] p-8 lg:p-10 text-white shadow-xl relative overflow-hidden">
+                    <div class="bg-emerald-500/10 absolute inset-0"></div>
+                    <p class="text-base lg:text-xl text-emerald-50 leading-relaxed relative z-10 italic">
+                        "{{details.how_it_works}}"
+                    </p>
+                </div>
+            </section>
+
+            <!-- Procedures Section -->
+            <section id="procedures" class="mb-10 lg:mb-12">
+                <h2 class="text-xl lg:text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                    <span
+                        class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mr-3 text-xs lg:text-sm">02</span>
+                    Procedures & Clinical Tests
+                </h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Diagnostic -->
+                    <div class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-100 shadow-sm">
+                        <div class="flex flex-row items-center gap-4 mb-6 lg:mb-8">
+                            <div
+                                class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <i class="fas fa-search-plus text-lg lg:text-xl"></i>
+                            </div>
+                            <h3 class="text-lg lg:text-xl font-bold text-slate-800">Diagnostic Methods</h3>
+                        </div>
+                        <ul class="space-y-3">
+                            <li *ngFor="let p of details.procedures.diagnostic"
+                                class="bg-slate-50 p-3.5 lg:p-3 rounded-xl text-slate-700 font-medium text-sm lg:text-base flex items-center">
+                                <div class="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full bg-blue-400 mr-3"></div>
+                                {{p}}
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Interventional -->
+                    <div class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-100 shadow-sm">
+                        <div class="flex flex-row items-center gap-4 mb-6 lg:mb-8">
+                            <div
+                                class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                                <i class="fas fa-tools text-lg lg:text-xl"></i>
+                            </div>
+                            <h3 class="text-lg lg:text-xl font-bold text-slate-800">{{ isAyurvedic() ? 'Therapeutic
+                                Care' :
+                                'Surgical/Interventional' }}</h3>
+                        </div>
+                        <ul class="space-y-3">
+                            <li *ngFor="let p of details.procedures.surgical_interventional"
+                                class="bg-slate-50 p-3.5 lg:p-3 rounded-xl text-slate-700 font-medium text-sm lg:text-base flex items-center">
+                                <div class="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full bg-amber-400 mr-3"></div>
+                                {{p}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- When to Consult Section -->
+            <section id="consult" class="mb-10 lg:mb-12">
+                <h2 class="text-xl lg:text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                    <span
+                        class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mr-3 text-xs lg:text-sm">03</span>
+                    When to Consult a specialist
+                </h2>
+                <div class="bg-white rounded-[2rem] border-2 border-dashed border-slate-200 p-6 lg:p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
+                        <div *ngFor="let symptom of details.when_to_consult"
+                            class="flex items-start p-4 bg-slate-50 rounded-2xl hover:bg-white hover:shadow-sm transition-all border border-transparent hover:border-slate-100">
+                            <i class="fas fa-bell text-rose-500 mt-1 mr-4"></i>
+                            <p class="text-slate-700 font-semibold text-sm lg:text-base">{{symptom}}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Innovations Section -->
+            <section id="innovations" class="mb-10 lg:mb-12">
+                <h2 class="text-xl lg:text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                    <span
+                        class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mr-3 text-xs lg:text-sm">04</span>
+                    {{ isAyurvedic() ? 'Modern Relevance' : 'Clinical Innovations' }}
+                </h2>
+                <div class="bg-emerald-50 rounded-[2rem] p-6 lg:p-10 border border-emerald-100">
+                    <div class="flex flex-row items-center gap-5 lg:gap-8 text-left">
+                        <div
+                            class="w-14 h-14 lg:w-20 lg:h-20 rounded-full bg-white flex items-center justify-center text-emerald-600 shadow-sm shrink-0">
+                            <i class="fas fa-lightbulb text-xl lg:text-3xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-base lg:text-lg text-emerald-900 font-medium leading-relaxed">
+                                {{ isAyurvedic() ? details.modern_relevance : details.modern_innovations }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Fun Fact -->
+            <div *ngIf="details.fun_fact"
+                class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-[2rem] p-6 flex flex-row items-start lg:items-center mt-12 mb-16 shadow-sm">
+                <div class="text-blue-600 text-xl lg:text-2xl mr-4 lg:mr-6 shrink-0 mt-1 lg:mt-0">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div>
+                    <span
+                        class="text-[10px] lg:text-xs font-bold uppercase tracking-widest text-blue-500 block mb-1">Did
+                        you
+                        know?</span>
+                    <p class="text-blue-900 font-bold text-sm lg:text-base leading-snug">{{details.fun_fact}}</p>
+                </div>
+            </div>
+
+            <!-- References Section -->
+            <section id="references" class="mb-16">
+                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">
+                    Further Reading & Sources
+                </h3>
+                <div class="flex flex-wrap gap-4">
+                    <!-- Modern Medical Sources -->
+                    <ng-container *ngIf="!isAyurvedic()">
+                        <a [href]="'https://medlineplus.gov/search?query=' + details.title" target="_blank"
+                            class="w-full sm:w-auto px-6 py-4 bg-white rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3 hover:border-emerald-200 hover:shadow-md transition-all group">
+                            <i
+                                class="fas fa-notes-medical text-blue-500 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-sm font-bold text-slate-700">MedlinePlus (NIH Knowledge)</span>
+                        </a>
+                        <a [href]="'https://www.mayoclinic.org/search/search-results?q=' + details.title"
+                            target="_blank"
+                            class="w-full sm:w-auto px-6 py-4 bg-white rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3 hover:border-emerald-200 hover:shadow-md transition-all group">
+                            <i class="fas fa-h-square text-indigo-500 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-sm font-bold text-slate-700">Mayo Clinic Care Details</span>
+                        </a>
+                        <a [href]="'https://www.who.int/home/search?indexCatalogue=generic-search-index&searchQuery=' + details.title"
+                            target="_blank"
+                            class="w-full sm:w-auto px-6 py-4 bg-white rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3 hover:border-emerald-200 hover:shadow-md transition-all group">
+                            <i
+                                class="fas fa-globe-americas text-emerald-500 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-sm font-bold text-slate-700">WHO Global Fact Sheets</span>
+                        </a>
+                    </ng-container>
+
+                    <!-- Ayurvedic Sources -->
+                    <ng-container *ngIf="isAyurvedic()">
+                        <a [href]="'https://ayushnext.ayush.gov.in/search?q=' + details.title" target="_blank"
+                            class="w-full sm:w-auto px-6 py-4 bg-white rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3 hover:border-emerald-200 hover:shadow-md transition-all group">
+                            <i class="fas fa-landmark text-emerald-600 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-sm font-bold text-slate-700">Ministry of AYUSH (Official Portal)</span>
+                        </a>
+                        <a [href]="'https://www.google.com/search?q=' + details.title + ' ayurvedic management scholarly'"
+                            target="_blank"
+                            class="w-full sm:w-auto px-6 py-4 bg-white rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3 hover:border-emerald-200 hover:shadow-md transition-all group">
+                            <i class="fas fa-scroll text-amber-600 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-sm font-bold text-slate-700">Ayurvedic Literature Research</span>
+                        </a>
+                        <a [href]="'https://www.google.com/search?q=site:tkdl.res.in+' + details.title" target="_blank"
+                            class="w-full sm:w-auto px-6 py-4 bg-white rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3 hover:border-emerald-200 hover:shadow-md transition-all group">
+                            <i class="fas fa-database text-blue-600 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-sm font-bold text-slate-700">Traditional Knowledge Database</span>
+                        </a>
+                    </ng-container>
+                </div>
+            </section>
+
+            <!-- Legal Disclaimer Footer -->
+            <footer class="border-t border-slate-200 pt-12 pb-10">
+                <div class="flex flex-row items-start gap-5 lg:gap-8 opacity-60">
+                    <i class="fas fa-balance-scale text-2xl lg:text-3xl text-slate-400 shrink-0 mt-1"></i>
+                    <div>
+                        <h4 class="text-slate-800 font-bold mb-2">Medical Information Disclaimer</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">
+                            The information provided in this Specialty Encyclopedia is for educational and general
+                            information purposes only. None of the content provided here should be interpreted as
+                            professional medical advice, diagnosis, or treatment.
+                            <br><br>
+                            Reliance on any information provided by this application is solely at your own risk.
+                            Ayurveda App and its creators do not recommend or endorse any specific medical tests,
+                            specialists, procedures, or external opinions that may be mentioned. Always seek the advice
+                            of a board-certified physician or qualified Ayurvedic practitioner with any questions you
+                            may have regarding a medical condition.
+                            <br><br>
+                            <strong>
+                                In case of a medical emergency, please call your local emergency services immediately.
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+</div>

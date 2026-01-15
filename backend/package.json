@@ -21,6 +21,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@sendgrid/mail": "^8.1.6",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
@@ -30,7 +31,9 @@
     "dotenv": "^17.2.3",
     "email-validator": "^2.0.4",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
     "express-session": "^1.18.2",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "libphonenumber-js": "^1.12.31",
     "multer": "^2.0.2",
@@ -40,11 +43,13 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "pdfkit": "^0.17.2",
+    "playwright": "^1.57.0",
     "qrcode": "^1.5.4",
     "razorpay": "^2.9.6",
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
+    "cheerio": "^1.1.2",
     "nodemon": "^3.1.11"
   }
 }

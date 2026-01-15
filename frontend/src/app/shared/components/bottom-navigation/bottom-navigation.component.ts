@@ -61,8 +61,12 @@ export class BottomNavigationComponent implements OnInit, OnDestroy {
   updateNavItems() {
     this.navItems = [
       { icon: 'fas fa-home', label: 'Home', route: '/' },
+      {
+        icon: this.isLoggedIn ? 'fas fa-calendar-alt' : 'fas fa-hospital',
+        label: this.isLoggedIn ? 'Wellness' : 'Hospitals',
+        route: this.isLoggedIn ? '/wellness/calendar' : '/hospitals'
+      },
       { icon: 'fas fa-pills', label: 'Medicines', route: '/medicines' },
-      // { icon: 'fas fa-clipboard-list', label: 'My Orders', route: '/orders' },
       {
         icon: this.isLoggedIn ? 'fas fa-user' : 'fas fa-sign-in-alt',
         label: this.isLoggedIn ? 'Profile' : 'Login',

@@ -6,7 +6,7 @@ class PrakritiService {
     constructor() {
         this.data = [];
         this.questions = null;
-        this.csvPath = path.join(__dirname, '../../data/Updated_Prakriti_With_Features.csv');
+        this.csvPath = path.join(__dirname, '../../data/ayurveda/Updated_Prakriti_With_Features.csv');
         this.loadData();
     }
 

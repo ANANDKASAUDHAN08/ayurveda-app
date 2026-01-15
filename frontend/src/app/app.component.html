@@ -37,4 +37,11 @@
     [initialLocation]="locationService.getCurrentLocation()" (modalClosed)="locationService.toggleMap(false)"
     (locationSelected)="onLocationFromMap($event)">
   </app-location-map-modal>
+
+  <!-- AI Chatbot (Global) -->
+  <app-chatbot></app-chatbot>
+
+  <!-- PWA Update Notification -->
+  <app-update-notification *ngIf="showUpdateNotification" (update)="onUpdateApp()" (dismiss)="onDismissUpdate()">
+  </app-update-notification>
 </div>

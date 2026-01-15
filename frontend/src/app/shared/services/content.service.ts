@@ -38,8 +38,8 @@ export class ContentService {
     }
 
     // Hospitals
-    getHospitals(params?: any): Observable<any> {
-        return this.http.get(`${this.baseUrl}/hospitals`, { params });
+    getHospitals(params?: any, suffix: string = 'hospitals'): Observable<any> {
+        return this.http.get(`${this.baseUrl}/${suffix}`, { params });
     }
 
     // Pharmacies
@@ -50,5 +50,10 @@ export class ContentService {
     // Static pages
     getStaticPage(slug: string): Observable<any> {
         return this.http.get(`${this.baseUrl}/page/${slug}`);
+    }
+
+    // Specialty Encyclopedia
+    getSpecialtyEncyclopedia(): Observable<any> {
+        return this.http.get(`${this.baseUrl}/specialty-encyclopedia`);
     }
 }

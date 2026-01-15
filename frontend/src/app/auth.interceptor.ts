@@ -24,8 +24,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                 // Only handle this if user actually HAD a token
                 const currentToken = localStorage.getItem('auth_token');
 
-                // URLs that are expected to return 401 when not logged in
-                const ignoredUrls = ['/cart', '/notifications'];
+                // URLs that are expected to return 401 when not logged in or during sensitive flows
+                const ignoredUrls = ['/cart', '/notifications', '/auth/2fa'];
                 const shouldIgnore = ignoredUrls.some(url => req.url.includes(url));
 
                 if (currentToken && !shouldIgnore) {

@@ -10,13 +10,14 @@ const appointmentControllerNew = require('../controllers/appointmentControllerNe
 const labTestController = require('../controllers/labTestController');
 const twoFactorController = require('../controllers/twoFactorController');
 const auth = require('../middleware/auth');
+const { authLimiter, tfaLimiter } = require('../middleware/security');
 
 // Auth
-router.post('/auth/register', authController.register);
-router.post('/auth/login', authController.login);
-router.post('/users/resend-verification', authController.resendVerification);
-router.post('/auth/forgot-password', authController.forgotPassword);
-router.post('/auth/reset-password', authController.resetPassword);
+router.post('/auth/register', authLimiter, authController.register);
+router.post('/auth/login', authLimiter, authController.login);
+router.post('/users/resend-verification', authLimiter, authController.resendVerification);
+router.post('/auth/forgot-password', authLimiter, authController.forgotPassword);
+router.post('/auth/reset-password', authLimiter, authController.resetPassword);
 router.get('/auth/verify-reset-token/:token', authController.verifyResetToken);
 
 // Users
@@ -27,15 +28,15 @@ router.delete('/users/profile', auth, userController.deleteAccount);
 
 // 2FA Management
 router.get('/auth/2fa/setup', auth, twoFactorController.setup2FA);
-router.post('/auth/2fa/verify-setup', auth, twoFactorController.verify2FASetup);
+router.post('/auth/2fa/verify-setup', [auth, tfaLimiter], twoFactorController.verify2FASetup);
 router.post('/auth/2fa/disable', auth, twoFactorController.disable2FA);
-router.post('/auth/2fa/verify-login', twoFactorController.verify2FALogin);
+router.post('/auth/2fa/verify-login', tfaLimiter, twoFactorController.verify2FALogin);
 
 // Doctors
-router.post('/doctors/register', doctorController.registerDoctor);
-router.post('/doctors/resend-verification', doctorController.resendVerification);
-router.post('/doctors/forgot-password', doctorController.forgotPassword);
-router.post('/doctors/reset-password', doctorController.resetPassword);
+router.post('/doctors/register', authLimiter, doctorController.registerDoctor);
+router.post('/doctors/resend-verification', authLimiter, doctorController.resendVerification);
+router.post('/doctors/forgot-password', authLimiter, doctorController.forgotPassword);
+router.post('/doctors/reset-password', authLimiter, doctorController.resetPassword);
 router.get('/doctors/verify-reset-token/:token', doctorController.verifyResetToken);
 router.get('/doctors/profile', auth, doctorController.getProfile);
 router.put('/doctors/profile', auth, doctorController.updateDoctorProfile);
@@ -87,5 +88,11 @@ router.get('/nearby/pharmacies', nearbyController.getNearbyPharmacies);
 router.get('/nearby/doctors', nearbyController.getNearbyDoctors);
 router.get('/nearby/health-centres', nearbyController.getNearbyHealthCentres);
 router.get('/nearby/search-districts', nearbyController.searchHealthCentresByDistrict);
+
+// NAMC Morbidity Codes
+const morbidityController = require('../controllers/morbidityController');
+router.get('/morbidity/search', morbidityController.searchCodes);
+router.get('/morbidity/:id', morbidityController.getCodeById);
+router.get('/morbidity', morbidityController.getAllCodes);
 
 module.exports = router;

@@ -49,4 +49,7 @@ router.delete('/doctors/:id', adminController.deleteDoctor);
 router.get('/static-pages', adminController.getStaticPages);
 router.put('/static-pages/:id', adminController.updateStaticPage);
 
+// ==================== CHATBOT MANAGEMENT ====================
+router.get('/chatbot/stats', adminController.getChatbotStats);
+
 module.exports = router;

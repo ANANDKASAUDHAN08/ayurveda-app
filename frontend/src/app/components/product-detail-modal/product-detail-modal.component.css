@@ -1,9 +1,4 @@
-:host {
-    display: block;
-    animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
+@keyframes fade-in {
     from {
         opacity: 0;
     }
@@ -13,18 +8,98 @@
     }
 }
 
-:host ::ng-deep .bg-white.rounded-2xl {
-    animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
+@keyframes slide-up {
     from {
+        opacity: 0;
         transform: translateY(20px);
-        opacity: 0;
     }
 
     to {
-        transform: translateY(0);
         opacity: 1;
+        transform: translateY(0);
     }
+}
+
+@keyframes fade-in-content {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.2s ease-out;
+}
+
+.animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+}
+
+.animate-fade-in-content {
+    animation: fade-in-content 0.3s ease-out;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Hide scrollbar for tabs on mobile */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Prevent screen jitter / bounce */
+.fixed.inset-0 {
+    overscroll-behavior: none;
+    touch-action: none;
+    -webkit-overflow-scrolling: none;
+}
+
+.modal-container-content {
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    position: relative;
+    max-width: 100%;
+}
+
+/* Always hide horizontal scroll in modal body */
+.modal-container-content {
+    overflow-x: hidden !important;
+}
+
+
+/* Prevent elastic scroll / rubber banding / jitter */
+.fixed.inset-0 {
+    overscroll-behavior: none;
+    touch-action: none;
+}
+
+.modal-container-content {
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+}
+
+/* Fix for background shifting when scrollbar disappears */
+:host-context(body.overflow-hidden) {
+    padding-right: var(--scrollbar-width, 0px);
 }

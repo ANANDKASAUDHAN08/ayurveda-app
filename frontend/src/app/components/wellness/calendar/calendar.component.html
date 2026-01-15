@@ -1,0 +1,530 @@
+<div class="min-h-screen pt-8 pb-12 transition-all duration-1000 bg-gradient-to-br"
+    [class.allopathy-view]="viewMode === 'allopathy'" [class.ayurveda-view]="viewMode === 'ayurveda'" [ngClass]="{
+        'from-slate-50 via-white to-emerald-50/40': viewMode === 'ayurveda' && currentDosha === 'kapha',
+        'from-orange-50/30 via-white to-amber-50/40': viewMode === 'ayurveda' && currentDosha === 'pitta',
+        'from-blue-100/30 via-white to-blue-200/20': viewMode === 'ayurveda' && currentDosha === 'vata',
+        'from-slate-50 via-white to-blue-50/30': viewMode === 'allopathy'
+    }">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Header - Dynamic Terminology -->
+        <div class="flex flex-col lg:flex-row justify-between items-center gap-6 mb-12">
+            <div class="space-y-2 text-center lg:text-left">
+                <span
+                    class="text-emerald-700 font-bold text-[10px] uppercase tracking-[0.4em] block animate-in fade-in slide-in-from-bottom-2 duration-700"
+                    [ngClass]="{'!text-indigo-700': viewMode === 'allopathy'}">
+                    {{ getTerminology().subtext }}
+                </span>
+                <h1 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter">
+                    {{ getTerminology().header.split(' ')[0] }} <span class="italic serif-font font-light" [ngClass]="{
+                        'text-emerald-700': viewMode !== 'allopathy',
+                        'text-indigo-700': viewMode === 'allopathy'
+                    }">{{ getTerminology().header.split(' ')[1] }}.</span>
+                </h1>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
+                <!-- Global View Toggle (Allo | Both | Ayu) -->
+                <div
+                    class="flex bg-white/80 backdrop-blur-md p-1.5 rounded-2xl border border-slate-200 shadow-sm transition-all hover:shadow-md w-full sm:w-auto overflow-x-auto no-scrollbar">
+                    <button (click)="setViewMode('allopathy')"
+                        class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 whitespace-nowrap"
+                        [class.bg-indigo-900]="viewMode === 'allopathy'" [class.text-white]="viewMode === 'allopathy'"
+                        [class.shadow-xl]="viewMode === 'allopathy'">Allo</button>
+                    <button (click)="setViewMode('ayurveda')"
+                        class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 whitespace-nowrap"
+                        [class.bg-emerald-950]="viewMode === 'ayurveda'" [class.text-white]="viewMode === 'ayurveda'"
+                        [class.shadow-xl]="viewMode === 'ayurveda'">Ayu</button>
+                </div>
+
+                <div class="flex items-center gap-3 w-full sm:w-auto justify-center">
+                    <!-- Pulse Add Button -->
+                    <button (click)="openAddModal()"
+                        class="text-white w-12 h-12 rounded-xl flex items-center justify-center shadow-xl hover:scale-110 active:scale-95 transition-all text-xl font-bold"
+                        [class.bg-indigo-900]="viewMode === 'allopathy'"
+                        [class.bg-emerald-900]="viewMode !== 'allopathy'">
+                        +
+                    </button>
+
+                    <!-- Month Navigation -->
+                    <div
+                        class="flex items-center gap-1 bg-white p-1.5 rounded-2xl shadow-xl border border-slate-100 group transition-all hover:border-emerald-100">
+                        <button (click)="prevMonth()"
+                            class="w-10 h-10 flex items-center justify-center hover:bg-slate-50 rounded-xl transition-all text-slate-400 hover:text-indigo-600 active:scale-90">
+                            <i class="fas fa-chevron-left text-sm"></i>
+                        </button>
+                        <div class="px-4 md:px-6 py-1 text-center min-w-[120px] md:min-w-[160px]">
+                            <h2 class="text-sm md:text-xl font-black tracking-tighter text-slate-800">
+                                {{ displayDate | date:'MMM yyyy' }}</h2>
+                        </div>
+                        <button (click)="nextMonth()"
+                            class="w-10 h-10 flex items-center justify-center hover:bg-slate-50 rounded-xl transition-all text-slate-400 hover:text-indigo-600 active:scale-90">
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Intelligence Strip -->
+        <div
+            class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-12 animate-in fade-in slide-in-from-top-4 duration-1000">
+            <!-- Vitality Bar Card -->
+            <div
+                class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] border border-white/50 shadow-xl p-8 relative overflow-hidden group">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Vitality /
+                        {{ viewMode === 'ayurveda' ? 'Ojas' : 'Capacity' }}</span>
+                    <span class="text-2xl font-black" [class.text-emerald-500]="viewMode !== 'allopathy'"
+                        [class.text-indigo-500]="viewMode === 'allopathy'">{{ vitalityScore }}%</span>
+                </div>
+                <div class="h-6 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                    <div class="h-full transition-all duration-1000 bg-gradient-to-r"
+                        [ngClass]="viewMode === 'ayurveda' ? 'from-emerald-400 to-emerald-600' : 'from-blue-500 to-blue-700'"
+                        [style.box-shadow]="viewMode === 'ayurveda' ? '0 0 20px rgba(16,185,129,0.4)' : '0 0 20px rgba(59,130,246,0.3)'"
+                        [style.width.%]="vitalityScore"></div>
+                </div>
+                <p class="mt-4 text-[11px] text-slate-500 font-bold italic serif-font">
+                    {{ viewMode === 'allopathy' ? 'Synthesized from your clinical adherence and biological trends.' :
+                    'Synthesized from your current Dinacharya alignment and seasonal status.' }}
+                </p>
+            </div>
+
+            <!-- Alignment Card -->
+            <div
+                class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] border border-white/50 shadow-xl p-6 relative overflow-hidden flex items-center justify-between group">
+                <div class="space-y-3 z-10 pl-4 text-left">
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
+                        {{ viewMode === 'allopathy' ? 'Clinical Status' : 'Current Alignment' }}
+                    </span>
+                    <h3 class="text-2xl md:text-3xl lg:text-4xl font-black capitalize tracking-tighter" [ngClass]="{
+                            'text-emerald-700': viewMode === 'ayurveda',
+                            'text-blue-700': viewMode === 'allopathy'
+                        }">
+                        {{ viewMode === 'allopathy' ? getBiologicalStatus() : currentDosha }}
+                    </h3>
+                    <p class="text-[11px] text-slate-500 font-bold max-w-[200px] leading-relaxed">
+                        <span *ngIf="viewMode === 'allopathy'">Biometric stability detected. Maintain current activity
+                            levels.</span>
+                        <span *ngIf="viewMode !== 'allopathy'">
+                            <span *ngIf="currentDosha === 'kapha'">Steady energy period. Perfect for intense
+                                rituals.</span>
+                            <span *ngIf="currentDosha === 'pitta'">High metabolic window. Prioritize complex
+                                meals.</span>
+                            <span *ngIf="currentDosha === 'vata'">Movement and creativity peaking. Keep grounded.</span>
+                        </span>
+                    </p>
+                </div>
+
+                <div class="dosha-clock-container relative w-24 h-24 md:w-32 md:h-32 mr-4 group">
+                    <!-- 24h Segmented Dosha Clock -->
+                    <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        <!-- Pitta: 22:00 - 02:00 -->
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#f97316" stroke-width="8"
+                            stroke-dasharray="16.66 83.33" stroke-dashoffset="-91.66" class="opacity-20"
+                            pathLength="100" />
+                        <!-- Vata: 02:00 - 06:00 -->
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#3b82f6" stroke-width="8"
+                            stroke-dasharray="16.66 83.33" stroke-dashoffset="-8.33" class="opacity-20"
+                            pathLength="100" />
+                        <!-- Kapha: 06:00 - 10:00 -->
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#10b981" stroke-width="8"
+                            stroke-dasharray="16.66 83.33" stroke-dashoffset="-25" class="opacity-20"
+                            pathLength="100" />
+                        <!-- Pitta: 10:00 - 14:00 -->
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#f97316" stroke-width="8"
+                            stroke-dasharray="16.66 83.33" stroke-dashoffset="-41.66" class="opacity-20"
+                            pathLength="100" />
+                        <!-- Vata: 14:00 - 18:00 -->
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#3b82f6" stroke-width="8"
+                            stroke-dasharray="16.66 83.33" stroke-dashoffset="-58.33" class="opacity-20"
+                            pathLength="100" />
+                        <!-- Kapha: 18:00 - 22:00 -->
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#10b981" stroke-width="8"
+                            stroke-dasharray="16.66 83.33" stroke-dashoffset="-75" class="opacity-20"
+                            pathLength="100" />
+
+                        <!-- Active Slice Highlight -->
+                        <circle cx="50" cy="50" r="42" fill="none"
+                            [attr.stroke]="viewMode === 'ayurveda' ? '#10b981' : '#3b82f6'" stroke-width="10"
+                            stroke-dasharray="16.6 83.4" [attr.stroke-dashoffset]="-getActiveDoshaOffset()"
+                            class="transition-all duration-1000"
+                            [style.filter]="'drop-shadow(0 0 5px ' + (viewMode === 'ayurveda' ? '#10b981' : '#3b82f6') + ')'"
+                            pathLength="100" />
+
+                        <!-- Subtle Ticks for 0, 6, 12, 18 -->
+                        <circle cx="50" cy="8" r="1" fill="#cbd5e1" />
+                        <circle cx="92" cy="50" r="1" fill="#cbd5e1" />
+                        <circle cx="50" cy="92" r="1" fill="#cbd5e1" />
+                        <circle cx="8" cy="50" r="1" fill="#cbd5e1" />
+
+                        <!-- Center Clock Hand (Needle style) -->
+                        <line x1="50" y1="50" x2="50" y2="12" stroke="#6366f1" stroke-width="2" stroke-linecap="round"
+                            [style.transform]="'rotate(' + currentHourRotation + 'deg)'"
+                            class="transition-transform duration-1000 origin-center drop-shadow-[0_0_3px_rgba(99,102,241,0.5)] group-hover:stroke-amber-500" />
+                    </svg>
+
+                    <div
+                        class="absolute inset-0 flex items-center justify-center text-base md:text-lg group-hover:scale-110 transition-transform duration-700 pointer-events-none opacity-80">
+                        {{ getMoodIcon() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 items-start">
+            <!-- Main Calendar Grid -->
+            <div class="lg:col-span-8 space-y-8">
+                <div
+                    class="bg-white/70 backdrop-blur-xl rounded-[2.5rem] border border-white/50 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.05)] p-4 md:p-8">
+                    <!-- Day Labels -->
+                    <div class="grid grid-cols-7 mb-4">
+                        <div *ngFor="let day of ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']"
+                            class="text-center text-[10px] font-black uppercase tracking-widest text-black">
+                            {{ day }}
+                        </div>
+                    </div>
+
+                    <!-- Calendar Body -->
+                    <div class="calendar-grid bg-slate-100/30 rounded-2xl overflow-hidden border border-slate-100 gap-[1px]"
+                        [class.month-transition]="isSwitchingMonth">
+                        <div *ngFor="let day of days; let i = index" (click)="selectDate(day)"
+                            (mouseenter)="hoveredDay = day" (mouseleave)="hoveredDay = null"
+                            class="calendar-day aspect-square p-2 transition-all cursor-pointer relative flex flex-col justify-between hover:bg-slate-100 border-[0.5px] border-slate-50 group"
+                            [ngClass]="{
+                                'selected-day': isSelected(day),
+                                'bg-white': !isSelected(day) && !isToday(day),
+                                'bg-blue-50/50': isToday(day) && viewMode === 'allopathy' && !isSelected(day),
+                                'bg-emerald-50/50': isToday(day) && viewMode !== 'allopathy' && !isSelected(day),
+                                'selection-glow-blue !bg-blue-600': isSelected(day) && viewMode === 'allopathy',
+                                'selection-glow-emerald !bg-emerald-600': isSelected(day) && viewMode !== 'allopathy',
+                                'opacity-30': isDifferentMonth(day)
+                            }" [class.heatmap-level-1]="getDayIntensity(day) === 1"
+                            [class.heatmap-level-5]="getDayIntensity(day) === 5">
+
+                            <div class="flex flex-col h-full">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="text-xs md:text-sm font-black transition-colors"
+                                        [class.text-white]="isSelected(day)"
+                                        [class.text-emerald-700]="isToday(day) && !isSelected(day) && viewMode !== 'allopathy'"
+                                        [class.text-blue-700]="isToday(day) && !isSelected(day) && viewMode === 'allopathy'">
+                                        {{ day | date:'d' }}
+                                    </span>
+
+                                    <!-- Top Right: Brief Indicators -->
+                                    <div class="flex gap-0.5 items-center">
+                                        <span *ngIf="getMoonIcon(day)" class="text-[8px] opacity-40"
+                                            [class.text-white]="isSelected(day)">
+                                            {{ getMoonIcon(day) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Indicators Area -->
+                                <div class="flex flex-wrap gap-1 justify-start items-center">
+                                    <!-- Seasonal Icon -->
+                                    <div *ngIf="getSpecialDayInfo(day)"
+                                        class="w-4 h-4 rounded-full bg-slate-50 flex items-center justify-center text-[10px]"
+                                        [ngClass]="{'!bg-white/20': isSelected(day)}">
+                                        {{ getSpecialDayInfo(day)?.icon }}
+                                    </div>
+
+                                    <!-- Event Dot Count -->
+                                    <div class="flex items-center gap-0.5" *ngIf="getEventsForDate(day).length > 0">
+                                        <span *ngFor="let event of getEventsForDate(day) | slice:0:3"
+                                            class="w-1.5 h-1.5 rounded-full border-[0.5px] border-white/50"
+                                            [class.bg-amber-400]="event.type === 'ritual' || event.sub_type === 'ayurveda'"
+                                            [class.bg-blue-400]="event.type === 'medication' || event.sub_type === 'allopathy'"
+                                            [class.bg-emerald-400]="event.type === 'activity'"></span>
+                                        <span *ngIf="getEventsForDate(day).length > 3" class="text-[8px] font-black"
+                                            [class.text-white]="isSelected(day)">+</span>
+                                    </div>
+
+                                    <!-- Significant Lunar Dot -->
+                                    <span *ngIf="isSignificantLunarDay(day) && !getMoonIcon(day)"
+                                        class="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_5px_rgba(251,191,36,0.5)]"></span>
+                                </div>
+
+                                <!-- Log Count Badge (Subtle) -->
+                                <div *ngIf="getEventsForDate(day).length > 0"
+                                    class="mt-1 px-1.5 py-0.5 rounded-full bg-slate-100/50 w-fit text-[7px] font-black uppercase tracking-widest text-slate-500"
+                                    [ngClass]="{'!bg-white/20 !text-white': isSelected(day)}">
+                                    {{ getEventsForDate(day).length }} {{ getEventsForDate(day).length === 1 ? 'log' :
+                                    'logs' }}
+                                </div>
+                            </div>
+
+                            <!-- Hover Details Tooltip -->
+                            <div *ngIf="hoveredDay === day && (getEventsForDate(day).length > 0 || getSpecialDayInfo(day) || isSignificantLunarDay(day))"
+                                class="absolute top-0 w-60 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-100 p-4 z-[100] animate-in fade-in slide-in duration-200 pointer-events-none hover-detail-box"
+                                [ngClass]="(i + 1) % 7 === 0 || (i + 1) % 7 === 6 ? 'right-full mr-4' : 'left-full ml-4'">
+
+                                <div
+                                    class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-3 border-b border-slate-100 pb-2 flex justify-between">
+                                    <span>Details for {{ day | date:'MMM d' }}</span>
+                                    <span *ngIf="getMoonIcon(day)">{{ getMoonIcon(day) }}</span>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <!-- Seasonal/Lunar Insights -->
+                                    <div *ngIf="getSpecialDayInfo(day) || isSignificantLunarDay(day)"
+                                        class="bg-slate-50 rounded-xl p-2.5 space-y-2">
+                                        <div *ngIf="getSpecialDayInfo(day)" class="flex items-start gap-2">
+                                            <span class="text-sm">{{ getSpecialDayInfo(day)?.icon }}</span>
+                                            <div>
+                                                <p class="text-[10px] font-black text-slate-700 leading-tight">
+                                                    {{
+                                                    getSpecialDayInfo(day)?.label }}</p>
+                                                <p
+                                                    class="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">
+                                                    Seasonal Alignment</p>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="isSignificantLunarDay(day)" class="flex items-start gap-2">
+                                            <span class="text-sm">🌑</span>
+                                            <div>
+                                                <p class="text-[10px] font-black text-slate-700 leading-tight">
+                                                    Significant Lunar Phase</p>
+                                                <p
+                                                    class="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">
+                                                    Day {{ getLunarDay(day) }} of cycle</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Activity Logs -->
+                                    <div *ngIf="getEventsForDate(day).length > 0" class="space-y-3">
+                                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">
+                                            Activity Logs</p>
+                                        <div *ngFor="let event of getEventsForDate(day)" class="flex gap-2">
+                                            <div
+                                                class="w-7 h-7 bg-slate-100 rounded-lg flex items-center justify-center text-xs shrink-0">
+                                                {{ event.sub_type === 'allopathy' ? '💊' : '🌿' }}
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-[11px] font-black text-slate-800 leading-tight truncate">
+                                                    {{
+                                                    event.title || 'Logged ' + event.type }}</p>
+                                                <div class="flex justify-between items-center mt-0.5">
+                                                    <span class="text-[9px] text-slate-400 font-bold uppercase">{{
+                                                        event.type }}</span>
+                                                    <span class="text-[9px] text-slate-400 font-bold uppercase">{{
+                                                        event.start_time | date:'h:mm a' }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Environmental Insights (Moved for better left column balance) -->
+                <div class="rounded-[3rem] p-8 md:p-10 text-white relative overflow-hidden shadow-2xl transition-all duration-1000"
+                    [ngClass]="{
+                        'bg-indigo-950': viewMode === 'allopathy',
+                        'bg-emerald-950': viewMode === 'ayurveda'
+                    }">
+                    <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+                        <div class="space-y-4 max-w-xl">
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="text-[10px] font-black uppercase tracking-[0.4em] opacity-60">Insights</span>
+                                <div class="h-[1px] w-12 bg-white/20"></div>
+                            </div>
+                            <h4 class="text-xl md:text-2xl font-black italic serif-font tracking-tight leading-snug">
+                                "{{ getWeatherInsight() }}"
+                            </h4>
+                        </div>
+
+                        <div
+                            class="flex items-center gap-6 pl-0 md:pl-8 border-l-0 md:border-l border-white/10 shrink-0">
+                            <div
+                                class="w-14 h-14 bg-white/5 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl border border-white/10 shadow-lg">
+                                {{ getMoodIcon() }}
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase opacity-60">Temperature</p>
+                                <p class="text-2xl font-black tracking-tight" *ngIf="currentWeather">
+                                    {{ currentWeather.temp | number:'1.0-0' }}°C
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Cards Column -->
+            <div class="lg:col-span-4 space-y-6">
+
+                <!-- Rituals Checklist Card -->
+                <div
+                    class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] border border-white/50 shadow-xl p-6 md:p-8 group">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-black tracking-tighter">
+                            {{ getTerminology().routine.split(' ')[0] }} <span
+                                [class.text-emerald-700]="viewMode !== 'allopathy'"
+                                [class.text-indigo-700]="viewMode === 'allopathy'">{{
+                                getTerminology().routine.split('
+                                ')[1] }}.</span>
+                        </h3>
+                        <span class="text-2xl">{{ getTerminology().icon }}</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div *ngFor="let item of dinacharyaList"
+                            class="flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50/50 transition-all group/item">
+                            <input type="checkbox" [checked]="item.done" (change)="toggleDinacharya(item)"
+                                class="checklist-item-checkbox" [class.indigo-style]="viewMode === 'allopathy'">
+                            <div class="flex-grow">
+                                <p class="text-[11px] font-black tracking-tight text-slate-800">{{ item.title }}
+                                </p>
+                                <p
+                                    class="text-[9px] text-slate-400 font-bold opacity-0 group-hover/item:opacity-100 transition-opacity">
+                                    {{ item.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Timeline Card -->
+                <div class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] border border-white/50 shadow-xl p-6 md:p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-black tracking-tighter">Daily <span
+                                [class.text-emerald-700]="viewMode !== 'allopathy'"
+                                [class.text-indigo-700]="viewMode === 'allopathy'">Log.</span></h3>
+                        <span
+                            class="px-3 py-1 bg-slate-50 text-slate-600 text-[10px] font-black uppercase rounded-full">
+                            {{ selectedDate | date:'MMM d' }}
+                        </span>
+                    </div>
+
+                    <div class="timeline-scroll">
+                        <!-- Daily Insights Header (Lunar/Seasonal) -->
+                        <div *ngIf="getSpecialDayInfo(selectedDate) || isSignificantLunarDay(selectedDate)"
+                            class="mb-6 bg-slate-50 border border-slate-100 rounded-2xl p-4 animate-in fade-in slide-in-from-top-2 duration-500">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[9px] font-black uppercase tracking-widest text-slate-400">Daily
+                                    Insights</span>
+                                <div class="h-px flex-1 bg-slate-100"></div>
+                            </div>
+                            <div class="space-y-3">
+                                <div *ngIf="getSpecialDayInfo(selectedDate)" class="flex items-center gap-3">
+                                    <span class="text-xl">{{ getSpecialDayInfo(selectedDate)?.icon }}</span>
+                                    <div>
+                                        <p class="text-xs font-black text-slate-800">{{
+                                            getSpecialDayInfo(selectedDate)?.label }}</p>
+                                        <p class="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">
+                                            Seasonal
+                                            Marker</p>
+                                    </div>
+                                </div>
+                                <div *ngIf="isSignificantLunarDay(selectedDate)" class="flex items-center gap-3">
+                                    <span class="text-xl">🌑</span>
+                                    <div>
+                                        <p class="text-xs font-black text-slate-800">Day {{ getLunarDay(selectedDate) }}
+                                            of
+                                            Lunar Cycle</p>
+                                        <p class="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">
+                                            Significant Lunar Phase</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="selectedDateEvents.length === 0 && !getSpecialDayInfo(selectedDate) && !isSignificantLunarDay(selectedDate)"
+                            class="text-center py-12 text-slate-300">
+                            <p class="font-bold text-xs italic serif-font">No logs for today.</p>
+                        </div>
+
+                        <div *ngFor="let event of selectedDateEvents" class="relative pl-7 pb-6 last:pb-0">
+                            <div class="absolute left-[3px] top-4 bottom-0 w-[1.5px] bg-slate-100"></div>
+                            <div class="absolute left-0 top-1 w-[7px] h-[7px] rounded-full ring-4 ring-white shadow-sm"
+                                [class.bg-indigo-500]="viewMode === 'allopathy'"
+                                [class.bg-emerald-500]="viewMode !== 'allopathy'"></div>
+
+                            <div (click)="editEvent(event)"
+                                class="bg-white p-3.5 rounded-2xl border border-slate-50 shadow-sm transition-all cursor-pointer hover:border-slate-200 hover:shadow-md">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h4 class="font-black text-[11px] text-slate-800 truncate pr-2">{{
+                                        event.title }}
+                                    </h4>
+                                    <span class="text-[8px] font-bold text-slate-300 whitespace-nowrap">{{
+                                        event.start_time | date:'h:mm a' }}</span>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 mt-2">
+                                    <span *ngIf="event.time_slot"
+                                        class="px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-wider"
+                                        [class.bg-emerald-50]="viewMode !== 'allopathy'"
+                                        [class.text-emerald-700]="viewMode !== 'allopathy'"
+                                        [class.bg-blue-50]="viewMode === 'allopathy'"
+                                        [class.text-blue-700]="viewMode === 'allopathy'">
+                                        {{ event.time_slot }}
+                                    </span>
+                                    <span *ngIf="event.dose_freq && event.dose_freq !== 'once'"
+                                        class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 text-[7px] font-black uppercase tracking-wider">
+                                        {{ formatDoseFreq(event.dose_freq) }}
+                                    </span>
+                                </div>
+                                <p class="text-[10px] text-slate-500 line-clamp-2 leading-tight mt-1.5">{{
+                                    event.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meds & Actions Card -->
+                <div
+                    class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] border border-white/50 shadow-xl p-6 md:p-8 space-y-6">
+                    <div>
+                        <h4 class="text-base font-black tracking-tight text-slate-800 mb-4">{{
+                            getTerminology().meds }}
+                        </h4>
+                        <div class="relative">
+                            <input type="text" [(ngModel)]="herbSearchQuery"
+                                [placeholder]="viewMode === 'allopathy' ? 'Search medicines...' : 'Search herbs...'"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-3.5 pl-11 text-[11px] font-bold focus:ring-2 transition-all"
+                                [ngClass]="{
+                                    'focus:ring-indigo-500/20': viewMode === 'allopathy',
+                                    'focus:ring-emerald-500/20': viewMode !== 'allopathy'
+                                }">
+                            <i class="fas fa-search absolute left-4 top-4 text-slate-300 text-xs"></i>
+
+                            <div *ngIf="herbSearchQuery && getFilteredHerbs().length > 0"
+                                class="absolute left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-[110]">
+                                <div *ngFor="let herb of getFilteredHerbs()" (click)="scheduleHerb(herb)"
+                                    class="p-4 hover:bg-slate-50 transition-colors cursor-pointer flex items-center gap-4">
+                                    <div
+                                        class="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center text-base">
+                                        {{ viewMode === 'allopathy' ? '💊' : '🌿' }}</div>
+                                    <p class="text-[11px] font-black text-slate-800">{{ herb.name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <button
+                            (click)="logQuickActivity(viewMode === 'allopathy' ? 'vital' : 'ritual', viewMode === 'allopathy' ? 'vitals' : 'ritual')"
+                            class="py-3 px-2 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg hover:brightness-110 active:scale-95 transition-all"
+                            [class.bg-indigo-900]="viewMode === 'allopathy'"
+                            [class.bg-emerald-950]="viewMode !== 'allopathy'">
+                            + {{ viewMode === 'allopathy' ? 'Vital' : 'Ritual' }}
+                        </button>
+                        <button (click)="logQuickActivity('medication', 'medication')"
+                            class="py-3 px-2 bg-white text-slate-900 border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-md hover:bg-slate-50 active:scale-95 transition-all">
+                            + Meds
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal Component -->
+        <app-event-modal [isOpen]="isModalOpen" [selectedDate]="selectedDate" [editEvent]="editingEvent"
+            [viewMode]="viewMode" (close)="isModalOpen = false" (save)="onSaveEvent($event)"
+            (delete)="onDeleteEvent($event)">
+        </app-event-modal>
+    </div>

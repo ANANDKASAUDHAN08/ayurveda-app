@@ -68,6 +68,13 @@
                 <i class="fas fa-file-alt"></i>
                 <span *ngIf="!sidebarCollapsed">Static Pages</span>
             </a>
+
+            <a routerLink="/admin/chatbot" routerLinkActive="bg-emerald-600"
+                [title]="sidebarCollapsed ? 'Chatbot Management' : ''"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer">
+                <i class="fas fa-robot"></i>
+                <span *ngIf="!sidebarCollapsed">Chatbot</span>
+            </a>
         </nav>
 
         <!-- Logout Button (Above User Info) -->

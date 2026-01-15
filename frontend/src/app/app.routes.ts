@@ -21,7 +21,10 @@ import { StaticPagesComponent } from './admin/static-pages/static-pages.componen
 import { StaticPageComponent } from './components/static-page/static-page.component';
 import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
 import { DoctorsAdminComponent } from './admin/admin-doctors/doctors-admin.component';
+import { ChatbotAdminComponent } from './admin/chatbot-admin/chatbot-admin.component';
 import { NearbyServicesComponent } from './pages/nearby-services/nearby-services.component';
+import { SpecialtiesIndexComponent } from './components/specialties/specialties-index/specialties-index.component';
+import { SpecialtyDetailComponent } from './components/specialties/specialty-detail/specialty-detail.component';
 
 import { StrictLogoutGuard } from './guards/strict-logout.guard';
 import { CartComponent } from './pages/cart/cart.component';
@@ -57,6 +60,10 @@ import { AyurvedaSearchComponent } from './components/medicine-type/ayurveda/ayu
 import { PrakritiQuizComponent } from './components/medicine-type/ayurveda/prakriti-quiz/prakriti-quiz.component';
 import { HealthArticlesListComponent } from './pages/health-articles/health-articles-list.component';
 import { FavoritesPageComponent } from './pages/favorites/favorites-page.component';
+import { SymptomCheckerComponent } from './pages/symptom-checker/symptom-checker.component';
+import { AyurvedaDictionaryComponent } from './components/medicine-type/ayurveda/ayurveda-dictionary/ayurveda-dictionary.component';
+import { SymptomHistoryComponent } from './pages/symptom-history/symptom-history.component';
+import { BillingComponent } from './pages/billing/billing.component';
 
 export const routes: Routes = [
     // Public routes (accessible to everyone)
@@ -69,6 +76,9 @@ export const routes: Routes = [
     { path: 'for-users', component: UserLandingComponent, canActivate: [StrictLogoutGuard] },
 
     // Public service pages
+    { path: 'symptom-checker', component: SymptomCheckerComponent },
+    { path: 'symptom-history', component: SymptomHistoryComponent, canActivate: [authGuard] },
+    { path: 'symptom-history/:id', component: SymptomHistoryComponent, canActivate: [authGuard] },
     { path: 'hospitals', component: HospitalsComponent },
     { path: 'pharmacies', component: PharmaciesComponent },
     { path: 'find-doctors', component: DoctorListComponent },
@@ -86,6 +96,10 @@ export const routes: Routes = [
     { path: 'nearby-hospitals', component: NearbyHospitalsComponent }, // Nearby Hospitals - no auth required
     { path: 'emergency-history', component: EmergencyCallHistoryComponent }, // Call History - requires auth
 
+    // Specialty Encyclopedia
+    { path: 'specialties', component: SpecialtiesIndexComponent },
+    { path: 'specialties/:name', component: SpecialtyDetailComponent },
+
     // Medicine Type System (Phase 12)
     { path: 'landing', component: LandingPageComponent }, // Common landing page
     { path: 'choose-type', component: MedicineTypeSelectorComponent }, // Medicine type selector
@@ -96,6 +110,12 @@ export const routes: Routes = [
     { path: 'ayurveda/yoga', component: YogaComponent },
     { path: 'ayurveda/about', component: AyurvedaAboutComponent },
     { path: 'ayurveda/prakriti', component: PrakritiQuizComponent },
+    { path: 'ayurveda/dictionary', component: AyurvedaDictionaryComponent },
+    {
+        path: 'wellness/calendar',
+        loadComponent: () => import('./components/wellness/calendar/calendar.component').then(m => m.CalendarComponent),
+        canActivate: [authGuard]
+    },
     { path: 'homeopathy', component: HomeopathyDashboardComponent }, // Homeopathy dashboard
     { path: 'allopathy', component: AllopathyDashboardComponent }, // Allopathy dashboard
 
@@ -192,6 +212,12 @@ export const routes: Routes = [
                 component: AdminLayoutComponent,
                 canActivate: [AdminGuard],
                 children: [{ path: '', component: StaticPagesComponent }]
+            },
+            {
+                path: 'chatbot',
+                component: AdminLayoutComponent,
+                canActivate: [AdminGuard],
+                children: [{ path: '', component: ChatbotAdminComponent }]
             }
         ]
     },
@@ -218,6 +244,12 @@ export const routes: Routes = [
     {
         path: 'user/settings',
         component: SettingsComponent,
+        canActivate: [authGuard],
+        data: { role: 'user' }
+    },
+    {
+        path: 'user/billing',
+        component: BillingComponent,
         canActivate: [authGuard],
         data: { role: 'user' }
     },

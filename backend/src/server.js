@@ -27,9 +27,15 @@ const oauthRoutes = require('./routes/oauth.routes');
 const ayurvedaRoutes = require('./routes/ayurveda');
 
 const app = express();
+const helmet = require('helmet');
+const { apiLimiter } = require('./middleware/security');
+
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.use(helmet()); // Basic security headers
+app.use('/api', apiLimiter); // Apply to all API routes
+
 const allowedOrigins = [
     process.env.APP_URL,
     process.env.FRONTEND_URL,
@@ -105,11 +111,34 @@ app.use('/api/allopathy', require('./routes/allopathy')); // Allopathy dashboard
 app.use('/api/favorites', require('./routes/favorite.routes')); // Favorites API
 app.use('/api/payment', require('./routes/paymentRoutes')); // Payment API
 app.use('/api/newsletter', require('./routes/newsletter.routes')); // Newsletter API
+app.use('/api/symptom-checker', require('./routes/symptomChecker')); // Symptom Checker API
+app.use('/api/chatbot', require('./routes/chatbot')); // AI Chatbot API
+app.use('/api/subscription', require('./routes/subscription')); // Subscription API
+app.use('/api/calendar', require('./routes/calendarRoutes')); // Wellness Calendar API
+app.use('/api/medicines', require('./routes/medicines')); // Dedicated Medicines Discovery API
 
+// Health check
+app.get('/health', (req, res) => {
+    res.json({ status: 'UP', timestamp: new Date() });
+});
 
-// Test route
-app.get('/', (req, res) => {
-    res.send('Ayurveda API is running');
+// Final error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Final Error Catch:', err);
+    res.status(500).json({
+        success: false,
+        message: 'An unexpected error occurred',
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+});
+
+// Global event handlers to prevent crash
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
 });
 
 app.listen(PORT, () => {
@@ -123,7 +152,6 @@ async function startServer() {
         console.log('✅ Connected to MySQL database successfully.');
     } catch (error) {
         console.error('❌ Unable to connect to the database:', error);
-        console.error('Please check your environment variables and ensure MySQL is running.');
     }
 }
 

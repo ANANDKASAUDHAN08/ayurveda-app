@@ -6,6 +6,7 @@ import { SnackbarService } from '../../shared/services/snackbar.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { UserServiceCardComponent } from '../user-service-card/user-service-card.component';
 import { ServiceCard } from '../../models/service-card.interface';
+import { CalendarService } from '../../shared/services/calendar.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,16 +36,22 @@ export class DashboardComponent implements OnInit {
   // Modal state
   showAppointmentsModal = false;
 
+  // Wellness Snapshot
+  todaySuggestions: any[] = [];
+  loadingWellness = false;
+
   constructor(
     private appointmentService: AppointmentService,
     private snackbar: SnackbarService,
-    private authService: AuthService
+    private authService: AuthService,
+    private calendarService: CalendarService
   ) { }
 
   ngOnInit() {
     this.loadUserName();
     this.loadAppointments();
     this.initializeServiceCards();
+    this.loadWellnessSuggestions();
   }
 
   loadUserName() {
@@ -59,6 +66,7 @@ export class DashboardComponent implements OnInit {
       // CARE Category
       { id: 'appointments', title: 'Appointments', icon: 'fas fa-calendar-check', description: 'Book and manage your medical appointments', route: '/user/dashboard', category: 'care', color: 'emerald' },
       { id: 'find-doctors', title: 'Find Doctors', icon: 'fas fa-user-md', description: 'Search and connect with doctors', route: '/find-doctors', category: 'care', color: 'blue' },
+      { id: 'wellness-calendar', title: 'Wellness Calendar', icon: 'fas fa-calendar-alt', description: 'Track your rituals, meds and vitals', route: '/wellness/calendar', category: 'care', color: 'emerald' },
       { id: 'hospitals', title: 'Hospitals', icon: 'fas fa-hospital', description: 'Find hospitals near you', route: '/hospitals', category: 'care', color: 'red' },
       { id: 'pharmacies', title: 'Pharmacies', icon: 'fa-solid fa-store', description: 'Locate pharmacies nearby', route: '/pharmacies', category: 'care', color: 'green' },
 
@@ -84,6 +92,42 @@ export class DashboardComponent implements OnInit {
     this.shopServices = this.serviceCards.filter(c => c.category === 'shop');
     this.emergencyServices = this.serviceCards.filter(c => c.category === 'emergency');
     this.otherServices = this.serviceCards.filter(c => c.category === 'other');
+  }
+
+  loadWellnessSuggestions() {
+    this.loadingWellness = true;
+    // Attempt to get location from navigator for better suggestions
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.fetchSuggestions(position.coords.latitude, position.coords.longitude);
+        },
+        () => {
+          this.fetchSuggestions(); // Fallback to default tips
+        }
+      );
+    } else {
+      this.fetchSuggestions();
+    }
+  }
+
+  fetchSuggestions(lat?: number, lon?: number) {
+    const today = new Date();
+    const start = new Date(today.setHours(0, 0, 0, 0)).toISOString();
+    const end = new Date(today.setHours(23, 59, 59, 999)).toISOString();
+
+    this.calendarService.getEvents(start, end, lat, lon).subscribe({
+      next: (response) => {
+        if (response.success) {
+          // Filter for system generated suggestions only
+          this.todaySuggestions = response.data.filter((e: any) => e.is_system_generated);
+        }
+        this.loadingWellness = false;
+      },
+      error: () => {
+        this.loadingWellness = false;
+      }
+    });
   }
 
   // Modal methods

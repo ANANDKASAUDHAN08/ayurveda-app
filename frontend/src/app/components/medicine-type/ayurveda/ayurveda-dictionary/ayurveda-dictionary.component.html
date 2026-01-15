@@ -1,0 +1,148 @@
+<div class="dictionary-container p-4 md:p-8 bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="max-w-7xl mx-auto mb-8">
+        <h1 class="text-3xl font-bold text-emerald-800 mb-2">National Ayurveda Morbidity Codes</h1>
+        <p class="text-emerald-600">Explore the standardized clinical terminology of Ayurveda (NAMC).</p>
+    </div>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Search and List Section -->
+        <div
+            class="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden flex flex-col h-[700px]">
+            <div class="p-4 border-b border-emerald-50 bg-emerald-50/30">
+                <div class="relative">
+                    <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearch($event)"
+                        placeholder="Search term or code..."
+                        class="w-full pl-10 pr-4 py-2 rounded-xl border-emerald-200 focus:ring-emerald-500 focus:border-emerald-500">
+                    <span class="absolute left-3 top-2.5 text-emerald-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
+            <!-- List -->
+            <div class="flex-grow overflow-y-auto p-2">
+                <div *ngIf="loading" class="flex justify-center p-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+                </div>
+
+                <div *ngIf="!loading && codes.length === 0" class="p-8 text-center text-gray-500">
+                    No terms found matching your search.
+                </div>
+
+                <div *ngFor="let code of codes" (click)="selectCode(code)"
+                    [class.bg-emerald-50]="selectedCode?.id === code.id"
+                    class="p-3 mb-1 rounded-xl cursor-pointer hover:bg-emerald-50 transition-colors border border-transparent"
+                    [class.border-emerald-100]="selectedCode?.id === code.id">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-semibold text-emerald-900">{{formatTerm(code.namc_term)}}</h3>
+                            <p class="text-sm text-emerald-600 italic">{{code.namc_term_devanagari}}</p>
+                        </div>
+                        <span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-mono">
+                            {{code.namc_code}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="p-4 border-t border-emerald-50 bg-emerald-50/30 flex justify-between items-center text-sm">
+                <button (click)="prevPage()" [disabled]="currentPage === 1"
+                    class="text-emerald-600 disabled:opacity-30 disabled:cursor-not-allowed hover:text-emerald-800">
+                    Previous
+                </button>
+                <span class="text-emerald-800 font-medium">Page {{currentPage}} of {{totalPages}}</span>
+                <button (click)="nextPage()" [disabled]="currentPage === totalPages"
+                    class="text-emerald-600 disabled:opacity-30 disabled:cursor-not-allowed hover:text-emerald-800">
+                    Next
+                </button>
+            </div>
+        </div>
+
+        <!-- Detail Section -->
+        <div class="lg:col-span-2">
+            <div *ngIf="!selectedCode"
+                class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-12 text-center h-[700px] flex flex-col justify-center items-center">
+                <div
+                    class="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mb-6 text-emerald-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-emerald-800 mb-2">Welcome to NAMC Dictionary</h2>
+                <p class="text-gray-500 max-w-md">Select a term from the list to view its full definition, clinical
+                    features, and Devanagari script.</p>
+            </div>
+
+            <div *ngIf="selectedCode"
+                class="bg-white rounded-2xl shadow-sm border border-emerald-100 h-[700px] flex flex-col">
+                <!-- Detail Header -->
+                <div class="p-6 bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-t-2xl relative">
+                    <button (click)="closeDetails()"
+                        class="absolute top-4 right-4 text-emerald-200 hover:text-white transition-colors lg:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    <div class="flex flex-wrap items-center gap-3 mb-2">
+                        <span
+                            class="px-2 py-0.5 bg-white/20 rounded-lg text-xs font-mono backdrop-blur-sm">{{selectedCode.namc_code}}</span>
+                        <span class="px-2 py-0.5 bg-white/20 rounded-lg text-xs backdrop-blur-sm">ID:
+                            {{selectedCode.namc_id}}</span>
+                    </div>
+
+                    <h2 class="text-3xl font-bold mb-1">{{formatTerm(selectedCode.namc_term)}}</h2>
+                    <p class="text-emerald-100 text-xl font-hindi">{{selectedCode.namc_term_devanagari}}</p>
+                    <p class="text-emerald-200/80 italic text-sm mt-1" *ngIf="selectedCode.namc_term_diacritical">
+                        {{selectedCode.namc_term_diacritical}}</p>
+                </div>
+
+                <!-- Detail Content -->
+                <div class="p-8 flex-grow overflow-y-auto">
+                    <!-- Short Definition (Only if exists) -->
+                    <div class="mb-8" *ngIf="selectedCode.short_definition && selectedCode.short_definition !== '('">
+                        <h4 class="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-3">Short Definition
+                        </h4>
+                        <p
+                            class="text-lg text-emerald-900 leading-relaxed italic bg-emerald-50 p-4 rounded-xl border-l-4 border-emerald-400">
+                            {{selectedCode.short_definition}}
+                        </p>
+                    </div>
+
+                    <!-- Clinical Insight & Characteristics -->
+                    <div class="mb-8">
+                        <h4 class="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-3">Clinical Insight &
+                            Characteristics</h4>
+                        <div *ngIf="selectedCode.long_definition" class="text-gray-700 leading-relaxed space-y-4">
+                            {{selectedCode.long_definition}}
+                        </div>
+                        <div *ngIf="!selectedCode.long_definition"
+                            class="text-sm text-gray-400 italic bg-gray-50 p-4 rounded-xl border-l-4 border-gray-200">
+                            Detailed clinical insight and characteristics are not available for this specific code in
+                            the current dataset.
+                        </div>
+                    </div>
+
+                    <div class="mt-auto pt-6 border-t border-gray-100" *ngIf="selectedCode.ontology_branches">
+                        <h4 class="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-2">Ontology Branches
+                        </h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span
+                                class="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-sm">{{formatOntology(selectedCode.ontology_branches)}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

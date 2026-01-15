@@ -127,3 +127,32 @@ exports.getPrinciplesContent = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error' });
     }
 };
+// Get Medicine Details from JSON
+// Get Medicine Details
+exports.getMedicineById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Use database as the source of truth for all metadata
+        const [rows] = await db.execute('SELECT * FROM medicines WHERE id = ?', [id]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'Medicine not found' });
+        }
+
+        const medicine = rows[0];
+
+        // Parse JSON fields if they are strings
+        if (typeof medicine.review_percent === 'string') {
+            try { medicine.review_percent = JSON.parse(medicine.review_percent); } catch (e) { }
+        }
+        if (typeof medicine.substitutes === 'string') {
+            try { medicine.substitutes = JSON.parse(medicine.substitutes); } catch (e) { }
+        }
+
+        res.json({ success: true, data: medicine });
+    } catch (error) {
+        console.error('Error fetching medicine details:', error);
+        res.status(500).json({ success: false, message: 'Server error loading details' });
+    }
+};

@@ -1,0 +1,233 @@
+disease,age,gender,severity,drug
+diarrhea,4,male,LOW,oral rehydration solution (ORS)
+diarrhea,4,male,NORMAL,loperamide
+diarrhea,5,male,LOW,oral rehydration solution (ORS)
+diarrhea,5,male,NORMAL,loperamide
+diarrhea,6,male,LOW,oral rehydration solution (ORS)
+diarrhea,6,male,NORMAL,loperamide
+diarrhea,7,male,LOW,oral rehydration solution (ORS)
+diarrhea,7,male,NORMAL,loperamide
+diarrhea,4,female,LOW,oral rehydration solution (ORS)
+diarrhea,4,female,NORMAL,loperamide
+diarrhea,5,female,LOW,oral rehydration solution (ORS)
+diarrhea,5,female,NORMAL,loperamide
+diarrhea,6,female,LOW,oral rehydration solution (ORS)
+diarrhea,6,female,NORMAL,loperamide
+diarrhea,7,female,LOW,oral rehydration solution (ORS)
+diarrhea,7,female,NORMAL,loperamide
+gastritis,8,male,HIGH,omeprazole
+gastritis,8,male,NORMAL,ranitidine
+gastritis,8,male,LOW,antacids
+gastritis,8,female,HIGH,omeprazole
+gastritis,8,female,NORMAL,ranitidine
+gastritis,8,female,LOW,antacids
+arthritis,8,male,NORMAL,ibuprofen
+arthritis,8,male,LOW,paracetamol
+arthritis,8,male,HIGH,naproxen
+arthritis,8,female,NORMAL,ibuprofen
+arthritis,8,female,LOW,paracetamol
+arthritis,8,female,HIGH,naproxen
+migraine,8,male,LOW,paracetamol
+migraine,8,male,NORMAL,ibuprofen
+migraine,8,male,HIGH,sumatriptan
+migraine,8,female,LOW,paracetamol
+migraine,8,female,NORMAL,ibuprofen
+migraine,8,female,HIGH,sumatriptan
+diarrhea,8,male,HIGH,ciprofloxacin
+diarrhea,8,male,NORMAL,loperamide + ORS
+diarrhea,8,male,LOW,oral rehydration solution (ORS)
+diarrhea,8,female,HIGH,ciprofloxacin
+diarrhea,8,female,NORMAL,loperamide + ORS
+diarrhea,8,female,LOW,oral rehydration solution (ORS)
+gastritis,9,male,HIGH,pantoprazole
+gastritis,9,male,NORMAL,ranitidine
+gastritis,9,male,LOW,antacids (aluminum hydroxide)
+gastritis,9,female,HIGH,pantoprazole
+gastritis,9,female,NORMAL,ranitidine
+gastritis,9,female,LOW,antacids (aluminum hydroxide)
+arthritis,9,male,NORMAL,ibuprofen
+arthritis,9,male,LOW,acetaminophen
+arthritis,9,male,HIGH,diclofenac
+arthritis,9,female,NORMAL,ibuprofen
+arthritis,9,female,LOW,acetaminophen
+arthritis,9,female,HIGH,diclofenac
+migraine,9,male,LOW,aspirin
+migraine,9,male,NORMAL,ibuprofen
+migraine,9,male,HIGH,sumatriptan
+migraine,9,female,LOW,aspirin
+migraine,9,female,NORMAL,ibuprofen
+migraine,9,female,HIGH,sumatriptan
+diarrhea,9,male,HIGH,azithromycin
+diarrhea,9,male,NORMAL,loperamide
+diarrhea,9,male,LOW,zinc supplements
+diarrhea,9,female,HIGH,azithromycin
+diarrhea,9,female,NORMAL,loperamide
+diarrhea,9,female,LOW,zinc supplements
+gastritis,10,male,HIGH,esomeprazole
+gastritis,10,male,NORMAL,famotidine
+gastritis,10,male,LOW,magnesium hydroxide
+gastritis,10,female,HIGH,esomeprazole
+gastritis,10,female,NORMAL,famotidine
+gastritis,10,female,LOW,magnesium hydroxide
+arthritis,10,male,NORMAL,naproxen
+arthritis,10,male,LOW,paracetamol
+arthritis,10,male,HIGH,celecoxib
+arthritis,10,female,NORMAL,naproxen
+arthritis,10,female,LOW,paracetamol
+arthritis,10,female,HIGH,celecoxib
+migraine,10,male,LOW,acetaminophen
+migraine,10,male,NORMAL,naproxen
+migraine,10,male,HIGH,rizatriptan
+migraine,10,female,LOW,acetaminophen
+migraine,10,female,NORMAL,naproxen
+migraine,10,female,HIGH,rizatriptan
+diarrhea,10,male,HIGH,metronidazole
+diarrhea,10,male,NORMAL,bismuth subsalicylate
+diarrhea,10,male,LOW,probiotics
+diarrhea,10,female,HIGH,metronidazole
+diarrhea,10,female,NORMAL,bismuth subsalicylate
+diarrhea,10,female,LOW,probiotics
+gastritis,15,male,HIGH,omeprazole
+gastritis,15,male,NORMAL,ranitidine
+gastritis,15,male,LOW,antacids
+gastritis,15,female,HIGH,omeprazole
+gastritis,15,female,NORMAL,ranitidine
+gastritis,15,female,LOW,antacids
+arthritis,15,male,NORMAL,ibuprofen
+arthritis,15,male,LOW,acetaminophen
+arthritis,15,male,HIGH,diclofenac
+arthritis,15,female,NORMAL,ibuprofen
+arthritis,15,female,LOW,acetaminophen
+arthritis,15,female,HIGH,diclofenac
+migraine,15,male,LOW,paracetamol
+migraine,15,male,NORMAL,ibuprofen
+migraine,15,male,HIGH,sumatriptan
+migraine,15,female,LOW,paracetamol
+migraine,15,female,NORMAL,ibuprofen
+migraine,15,female,HIGH,sumatriptan
+diarrhea,15,male,HIGH,ciprofloxacin
+diarrhea,15,male,NORMAL,loperamide
+diarrhea,15,male,LOW,oral rehydration solution
+diarrhea,15,female,HIGH,ciprofloxacin
+diarrhea,15,female,NORMAL,loperamide
+diarrhea,15,female,LOW,oral rehydration solution
+gastritis,20,male,HIGH,pantoprazole
+gastritis,20,male,NORMAL,ranitidine
+gastritis,20,male,LOW,antacids
+gastritis,20,female,HIGH,pantoprazole
+gastritis,20,female,NORMAL,ranitidine
+gastritis,20,female,LOW,antacids
+arthritis,20,male,NORMAL,naproxen
+arthritis,20,male,LOW,paracetamol
+arthritis,20,male,HIGH,celecoxib
+arthritis,20,female,NORMAL,naproxen
+arthritis,20,female,LOW,paracetamol
+arthritis,20,female,HIGH,celecoxib
+migraine,20,male,LOW,aspirin
+migraine,20,male,NORMAL,naproxen
+migraine,20,male,HIGH,sumatriptan
+migraine,20,female,LOW,aspirin
+migraine,20,female,NORMAL,naproxen
+migraine,20,female,HIGH,sumatriptan
+diarrhea,20,male,HIGH,azithromycin
+diarrhea,20,male,NORMAL,loperamide
+diarrhea,20,male,LOW,probiotics
+diarrhea,20,female,HIGH,azithromycin
+diarrhea,20,female,NORMAL,loperamide
+diarrhea,20,female,LOW,probiotics
+gastritis,25,male,HIGH,esomeprazole
+gastritis,25,male,NORMAL,famotidine
+gastritis,25,male,LOW,antacids (calcium carbonate)
+gastritis,25,female,HIGH,esomeprazole
+gastritis,25,female,NORMAL,famotidine
+gastritis,25,female,LOW,antacids (calcium carbonate)
+arthritis,25,male,NORMAL,ibuprofen
+arthritis,25,male,LOW,acetaminophen
+arthritis,25,male,HIGH,diclofenac sodium
+arthritis,25,female,NORMAL,ibuprofen
+arthritis,25,female,LOW,acetaminophen
+arthritis,25,female,HIGH,diclofenac sodium
+migraine,25,male,LOW,paracetamol
+migraine,25,male,NORMAL,ibuprofen
+migraine,25,male,HIGH,zolmitriptan
+migraine,25,female,LOW,paracetamol
+migraine,25,female,NORMAL,ibuprofen
+migraine,25,female,HIGH,zolmitriptan
+diarrhea,25,male,HIGH,ciprofloxacin
+diarrhea,25,male,NORMAL,loperamide
+diarrhea,25,male,LOW,oral rehydration solution
+diarrhea,25,female,HIGH,ciprofloxacin
+diarrhea,25,female,NORMAL,loperamide
+diarrhea,25,female,LOW,oral rehydration solution
+gastritis,30,male,HIGH,omeprazole
+gastritis,30,male,NORMAL,ranitidine
+gastritis,30,male,LOW,antacids
+gastritis,30,female,HIGH,omeprazole
+gastritis,30,female,NORMAL,ranitidine
+gastritis,30,female,LOW,antacids
+arthritis,30,male,NORMAL,naproxen
+arthritis,30,male,LOW,paracetamol
+arthritis,30,male,HIGH,celecoxib
+arthritis,30,female,NORMAL,naproxen
+arthritis,30,female,LOW,paracetamol
+arthritis,30,female,HIGH,celecoxib
+migraine,30,male,LOW,aspirin
+migraine,30,male,NORMAL,naproxen
+migraine,30,male,HIGH,sumatriptan
+migraine,30,female,LOW,aspirin
+migraine,30,female,NORMAL,naproxen
+migraine,30,female,HIGH,sumatriptan
+diarrhea,30,male,HIGH,norfloxacin
+diarrhea,30,male,NORMAL,loperamide + ORS
+diarrhea,30,male,LOW,probiotics
+diarrhea,30,female,HIGH,norfloxacin
+diarrhea,30,female,NORMAL,loperamide + ORS
+diarrhea,30,female,LOW,probiotics
+gastritis,35,male,HIGH,pantoprazole
+gastritis,35,male,NORMAL,ranitidine
+gastritis,35,male,LOW,antacids
+gastritis,35,female,HIGH,pantoprazole
+gastritis,35,female,NORMAL,ranitidine
+gastritis,35,female,LOW,antacids
+arthritis,35,male,NORMAL,ibuprofen
+arthritis,35,male,LOW,acetaminophen
+arthritis,35,male,HIGH,indomethacin
+arthritis,35,female,NORMAL,ibuprofen
+arthritis,35,female,LOW,acetaminophen
+arthritis,35,female,HIGH,indomethacin
+migraine,35,male,LOW,paracetamol
+migraine,35,male,NORMAL,ibuprofen
+migraine,35,male,HIGH,rizatriptan
+migraine,35,female,LOW,paracetamol
+migraine,35,female,NORMAL,ibuprofen
+migraine,35,female,HIGH,rizatriptan
+diarrhea,35,male,HIGH,ofloxacin
+diarrhea,35,male,NORMAL,loperamide
+diarrhea,35,male,LOW,ORS + zinc
+diarrhea,35,female,HIGH,ofloxacin
+diarrhea,35,female,NORMAL,loperamide
+diarrhea,35,female,LOW,ORS + zinc
+gastritis,40,male,HIGH,esomeprazole
+gastritis,40,male,NORMAL,famotidine
+gastritis,40,male,LOW,antacids
+gastritis,40,female,HIGH,esomeprazole
+gastritis,40,female,NORMAL,famotidine
+gastritis,40,female,LOW,antacids
+arthritis,40,male,NORMAL,naproxen
+arthritis,40,male,LOW,paracetamol
+arthritis,40,male,HIGH,diclofenac
+arthritis,40,female,NORMAL,naproxen
+arthritis,40,female,LOW,paracetamol
+arthritis,40,female,HIGH,diclofenac
+migraine,40,male,LOW,aspirin
+migraine,40,male,NORMAL,naproxen
+migraine,40,male,HIGH,sumatriptan
+migraine,40,female,LOW,aspirin
+migraine,40,female,NORMAL,naproxen
+migraine,40,female,HIGH,sumatriptan
+diarrhea,40,male,HIGH,ciprofloxacin
+diarrhea,40,male,NORMAL,bismuth subsalicylate
+diarrhea,40,male,LOW,probiotics
+diarrhea,40,female,HIGH,ciprofloxacin
+diarrhea,40,female,NORMAL,bismuth subsalicylate
+diarrhea,40,female,LOW,probiotics

@@ -1,0 +1,262 @@
+<div class="min-h-screen bg-gray-50 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Diagnostic History</h1>
+                <p class="mt-2 text-sm text-gray-500">View and manage your past symptom assessments.</p>
+            </div>
+            <a routerLink="/symptom-checker"
+                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
+                <i class="fas fa-plus mr-2"></i> New Check
+            </a>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading && !history.length" class="flex flex-col items-center justify-center py-20">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
+            <p class="mt-4 text-gray-500 font-medium">Loading your history...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!isLoading && history.length === 0"
+            class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+            <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-history text-3xl text-emerald-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">No history yet</h3>
+            <p class="text-gray-500 mb-8 max-w-sm mx-auto">You haven't performed any symptom checks yet. Start your
+                first check to see it here!</p>
+            <a routerLink="/symptom-checker"
+                class="inline-flex items-center px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-all shadow-md hover:shadow-lg">
+                Start Symptom Check
+            </a>
+        </div>
+
+        <!-- History List -->
+        <div *ngIf="history.length > 0" class="space-y-4">
+            <div *ngFor="let item of history" (click)="viewDetail(item.id)"
+                class="group bg-white rounded-xl border border-gray-200 p-5 cursor-pointer hover:border-emerald-300 hover:shadow-md transition-all">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                                {{ item.diagnosis }}</h3>
+                            <span [class]="getConfidenceClass(item.confidence)"
+                                class="text-xs px-2 py-0.5 bg-gray-50 rounded-full">
+                                {{ item.confidence }}% Confidence
+                            </span>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span *ngFor="let sym of item.symptoms.slice(0, 3)"
+                                class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                                {{ sym.replace('_', ' ') }}
+                            </span>
+                            <span *ngIf="item.symptoms.length > 3" class="text-xs text-gray-400 self-center">+{{
+                                item.symptoms.length - 3 }} more</span>
+                        </div>
+
+                        <div class="flex items-center text-xs text-gray-400 gap-4">
+                            <span class="flex items-center"><i class="far fa-calendar-alt mr-1.5"></i> {{
+                                formatDate(item.date) }}</span>
+                            <span *ngIf="item.ayurvedicTerm" class="flex items-center text-emerald-600 font-medium">
+                                <i class="fas fa-leaf mr-1.5"></i> {{ item.ayurvedicTerm }} ({{ item.ayurvedicDevanagari
+                                }})
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-end">
+                        <i
+                            class="fas fa-chevron-right text-gray-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Detail Modal -->
+        <div *ngIf="selectedReport" class="fixed inset-0 z-50 overflow-hidden" role="dialog" aria-modal="true">
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" (click)="closeDetail()">
+            </div>
+
+            <!-- Modal Container -->
+            <div class="fixed inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+                <!-- Modal Panel -->
+                <div
+                    class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col pointer-events-auto transform transition-all">
+
+                    <!-- Modal Header (Sticky) -->
+                    <div class="bg-emerald-600 px-6 py-4 flex items-center justify-between shrink-0 rounded-t-2xl">
+                        <div class="text-white">
+                            <p class="text-[10px] font-bold opacity-80 uppercase tracking-widest text-emerald-100">
+                                Diagnostic Report</p>
+                            <h2 class="text-xl font-black tracking-tight">{{ selectedReport.diagnosis.disease }}</h2>
+                        </div>
+                        <button (click)="closeDetail()"
+                            class="text-white/80 hover:text-white hover:bg-white/10 rounded-full p-2 transition-colors focus:outline-none">
+                            <i class="fas fa-times text-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- Modal Content (Scrollable) -->
+                    <div class="p-6 overflow-y-auto custom-scrollbar bg-white">
+                        <!-- Symptoms & Confidence -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+                                <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">
+                                    Symptoms Logged</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span *ngFor="let sym of selectedReport.symptoms"
+                                        class="bg-white text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 shadow-sm">
+                                        {{ sym.replace('_', ' ') }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+                                <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">AI
+                                    Confidence</h4>
+                                <div class="flex items-center gap-4">
+                                    <div class="relative w-14 h-14 shrink-0">
+                                        <svg class="w-full h-full transform -rotate-90">
+                                            <circle cx="28" cy="28" r="24" stroke="currentColor" stroke-width="5"
+                                                fill="transparent" class="text-slate-200" />
+                                            <circle cx="28" cy="28" r="24" stroke="currentColor" stroke-width="5"
+                                                fill="transparent" [attr.stroke-dasharray]="150.8"
+                                                [attr.stroke-dashoffset]="150.8 * (1 - (selectedReport.diagnosis.confidence.replace('%','') / 100))"
+                                                class="text-emerald-500" stroke-linecap="round" />
+                                        </svg>
+                                        <span
+                                            class="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-700">
+                                            {{ selectedReport.diagnosis.confidence }}
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 font-medium leading-relaxed">
+                                        Analysis based on clinical correlation datasets and pattern matching.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ayurvedic Insight -->
+                        <div *ngIf="selectedReport.ayurvedicInsight"
+                            class="mb-8 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-100 relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 p-4 text-6xl text-amber-500/10 rotate-12 pointer-events-none">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="relative z-10">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span
+                                        class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-black uppercase tracking-widest rounded">Ayurvedic
+                                        Perspective</span>
+                                </div>
+                                <h3 class="text-lg font-black text-amber-900 mb-1">
+                                    {{ selectedReport.ayurvedicInsight.term }}
+                                    <span class="text-amber-700 font-medium text-base ml-1">({{
+                                        selectedReport.ayurvedicInsight.devanagari }})</span>
+                                </h3>
+                                <p class="text-amber-800/80 text-sm italic mb-4">
+                                    "{{ selectedReport.ayurvedicInsight.definition }}"
+                                </p>
+                                <div *ngIf="selectedReport.ayurvedicInsight.clinical_insight"
+                                    class="bg-white/60 rounded-lg p-3 text-sm text-amber-900 border border-amber-100/50">
+                                    <strong
+                                        class="block text-[10px] uppercase tracking-wide text-amber-600 mb-1">Clinical
+                                        Insight</strong>
+                                    {{ selectedReport.ayurvedicInsight.clinical_insight }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Treatment Options -->
+                        <div class="space-y-8">
+                            <!-- Allopathy -->
+                            <div *ngIf="selectedReport.treatments.allopathy">
+                                <h4
+                                    class="flex items-center gap-2 text-sm font-black text-blue-900 mb-4 border-b border-blue-100 pb-2">
+                                    <i class="fas fa-hospital-user text-blue-500"></i> Modern Medical Approach
+                                </h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div *ngFor="let severity of ['LOW', 'NORMAL', 'HIGH']"
+                                        class="bg-blue-50/50 rounded-xl p-4 border border-blue-100">
+                                        <div class="flex items-center gap-2 mb-3">
+                                            <span class="w-1.5 h-1.5 rounded-full"
+                                                [ngClass]="{'bg-blue-400': severity === 'LOW', 'bg-indigo-400': severity === 'NORMAL', 'bg-blue-600': severity === 'HIGH'}"></span>
+                                            <span
+                                                class="text-[10px] font-black tracking-widest uppercase text-slate-500">
+                                                {{ severity }} Severity
+                                            </span>
+                                        </div>
+                                        <ul class="space-y-1.5">
+                                            <li *ngFor="let medicine of selectedReport.treatments.allopathy[severity]"
+                                                class="text-xs text-slate-700 flex items-start gap-2 font-medium">
+                                                <i class="fas fa-pills text-blue-300 mt-0.5 text-[10px]"></i>
+                                                <span>{{ medicine }}</span>
+                                            </li>
+                                            <li *ngIf="!selectedReport.treatments.allopathy[severity].length"
+                                                class="text-[10px] text-slate-400 italic pl-5">None specific</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ayurveda -->
+                            <div *ngIf="selectedReport.treatments.ayurveda">
+                                <h4
+                                    class="flex items-center gap-2 text-sm font-black text-emerald-900 mb-4 border-b border-emerald-100 pb-2">
+                                    <i class="fas fa-mortar-pestle text-emerald-500"></i> Ayurvedic Rejuvenation
+                                </h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div *ngFor="let severity of ['LOW', 'NORMAL', 'HIGH']"
+                                        class="bg-emerald-50/50 rounded-xl p-4 border border-emerald-100 hover:bg-emerald-50 transition-colors">
+                                        <div class="flex items-center gap-2 mb-3">
+                                            <span class="w-1.5 h-1.5 rounded-full"
+                                                [ngClass]="{'bg-emerald-400': severity === 'LOW', 'bg-yellow-400': severity === 'NORMAL', 'bg-red-400': severity === 'HIGH'}"></span>
+                                            <span
+                                                class="text-[10px] font-black tracking-widest uppercase text-slate-500">
+                                                {{ severity }} Severity
+                                            </span>
+                                        </div>
+                                        <ul class="space-y-2">
+                                            <li *ngFor="let medicine of selectedReport.treatments.ayurveda[severity]"
+                                                class="flex items-center justify-between group">
+                                                <div class="text-xs text-slate-700 flex items-start gap-2 font-medium">
+                                                    <i class="fas fa-seedling text-emerald-300 mt-0.5 text-[10px]"></i>
+                                                    <span>{{ medicine }}</span>
+                                                </div>
+                                                <button (click)="viewMedicineDetails(medicine)"
+                                                    class="text-[10px] bg-white border border-emerald-100 text-emerald-600 px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-all hover:bg-emerald-600 hover:text-white">
+                                                    Info
+                                                </button>
+                                            </li>
+                                            <li *ngIf="!selectedReport.treatments.ayurveda[severity].length"
+                                                class="text-[10px] text-slate-400 italic pl-5">None specific</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer (Sticky) -->
+                    <div
+                        class="bg-slate-50 px-6 py-4 flex justify-between items-center shrink-0 rounded-b-2xl border-t border-slate-100">
+                        <p class="text-[10px] text-slate-400 max-w-[65%] leading-tight">
+                            AI-generated for educational use. Consult a professional.
+                        </p>
+                        <button (click)="closeDetail()"
+                            class="px-5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-sm transition-all">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Medicine Detail Modal -->
+<app-ayurveda-detail *ngIf="selectedItem" [item]="selectedItem" (close)="closeMedicineDetails()">
+</app-ayurveda-detail>

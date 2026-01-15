@@ -20,3 +20,8 @@ Thumbs.db
 
 # Brain artifacts (optional - you can commit these if useful)
 .gemini/
+
+# Large files
+backend/data/allopathy/medicine_data.csv
+backend/data/allopathy/medicine_dataset.csv
+backend/exports/

@@ -18,4 +18,7 @@ router.get('/pharmacy/overview', allopathyController.getPharmacyData);
 // Principles & Clinical Pillars
 router.get('/principles', allopathyController.getPrinciplesContent);
 
+// Medicine Details
+router.get('/medicine/:id', allopathyController.getMedicineById);
+
 module.exports = router;

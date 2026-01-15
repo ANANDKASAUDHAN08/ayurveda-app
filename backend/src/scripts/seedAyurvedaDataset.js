@@ -56,7 +56,7 @@ async function seedAyurvedaDataset() {
         console.log('🧹 Existing data cleared.');
 
         // 3. Parse CSV and Insert
-        const csvFilePath = path.join(__dirname, '../../data/AyurGenixAI_Dataset.csv');
+        const csvFilePath = path.join(__dirname, '../../data/ayurveda/AyurGenixAI_Dataset.csv');
         const results = [];
 
         fs.createReadStream(csvFilePath)

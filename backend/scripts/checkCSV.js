@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Quick script to check CSV column headers
-const CSV_FILE = path.join(__dirname, '../data/indian-medicines.csv');
+const CSV_FILE = path.join(__dirname, '../data/allopathy/indian-medicines.csv');
 
 const content = fs.readFileSync(CSV_FILE, 'utf-8');
 const lines = content.split('\n').slice(0, 3);

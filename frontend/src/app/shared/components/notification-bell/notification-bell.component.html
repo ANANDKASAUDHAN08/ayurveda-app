@@ -1,0 +1,102 @@
+<!-- Notification Bell -->
+<div class="relative" (clickOutside)="closeDropdown()">
+    <!-- Bell Icon -->
+    <button (click)="toggleDropdown()"
+        class="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
+        <i class="fa-solid fa-bell text-xl" [class.text-red-600]="unreadCount > 0"></i>
+
+        <!-- Badge -->
+        <span *ngIf="unreadCount > 0"
+            class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
+            {{ unreadCount > 99 ? '99+' : unreadCount }}
+        </span>
+    </button>
+
+    <div *ngIf="showDropdown"
+        class="fixed sm:absolute inset-x-4 sm:inset-auto sm:right-0 top-16 sm:top-full mt-0 sm:mt-4 w-auto sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 z-[120] max-h-[80vh] sm:max-h-[500px] overflow-hidden animate-fade-in-up shadow-emerald-900/10"
+        (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        <div
+            class="px-4 py-1 sm:py-2 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-emerald-50 to-teal-50">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-bell text-emerald-600"></i>
+                <h3 class="font-semibold text-gray-900">
+                    Notifications
+                    <span *ngIf="unreadCount > 0" class="text-sm text-emerald-600">({{ unreadCount }})</span>
+                </h3>
+            </div>
+            <div class="flex items-center gap-2">
+                <a routerLink="/notifications" (click)="closeDropdown()"
+                    class="text-sm text-emerald-600 hover:text-emerald-700 font-medium whitespace-nowrap hidden sm:block">
+                    View All
+                </a>
+                <button (click)="closeDropdown()" class="text-gray-400 hover:text-gray-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="py-12 text-center">
+            <i class="fa-solid fa-spinner fa-spin text-3xl text-emerald-600 mb-2"></i>
+            <p class="text-gray-600 text-sm">Loading...</p>
+        </div>
+
+        <!-- Notifications List -->
+        <div *ngIf="!loading && notifications.length > 0" class="max-h-[400px] overflow-y-auto">
+            <div *ngFor="let notification of notifications" [routerLink]="notification.action_url || '/notifications'"
+                (click)="navigateToNotification(notification)"
+                class="px-4 py-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
+                [class.bg-blue-50]="!notification.is_read">
+
+                <div class="flex items-start gap-3">
+                    <!-- Icon -->
+                    <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center" [ngClass]="{
+                           'bg-green-100': notification.type.includes('approved') || notification.type.includes('verified'),
+                           'bg-red-100': notification.type.includes('rejected') || notification.type.includes('failed'),
+                           'bg-yellow-100': notification.type.includes('reminder') || notification.type.includes('expiring'),
+                           'bg-blue-100': !notification.type.includes('approved') && !notification.type.includes('rejected') && !notification.type.includes('reminder')
+                         }">
+                        <i class="fa-solid" [ngClass]="notificationService.getNotificationIcon(notification.type)"
+                            [class]="notificationService.getNotificationColor(notification.type)"></i>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between mb-1">
+                            <h4 class="text-sm font-semibold text-gray-900 truncate"
+                                [class.font-bold]="!notification.is_read">
+                                {{ notification.title }}
+                            </h4>
+                            <span *ngIf="!notification.is_read"
+                                class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full ml-2"></span>
+                        </div>
+                        <p class="text-xs text-gray-600 line-clamp-2 mb-1">
+                            {{ notification.message }}
+                        </p>
+                        <span class="text-xs text-gray-500">
+                            {{ timeAgo(notification.created_at) }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!loading && notifications.length === 0" class="py-12 text-center">
+            <i class="fa-solid fa-bell-slash text-4xl text-gray-300 mb-3"></i>
+            <p class="text-gray-600">No notifications yet</p>
+            <p class="text-sm text-gray-500 mt-1">We'll notify you when something happens</p>
+        </div>
+
+        <!-- Footer -->
+        <div *ngIf="notifications.length > 0" class="px-4 py-2 bg-gray-50 border-t border-gray-200">
+            <a routerLink="/notifications" (click)="closeDropdown()"
+                class="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center justify-center gap-2">
+                View All Notifications
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</div>

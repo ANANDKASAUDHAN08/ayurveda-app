@@ -450,3 +450,64 @@ exports.deleteDoctor = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+// ==================================
+// CHATBOT MANAGEMENT & STATISTICS
+// ==================================
+
+// Get aggregated chatbot statistics
+exports.getChatbotStats = async (req, res) => {
+    try {
+        // 1. Total counts
+        const [[{ totalSessions }]] = await pool.query('SELECT COUNT(*) as totalSessions FROM chat_sessions');
+        const [[{ totalMessages }]] = await pool.query('SELECT COUNT(*) as totalMessages FROM chat_messages');
+        const [[{ totalUsers }]] = await pool.query('SELECT COUNT(DISTINCT user_id) as totalUsers FROM chat_sessions');
+
+        // 2. Daily message trends (last 14 days)
+        const [dailyTrends] = await pool.query(`
+            SELECT DATE(timestamp) as date, COUNT(*) as count 
+            FROM chat_messages 
+            WHERE timestamp >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+            GROUP BY DATE(timestamp)
+            ORDER BY date ASC
+        `);
+
+        // 3. Subscription tier distribution
+        const [tierDistribution] = await pool.query(`
+            SELECT u.subscription_tier as tier, COUNT(DISTINCT cs.user_id) as count
+            FROM chat_sessions cs
+            JOIN users u ON cs.user_id = u.id
+            GROUP BY u.subscription_tier
+        `);
+
+        // 4. Recent sessions with user details
+        const [recentSessions] = await pool.query(`
+            SELECT 
+                cs.session_id, 
+                cs.started_at, 
+                cs.message_count,
+                u.name as user_name,
+                u.email as user_email,
+                u.subscription_tier
+            FROM chat_sessions cs
+            JOIN users u ON cs.user_id = u.id
+            ORDER BY cs.started_at DESC
+            LIMIT 10
+        `);
+
+        res.json({
+            success: true,
+            stats: {
+                totalSessions,
+                totalMessages,
+                totalUsers,
+                averageMessagesPerSession: totalSessions > 0 ? (totalMessages / totalSessions).toFixed(1) : 0,
+                dailyTrends,
+                tierDistribution,
+                recentSessions
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching chatbot stats:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

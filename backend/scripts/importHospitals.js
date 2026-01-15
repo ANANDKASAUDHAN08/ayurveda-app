@@ -11,7 +11,7 @@ const db = require('../src/config/database');
  * Source: planemad/india_health_facilities
  */
 
-const JSON_FILE = path.join(__dirname, '../data/indian-hospitals.json');
+const JSON_FILE = path.join(__dirname, '../data/hospitals/indian-hospitals.json');
 const BATCH_SIZE = 500;
 
 async function importHospitals() {

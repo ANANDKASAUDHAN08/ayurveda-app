@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { PrescriptionService, Prescription } from '../../../shared/services/prescription.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { UploadPrescriptionModalComponent } from '../upload-prescription-modal/upload-prescription-modal.component';
-import { PrescriptionOrderModalComponent } from '../../shared/prescription-order-modal/prescription-order-modal.component';
+import { PrescriptionOrderModalComponent } from '../../../shared/components/prescription-order-modal/prescription-order-modal.component';
 
 @Component({
   selector: 'app-prescriptions-list',

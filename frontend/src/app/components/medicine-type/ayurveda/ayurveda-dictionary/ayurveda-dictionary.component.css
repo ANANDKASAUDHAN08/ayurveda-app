@@ -1,0 +1,51 @@
+@font-face {
+    font-family: 'hindi';
+    src: url('https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&display=swap');
+}
+
+.font-hindi {
+    font-family: 'Tiro Devanagari Hindi', 'Noto Sans Devanagari', sans-serif;
+}
+
+.dictionary-container {
+    height: calc(100vh - 64px);
+    /* Adjust based on your header height */
+    overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d1fae5;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #10b981;
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 1024px) {
+    .dictionary-container {
+        height: auto;
+    }
+}

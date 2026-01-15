@@ -120,46 +120,116 @@
             </div>
         </div>
 
-        <!-- Recent Activity - MOBILE OPTIMIZED -->
-        <div class="bg-white rounded-xl md:rounded-2xl border border-slate-200 shadow-sm p-4 md:p-6 mb-6 md:mb-8">
-            <div class="flex items-center justify-between mb-3 md:mb-4">
-                <h3 class="text-base md:text-lg font-bold text-slate-900">Recent Activity</h3>
-                <button (click)="openAppointmentsModal()"
-                    class="text-sm text-blue-600 hover:text-blue-700 font-semibold no-underline cursor-pointer">View All
-                    →</button>
-            </div>
+        <!-- Main Dashboard Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 md:mb-12">
 
-            <!-- Recent appointments preview -->
-            <div *ngIf="filteredAppointments.length > 0; else noActivity" class="space-y-3">
-                <div *ngFor="let appointment of filteredAppointments.slice(0, 3)"
-                    class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
-                    <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-calendar text-emerald-600"></i>
+            <!-- Recent Activity - LEFT (2 cols on desktop) -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl md:rounded-2xl border border-slate-200 shadow-sm p-4 md:p-6 h-full">
+                    <div class="flex items-center justify-between mb-4 md:mb-6">
+                        <h3 class="text-base md:text-lg font-bold text-slate-900">Recent Activity</h3>
+                        <button (click)="openAppointmentsModal()"
+                            class="text-sm text-blue-600 hover:text-blue-700 font-semibold no-underline cursor-pointer">View
+                            All
+                            →</button>
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-semibold text-slate-900 truncate">
-                            Appointment with Dr. {{appointment.doctor_name}}
-                        </p>
-                        <p class="text-xs text-slate-600">
-                            {{appointment.appointment_date | date:'MMM d, y'}} at {{appointment.start_time}}
-                        </p>
+
+                    <!-- Recent appointments preview -->
+                    <div *ngIf="filteredAppointments.length > 0; else noActivity" class="space-y-3">
+                        <div *ngFor="let appointment of filteredAppointments.slice(0, 5)"
+                            class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                            <div
+                                class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-calendar text-emerald-600"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold text-slate-900 truncate">
+                                    Appointment with Dr. {{appointment.doctor_name}}
+                                </p>
+                                <p class="text-xs text-slate-600">
+                                    {{appointment.appointment_date | date:'MMM d, y'}} at {{appointment.start_time}}
+                                </p>
+                            </div>
+                            <span [ngClass]="{
+                                'bg-emerald-100 text-emerald-800': appointment.status === 'confirmed',
+                                'bg-red-100 text-red-800': appointment.status === 'cancelled',
+                                'bg-blue-100 text-blue-800': appointment.status === 'completed'
+                            }" class="px-2 py-1 rounded-full text-xs font-medium capitalize flex-shrink-0">
+                                {{appointment.status}}
+                            </span>
+                        </div>
                     </div>
-                    <span [ngClass]="{
-                        'bg-emerald-100 text-emerald-800': appointment.status === 'confirmed',
-                        'bg-red-100 text-red-800': appointment.status === 'cancelled',
-                        'bg-blue-100 text-blue-800': appointment.status === 'completed'
-                    }" class="px-2 py-1 rounded-full text-xs font-medium capitalize flex-shrink-0">
-                        {{appointment.status}}
-                    </span>
+
+                    <ng-template #noActivity>
+                        <div class="text-center py-12 text-slate-500">
+                            <i class="fa-solid fa-inbox text-4xl mb-3 opacity-50"></i>
+                            <p class="text-sm">No recent activity</p>
+                        </div>
+                    </ng-template>
                 </div>
             </div>
 
-            <ng-template #noActivity>
-                <div class="text-center py-8 text-slate-500">
-                    <i class="fa-solid fa-inbox text-4xl mb-2 opacity-50"></i>
-                    <p class="text-sm">No recent activity</p>
+            <!-- Wellness Snapshot - RIGHT (1 col on desktop) -->
+            <div class="lg:col-span-1">
+                <div
+                    class="bg-white rounded-xl md:rounded-2xl border border-slate-200 shadow-sm p-4 md:p-6 h-full overflow-hidden relative group">
+                    <!-- Glassmorphism gradient background -->
+                    <div
+                        class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-500/20 transition-all">
+                    </div>
+
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-base md:text-lg font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fas fa-leaf text-emerald-600"></i>
+                                Wellness Snapshot
+                            </h3>
+                            <a routerLink="/wellness/calendar"
+                                class="text-xs text-emerald-600 hover:text-emerald-700 font-bold uppercase tracking-wider">Full
+                                View</a>
+                        </div>
+
+                        <!-- Suggestions List -->
+                        <div *ngIf="!loadingWellness; else loadingWellnessTpl">
+                            <div *ngIf="todaySuggestions.length > 0; else noSuggestions" class="space-y-4">
+                                <div *ngFor="let suggestion of todaySuggestions.slice(0, 3)"
+                                    class="p-3 bg-emerald-50 border border-emerald-100 rounded-xl">
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-emerald-600 shadow-sm flex-shrink-0">
+                                            <i
+                                                [class]="suggestion.category === 'Ritual' ? 'fas fa-om' : 'fas fa-pills'"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-bold text-emerald-900 mb-0.5">{{suggestion.title}}
+                                            </p>
+                                            <p class="text-[11px] text-emerald-700 line-clamp-2 leading-relaxed">
+                                                {{suggestion.description}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-[10px] text-slate-400 text-center italic mt-2">Based on current local
+                                    weather & conditions</p>
+                            </div>
+                            <ng-template #noSuggestions>
+                                <div class="text-center py-8">
+                                    <div
+                                        class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <i class="fas fa-spa text-slate-300"></i>
+                                    </div>
+                                    <p class="text-xs font-medium text-slate-500">Perfect balance today! Follow your
+                                        daily routine.</p>
+                                </div>
+                            </ng-template>
+                        </div>
+                        <ng-template #loadingWellnessTpl>
+                            <div class="space-y-4 py-2">
+                                <div *ngFor="let i of [1,2,3]" class="h-16 bg-slate-50 animate-pulse rounded-xl"></div>
+                            </div>
+                        </ng-template>
+                    </div>
                 </div>
-            </ng-template>
+            </div>
         </div>
 
     </div>

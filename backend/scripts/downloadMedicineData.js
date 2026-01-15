@@ -9,7 +9,7 @@ const path = require('path');
  */
 
 const DATASET_URL = 'https://raw.githubusercontent.com/junioralive/Indian-Medicine-Dataset/main/DATA/indian_medicine_data.csv';
-const DATA_DIR = path.join(__dirname, '../data');
+const DATA_DIR = path.join(__dirname, '../data/allopathy');
 const OUTPUT_FILE = path.join(DATA_DIR, 'indian-medicines.csv');
 
 // Create data directory if it doesn't exist

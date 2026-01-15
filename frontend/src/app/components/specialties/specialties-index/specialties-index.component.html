@@ -1,0 +1,243 @@
+<div class="specialties-container min-h-screen pb-6 bg-slate-50">
+    <!-- Hero Section (Compact & Split for Desktop) -->
+    <div
+        class="hero-section py-1 md:py-6 px-4 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 -left-10 w-72 h-72 bg-emerald-400 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 -right-10 w-96 h-96 bg-teal-400 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+            <!-- Left side: Text content -->
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl md:text-5xl font-bold mb-3 tracking-tight">Specialty <span
+                        class="text-emerald-400">Encyclopedia</span></h1>
+                <p class="text-[12px] md:text-lg text-emerald-100/80 max-w-xl mx-auto md:mx-0 leading-relaxed">
+                    Navigate through medical disciplines from traditional Ayurvedic insights to modern sciences.
+                </p>
+            </div>
+
+            <!-- Right side: Search & Filters -->
+            <div class="space-y-4">
+                <div class="relative group">
+                    <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()"
+                        placeholder="Search for a specialty..."
+                        class="w-full px-5 py-3 md:py-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all">
+                    <div class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+
+                <!-- Filter Bar -->
+                <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 md:gap-4">
+                    <div class="flex bg-white/10 rounded-lg p-0.5 md:p-1 border border-white/10 backdrop-blur-sm">
+                        <button (click)="selectedCategory = 'all'; applyFilters()"
+                            [class.bg-emerald-500]="selectedCategory === 'all'"
+                            class="px-2 md:px-6 h-7 md:h-9 flex items-center justify-center rounded-md text-[11px] md:text-sm leading-none transition-all">All</button>
+                        <button (click)="selectedCategory = 'modern'; applyFilters()"
+                            [class.bg-blue-500]="selectedCategory === 'modern'"
+                            class="px-2 md:px-6 h-7 md:h-9 flex items-center justify-center rounded-md text-[11px] md:text-sm leading-none transition-all">Modern</button>
+                        <button (click)="selectedCategory = 'ayurvedic'; applyFilters()"
+                            [class.bg-emerald-500]="selectedCategory === 'ayurvedic'"
+                            class="px-2 md:px-6 h-7 md:h-9 flex items-center justify-center rounded-md text-[11px] md:text-sm leading-none transition-all">Vedic</button>
+                    </div>
+
+                    <div class="flex bg-white/10 rounded-lg p-0.5 md:p-1 border border-white/10 backdrop-blur-sm">
+                        <button (click)="sortBy = 'asc'; applyFilters()" [ngClass]="{'bg-white/20': sortBy === 'asc'}"
+                            class="px-2 md:px-4 h-7 md:h-9 flex items-center justify-center rounded-md text-[11px] md:text-sm leading-none transition-all">
+                            <i class="fas fa-sort-alpha-down"></i>
+                        </button>
+                        <button (click)="sortBy = 'desc'; applyFilters()" [ngClass]="{'bg-white/20': sortBy === 'desc'}"
+                            class="px-2 md:px-4 h-7 md:h-9 flex items-center justify-center rounded-md text-[11px] md:text-sm leading-none transition-all">
+                            <i class="fas fa-sort-alpha-up"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 mt-8">
+        <!-- Loading State -->
+        <div *ngIf="loading" class="flex flex-col items-center justify-center py-20">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+            <p class="mt-4 text-slate-500">Loading encyclopedia...</p>
+        </div>
+
+        <!-- Content Sections -->
+        <div *ngIf="!loading">
+
+            <!-- Modern Section (First) -->
+            <section class="mb-12"
+                *ngIf="getModernSpecialties().length > 0 && (selectedCategory === 'all' || selectedCategory === 'modern')">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+                    <div class="flex items-center">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
+                            <i class="fas fa-microscope text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl md:text-2xl font-bold text-slate-800">Modern Sciences</h2>
+                            <p class="text-slate-500 text-xs md:text-sm">Clinical & surgical disciplines</p>
+                        </div>
+                    </div>
+
+                    <!-- Pagination for Modern -->
+                    <div class="hidden md:flex items-center bg-white border border-slate-200 rounded-lg p-1 shadow-sm"
+                        *ngIf="getModernSpecialties().length > itemsPerPage">
+                        <button (click)="prevPage('modern')" [disabled]="modernPage === 1"
+                            class="p-2 text-slate-400 hover:text-emerald-500 disabled:opacity-30 disabled:hover:text-slate-400">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span class="px-3 text-sm font-medium text-slate-600">
+                            {{modernPage}} / {{getTotalPages(getModernSpecialties().length)}}
+                        </span>
+                        <button (click)="nextPage('modern')"
+                            [disabled]="modernPage === getTotalPages(getModernSpecialties().length)"
+                            class="p-2 text-slate-400 hover:text-emerald-500 disabled:opacity-30 disabled:hover:text-slate-400">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+                    <div *ngFor="let key of getPaginatedModern()" [routerLink]="['/specialties', key]"
+                        class="specialty-card group bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-2 md:mb-4">
+                            <h3
+                                class="font-bold text-sm md:text-lg text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-1">
+                                {{specialties[key].title}}</h3>
+                            <span
+                                class="hidden md:block text-[10px] font-bold uppercase tracking-widest text-blue-500 bg-blue-50 px-2 py-1 rounded-md">Modern</span>
+                        </div>
+                        <p
+                            class="text-slate-500 text-[11px] md:text-sm line-clamp-2 md:line-clamp-3 mb-3 md:mb-4 flex-grow">
+                            {{specialties[key].definition}}</p>
+                        <div class="flex items-center text-blue-600 font-semibold text-[10px] md:text-sm mt-auto">
+                            Explore <i
+                                class="fas fa-arrow-right ml-1 md:ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination for Modern (Mobile Only) -->
+                <div class="flex md:hidden items-center justify-center bg-white border border-slate-200 rounded-lg p-1 mt-4 shadow-sm mx-auto w-fit"
+                    *ngIf="getModernSpecialties().length > itemsPerPage">
+                    <button (click)="prevPage('modern')" [disabled]="modernPage === 1"
+                        class="p-2 text-slate-400 active:text-emerald-500 disabled:opacity-30">
+                        <i class="fas fa-chevron-left text-xs"></i>
+                    </button>
+                    <span class="px-3 text-xs font-bold text-slate-600">
+                        {{modernPage}} / {{getTotalPages(getModernSpecialties().length)}}
+                    </span>
+                    <button (click)="nextPage('modern')"
+                        [disabled]="modernPage === getTotalPages(getModernSpecialties().length)"
+                        class="p-2 text-slate-400 active:text-emerald-500 disabled:opacity-30">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Ayurvedic Section -->
+            <section class="mb-8"
+                *ngIf="getAyurvedicSpecialties().length > 0 && (selectedCategory === 'all' || selectedCategory === 'ayurvedic')">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+                    <div class="flex items-center">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 mr-3">
+                            <i class="fas fa-leaf text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl md:text-2xl font-bold text-slate-800">Ayurvedic Wisdom</h2>
+                            <p class="text-slate-500 text-xs md:text-sm">Traditional Ashtang Ayurveda</p>
+                        </div>
+                    </div>
+
+                    <!-- Pagination for Ayurvedic -->
+                    <div class="hidden md:flex items-center bg-white border border-slate-200 rounded-lg p-1 shadow-sm"
+                        *ngIf="getAyurvedicSpecialties().length > itemsPerPage">
+                        <button (click)="prevPage('ayurvedic')" [disabled]="ayurvedicPage === 1"
+                            class="p-2 text-slate-400 hover:text-emerald-500 disabled:opacity-30 disabled:hover:text-slate-400">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span class="px-3 text-sm font-medium text-slate-600">
+                            {{ayurvedicPage}} / {{getTotalPages(getAyurvedicSpecialties().length)}}
+                        </span>
+                        <button (click)="nextPage('ayurvedic')"
+                            [disabled]="ayurvedicPage === getTotalPages(getAyurvedicSpecialties().length)"
+                            class="p-2 text-slate-400 hover:text-emerald-500 disabled:opacity-30 disabled:hover:text-slate-400">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+                    <div *ngFor="let key of getPaginatedAyurvedic()" [routerLink]="['/specialties', key]"
+                        class="specialty-card group bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-2 md:mb-4">
+                            <h3
+                                class="font-bold text-sm md:text-lg text-slate-800 group-hover:text-emerald-600 transition-colors line-clamp-1">
+                                {{specialties[key].title}}</h3>
+                            <span
+                                class="hidden md:block text-[10px] font-bold uppercase tracking-widest text-emerald-500 bg-emerald-50 px-2 py-1 rounded-md">Vedic</span>
+                        </div>
+                        <p
+                            class="text-slate-500 text-[11px] md:text-sm line-clamp-2 md:line-clamp-3 mb-3 md:mb-4 flex-grow">
+                            {{specialties[key].definition}}</p>
+                        <div class="flex items-center text-emerald-600 font-semibold text-[10px] md:text-sm mt-auto">
+                            Explore <i
+                                class="fas fa-arrow-right ml-1 md:ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination for Ayurvedic (Mobile Only) -->
+                <div class="flex md:hidden items-center justify-center bg-white border border-slate-200 rounded-lg p-1 mt-4 shadow-sm mx-auto w-fit"
+                    *ngIf="getAyurvedicSpecialties().length > itemsPerPage">
+                    <button (click)="prevPage('ayurvedic')" [disabled]="ayurvedicPage === 1"
+                        class="p-2 text-slate-400 active:text-emerald-500 disabled:opacity-30">
+                        <i class="fas fa-chevron-left text-xs"></i>
+                    </button>
+                    <span class="px-3 text-xs font-bold text-slate-600">
+                        {{ayurvedicPage}} / {{getTotalPages(getAyurvedicSpecialties().length)}}
+                    </span>
+                    <button (click)="nextPage('ayurvedic')"
+                        [disabled]="ayurvedicPage === getTotalPages(getAyurvedicSpecialties().length)"
+                        class="p-2 text-slate-400 active:text-emerald-500 disabled:opacity-30">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Medical Disclaimer (Fixed Position) -->
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-xl shadow-sm">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 text-amber-500 text-lg mt-0.5">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-xs md:text-sm text-amber-800 font-bold mb-1">Medical Disclaimer</p>
+                        <p class="text-[10px] md:text-xs text-amber-700/80 leading-relaxed">
+                            This encyclopedia is for educational purposes only and not a substitute for professional
+                            medical advice. Always consult with a qualified health provider.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No Results -->
+            <div *ngIf="filteredKeys.length === 0"
+                class="text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                <div class="text-6xl text-slate-200 mb-4">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800">No specialties found</h3>
+                <p class="text-slate-500">Try adjusting your search or filters</p>
+                <button (click)="searchQuery = ''; selectedCategory = 'all'; applyFilters()"
+                    class="mt-6 px-6 py-2 bg-emerald-600 text-white rounded-full hover:bg-emerald-700 transition-colors font-medium">
+                    Clear All Filters
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

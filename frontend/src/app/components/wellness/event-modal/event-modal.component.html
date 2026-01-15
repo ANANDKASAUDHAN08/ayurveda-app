@@ -1,0 +1,143 @@
+<div *ngIf="isOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 md:p-6">
+    <!-- Backdrop -->
+    <div (click)="closeModal()" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+
+    <div
+        class="relative bg-white w-full h-full sm:h-auto sm:max-w-lg sm:rounded-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300 flex flex-col">
+
+        <!-- Header - Matches Global Modal Pattern -->
+        <div class="px-6 py-6 text-white flex justify-between items-center sticky top-0 z-10 transition-colors duration-500"
+            [ngClass]="viewMode === 'allopathy' ? 'bg-gradient-to-r from-blue-600 to-indigo-700' : 'bg-gradient-to-r from-emerald-600 to-teal-700'">
+            <div>
+                <h3 class="text-xl md:text-2xl font-bold tracking-tight">
+                    {{ editEvent?.id ? 'Edit' : 'Add' }} Activity
+                </h3>
+                <p class="text-xs opacity-80 font-medium">{{ selectedDate | date:'fullDate' }}</p>
+            </div>
+            <button (click)="closeModal()"
+                class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 transition-all text-2xl">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Body - Clean & Spaced -->
+        <div class="p-6 md:p-8 space-y-6 overflow-y-auto max-h-[70vh]">
+            <!-- Activity Title -->
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Activity Title</label>
+                <div class="relative">
+                    <input [(ngModel)]="eventForm.title" type="text"
+                        placeholder="e.g., Morning Yoga, Taking Multivitamin"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 transition-all font-semibold text-slate-800 outline-none focus:bg-white focus:ring-4"
+                        [ngClass]="viewMode === 'allopathy' ? 'focus:border-blue-500 focus:ring-blue-500/10' : 'focus:border-emerald-500 focus:ring-emerald-500/10'">
+                </div>
+            </div>
+
+            <!-- Type & System Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Type</label>
+                    <select [(ngModel)]="eventForm.type"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 transition-all font-semibold text-slate-800 outline-none focus:bg-white"
+                        [ngClass]="viewMode === 'allopathy' ? 'focus:border-blue-500' : 'focus:border-emerald-500'">
+                        <option value="ritual">Ritual</option>
+                        <option value="medication">Medication</option>
+                        <option value="activity">Physical Activity</option>
+                        <option value="vital">Health Vital</option>
+                        <option value="appointment">Appointment</option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">System</label>
+                    <div class="flex bg-slate-100 p-1 rounded-xl">
+                        <button (click)="eventForm.sub_type = 'ayurveda'"
+                            [class.bg-white]="eventForm.sub_type === 'ayurveda'"
+                            [class.text-emerald-700]="eventForm.sub_type === 'ayurveda'"
+                            [class.shadow-sm]="eventForm.sub_type === 'ayurveda'"
+                            class="flex-1 py-2 rounded-lg text-xs font-bold uppercase transition-all duration-300">Ayu</button>
+                        <button (click)="eventForm.sub_type = 'allopathy'"
+                            [class.bg-white]="eventForm.sub_type === 'allopathy'"
+                            [class.text-blue-700]="eventForm.sub_type === 'allopathy'"
+                            [class.shadow-sm]="eventForm.sub_type === 'allopathy'"
+                            class="flex-1 py-2 rounded-lg text-xs font-bold uppercase transition-all duration-300">Allo</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Value & Unit (Conditional) -->
+            <div class="grid grid-cols-2 gap-4" *ngIf="eventForm.type === 'vital' || eventForm.type === 'medication'">
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Value / Dosage</label>
+                    <input [(ngModel)]="eventForm.value" type="text" placeholder="e.g., 120/80, 500mg"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 transition-all font-semibold text-slate-800 outline-none focus:bg-white"
+                        [ngClass]="viewMode === 'allopathy' ? 'focus:border-blue-500' : 'focus:border-emerald-500'">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Unit</label>
+                    <input [(ngModel)]="eventForm.unit" type="text" placeholder="e.g., mmHg, tablets"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 transition-all font-semibold text-slate-800 outline-none focus:bg-white"
+                        [ngClass]="viewMode === 'allopathy' ? 'focus:border-blue-500' : 'focus:border-emerald-500'">
+                </div>
+            </div>
+
+            <!-- Enhanced Scheduling Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6"
+                *ngIf="eventForm.type === 'medication' || eventForm.type === 'ritual'">
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Preferred Time Slot</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button *ngFor="let slot of ['morning', 'afternoon', 'evening', 'night']"
+                            (click)="eventForm.time_slot = slot"
+                            [class.bg-emerald-50]="eventForm.time_slot === slot && viewMode === 'ayurveda'"
+                            [class.border-emerald-200]="eventForm.time_slot === slot && viewMode === 'ayurveda'"
+                            [class.text-emerald-700]="eventForm.time_slot === slot && viewMode === 'ayurveda'"
+                            [class.bg-blue-50]="eventForm.time_slot === slot && viewMode === 'allopathy'"
+                            [class.border-blue-200]="eventForm.time_slot === slot && viewMode === 'allopathy'"
+                            [class.text-blue-700]="eventForm.time_slot === slot && viewMode === 'allopathy'"
+                            class="py-2 px-1 border border-slate-100 rounded-lg text-[10px] font-black uppercase tracking-tighter hover:bg-slate-50 transition-all">
+                            {{ slot }}
+                        </button>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Frequency</label>
+                    <select [(ngModel)]="eventForm.dose_freq"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 transition-all font-semibold text-slate-800 outline-none focus:bg-white"
+                        [ngClass]="viewMode === 'allopathy' ? 'focus:border-blue-500' : 'focus:border-emerald-500'">
+                        <option value="once">Once Daily</option>
+                        <option value="twice">Twice Daily (AM/PM)</option>
+                        <option value="thrice">Thrice Daily</option>
+                        <option value="four_times">Every 6 Hours</option>
+                        <option value="as_needed">As Needed (PRN)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Description (Optional)</label>
+                <textarea [(ngModel)]="eventForm.description" rows="3" placeholder="Add any notes here..."
+                    class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 transition-all font-semibold text-slate-800 outline-none resize-none focus:bg-white"
+                    [ngClass]="viewMode === 'allopathy' ? 'focus:border-blue-500' : 'focus:border-emerald-500'"></textarea>
+            </div>
+        </div>
+
+        <!-- Footer - Matches Global Footer Pattern -->
+        <div
+            class="border-t border-slate-200 p-4 md:p-6 bg-slate-50 flex flex-col-reverse sm:flex-row justify-end gap-3 sticky bottom-0">
+            <button *ngIf="editEvent?.id" (click)="onDelete()"
+                class="px-6 py-2.5 rounded-xl bg-white border border-red-100 text-red-600 font-bold text-sm hover:bg-red-50 transition-all sm:mr-auto">
+                <i class="fas fa-trash-alt mr-2"></i> Delete
+            </button>
+            <button (click)="closeModal()"
+                class="px-6 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm transition-all focus:ring-2 focus:ring-slate-300">
+                Cancel
+            </button>
+            <button (click)="onSave()"
+                class="px-8 py-2.5 rounded-xl text-white font-bold text-sm transition-all shadow-lg active:scale-95"
+                [ngClass]="viewMode === 'allopathy' ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/20' : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20'">
+                {{ editEvent?.id ? 'Update' : 'Save' }} Entry
+            </button>
+        </div>
+    </div>
+</div>

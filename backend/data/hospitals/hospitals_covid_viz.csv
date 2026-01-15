@@ -1,0 +1,167 @@
+,name,city,district,category,latitude,longitude,url,id,state,helpline
+0,All India Institute for Medical Sciences (AIIMS),Delhi,SOUTH WEST DELHI,government,28.5672,77.21,https://goo.gl/maps/8ihUksf6d7mDDbN4A,1,Delhi,011 2658 8500
+1,National Centre for Disease Control (NCDC),Delhi,New Delhi,government,28.679713,77.223564,https://goo.gl/maps/JMCegWci9kVrNMPa6,1,Delhi,011 2391 3148
+2,Lady Hardinge Medical College,Delhi,New Delhi,government,28.634399,77.213045,https://goo.gl/maps/3ae46ohydhqgWmrd9,1,Delhi,011 2336 3728
+3,Ram Manohar Lohia Hospital,Delhi,New Delhi,government,28.62594,77.202689,https://goo.gl/maps/Y6ze9bmmadWeWWMb8,1,Delhi,011 2340 4286
+4,Institute of Liver & Biliary Sciences,Delhi,New Delhi,government,28.506866,77.166204,https://goo.gl/maps/UuzxWbD8T8GXrKva9,1,Delhi,011 4630 0000
+5,Army Hospital Research & Referral,Delhi,New Delhi,government,28.58381,77.157809,https://goo.gl/maps/w8CpMe3itS1hQLvg6,1,Delhi,011 2333 8199
+6,Lal Path Labs,Delhi,North West Delhi,private,28.739089,77.136464,https://goo.gl/maps/FrjUm3m9LYUadFft7,1,Delhi,011 3025 8600
+7,Dr Dangs Lab,Delhi,South Delhi,private,28.550377,77.20345,https://g.page/DrDangsLab?share,1,Delhi,099999 92020
+8,"Laboratory Services, Indraprastha Apollo Hospitals",Delhi,South East Delhi,private,28.540832,77.283447,https://g.page/apollo-hospital-delhi?share,1,Delhi,1860 500 1066
+9,"Max Lab, Max Super Spciality Hospital",Delhi,South Delhi,private,28.527855,77.212138,https://g.page/Maxsaket?share,1,Delhi,011 2651 5050
+10,"Sir Ganga Ram Hospital Clinical Lab Services, Sir Ganga Ram Hospital",Delhi,Central Delhi,private,28.639028,77.19007,https://goo.gl/maps/XRYxodk2WSoswbEr7,1,Delhi,011 2575 0000
+11,Oncquest Labs Ltd,Delhi,New Delhi,private,28.568738,77.201837,https://goo.gl/maps/inkeMFqBXU8VucKt5,1,Delhi,011 3061 1432
+12,Prognosis Laboratories,Delhi,Central Delhi,private,28.580238,77.050985,https://goo.gl/maps/oGJsQ1mGYYmL5jze6,1,Delhi,081301 92290
+13,City X-Ray & Scan Clinic Pvt Ltd,Delhi,New Delhi,private,28.640535,77.103509,https://g.page/City_x_ray_and_scan_clinicpvtltd?share,1,Delhi,095777 27772
+14,Maulana Azad Medical College,Delhi,New Delhi,other,28.63574,77.240049,https://goo.gl/maps/h1VtzrhxkFt3ATMt9,1,Delhi,011 2323 9279
+15,Indira Gandhi Government Medical College,Nagpur,Nagpur,government,21.153728,79.093973,https://goo.gl/maps/d1AXLSTGmGgAoNW77,2,Maharashtra,0712 272 5423
+16,Kasturba Hospital for Infectious Diseases,Mumbai,Mumbai,government,18.984118,72.829849,https://goo.gl/maps/thCucwsUczhGhAz38,2,Maharashtra,2223083901
+17,"National Institute of Virology, Pune",Pune,Pune,government,18.520708,73.872685,https://goo.gl/maps/KYTvzCc36qvFXjpa6,2,Maharashtra,020 2612 7301
+18,"National Institute of Virology, Mumbai Unit",Mumbai,Mumbai,government,19.002067,72.844032,https://goo.gl/maps/WA7EWF8MbeS61Y1g9,2,Maharashtra,094210 18275
+19,"Seth GS Medical College & KEM Hospital, Mumbai",Mumbai,Mumbai,government,19.00252,72.842075,https://goo.gl/maps/D7fZMCQNuEa8mUJS8,2,Maharashtra,022 2410 7000
+20,"Armed Forces Medical College, Pune",Pune,Pune,government,18.50404,73.890097,https://goo.gl/maps/mGLJhVmiEgKExvTe7,2,Maharashtra,020 2337 3158
+21,"BJ Medical College, Pune",Pune,Pune,government,18.526295,73.870917,https://goo.gl/maps/T4s6gxt5WKhvdXtx9,2,Maharashtra,020 2612 8000
+22,"Grant Medical College & Sir JJ Hospital, Mumbai",Mumbai,Mumbai,government,18.963491,72.833579,https://goo.gl/maps/PEYMxL34DZo7rH4o8,2,Maharashtra,022 2373 5555
+23,Thyrocare Technologies Limited,Mumbai,Mumbai,private,19.061707,73.02558,https://goo.gl/maps/KgqqT7WHQkdxJmDC8,2,Maharashtra,2227622762
+24,Suburban Diagnostics (India) Pvt. Ltd.,Mumbai,Mumbai,private,19.137596,72.825472,https://goo.gl/maps/yACdzgZyP5Hm9HYA6,2,Maharashtra,022 6170 0000
+25,Metropolis Healthcare Ltd,Mumbai,Mumbai,private,19.082013,72.885721,https://goo.gl/maps/DKbXGwp9RqQpKVsbA,2,Maharashtra,022 3399 3939
+26,"Sir H.N. Reliance Foundation Hospital and Research Centre, Molecular Medicine, Reliance Life Sciences Pvt. Ltd.",Navi Mumbai,Navi Mumbai,private,19.139213,73.004457,https://goo.gl/maps/cWRaWE28aDa4pSHe6,2,Maharashtra,022 4067 8000
+27,SRL Limited,Mumbai,Mumbai,private,19.171399,72.845614,https://goo.gl/maps/opFUrLQmFBCJ4Cb7A,2,Maharashtra,1800 22 2000
+28,A.G. Diagnostics Pvt Ltd,Mumbai,Mumbai,private,18.518807,73.830917,https://goo.gl/maps/9fahvb3qromCCr5Y7,2,Maharashtra,020 6763 6763
+29,Kokilaben Dhirubhai Ambani Hospital Laboratory,Mumbai,Mumbai,private,19.131272,72.825062,https://g.page/kokilaben?share,2,Maharashtra,022 3069 6969
+30,InfeXn Laboratories Private Limited,Mumbai,Mumbai,private,19.195041,72.94856,https://g.page/Infexn?share,2,Maharashtra,022 2583 6546
+31,iGenetic Diagnostics Pvt Ltd,Mumbai,Mumbai,private,19.110265,72.887085,https://goo.gl/maps/BsBXmjTTVWqheaHN9,2,Maharashtra,1800 103 1715
+32,"Govt. Medical College, Aurangabad",Aurangabad,Aurangabad,other,19.89011,75.318395,https://goo.gl/maps/SVZxFhyy9ovqs2Hv8,2,Maharashtra,0240 240 2412
+33,"V. M. Government Medical College, Solapur",Solapur,Solapur,other,17.665321,75.909627,https://goo.gl/maps/XfG7ePDwKsKJ9zqX7,2,Maharashtra,217 2310766
+34,"Shri Bhausaheb Hire Government Medical College, Dhule",Dhule,Dhule,other,20.864044,74.762367,https://goo.gl/maps/qHr4Vs21H512hq796,2,Maharashtra,02562 239 407
+35,Sawai Maansingh Hospital,Jaipur,Jaipur,government,26.905443,75.815549,https://goo.gl/maps/ZYJ9qNMkz3NaJrxC8,3,Rajasthan,1412518222
+36,Dr. Sampurnanand Medical College (SNMC),Jodhpur,Jodhpur,government,26.269487,73.007409,https://goo.gl/maps/3oP7SEAhTqnu8aCM8,3,Rajasthan,0291 243 4374
+37,Jhalawar Medical College,Jhalawar,Jhalawar,government,24.585564,76.161035,https://goo.gl/maps/bB3nNT8eAMAu4BL87,3,Rajasthan,07432 233 388
+38,Sardar Patel Medical College,Bikaner,Bikaner,government,28.006403,73.330502,https://goo.gl/maps/sYroHcvWUdPuW6wa9,3,Rajasthan,0151 222 0115
+39,Rabindra Nath Tagore Medical College,Udaipur,Udaipur,government,24.588231,73.694966,https://goo.gl/maps/JZf4Q29HNHtMLkN37,3,Rajasthan,0294 241 8258
+40,"All India Institute of Medical Sciences, Jodhpur",Jodhpur,Jodhpur,government,26.240151,73.005594,https://goo.gl/maps/LA7zGifE38NFmgvn8,3,Rajasthan,0291 274 0741
+41,"JLN Medical College, Ajmer",Ajmer,Ajmer,government,26.467301,74.63634,https://goo.gl/maps/8bRo9EdSUgUrJay1A,3,Rajasthan,0145 242 5050
+42,"Govt. Medical College, Kota",Kota,Kota,government,25.123596,75.82964,https://goo.gl/maps/2Rv2L74d86R4Y5mx9,3,Rajasthan,0744 247 0674
+43,King Institute of Preventive Medicine & Research,Chennai,Guindy,government,13.012442,80.217615,https://goo.gl/maps/LGKJzEeTsHgCcrCE8,4,Tamil Nadu,044 2250 1520
+44,Theni Government Medical College,Theni,Theni,government,10.00633,77.55364,https://goo.gl/maps/y19GhvR3Zbxq3LDG8,4,Tamil Nadu,04546 263 668
+45,Tirunelveli Medical College,Tirunelveli,Tirunelveli,government,8.711805,77.750812,https://goo.gl/maps/njjzh8MVnke9A5Ny7,4,Tamil Nadu,0462 257 2733
+46,Thiruvarur Government Medical college,Thiruvarur,Thiruvarur,government,10.775823,79.605097,https://goo.gl/maps/BKUraLsDkwEVVHPw9,4,Tamil Nadu,Not Known
+47,"Madras Medical College, Chennai",Chennai,Chennai,government,13.079988,80.272279,https://goo.gl/maps/KuCtfiKWavuRfex48,4,Tamil Nadu,044 2530 5000
+48,"Kumar Mangalam Govt. Medical College, Salem",Salem,Salem,government,11.655294,78.152822,https://goo.gl/maps/Xy43q7YVuAS9twYp7,4,Tamil Nadu,0427 221 0674
+49,"Coimbatore Medical College, Coimbatore",Coimbatore,Coimbatore,government,11.028701,77.023903,https://goo.gl/maps/7PaQiRn4iMXkhTss9,4,Tamil Nadu,0422 257 4375
+50,"Govt. Medical College, Villupuram",Villupuram,Villupuram,government,11.994307,79.515207,https://goo.gl/maps/R6Qy5nWUzQCU2FQd7,4,Tamil Nadu,1800 180 5522
+51,"Madurai Medical College, Madurai",Thiruvarur,Thiruvarur,government,10.775823,79.605097,https://goo.gl/maps/BKUraLsDkwEVVHPw9,4,Tamil Nadu,9444487898
+52,"Govt. Medical College, Trichy",Trichy,Trichy,government,10.797369,78.676662,https://goo.gl/maps/Afiw4ARHyaTycnVy7,4,Tamil Nadu,0431 240 1011
+53,"Dept. of Clinical Virology, CMC, Vellore",Vellore,Vellore,private,12.924606,79.134811,https://goo.gl/maps/BDG6s6v7tnGsfsvs7,4,Tamil Nadu,0416 228 1000
+54,"Department of Laboratory Services, Apollo Hospitals Enterprise Ltd",Chennai,Chennai,private,13.061091,80.253357,https://goo.gl/maps/faqV6GTG95hrJPDV7,4,Tamil Nadu,18605001066
+55,Neuberg Ehrlich Lab Pvt Ltd,Chennai,Chennai,private,13.048596,80.266064,https://goo.gl/maps/yLx2kyj1qBCF3Bc6A,4,Tamil Nadu,097003 69700
+56,Sri Ramachandra Medical College & Research Institute,Chennai,Porur,private,13.038366,80.143423,https://g.page/SRIHER?share,4,Tamil Nadu,044 4592 8500
+57,King George's Medical University,Lucknow,Lucknow,government,26.868674,80.916269,https://goo.gl/maps/e9JHACDbX67PhEmL7,5,Uttar Pradesh,0522 225 8880
+58,"Institute of Medical Sciences, Banaras Hindu University",Varanasi,Varanasi,government,25.274473,82.999505,https://goo.gl/maps/RSVDXGQ2itYgY6Kz9,5,Uttar Pradesh,0542 236 7568
+59,"Jawaharlal Nehru Medical College, AMU",Aligarh,Aligarh,government,27.918637,78.085751,https://goo.gl/maps/prCvpQPcuF4CHkbs5,5,Uttar Pradesh,5712721113
+60,"Command Hospital, Lucknow",Lucknow,Lucknow,government,26.817452,80.940818,https://goo.gl/maps/fpkQHWWWkcNxwhj6A,5,Uttar Pradesh,5222296577
+61,"Lala Lajpat Rai Memorial Medical College, Meerut",Meerut,Meerut,government,28.960007,77.750223,https://goo.gl/maps/mXNfFxZmKhPoWpN99,5,Uttar Pradesh,0121 276 0888
+62,"Sanjay Gandhi Post Graduate Institute, Lucknow",Lucknow,Lucknow,government,26.743546,80.945206,https://goo.gl/maps/d9s1mZgfTh1Fpp3o9,5,Uttar Pradesh,0522 266 8700
+63,"Uttar Pradesh RIMS, Saifai",Saifai,Saifai,government,26.960841,78.960586,https://goo.gl/maps/811nGvdfNffAVLUz7,5,Uttar Pradesh,05688 276 569
+64,"Regional Medical Research Centre, Gorakhpur",Gorakhpur,Gorakhpur,government,26.761851,83.366207,https://goo.gl/maps/PyVgZArsEWgQn5C88,5,Uttar Pradesh,0551 233 0173
+65,RML Mehrotra Pathology Pvt Ltd,Gorakhpur,Gorakhpur,private,26.8784,80.932652,https://goo.gl/maps/QCq4o5gs9g8FYCCg7,5,Uttar Pradesh,0522 403 4100
+66,Government Medical College Haldwani,Haldwani,Haldwani,government,29.206532,79.521457,https://goo.gl/maps/EEqH4x37jTnPj9cb8,6,Uttarakhand,05946 282 824
+67,"All India Institute of Medical Sciences, Rishikesh",Rishikesh,Rishikesh,government,30.078965,78.286072,https://goo.gl/maps/qqfAA48ydzMDA9xD6,6,Uttarakhand,084750 00144
+68,National Institute of Cholera and Enteric Diseases,Kolkata,Beleghata,government,22.56585,88.399808,https://goo.gl/maps/n2TJbtE33wjot7su5,7,West Bengal,033 2363 3373
+69,Institute of Post Graduate Medical Education and Research (IPGMER),Kolkata,Kolkata,government,22.53948,88.341843,https://goo.gl/maps/VAgDkd9HmxMJ57h37,7,West Bengal,033 2204 1101
+70,"North Bengal Medical College, Darjeeling",Darjeeling,Darjeeling,government,26.690289,88.385161,https://goo.gl/maps/CFbPz3AgJSrHzEjS9,7,West Bengal,0353 258 5478
+71,"Midnapore Medical College, Midnapore",Midnapore,Midnapore,government,22.421706,87.323119,https://goo.gl/maps/yTeot6DS5pdFfkcn8,7,West Bengal,03222 222 400
+72,Apollo Gleneagles Hospitals,Kolkata,Kolkata,private,22.573378,88.401024,https://goo.gl/maps/WvYY6Xz3xLd6dK7M8,7,West Bengal,033 2320 3040
+73,Tata Medical Center,Kolkata,Kolkata,private,22.577196,88.479686,https://goo.gl/maps/v9WwgyozZEtpyc3TA,7,West Bengal,033 6605 7000
+74,"School of Tropical Medicine, Kolkata",Kolkata,Kolkata,other,22.574957,88.359772,https://goo.gl/maps/fQfswrcs9Q5WQier7,7,West Bengal,033 2212 3697
+75,All India Institute of Medical Sciences (AIIMS) Bhopal,Bhopal,Bhopal,government,23.206767,77.460166,https://goo.gl/maps/wzHtjPDiGJnZQn7TA,8,Madhya Pradesh,0755 267 2322
+76,National Institute of Research in Tribal Health (NIRTH),Jabalpur,Jabalpur,government,23.14717,79.878866,https://goo.gl/maps/p3eiEgkVXCVKhbuy6,8,Madhya Pradesh,076123 70800
+77,"Mahatma Gandhi Memorial Medical College, Indore",Indore,Indore,government,22.71433,75.882881,https://goo.gl/maps/ZrwZSAddScut5grV7,8,Madhya Pradesh,0731 252 7383
+78,"Gandhi Medical College, Bhopal",Jabalpur,Jabalpur,government,23.259927,77.390959,https://goo.gl/maps/EKtqT7bxuMamSZe5A,8,Madhya Pradesh,0755 254 0590
+79,Bhopal Memorial Hospital & Research Centre,Bhopal,Bhopal,other,23.300389,77.416805,https://goo.gl/maps/DeQTYjUiWwrfWsT86,8,Madhya Pradesh,0755 274 2212
+80,"National Institute of Virology, Kerala Unit",Alappuzha,Alappuzha,government,9.418524,76.343211,https://goo.gl/maps/pRDBJDYvS5LbKHPF7,9,Kerala,477 2970004
+81,Government Medical College Thiruvananthapuram,Thriuvananthapuram,Thriuvananthapuram,government,8.523505,76.928289,https://goo.gl/maps/FM1exGV7KEm3Ga3V9,9,Kerala,0471 252 8300
+82,Government Medical College Kozhikode,Kozhikhode,Kozhikhode,government,11.27222,75.837203,https://goo.gl/maps/TDbCwNooYTsuQ7DP8,9,Kerala,0495 235 0216
+83,Government Medical College Thrissur,Thrissur,Thrissur,government,10.614592,76.195885,https://goo.gl/maps/hUHUHeM2aqRLDpJ59,9,Kerala,0487 220 0310
+84,"Rajiv Gandhi Center for Biotechnology, Thiruvanathapuram",Thiruvanathapuram,Thiruvanathapuram,government,8.492356,76.966875,https://goo.gl/maps/qdcVeyStXmbNcnLW9,9,Kerala,0471 252 9400
+85,"Sree Chitra Tirunal Institute of Medical Sciences, Thiruvanathapuram",Thiruvanathapuram,Thiruvanathapuram,government,8.521674,76.926393,https://goo.gl/maps/HMRB48SnFLfduzgF8,9,Kerala,0471 244 3152
+86," State Public Health Laboratory, Trivandrum",Trivandrum,Trivandrum,government,8.498273,76.939466,https://goo.gl/maps/PoBg3NjbjaFeZu5R6,9,Kerala,0471 247 2225
+87,"Interuniversity, Kottayam",Kottayam,Kottayam,government,9.657966,76.532766,https://goo.gl/maps/Sdx93wRr8VVCTMAH6,9,Kerala,0481 273 1669
+88,"Malabar Cancer Center, Thalassery",Thalassery,Thalassery,government,11.749401,75.52394,https://goo.gl/maps/HuwDyuAG9hz5umfR6,9,Kerala,0490 235 5881
+89,DDRC SRL Diagnostics Pvt Ltd,Ernakulam,Ernakulam,private,9.961473,76.292805,https://goo.gl/maps/kG4J5qqaMsi3Jiz66,9,Kerala,090745 58942
+90,MIMS Lab Services,Kozhikode,Kozhikode,private,11.245826,75.798648,https://goo.gl/maps/tfm6X4XQDyt2MATF8,9,Kerala,0495 248 8000
+91,"Regional Cancer Centre, Thiruvanathapuram",Thiruvanathapuram,Thiruvanathapuram,other,8.520936,76.92477,https://goo.gl/maps/MqkUWSytZJYKXB9FA,9,Kerala,0471 244 2541
+92,Bangalore Medical College & Research Institute (BMRCI),Bengaluru,Bengaluru,government,12.959443,77.57474,https://goo.gl/maps/e9sfP669g39oYPER9,10,Karnataka,080 2670 1529
+93,National Institute of Virology Field Unit Bangalore,Bengaluru,Bengaluru,government,12.93733,77.590832,https://goo.gl/maps/LaBHGJJ5es28kp2V6,10,Karnataka,Not Known
+94,Mysore Medical College & Research Institute,Mysuru,Mysuru,government,12.315145,76.650405,https://goo.gl/maps/fXSpJUS7EaxCtDwm8,10,Karnataka,0821 252 0512
+95,Hassan Institiute of Medical Sciences,Hassan,Hassan,government,13.004879,76.102707,https://goo.gl/maps/u4pBpLHD8vd9suvz5,10,Karnataka,081722 31699
+96,Shimoga Institute of Medical Sciences,Shivamogga,Shivamogga,government,13.933005,75.566903,https://goo.gl/maps/t1wAkWL6TJxnNn3h7,10,Karnataka,081822 29933
+97,Command Hospital (Air Force) Bengaluru,Bengaluru,Bengaluru,government,12.964646,77.628134,https://goo.gl/maps/6UDg5mVHG4jHjuGZ9,10,Karnataka,080 2530 1215
+98," Gulbarga Institute of Medical Sciences, Gulbarga",Gulbarga,Gulbarga,government,17.327233,76.844095,https://goo.gl/maps/YNUtowztmo9WaXdE7,10,Karnataka,084722 27252
+99,Neuberg Anand Reference Laboratory,Bengaluru,Bengaluru,private,12.982106,77.603799,https://goo.gl/maps/TYKBhN9yvowfPEWZ6,10,Karnataka,1800 425 1974
+100,"Cancyte Technologies Pvt Ltd, Bengaluru",Bengaluru,Bengaluru,private,12.957597,77.566771,https://goo.gl/maps/VEMhfzmwtR4qYMV47,10,Karnataka,Not Known
+101,B.J. Medical College and Civil hospital,Ahmedabad,Ahmedabad,government,23.052727,72.602878,https://goo.gl/maps/dPNdPVuunccEnEY56,11,Gujarat,079 2268 0074
+102,M.P.Shah Government Medical College,Jamnagar,Jamnagar,government,22.477396,70.065323,https://goo.gl/maps/VbNyUF24PJoYr92d8,11,Gujarat,0288 255 3515
+103,"Govt. Medical College, Surat",Surat,Surat,government,21.178065,72.82026,https://goo.gl/maps/v92wrFEJinXQQvuC7,11,Gujarat,0261 224 4175
+104,"Govt. Medical College, Bhavnagar",Bhavnagar,Bhavnagar,government,21.768719,72.13699,https://goo.gl/maps/c92RdbeNBWjT6HQT6,11,Gujarat,0278 251 0236
+105,"Govt. Medical College, Vadodara",Vadodara,Vadodara,government,22.304379,73.191825,https://goo.gl/maps/4Z9ET46vAcXdD17FA,11,Gujarat,0265 242 1594
+106,Unipath Specialty laboratory limited,Ahmedabad,Ahmedabad,private,23.019104,72.555663,https://goo.gl/maps/A9ngfMu2s9N93wRz8,11,Gujarat,2755 3594/95
+107,Supratech Micropath Laboratory & Research Institute Pvt Ltd,Ahmedabad,Ahmedabad,private,23.019829,72.559287,https://goo.gl/maps/CX5TeEuVKjHN5aEP7,11,Gujarat,079 4040 8181
+108,SN GeneLab Pvt Ltd,Surat,Surat,private,21.183376,72.814367,https://goo.gl/maps/uBnFKDjQwsM7rpK66,11,Gujarat,095861 77755
+109,Pangenomics International Pvt Ltd,Ahmedabad,Ahmedabad,private,23.01956,72.56061,https://goo.gl/maps/rG1jnpnTj1g3z8r59,11,Gujarat,79 40372720
+110,BPS Government Medical College,Sonipat,Sonipat,government,29.152207,76.808367,https://goo.gl/maps/XDsRXh2tbCDZP4yA8,12,Haryana,01263 283 025
+111,Pandit Bhagwat Dayal Sharma Post Graduate Institute of Medical Sciences,Rohtak,Rohtak,government,28.885183,76.608749,https://goo.gl/maps/6u4fYD9Bb9FxQc8Y8,12,Haryana,01262 281 307
+112,Strand Life Sciences,Gurugram,Gurugram,private,28.429439,77.015539,https://goo.gl/maps/A4Ym4MbZKDUSnZLa7,12,Haryana,080 4078 7263
+113,SRL Limited,Gurugram,Gurugram,private,28.489102,77.061688,https://goo.gl/maps/J5QHkuQ1PrPXenrp7,12,Haryana,0124 441 2121
+114,Modern Diagnostic & Research Centre-Lab,Gurgaon,Gurgaon,private,28.466006,77.026975,https://goo.gl/maps/Y5ySq92gQc2JJ4pw9,12,Haryana,0124 671 2000
+115,Core Diagnostics Pvt Ltd,Hyderabad,Hyderabad,private,28.509293,77.091651,https://g.page/COREDx?share,12,Haryana,1800 103 2673
+116,Indira Gandhi Medical College & Hospital,Shimla,Shimla,government,31.106499,77.182276,https://goo.gl/maps/pvKtkLcaFcbK3q1b9,13,Himachal Pradesh,0177 265 4713
+117,Dr. Rajendra Prasad Government Medical College,Shimla,Shimla,government,32.099224,76.298741,https://goo.gl/maps/2fK5zkzufi6FjiFN9,13,Himachal Pradesh,0189 226 7115
+118,Sher - i - Kashmir Institute of Medical Sciences,Srinagar,Srinagar,government,34.136156,74.800046,https://goo.gl/maps/8eeNVp8e7mmT1La68,14,Jammu and Kashmir,0194 240 1013
+119,Government Medical College Jammu,Jammu,Jammu,government,32.735871,74.854675,https://goo.gl/maps/uD1LjD6y29kyuU7F7,14,Jammu and Kashmir,0194 240 1013
+120,Government Medical College Srinagar,Srinagar,Srinagar,government,34.086116,74.798866,https://goo.gl/maps/wKD5A4PAZkqRxaFG7,14,Jammu and Kashmir,0194 245 3114
+121,Command Hospital (NC) Udhampur,Udhampur,Udhampur,government,32.930785,75.135349,https://goo.gl/maps/V8UcKtvRn4VxMqYA6,14,Jammu and Kashmir,090856 23485
+122,MGM Medical College,Jamshedpur,Jamshedpur,government,22.843838,86.232355,https://goo.gl/maps/E5pSRoCcFXVSjZoS7,15,Jharkhand,0657 236 0859
+123,"Rajendra Institute of Medical Sciences, Ranchi",Ranchi,Ranchi,government,23.39151,85.348476,https://goo.gl/maps/VprVzWDJchqNsSEK6,15,Jharkhand,0651 254 1533
+124,NEIGRI of Health and Medical Sciences (NEIGHRHMS),Shillong,Shillong,government,25.591484,91.94013,https://goo.gl/maps/45k6vhJ6JkpovxMG6,16,Meghalaya,0651 254 1533
+125,J N Institute of Medical Sciences Hospital,Imphal-East,Imphal-East,government,24.81004,93.960979,https://goo.gl/maps/eMLwwU4KLznGvq2q9,17,Manipur,044 2000 2001
+126,Regional Institute of Medical Sciences,Imphal,Imphal,government,24.815841,93.922805,https://goo.gl/maps/xWd7aDrr2e9L5Lyn6,17,Manipur,0385 241 4629
+127,Regional Medical Research Center,Bhubaneswar,Bhubaneswar,government,20.316662,85.819509,https://goo.gl/maps/j27kHYyzUmsDrLMr7,18,Odisha,0674 247 6789
+128,"All India Institute of Medical Sciences, Bhubaneshwar",Bhubaneswar,Bhubaneswar,government,20.231118,85.775042,https://goo.gl/maps/J8Biat16Vb6GbpvD9,18,Odisha,0674 247 6789
+129,"Dept of Lab Services, Apollo Hospitals, Bhubaneswar",Bhubaneswar,Bhubaneswar,private,20.305708,85.831743,https://goo.gl/maps/AWcSxig2VXZasnEm6,18,Odisha,0674 666 1066
+130,Government Medical College Patiala,Patiala,Patiala,government,30.32797,76.385075,https://goo.gl/maps/a64fwyTSLp9AQGPw9,19,Punjab,0175 221 2018
+131,"Government Medical College, Amritsar",Amritsar,Amritsar,government,31.654054,74.885301,https://goo.gl/maps/5yyDjSqP7S78g5oF9,19,Punjab,0183 242 6918
+132,Jawaharlal Institute of Postgraduate Medical Education & Research (JIPMER),Puducherry,Puducherry,government,11.950491,79.799718,https://goo.gl/maps/jXQcJLJVK14Lcc1B9,20,Puducherry,0183 242 6918
+133,Gandhi Medical College,Secunderabad,Secunderabad,government,17.424916,78.50437,https://goo.gl/maps/Z3Qy61VntG2Dq5Hn8,21,Telangana,040 2750 2742
+134,Osmania Medical College,Hyderabad,Hyderabad,government,17.3822,78.482848,https://goo.gl/maps/Bsan9NUjDcVyFUfV7,21,Telangana,040 2465 3992
+135,"Sir Ronald Ross of Tropical & Communicable Diseases, Hyderabad",Hyderabad,Hyderabad,government,17.445528,78.472241,https://goo.gl/maps/Taazo2UQH5s34ste6,21,Telangana,040 2768 2218
+136,"Nizam’s Institute of Medical Sciences, Hyderabad",Hyderabad,Hyderabad,government,17.42193,78.452006,https://goo.gl/maps/wuF9xdYKjtc5aWtf7,21,Telangana,040 2348 9000
+137,"Institute of Preventive Medicine, Hyderabad",Hyderabad,Hyderabad,government,17.394057,78.490283,https://goo.gl/maps/Bp7dJ9dKJnwEtUFLA,21,Telangana,040-29569043
+138,"Laboratory Services, Apollo Hospitals",Hyderabad,Hyderabad,private,17.414876,78.412348,https://g.page/apollo-hospitals-hyderabad?share,21,Telangana,1860 500 1066
+139,Vijaya Diagnostic Centre Pvt Ltd,Hyderabad,Hyderabad,private,17.404162,78.479876,https://goo.gl/maps/4R23G2z6pFd4CNPJ6,21,Telangana,040 2342 0422
+140,Vimta Labs Ltd,Hyderabad,Hyderabad,private,17.47064,78.602305,https://goo.gl/maps/GFN9X6VJDZeR6QKq7,21,Telangana,040 2726 4141
+141,"Apollo Health and Lifestyle Limited, Diagnostic Labortory",Secunderabad,Secunderabad,private,17.469123,78.48433,https://goo.gl/maps/eFPK1JRehvVKHf6z5,21,Telangana,091009 11393
+142,Dr. Remedies Labs Private Ltd,Hyderabad,Hyderabad,private,17.424495,78.453049,https://goo.gl/maps/rDwkxgRkCwHVxNtF9,21,Telangana,040 2335 0611
+143,Pathcare Labs Pvt Ltd,Hyderabad,Hyderabad,private,17.444745,78.469191,https://goo.gl/maps/tNErfYoCmJu1f7Xk7,21,Telangana,088860 91717
+144,"American Institute of Pathology And Lab Sciences Pvt Ltd, Citizens Hospital",Hyderabad,Hyderabad,private,17.470604,78.3114,https://g.page/CitizensHospital?share,21,Telangana,040 6719 1919
+145,Government Medical College Agartala,Agartala,Agartala,government,23.860522,91.292783,https://goo.gl/maps/iA8uRFGCSzwRYN2R8,22,Tripura,0381 235 6701
+146,Rajendra Memorial Research Institute of Medical Sciences,Patna,aaa,government,25.599913,85.197797,https://goo.gl/maps/n2wfXocUHipDdj4W9,23,Bihar,0612 263 6651
+147,"Indira Gandhi Institute Medical Sciences, Patna",Patna,Patna,government,25.610556,85.088932,https://goo.gl/maps/wXHxUGHz2SUyuTvx9,23,Bihar,0612 229 7099
+148,"Patna Medical College, Patna",Patna,Patna,other,25.620886,85.160286,https://goo.gl/maps/VdEqQ8BtQVN5T2Mq6,23,Bihar,0612 230 0343
+149,"Darbhanga Medical College, Darbhanga",Darbhanga,Darbhanga,other,26.133777,85.901574,https://goo.gl/maps/yZy3f6eceFhuHSaP7,23,Bihar,6272233092
+150,Post Graduate Institute of Medical Education & Research,Chandigarh,Chandigarh,government,30.765034,76.774991,https://goo.gl/maps/o3MXHo8hTeX9RU7s9,24,Chandigarh,0172 274 7585
+151,"Govt. Medical College, Chandigarh",Chandigarh,Chandigarh,government,30.708822,76.780485,https://goo.gl/maps/RyJqjpPX7AQUUPyK6,24,Chandigarh,0172 260 1023
+152,All India Institute  Medical Sciences,Raipur,Raipur,government,21.256797,81.579194,https://goo.gl/maps/nRx4ZcFtg6en8tK8A,25,Chhattisgarh,077125 72240
+153,"Late Baliram Kashyap M Govt. Medical College, Jagdalpur",Jagdalpur,Jagdalpur,government,19.050683,81.948179,https://goo.gl/maps/rhhUKyaHCDzLCPxT8,25,Chhattisgarh,077822 92878
+154,Regional Medical Research Centre,Port Blair,Port Blair,government,20.31671,85.819494,https://goo.gl/maps/aaAv1S6ZiiyNGZya8,26,Andaman & Nicobar Islands,0674 230 1322
+155,Sri Venkateswara Institute of Medical Sciences,Tirupati,Tirupati,government,13.638115,79.403965,https://goo.gl/maps/sr2BptzaZ3PZUvSq7,27,Andhra Pradesh,0877 228 7777
+156,Andhra Medical College,Visakhapatnam,Visakhapatnam,government,17.706495,83.30484,https://goo.gl/maps/D7sFJ2NiH1A5mgU99,27,Andhra Pradesh,089127 12258
+157,Government Medical College,Anantapur,Anantapur,government,14.671293,77.592895,https://goo.gl/maps/KxHBYpDojhf96ciu9,27,Andhra Pradesh,044-25333319
+158,Sidhartha Medical College,Vijayawada,Vijayawada,government,16.517449,80.671302,https://goo.gl/maps/T1UYqedvBRb4bz3V7,27,Andhra Pradesh,0866 245 0390
+159,Rangaraya Medical College,Kakinada,Kakinada,government,16.979127,82.237259,https://goo.gl/maps/UQNVrtpQWdQrDr7u7,27,Andhra Pradesh,0884 236 3401
+160,Guntur Medical College,Guntur,Guntur,other,16.298177,80.438256,https://goo.gl/maps/FEi3p69qWo7yRLvt8,27,Andhra Pradesh,0863 223 4625
+161,Gauhati Medical College,Guwahati,Guwahati,government,26.154538,91.770104,https://goo.gl/maps/mUkC78SnRh67Wwa99,28,Assam,0361 213 2751
+162,Regional Medical Research Center (RMCR),Dibrugarh,Dibrugarh,government,27.472838,94.982893,https://goo.gl/maps/3YFnLjGYntuBBNkT6,28,Assam,0373 238 1494
+163,Silchar Medical College,Silchar,Silchar,government,24.775934,92.795077,https://goo.gl/maps/3cCjnP9PpZ7AhCZJA,28,Assam,03842 229 110
+164,Jorhat Medical College,Jorhat,Jorhat,government,26.74248,94.195198,https://goo.gl/maps/HJY8sXAqcn9J4b726,28,Assam,0376 237 0107
+165,"Fakhruddin Ali Ahmed Medical College, Barpeta",Barpeta,Barpeta,other,26.324421,90.984979,https://goo.gl/maps/xGrAndZqTTUonSsg8,28,Assam,03665 252 081

@@ -58,9 +58,20 @@ exports.verify2FASetup = async (req, res) => {
         const tempSecret = users[0].two_factor_temp_secret;
 
         // Verify code
+        if (!/^\d{6}$/.test(code)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid code format. Please enter a 6-digit number.'
+            });
+        }
+
         const isValid = authenticator.check(code, tempSecret);
         if (!isValid) {
-            return res.status(400).json({ message: 'Invalid verification code' });
+            console.warn(`[2FA] Failed setup verification attempt for user ${userId}`);
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid verification code. Please check your authenticator app.'
+            });
         }
 
         // Enable 2FA: move temp secret to permanent secret
@@ -115,9 +126,20 @@ exports.verify2FALogin = async (req, res) => {
         }
 
         // Verify code
+        if (!/^\d{6}$/.test(code)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid code format. Please enter a 6-digit number.'
+            });
+        }
+
         const isValid = authenticator.check(code, user.two_factor_secret);
         if (!isValid) {
-            return res.status(400).json({ message: 'Invalid verification code' });
+            console.warn(`[2FA] Failed login verification attempt for userId: ${userId}`);
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid verification code. Please check your authenticator app.'
+            });
         }
 
         // If valid, generate full token

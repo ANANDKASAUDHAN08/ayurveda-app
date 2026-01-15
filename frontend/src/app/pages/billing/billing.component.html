@@ -1,0 +1,254 @@
+<div class="min-h-screen bg-slate-50 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="mb-10">
+            <h1 class="text-3xl font-black text-slate-900 tracking-tight">Billing & Plans</h1>
+            <p class="mt-2 text-slate-500 font-medium">Manage your subscription, track usage, and download invoices.</p>
+        </div>
+
+        <!-- ADD THIS AT THE TOP (Just after the first <div>) -->
+        <div *ngIf="isLoading"
+            class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm transition-all">
+            <div
+                class="bg-white p-8 rounded-3xl shadow-2xl text-center space-y-4 max-w-xs w-full animate-in fade-in zoom-in duration-300">
+                <div class="relative w-16 h-16 mx-auto">
+                    <div class="absolute inset-0 border-4 border-emerald-100 rounded-full"></div>
+                    <div
+                        class="absolute inset-0 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin">
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-black text-slate-900 uppercase tracking-widest text-xs">Securing Connection</h3>
+                    <p class="text-slate-500 text-[10px] font-medium mt-1">Please wait while we prepare the secure
+                        payment portal...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Current Plan & Usage -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Current Plan Card -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-6 bg-gradient-to-br from-emerald-600 to-emerald-700 text-white">
+                        <span class="text-[10px] font-black uppercase tracking-widest opacity-80">Current
+                            Subscription</span>
+                        <h2 class="text-2xl font-black mt-1">{{ subscription?.tier || 'Free' | titlecase }} Plan</h2>
+                        <div class="mt-4 flex items-center justify-between">
+                            <span class="text-xs font-bold px-2 py-1 bg-white/20 rounded-lg backdrop-blur-md">
+                                {{ subscription?.status | titlecase }}
+                            </span>
+                            <span *ngIf="subscription?.tier !== 'free'" class="text-xs opacity-80">
+                                Renews: {{ formatDate(subscription?.endDate || '') }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <button *ngIf="subscription?.tier !== 'free'" (click)="cancelSubscription()"
+                            class="w-full py-3 px-4 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs uppercase tracking-widest hover:bg-slate-50 transition-colors">
+                            Cancel Subscription
+                        </button>
+                        <p *ngIf="subscription?.tier === 'free'"
+                            class="text-center text-sm text-slate-500 font-medium italic">
+                            Upgrade to Premium for unlimited access!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Usage Tracker Cards -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-6">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fas fa-chart-line text-emerald-600"></i> Usage Limits
+                    </h3>
+
+                    <!-- Symptom Checks Tracker -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs font-bold">
+                            <span class="text-slate-500 uppercase tracking-tighter">Symptom Checks</span>
+                            <span class="text-slate-900">{{ usage?.symptomChecks.used }} / {{ usage?.symptomChecks.limit
+                                === 'unlimited' ? '∞' : usage?.symptomChecks.limit }}</span>
+                        </div>
+                        <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-500 rounded-full transition-all duration-1000"
+                                [style.width.%]="getUsagePercentage(usage?.symptomChecks)"></div>
+                        </div>
+                    </div>
+
+                    <!-- Chat AI Tracker -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs font-bold">
+                            <span class="text-slate-500 uppercase tracking-tighter">Chat AI Messages</span>
+                            <span class="text-slate-900">{{ usage?.chatMessages.used }} / {{ usage?.chatMessages.limit
+                                === 'unlimited' ? '∞' : usage?.chatMessages.limit }}</span>
+                        </div>
+                        <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-blue-500 rounded-full transition-all duration-1000"
+                                [style.width.%]="getUsagePercentage(usage?.chatMessages)"></div>
+                        </div>
+                    </div>
+
+                    <p class="text-[10px] text-slate-400 leading-tight">
+                        <i class="fas fa-info-circle mr-1"></i> Limits reset monthly on your billing anniversary.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Column: Plans & History -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Plan Switcher -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+                    <div
+                        class="p-8 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                        <div>
+                            <h3 class="text-xl font-black text-slate-900">Change your plan</h3>
+                            <p class="text-sm text-slate-500 mt-1">Select the best companion for your health journey.
+                            </p>
+                        </div>
+
+                        <!-- Cycle Toggle -->
+                        <div class="bg-slate-100 p-1 rounded-xl flex items-center self-start">
+                            <button (click)="activeCycle = 'monthly'" [class.bg-white]="activeCycle === 'monthly'"
+                                [class.text-slate-900]="activeCycle === 'monthly'"
+                                [class.shadow-sm]="activeCycle === 'monthly'"
+                                class="px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all">
+                                Monthly
+                            </button>
+                            <button (click)="activeCycle = 'yearly'" [class.bg-white]="activeCycle === 'yearly'"
+                                [class.text-slate-900]="activeCycle === 'yearly'"
+                                [class.shadow-sm]="activeCycle === 'yearly'"
+                                class="px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all relative">
+                                Yearly
+                                <span
+                                    class="absolute -top-2 -right-2 bg-emerald-500 text-white text-[8px] px-1.5 py-0.5 rounded-full ring-2 ring-white">SAVE
+                                    15%</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Premium Plan Card -->
+                        <div *ngIf="plans['premium']" class="group rounded-2xl border p-6 flex flex-col transition-all"
+                            [class.border-emerald-600]="subscription?.tier === 'premium'"
+                            [ngClass]="{'bg-emerald-50/20': subscription?.tier === 'premium'}"
+                            [class.border-slate-200]="subscription?.tier !== 'premium'">
+                            <span *ngIf="subscription?.tier === 'premium'"
+                                class="text-[9px] font-black uppercase text-emerald-600 mb-2">Your Current Plan</span>
+                            <h4 class="text-lg font-black text-slate-900">Premium</h4>
+                            <div class="mt-4 flex items-baseline gap-1">
+                                <span class="text-3xl font-black text-slate-900">₹{{ activeCycle === 'monthly' ?
+                                    plans['premium'].price : plans['premium'].yearlyPrice }}</span>
+                                <span class="text-xs text-slate-500 uppercase tracking-widest font-bold">/ {{
+                                    activeCycle }}</span>
+                            </div>
+                            <ul class="mt-6 space-y-3 flex-grow">
+                                <li *ngFor="let feature of plans['premium'].features.slice(0, 5)"
+                                    class="flex items-center gap-2 text-xs text-slate-600">
+                                    <i class="fas fa-check text-emerald-500 text-[10px]"></i> {{ feature }}
+                                </li>
+                            </ul>
+                            <button (click)="upgradePlan('premium')" [disabled]="subscription?.tier === 'premium'"
+                                class="mt-8 w-full py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-md"
+                                [class.bg-emerald-600]="subscription?.tier !== 'premium'"
+                                [class.text-white]="subscription?.tier !== 'premium'"
+                                [class.hover:bg-emerald-700]="subscription?.tier !== 'premium'"
+                                [class.bg-slate-100]="subscription?.tier === 'premium'"
+                                [class.text-slate-400]="subscription?.tier === 'premium'">
+                                {{ subscription?.tier === 'premium' ? 'Active Plan' : 'Select Plan' }}
+                            </button>
+                        </div>
+
+                        <!-- Premium Plus Plan Card -->
+                        <div *ngIf="plans['premium_plus']"
+                            class="group rounded-2xl border p-6 flex flex-col transition-all relative overflow-hidden"
+                            [class.border-emerald-600]="subscription?.tier === 'premium_plus'"
+                            [ngClass]="{'bg-emerald-50/20': subscription?.tier === 'premium_plus'}"
+                            [class.border-slate-200]="subscription?.tier !== 'premium_plus'">
+                            <div
+                                class="absolute top-0 right-0 py-1.5 px-4 bg-emerald-600 text-white text-[9px] font-black uppercase tracking-widest rounded-bl-xl shadow-lg">
+                                Recommended
+                            </div>
+                            <span *ngIf="subscription?.tier === 'premium_plus'"
+                                class="text-[9px] font-black uppercase text-emerald-600 mb-2">Your Current Plan</span>
+                            <h4 class="text-lg font-black text-slate-900">Premium Plus</h4>
+                            <div class="mt-4 flex items-baseline gap-1">
+                                <span class="text-3xl font-black text-slate-900">₹{{ activeCycle === 'monthly' ?
+                                    plans['premium_plus'].price : plans['premium_plus'].yearlyPrice }}</span>
+                                <span class="text-xs text-slate-500 uppercase tracking-widest font-bold">/ {{
+                                    activeCycle }}</span>
+                            </div>
+                            <ul class="mt-6 space-y-3 flex-grow">
+                                <li *ngFor="let feature of plans['premium_plus'].features.slice(0, 5)"
+                                    class="flex items-center gap-2 text-xs text-slate-600">
+                                    <i class="fas fa-gem text-emerald-500 text-[10px]"></i> {{ feature }}
+                                </li>
+                            </ul>
+                            <button (click)="upgradePlan('premium_plus')"
+                                [disabled]="subscription?.tier === 'premium_plus'"
+                                class="mt-8 w-full py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg"
+                                [class.bg-emerald-600]="subscription?.tier !== 'premium_plus'"
+                                [class.text-white]="subscription?.tier !== 'premium_plus'"
+                                [class.hover:bg-emerald-700]="subscription?.tier !== 'premium_plus'"
+                                [class.bg-slate-100]="subscription?.tier === 'premium_plus'"
+                                [class.text-slate-400]="subscription?.tier === 'premium_plus'">
+                                {{ subscription?.tier === 'premium_plus' ? 'Active Plan' : 'Go Premium Plus' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing History -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest">Billing History</h3>
+                        <span class="text-[10px] text-slate-400 italic">Recent 10 transactions</span>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div *ngIf="isBillingHistoryLoading" class="p-12 text-center">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500 mx-auto"></div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div *ngIf="!isBillingHistoryLoading && invoices.length === 0" class="p-12 text-center">
+                        <p class="text-sm text-slate-400 italic">No payment history found.</p>
+                    </div>
+
+                    <!-- Invoices Table -->
+                    <div *ngIf="invoices.length > 0" class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="bg-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                    <th class="px-6 py-4">Invoice #</th>
+                                    <th class="px-6 py-4">Date</th>
+                                    <th class="px-6 py-4">Amount</th>
+                                    <th class="px-6 py-4">Status</th>
+                                    <th class="px-6 py-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr *ngFor="let inv of invoices" class="hover:bg-slate-50/50 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-xs text-slate-900">{{ inv.invoice_number }}</td>
+                                    <td class="px-6 py-4 text-xs text-slate-500">{{ formatDate(inv.created_at) }}</td>
+                                    <td class="px-6 py-4 text-xs font-black text-slate-900">{{ inv.currency }} {{
+                                        inv.amount }}</td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                            {{ inv.status }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button (click)="downloadInvoice(inv)"
+                                            class="text-emerald-600 hover:text-emerald-700 font-black text-[10px] uppercase tracking-widest flex items-center justify-end gap-1 ml-auto">
+                                            <i class="fas fa-download"></i> PDF
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- End Billing History -->
+            </div> <!-- End Right Column -->
+        </div>
+    </div>
+</div>

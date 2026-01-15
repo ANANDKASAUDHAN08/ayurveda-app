@@ -1,0 +1,17 @@
+/* Styles are handled via Tailwind CSS in HTML template */
+/* Ensure the Razorpay modal isn't clipped by any parent containers */
+html,
+body {
+    overflow-x: hidden;
+    height: auto !important;
+}
+
+/* If the top navbar is overlapping it, you can lower its z-index temporarily when billing is open */
+.razorpay-backdrop {
+    z-index: 999999 !important;
+}
+
+.razorpay-payment-button {
+    display: none;
+    /* Hide default button if any */
+}

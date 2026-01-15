@@ -13,11 +13,15 @@ router.get('/health-articles/:id', contentController.getArticleById);
 
 // Hospitals
 router.get('/hospitals', contentController.getHospitals);
+router.get('/hospital-filters', contentController.getHospitalFilters);
 
 // Pharmacies
 router.get('/pharmacies', contentController.getPharmacies);
 
 // Static pages (policy pages)
 router.get('/page/:slug', contentController.getStaticPage);
+
+// Specialty Encyclopedia
+router.get('/specialty-encyclopedia', contentController.getSpecialtyEncyclopedia);
 
 module.exports = router;

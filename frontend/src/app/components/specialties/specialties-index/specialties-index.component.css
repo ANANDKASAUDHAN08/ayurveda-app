@@ -1,0 +1,95 @@
+.specialties-container {
+    background-color: #f8fafc;
+}
+
+.hero-section {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Glassmorphism for filters */
+.backdrop-blur-md {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.specialty-card {
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.specialty-card:hover {
+    border-color: rgba(16, 185, 129, 0.2);
+    transform: translateY(-4px);
+}
+
+/* Line clamping for titles */
+.line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+section {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Pagination button hover */
+button:not(:disabled):hover {
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+/* Glassmorphism focus */
+input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.875rem !important;
+        line-height: 2.25rem !important;
+    }
+}

@@ -8,8 +8,8 @@ const path = require('path');
  * Alternative to data.gov.in which had broken links
  */
 
-const GITHUB_GEOJSON_URL = 'https://raw.githubusercontent.com/planemad/india_health_facilities/master/data/india_health_facilities.geojson';
-const DATA_DIR = path.join(__dirname, '../data');
+const GITHUB_GEOJSON_URL = 'https://raw.githubusercontent.com/planemad/india_health_facilities/master/map/public_health_facilities_nic.geojson';
+const DATA_DIR = path.join(__dirname, '../data/hospitals');
 const OUTPUT_FILE = path.join(DATA_DIR, 'indian-hospitals.json');
 
 // Create data directory if it doesn't exist
