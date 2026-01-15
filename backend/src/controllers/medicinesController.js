@@ -150,7 +150,7 @@ exports.getSuggestions = async (req, res) => {
 // Get all unique manufacturers
 exports.getManufacturers = async (req, res) => {
     try {
-        const [rows] = await db.execute('SELECT DISTINCT manufacturer FROM medicines WHERE manufacturer IS NOT NULL AND manufacturer != "" ORDER BY manufacturer LIMIT 50'); // Limit to top 50 for now
+        const [rows] = await db.execute("SELECT DISTINCT manufacturer FROM medicines WHERE manufacturer IS NOT NULL AND manufacturer != '' ORDER BY manufacturer LIMIT 50"); // Limit to top 50 for now
         res.json({
             success: true,
             data: rows.map(r => r.manufacturer)
@@ -164,7 +164,7 @@ exports.getManufacturers = async (req, res) => {
 // Get all unique categories for medicines
 exports.getCategories = async (req, res) => {
     try {
-        const [rows] = await db.execute('SELECT DISTINCT category FROM medicines WHERE category IS NOT NULL AND category != "" ORDER BY category');
+        const [rows] = await db.execute("SELECT DISTINCT category FROM medicines WHERE category IS NOT NULL AND category != '' ORDER BY category");
         res.json({
             success: true,
             data: rows.map(r => r.category)
