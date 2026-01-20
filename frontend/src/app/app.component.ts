@@ -19,6 +19,9 @@ import { GoogleMapsLoaderService } from './shared/services/google-maps-loader.se
 import { ChatbotComponent } from './shared/components/chatbot/chatbot.component';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { UpdateNotificationComponent } from './shared/components/update-notification/update-notification.component';
+import { LocationPermissionDialogComponent } from './shared/components/location-permission-dialog/location-permission-dialog.component';
+import { LogoutConfirmationComponent } from './shared/components/logout-confirmation/logout-confirmation.component';
+import { LogoutConfirmationService } from './shared/services/logout-confirmation.service';
 
 @Component({
   selector: 'app-root',
@@ -38,7 +41,9 @@ import { UpdateNotificationComponent } from './shared/components/update-notifica
     LocationBottomSheetComponent,
     LocationMapModalComponent,
     ChatbotComponent,
-    UpdateNotificationComponent
+    UpdateNotificationComponent,
+    LocationPermissionDialogComponent,
+    LogoutConfirmationComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -55,19 +60,24 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   showMapModal = false;
   mapsLoaded$ = this.googleMapsLoader.isLoaded$;
   showUpdateNotification = false;
+  showLocationPermissionDialog = false;
+  showLogoutConfirmation = false;
 
   // Subscriptions for cleanup
   private routerSubscription?: Subscription;
   private authSubscription?: Subscription;
   private locationSheetSubscription?: Subscription;
   private mapModalSubscription?: Subscription;
+  private permissionDialogSubscription?: Subscription;
+  private logoutConfirmationSubscription?: Subscription;
 
   constructor(
     private router: Router,
     private authService: AuthService,
     public locationService: LocationService,
     private googleMapsLoader: GoogleMapsLoaderService,
-    private swUpdate: SwUpdate
+    private swUpdate: SwUpdate,
+    private logoutConfirmationService: LogoutConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -91,6 +101,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.mapModalSubscription = this.locationService.openMap$.subscribe(open => {
       this.showMapModal = open;
+    });
+
+    // Handle Location Permission Dialog
+    this.permissionDialogSubscription = this.locationService.showPermissionDialog$.subscribe(show => {
+      this.showLocationPermissionDialog = show;
+    });
+
+    // Handle Logout Confirmation Dialog
+    this.logoutConfirmationSubscription = this.logoutConfirmationService.showDialog$.subscribe(show => {
+      this.showLogoutConfirmation = show;
     });
 
     /* 
@@ -219,10 +239,20 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showUpdateNotification = false;
   }
 
+  onLogoutConfirm() {
+    this.logoutConfirmationService.confirmLogout();
+  }
+
+  onLogoutCancel() {
+    this.logoutConfirmationService.cancelLogout();
+  }
+
   ngOnDestroy(): void {
     this.routerSubscription?.unsubscribe();
     this.authSubscription?.unsubscribe();
     this.locationSheetSubscription?.unsubscribe();
     this.mapModalSubscription?.unsubscribe();
+    this.permissionDialogSubscription?.unsubscribe();
+    this.logoutConfirmationSubscription?.unsubscribe();
   }
 }

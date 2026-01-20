@@ -13,6 +13,7 @@ import { LocationSelectorComponent } from '../location-selector/location-selecto
 import { LocationService, UserLocation } from '../../services/location.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { PwaInstallService } from '../../services/pwa-install.service';
+import { LogoutConfirmationService } from '../../services/logout-confirmation.service';
 
 @Component({
   selector: 'app-top-navbar',
@@ -83,7 +84,8 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private snackbarService: SnackbarService,
     public locationService: LocationService,
-    private pwaInstallService: PwaInstallService
+    private pwaInstallService: PwaInstallService,
+    private logoutConfirmationService: LogoutConfirmationService
   ) { }
 
   ngOnInit() {
@@ -462,11 +464,14 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout();
-    this.clearUserData();
-    this.clearCart();
-    this.profileMenuOpen = false;
-    this.router.navigate(['/']);
+    this.logoutConfirmationService.requestLogout(() => {
+      this.authService.logout();
+      this.clearUserData();
+      this.clearCart();
+      this.profileMenuOpen = false;
+      this.router.navigate(['/']);
+      this.snackbarService.show('Logged out successfully', 'success');
+    });
   }
 
   getImageUrl(imagePath?: string): string {

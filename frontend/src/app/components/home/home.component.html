@@ -406,149 +406,115 @@
     </div>
 </section>
 
-<!-- Quick Actions Grid (4x2 on desktop, 2x2 on mobile) -->
-<div class="mb-16">
-    <h2 class="text-2xl md:text-4xl font-bold text-slate-900 text-center mb-8 md:mt-4">
+<!-- Quick Actions Grid - Mobile Optimized -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+    <h2 class="text-2xl md:text-4xl font-bold text-slate-900 text-center mb-8 md:mb-12">
         What would you like to do?
     </h2>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         <!-- Video Consult -->
         <div (click)="navigateTo('/user/find-doctors')"
-            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            class="group relative bg-white rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
             <div
-                class="absolute top-3 right-3 py-1 px-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-emerald-500 to-emerald-600 text-white animate-pulse">
+                class="absolute top-2 right-2 sm:top-3 sm:right-3 py-1 px-2 sm:px-2.5 rounded-lg text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-emerald-500 to-emerald-600 text-white animate-pulse">
                 LIVE</div>
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
                 style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                <i class="fas fa-video text-3xl text-white"></i>
+                <i class="fas fa-video text-2xl sm:text-3xl text-white"></i>
             </div>
-            <h4 class="text-base font-bold text-slate-800 mb-1">Video Consult</h4>
-            <p class="text-[11px] text-slate-500 font-medium">Talk to doctors now</p>
+            <h4 class="text-sm sm:text-base font-bold text-slate-800 mb-1">Video Consult</h4>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 font-medium">Talk to doctors now</p>
         </div>
 
         <!-- Order Medicine -->
         <div (click)="navigateTo('/medicines')"
-            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            class="group relative bg-white rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
             <div
-                class="absolute top-3 right-3 py-1 px-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-amber-500 to-orange-600 text-white">
+                class="absolute top-2 right-2 sm:top-3 sm:right-3 py-1 px-2 sm:px-2.5 rounded-lg text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-amber-500 to-orange-600 text-white">
                 15% OFF</div>
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
                 style="background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);">
-                <i class="fas fa-pills text-3xl text-white"></i>
+                <i class="fas fa-pills text-2xl sm:text-3xl text-white"></i>
             </div>
-            <h4 class="text-base font-bold text-slate-800 mb-1">Order Medicine</h4>
-            <p class="text-[11px] text-slate-500 font-medium">Delivered to your door</p>
+            <h4 class="text-sm sm:text-base font-bold text-slate-800 mb-1">Order Medicine</h4>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 font-medium">Delivered to your door</p>
         </div>
 
         <!-- Book Lab Test -->
         <div (click)="navigateTo('/user/dashboard')"
-            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            class="group relative bg-white rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
             <div
-                class="absolute top-3 right-3 py-1 px-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+                class="absolute top-2 right-2 sm:top-3 sm:right-3 py-1 px-2 sm:px-2.5 rounded-lg text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-blue-500 to-blue-600 text-white">
                 QUICK</div>
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
                 style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
-                <i class="fas fa-flask text-3xl text-white"></i>
+                <i class="fas fa-flask text-2xl sm:text-3xl text-white"></i>
             </div>
-            <h4 class="text-base font-bold text-slate-800 mb-1">Book Lab Test</h4>
-            <p class="text-[11px] text-slate-500 font-medium">Home sample pickup</p>
+            <h4 class="text-sm sm:text-base font-bold text-slate-800 mb-1">Book Lab Test</h4>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 font-medium">Home sample pickup</p>
         </div>
 
         <!-- Schedule Checkup -->
         <div (click)="navigateTo('/user/appointments')"
-            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+            class="group relative bg-white rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
                 style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);">
-                <i class="fas fa-calendar-check text-3xl text-white"></i>
+                <i class="fas fa-calendar-check text-2xl sm:text-3xl text-white"></i>
             </div>
-            <h4 class="text-base font-bold text-slate-800 mb-1">Schedule Checkup</h4>
-            <p class="text-[11px] text-slate-500 font-medium">Book your appointment</p>
+            <h4 class="text-sm sm:text-base font-bold text-slate-800 mb-1">Schedule Checkup</h4>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 font-medium">Book your appointment</p>
         </div>
 
         <!-- Find Hospital -->
         <div (click)="navigateTo('/user/find-doctors')"
-            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+            class="group relative bg-white rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
                 style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-                <i class="fas fa-hospital text-3xl text-white"></i>
+                <i class="fas fa-hospital text-2xl sm:text-3xl text-white"></i>
             </div>
-            <h4 class="text-base font-bold text-slate-800 mb-1">Find Hospital</h4>
-            <p class="text-[11px] text-slate-500 font-medium">Locate nearby facilities</p>
+            <h4 class="text-sm sm:text-base font-bold text-slate-800 mb-1">Find Hospital</h4>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 font-medium">Locate nearby facilities</p>
         </div>
 
         <!-- Emergency -->
         <div (click)="navigateTo('/user/find-doctors')"
-            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border-2 border-red-50">
+            class="group relative bg-white rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border-2 border-red-50">
             <div
-                class="absolute top-3 right-3 py-1 px-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-red-500 to-red-600 text-white animate-pulse">
+                class="absolute top-2 right-2 sm:top-3 sm:right-3 py-1 px-2 sm:px-2.5 rounded-lg text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-gradient-to-br from-red-500 to-red-600 text-white animate-pulse">
                 URGENT</div>
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
                 style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
-                <i class="fas fa-ambulance text-3xl text-white"></i>
+                <i class="fas fa-ambulance text-2xl sm:text-3xl text-white"></i>
             </div>
-            <h4 class="text-base font-bold text-slate-800 mb-1">Emergency</h4>
-            <p class="text-[11px] text-slate-500 font-medium">24/7 assistance</p>
+            <h4 class="text-sm sm:text-base font-bold text-slate-800 mb-1">Emergency</h4>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 font-medium">24/7 assistance</p>
         </div>
 
         <!-- Health Records -->
         <div (click)="navigateTo('/user/dashboard')"
-            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+            class="group relative bg-white rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
                 style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
-                <i class="fas fa-file-medical text-3xl text-white"></i>
+                <i class="fas fa-file-medical text-2xl sm:text-3xl text-white"></i>
             </div>
-            <h4 class="text-base font-bold text-slate-800 mb-1">Health Records</h4>
-            <p class="text-[11px] text-slate-500 font-medium">Access your reports</p>
+            <h4 class="text-sm sm:text-base font-bold text-slate-800 mb-1">Health Records</h4>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 font-medium">Access your reports</p>
         </div>
 
         <!-- Wellness Programs -->
         <div (click)="navigateTo('/ayurveda/wellness')"
-            class="group relative bg-white rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+            class="group relative bg-white rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] shadow-sm hover:shadow-xl border border-slate-50">
+            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
                 style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
-                <i class="fas fa-spa text-3xl text-white"></i>
+                <i class="fas fa-spa text-2xl sm:text-3xl text-white"></i>
             </div>
-            <h4 class="text-base font-bold text-slate-800 mb-1">Wellness</h4>
-            <p class="text-[11px] text-slate-500 font-medium">Yoga & meditation</p>
-        </div>
-    </div>
-</div>
-
-<!-- Services Section -->
-<section class="max-w mx-auto px-2 py-16 bg-white relative overflow-hidden">
-    <!-- Subtle background decoration -->
-    <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-50 rounded-full blur-3xl opacity-50"></div>
-
-    <div class="relative z-10 max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
-            <div class="space-y-4">
-                <span
-                    class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 rounded-full text-sm font-bold uppercase tracking-wider">Trusted
-                    Services</span>
-                <h2 class="text-4xl md:text-6xl font-black text-slate-900 leading-tight">Expert Care for <br><span
-                        class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Your
-                        Wellness</span></h2>
-            </div>
-            <p class="text-slate-600 max-w-md text-lg leading-relaxed border-l-4 border-emerald-500 pl-6 py-2">Discover
-                our comprehensive range of medical services tailored to your specific needs with ancient wisdom and
-                modern technology.</p>
-        </div>
-
-        <!-- Show skeleton while loading -->
-        <div *ngIf="loadingServices"
-            class="service-grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            <app-skeleton-loader *ngFor="let i of [1,2,3,4]" type="card" [count]="1"></app-skeleton-loader>
-        </div>
-        <!-- Show actual services -->
-        <div *ngIf="!loadingServices"
-            class="service-grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            <app-service-card *ngFor="let service of services; let i = index; trackBy: trackByServiceId"
-                [service]="service" class="stagger-item" [style.--delay]="i * 0.12 + 's'">
-            </app-service-card>
+            <h4 class="text-sm sm:text-base font-bold text-slate-800 mb-1">Wellness</h4>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 font-medium">Yoga & meditation</p>
         </div>
     </div>
 </section>
+
 
 <!-- Categories Grid -->
 <!-- <section class="py-12 md:py-16 bg-slate-50">
@@ -566,7 +532,7 @@
 </section> -->
 
 <!-- Deals Section -->
-<section class="py-12 md:py-16 bg-white">
+<!-- <section class="py-12 md:py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between mb-8">
             <div>
@@ -584,7 +550,7 @@
             <app-deal-card *ngFor="let deal of deals" [deal]="deal"></app-deal-card>
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- Top Rated Doctors Carousel Component -->
 <div id="topDoctors">
@@ -610,16 +576,16 @@
 <app-article-details *ngIf="showArticleModal && selectedArticle" [article]="selectedArticle" (close)="closeArticle()">
 </app-article-details>
 
-<!-- Trust Badges (add at bottom before footer) -->
+<!-- Trust Badges - Mobile Optimized -->
 <section class="py-12 md:py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-2xl md:text-4xl font-bold text-slate-900 mb-4">Why Trust HealthConnect?
+        <div class="text-center mb-8 md:mb-12">
+            <h2 class="text-2xl md:text-4xl font-bold text-slate-900 mb-2 md:mb-4">Why Trust HealthConnect?
             </h2>
-            <p class="text-lg text-slate-600">Join thousands of satisfied customers</p>
+            <p class="text-base md:text-lg text-slate-600">Join thousands of satisfied customers</p>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             <app-trust-badge *ngFor="let badge of trustBadges" [badge]="badge"></app-trust-badge>
         </div>
     </div>

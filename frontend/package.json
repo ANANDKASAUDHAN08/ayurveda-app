@@ -1,12 +1,15 @@
 {
   "name": "frontend",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "version:patch": "node update-version.js patch",
+    "version:minor": "node update-version.js minor",
+    "version:major": "node update-version.js major"
   },
   "private": true,
   "dependencies": {

@@ -3,6 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { SnackbarService } from './snackbar.service';
+import { PermissionService } from './permission.service';
+
 
 export interface UserLocation {
     city: string;
@@ -34,8 +36,13 @@ export class LocationService {
     private sheetOpenSubject = new BehaviorSubject<boolean>(false);
     public sheetOpen$ = this.sheetOpenSubject.asObservable();
 
+    private showPermissionDialogSubject = new BehaviorSubject<boolean>(false);
+    public showPermissionDialog$ = this.showPermissionDialogSubject.asObservable();
+
     private http = inject(HttpClient);
     private snackbar = inject(SnackbarService);
+    private permissionService = inject(PermissionService);
+
 
     constructor() {
         // Load from localStorage on service init
@@ -72,7 +79,11 @@ export class LocationService {
                 (error) => {
                     let msg = 'Could not detect location';
                     if (error.code === error.PERMISSION_DENIED) {
-                        msg = 'Location access denied. Please allow it in settings.';
+                        msg = 'Location access denied';
+                        // Store the permission denial
+                        this.permissionService.setPermissionDenied();
+                        // Trigger the permission dialog
+                        this.showPermissionDialogSubject.next(true);
                     } else if (error.code === error.POSITION_UNAVAILABLE) {
                         msg = 'Location information is unavailable.';
                     } else if (error.code === error.TIMEOUT) {
@@ -88,6 +99,7 @@ export class LocationService {
             );
         });
     }
+
 
     public getLocationFromCoordinates(lat: number, lng: number): Observable<UserLocation> {
         const coordsCity = `Loc: ${lat.toFixed(3)}, ${lng.toFixed(3)}`;
@@ -292,5 +304,15 @@ export class LocationService {
             })
         );
     }
+
+    // Permission Dialog Methods
+    showPermissionDialog(): void {
+        this.showPermissionDialogSubject.next(true);
+    }
+
+    hidePermissionDialog(): void {
+        this.showPermissionDialogSubject.next(false);
+    }
 }
+
 

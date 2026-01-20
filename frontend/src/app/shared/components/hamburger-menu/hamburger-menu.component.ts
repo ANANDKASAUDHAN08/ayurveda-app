@@ -5,6 +5,10 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { PwaInstallService } from '../../services/pwa-install.service';
+import { CartService } from '../../services/cart.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { LogoutConfirmationService } from '../../services/logout-confirmation.service';
+import { SnackbarService } from '../../services/snackbar.service';
 interface MenuItem {
   title: string;
   icon: string;
@@ -47,7 +51,9 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy, OnChanges {
     public authService: AuthService,
     private router: Router,
     private renderer: Renderer2,
-    private pwaInstallService: PwaInstallService
+    private pwaInstallService: PwaInstallService,
+    private logoutConfirmationService: LogoutConfirmationService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -128,9 +134,11 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   logout() {
-    this.authService.logout();
-    this.closeMenu();
-    this.router.navigate(['/']);
+    this.logoutConfirmationService.requestLogout(() => {
+      this.authService.logout();
+      this.router.navigate(['/']);
+      this.snackbarService.show('Logged out successfully', 'success');
+    });
   }
 
   installApp() {

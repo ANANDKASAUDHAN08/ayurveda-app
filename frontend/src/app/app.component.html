@@ -45,4 +45,12 @@
   <!-- PWA Update Notification -->
   <app-update-notification *ngIf="showUpdateNotification" (update)="onUpdateApp()" (dismiss)="onDismissUpdate()">
   </app-update-notification>
+
+  <!-- Location Permission Dialog -->
+  <app-location-permission-dialog *ngIf="showLocationPermissionDialog">
+  </app-location-permission-dialog>
+
+  <!-- Logout Confirmation Dialog -->
+  <app-logout-confirmation [isOpen]="showLogoutConfirmation" (confirm)="onLogoutConfirm()" (cancel)="onLogoutCancel()">
+  </app-logout-confirmation>
 </div>

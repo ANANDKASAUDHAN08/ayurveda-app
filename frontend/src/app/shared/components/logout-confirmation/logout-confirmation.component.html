@@ -1,0 +1,51 @@
+<!-- Backdrop -->
+<div *ngIf="isOpen"
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4 animate-in fade-in duration-200"
+    (click)="onBackdropClick()">
+    <!-- Dialog Content -->
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full relative animate-in slide-in-from-bottom-4 duration-300 p-8 text-center"
+        (click)="$event.stopPropagation()">
+        <!-- Icon -->
+        <div
+            class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-red-600 mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-8 h-8 text-white">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+            </svg>
+        </div>
+
+        <!-- Title and Description -->
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Logout Confirmation</h2>
+        <p class="text-sm text-gray-600 mb-8">Are you sure you want to logout?</p>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3">
+            <button type="button"
+                class="flex-1 px-6 py-3 rounded-lg font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+                (click)="onCancel()">
+                Cancel
+            </button>
+            <button type="button"
+                class="flex-1 px-6 py-3 rounded-lg font-semibold bg-gradient-to-br from-red-500 to-red-600 text-white hover:-translate-y-0.5 hover:shadow-lg hover:shadow-red-500/40 transition-all inline-flex items-center justify-center gap-2"
+                (click)="onConfirm()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-[18px] h-[18px]">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                </svg>
+                Logout
+            </button>
+        </div>
+
+        <!-- Close Button -->
+        <button type="button"
+            class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+            (click)="onCancel()" aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-5 h-5 text-gray-600">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+</div>

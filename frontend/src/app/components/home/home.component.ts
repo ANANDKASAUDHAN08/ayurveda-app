@@ -8,6 +8,8 @@ import { SearchService } from '../../shared/services/search.service';
 import { MedicineTypeService, MedicineType } from '../../shared/services/medicine-type.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
+import { AuthService } from '../../shared/services/auth.service';
+import { Subscription } from 'rxjs';
 
 import { ArticleDetailsComponent } from '../article-details/article-details.component';
 import { TopRatedDoctorsCarouselComponent } from './top-rated-doctors-carousel/top-rated-doctors-carousel.component';
@@ -80,6 +82,7 @@ export class HomeComponent implements OnInit {
   loadingServices = true;
   showScrollTop = false;
   currentCardIndex = 0;
+  private authSubscription?: Subscription;
 
   onCardScroll(event: Event) {
     const element = event.target as HTMLElement;
@@ -140,6 +143,7 @@ export class HomeComponent implements OnInit {
     private searchService: SearchService,
     private snackbar: SnackbarService,
     private medicineTypeService: MedicineTypeService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -197,15 +201,23 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      try {
-        const user = JSON.parse(userData);
-        this.userName = user.name || 'Anand';
-      } catch (e) {
-        console.error('Failed to parse user data', e);
+    // Subscribe to auth state changes to update userName
+    this.authSubscription = this.authService.authStatus$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          try {
+            const user = JSON.parse(userData);
+            this.userName = user.name || 'User';
+          } catch (e) {
+            console.error('Failed to parse user data', e);
+            this.userName = 'User';
+          }
+        }
+      } else {
+        this.userName = 'Guest';
       }
-    }
+    });
 
     this.loadFeaturedDoctors();
     this.loadHealthArticles();
@@ -228,6 +240,10 @@ export class HomeComponent implements OnInit {
   ngAfterViewInit(): void {
     // Re-initialize scroll animations after view is ready to catch all elements
     setTimeout(() => this.initializeScrollAnimations(), 500);
+  }
+
+  ngOnDestroy() {
+    this.authSubscription?.unsubscribe();
   }
 
   private initializeScrollAnimations(): void {
