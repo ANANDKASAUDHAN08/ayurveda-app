@@ -44,7 +44,13 @@ router.put('/doctors/change-password', auth, doctorController.changePassword);
 router.put('/doctors/enable-2fa', auth, doctorController.enable2FA);
 router.delete('/doctors/profile', auth, doctorController.deleteAccount);
 router.get('/doctors', doctorController.getDoctors);
+router.get('/doctors/suggestions', doctorController.getDoctorSuggestions);
+router.get('/doctors/filters/specializations', doctorController.getSpecializations);
+router.get('/doctors/filters/locations', doctorController.getLocations);
 router.get('/doctors/:id', doctorController.getDoctorById);
+router.get('/doctors/:id/available-slots', doctorController.getDoctorAvailableSlots);
+router.get('/doctors/:id/reviews', doctorController.getDoctorReviews);
+
 
 // Legacy Slots (keep for backward compatibility)
 router.get('/slots', slotController.getSlots);

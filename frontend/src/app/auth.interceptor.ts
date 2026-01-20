@@ -3,11 +3,13 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { SnackbarService } from './shared/services/snackbar.service';
+import { AuthService } from './shared/services/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const token = localStorage.getItem('auth_token');
     const router = inject(Router);
     const snackbarService = inject(SnackbarService);
+    const authService = inject(AuthService);
 
     // Clone request with auth header if token exists
     const cloned = token ? req.clone({
@@ -21,39 +23,40 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         catchError((error: HttpErrorResponse) => {
             // Check if it's a 401 Unauthorized error
             if (error.status === 401) {
-                // Only handle this if user actually HAD a token
                 const currentToken = localStorage.getItem('auth_token');
 
-                // URLs that are expected to return 401 when not logged in or during sensitive flows
-                const ignoredUrls = ['/cart', '/notifications', '/auth/2fa'];
-                const shouldIgnore = ignoredUrls.some(url => req.url.includes(url));
+                if (currentToken) {
+                    // Check if we already showed the session expired alert recently
+                    // to prevent spam if multiple requests fail at once
+                    const now = Date.now();
+                    const lastAlert = (window as any)._lastSessionAlert || 0;
 
-                if (currentToken && !shouldIgnore) {
-                    // User was logged in but token is now expired/invalid
-                    const userStr = localStorage.getItem('user');
-                    let userRole = 'user';
+                    if (now - lastAlert > 5000) { // 5 second debounce
+                        (window as any)._lastSessionAlert = now;
 
-                    try {
-                        if (userStr) {
-                            const user = JSON.parse(userStr);
-                            userRole = user.role || 'user';
+                        const userStr = localStorage.getItem('user');
+                        let userRole = 'user';
+
+                        try {
+                            if (userStr) {
+                                const user = JSON.parse(userStr);
+                                userRole = user.role || 'user';
+                            }
+                        } catch (e) {
+                            console.error('Error parsing user data:', e);
                         }
-                    } catch (e) {
-                        console.error('Error parsing user data:', e);
+
+                        const loginPath = userRole === 'doctor' ? '/for-doctors' : '/for-users';
+
+                        // Clear authentication data properly
+                        authService.logout();
+
+                        // Show error message
+                        snackbarService.show('Session expired. Please login again.', 'error');
+
+                        // Navigate to login
+                        router.navigate([loginPath]);
                     }
-
-                    // Determine redirect path BEFORE clearing data
-                    const loginPath = userRole === 'doctor' ? '/for-doctors' : '/for-users';
-
-                    // Clear authentication data
-                    localStorage.removeItem('auth_token');
-                    localStorage.removeItem('user');
-
-                    // Show error message
-                    snackbarService.show('Token is expired, please login again', 'error');
-
-                    // Navigate after alert is dismissed
-                    router.navigate([loginPath]);
                 }
             }
 

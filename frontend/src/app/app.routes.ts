@@ -271,6 +271,17 @@ export const routes: Routes = [
         canActivate: [],
         data: { role: 'user' }
     },
+    {
+        path: 'appointments/video',
+        loadComponent: () => import('./components/my-appointments/my-appointments.component').then(m => m.MyAppointmentsComponent),
+        canActivate: [authGuard],
+        data: { role: 'user' }
+    },
+    {
+        path: 'video-call/:appointmentId',
+        loadComponent: () => import('./components/video-call/video-call.component').then(m => m.VideoCallComponent),
+        canActivate: [authGuard]
+    },
 
     // Doctor routes
     {

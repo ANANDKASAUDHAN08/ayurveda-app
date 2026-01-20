@@ -92,8 +92,8 @@
                                 </div>
 
                                 <!-- Login Form Content (Hidden during 2FA) -->
-                                <form *ngIf="!show2FAChallenge" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()"
-                                    class="space-y-6">
+                                <form *ngIf="!show2FAChallenge && activeTab === 'login'" [formGroup]="loginForm"
+                                    (ngSubmit)="onLoginSubmit()" class="space-y-6">
 
                                     <!-- Google OAuth Button -->
                                     <button type="button" (click)="signInWithGoogle()"

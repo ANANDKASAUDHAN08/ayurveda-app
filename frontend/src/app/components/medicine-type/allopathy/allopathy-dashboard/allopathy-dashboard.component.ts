@@ -78,7 +78,7 @@ export class AllopathyDashboardComponent implements OnInit {
   }
 
   viewAllDoctors(): void {
-    this.router.navigate(['/user/doctors']);
+    this.router.navigate(['/find-doctors']);
   }
 
   switchTab(tab: 'home' | 'principles' | 'benefits' | 'diagnostics' | 'pharmacy' | 'records'): void {

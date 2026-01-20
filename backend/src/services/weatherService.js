@@ -7,10 +7,22 @@ exports.getRawWeatherData = async (lat, lon) => {
     try {
         if (!WEATHER_API_KEY) return null;
 
-        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${WEATHER_API_KEY}`);
+        const response = await axios.get(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${WEATHER_API_KEY}`,
+            {
+                timeout: 10000, // 10 second timeout
+                validateStatus: (status) => status < 500 // Don't throw on 4xx errors
+            }
+        );
         return response.data;
     } catch (error) {
-        console.error('Weather Fetch Error:', error);
+        if (error.code === 'ETIMEDOUT' || error.code === 'ECONNABORTED') {
+            console.warn('Weather API timeout - using fallback data');
+        } else if (error.response) {
+            console.error('Weather API error:', error.response.status, error.response.data);
+        } else {
+            console.error('Weather network error:', error.message);
+        }
         return null;
     }
 };

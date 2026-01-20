@@ -12,8 +12,11 @@ import { FavoritesService } from '../../shared/services/favorites.service';
 export class DoctorCardComponent {
   @Input() doctor: any;
   @Input() showDetailsLink: boolean = true;
+  @Input() isOnline: boolean = false; // NEW: Online status
+  @Input() isFree: boolean = false; // NEW: Free consultation
   @Output() book = new EventEmitter<any>();
   @Output() viewDetails = new EventEmitter<any>();
+  @Output() instantConsult = new EventEmitter<any>(); // NEW: Instant consultation
 
   constructor(private favoritesService: FavoritesService) { }
 
@@ -23,6 +26,10 @@ export class DoctorCardComponent {
 
   onViewDetails() {
     this.viewDetails.emit(this.doctor);
+  }
+
+  onInstantConsult() {
+    this.instantConsult.emit(this.doctor);
   }
 
   toggleFavorite(event: Event) {

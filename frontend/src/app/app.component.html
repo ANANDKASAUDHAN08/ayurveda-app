@@ -3,21 +3,22 @@
   <app-offline-indicator></app-offline-indicator>
 
   <!-- Top Navbar -->
-  <app-top-navbar [onMenuToggle]="toggleHamburgerMenu"></app-top-navbar>
+  <app-top-navbar *ngIf="!isVideoCallRoute" [onMenuToggle]="toggleHamburgerMenu"></app-top-navbar>
 
   <!-- Hamburger Menu -->
-  <app-hamburger-menu [isOpen]="hamburgerMenuOpen" (close)="closeHamburgerMenu()"></app-hamburger-menu>
+  <app-hamburger-menu *ngIf="!isVideoCallRoute" [isOpen]="hamburgerMenuOpen"
+    (close)="closeHamburgerMenu()"></app-hamburger-menu>
 
   <!-- Main Content -->
   <main class="flex-1">
     <router-outlet></router-outlet>
   </main>
 
-  <!-- Footer (hide on admin routes) -->
-  <app-footer *ngIf="!isAdminRoute"></app-footer>
+  <!-- Footer (hide on admin routes and video calls) -->
+  <app-footer *ngIf="!isAdminRoute && !isVideoCallRoute"></app-footer>
 
   <!-- Bottom Navigation (Mobile only) -->
-  <app-bottom-navigation (navItemClicked)="closeHamburgerMenu()"></app-bottom-navigation>
+  <app-bottom-navigation *ngIf="!isVideoCallRoute" (navItemClicked)="closeHamburgerMenu()"></app-bottom-navigation>
 
   <!-- Snackbar -->
   <app-snackbar></app-snackbar>
@@ -26,7 +27,7 @@
   <!-- <app-fab-menu (actionClicked)="handleFabAction($event)"></app-fab-menu> -->
 
   <!-- Scroll to Top Button -->
-  <app-scroll-to-top></app-scroll-to-top>
+  <app-scroll-to-top *ngIf="!isVideoCallRoute"></app-scroll-to-top>
 
   <!-- Location Bottom Sheet -->
   <app-location-bottom-sheet [isOpen]="isLocationSheetOpen" (closeRequested)="locationService.toggleBottomSheet(false)">
@@ -39,7 +40,7 @@
   </app-location-map-modal>
 
   <!-- AI Chatbot (Global) -->
-  <app-chatbot></app-chatbot>
+  <app-chatbot *ngIf="!isVideoCallRoute"></app-chatbot>
 
   <!-- PWA Update Notification -->
   <app-update-notification *ngIf="showUpdateNotification" (update)="onUpdateApp()" (dismiss)="onDismissUpdate()">

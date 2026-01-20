@@ -32,42 +32,33 @@ const { apiLimiter } = require('./middleware/security');
 
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(helmet()); // Basic security headers
-app.use('/api', apiLimiter); // Apply to all API routes
-
+// 1. CORS Configuration (Should be first to handle pre-flights)
 const allowedOrigins = [
     process.env.APP_URL,
     process.env.FRONTEND_URL,
+    'http://localhost:4200',
     'https://healthconnect-zeta.vercel.app',
     'https://healthconnect-6s0ig7c0r-anand-kasaudhans-projects.vercel.app'
 ].filter(Boolean).map(url => url.replace(/\/$/, ""));
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl)
-        if (!origin) {
-            return callback(null, true);
-        }
-
-        // Remove trailing slash from origin
+        if (!origin) return callback(null, true);
         const cleanOrigin = origin.replace(/\/$/, "");
-
-        // Check if origin is in allowed list
-        if (allowedOrigins.indexOf(cleanOrigin) !== -1) {
+        if (allowedOrigins.indexOf(cleanOrigin) !== -1 || cleanOrigin.includes('.vercel.app')) {
             return callback(null, true);
         }
-
-        // Allow all Vercel preview deployments
-        if (cleanOrigin.includes('.vercel.app')) {
-            return callback(null, true);
-        }
-
         console.log('CORS blocked origin:', origin);
         callback(new Error('Not allowed by CORS'));
     },
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }));
+
+// 2. Security Middleware
+app.use(helmet()); // Basic security headers
+app.use('/api', apiLimiter); // Apply to all API routes
 
 app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'));
@@ -116,6 +107,7 @@ app.use('/api/chatbot', require('./routes/chatbot')); // AI Chatbot API
 app.use('/api/subscription', require('./routes/subscription')); // Subscription API
 app.use('/api/calendar', require('./routes/calendarRoutes')); // Wellness Calendar API
 app.use('/api/medicines', require('./routes/medicines')); // Dedicated Medicines Discovery API
+app.use('/api/video-consultancy', require('./routes/videoConsultancy')); // Video Consultancy - Appointments & Payment
 
 // Health check
 app.get('/health', (req, res) => {
@@ -141,8 +133,60 @@ process.on('uncaughtException', (err) => {
     console.error('Uncaught Exception:', err);
 });
 
-app.listen(PORT, () => {
+// Create HTTP server and attach Socket.io
+const http = require('http');
+const server = http.createServer(app);
+
+// Socket.io for WebRTC signaling
+const { Server } = require('socket.io');
+const io = new Server(server, {
+    cors: {
+        origin: allowedOrigins,
+        methods: ['GET', 'POST'],
+        credentials: true
+    }
+});
+
+// Socket.io connection handling for video calls
+io.on('connection', (socket) => {
+    console.log('👤 Client connected:', socket.id);
+
+    // Join a video room
+    socket.on('join-room', (roomId) => {
+        const room = io.sockets.adapter.rooms.get(roomId);
+        const numClients = room ? room.size : 0;
+
+        socket.join(roomId);
+
+        // Notify others in the room
+        socket.to(roomId).emit('peer-joined', socket.id);
+
+        // Tell the joining user if they should expect a peer
+        if (numClients > 0) {
+            socket.emit('room-ready', { numClients });
+        }
+    });
+
+    // Handle WebRTC signaling
+    socket.on('signal', ({ roomId, signal }) => {
+        socket.to(roomId).emit('signal', signal);
+    });
+
+    // Handle Chat Messages
+    socket.on('chat-message', ({ roomId, message, sender }) => {
+        socket.to(roomId).emit('chat-message', { message, sender, timestamp: new Date() });
+    });
+
+    // Handle disconnection
+    socket.on('disconnect', () => {
+        console.log('👋 Client disconnected:', socket.id);
+    });
+});
+
+// Start server
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log(`🎥 WebRTC signaling server ready`);
 });
 
 async function startServer() {

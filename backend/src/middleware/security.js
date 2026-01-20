@@ -3,10 +3,10 @@ const rateLimit = require('express-rate-limit');
 // Rate limiter for general API requests
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 1000, // increased from 100 to prevent blocking on refresh
+    max: process.env.NODE_ENV === 'development' ? 10000 : 1000, // Significantly higher in dev
     message: {
         success: false,
-        message: 'Too many requests from this IP, please try again after 15 minutes'
+        message: 'Too many requests'
     },
     standardHeaders: true,
     legacyHeaders: false,

@@ -1,299 +1,433 @@
-<div class="lg:h-[100vh] lg:overflow-hidden lg:flex flex-col lg:flex-row bg-slate-50">
-    <!-- Desktop Sidebar Filters -->
-    <aside
-        [class]="'hidden lg:block h-full border-r border-slate-200 bg-white shadow-sm overflow-y-auto custom-scrollbar flex-shrink-0 transition-all duration-300 ' + (isFilterCollapsed ? 'lg:w-0' : 'lg:w-80')">
-        <div class="p-8">
-            <div class="flex items-center justify-between mb-10">
-                <h2 class="text-2xl font-black text-slate-800 tracking-tight">Filters</h2>
-                <button
-                    *ngIf="filters.search || filters.specialization.length > 0 || filters.mode || filters.maxFee || filters.minExperience"
-                    (click)="clearFilters()"
-                    class="text-sm text-emerald-600 hover:text-emerald-700 font-extrabold transition-all flex items-center gap-1.5 hover:scale-105 active:scale-95">
-                    <i class="fas fa-undo-alt text-xs"></i> Reset
-                </button>
-            </div>
+<div class="flex flex-col bg-slate-50 min-h-screen">
+    <!-- Desktop Filter Overlay (similar to mobile but for desktop) -->
+    <div *ngIf="showDesktopFilters" class="hidden lg:block fixed inset-0 z-[120]">
+        <!-- Overlay Backdrop -->
+        <div (click)="toggleFilterSidebar()" class="absolute inset-0 bg-slate-900/20 animate-fade-in">
+        </div>
 
-            <div class="space-y-8">
-                <!-- Search -->
-                <div>
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Search
-                        Doctor</label>
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                            <i
-                                class="fas fa-search text-slate-300 group-focus-within:text-emerald-500 transition-colors"></i>
+        <!-- Filter Sidebar -->
+        <aside
+            class="absolute left-0 top-0 bottom-0 w-80 bg-white shadow-2xl overflow-y-auto custom-scrollbar flex-shrink-0 animate-slide-in-left">
+            <div class="p-8">
+                <div class="flex items-center justify-between mb-10">
+                    <div class="flex items-center gap-3">
+                        <h2 class="text-2xl font-black text-slate-800 tracking-tight">Filters</h2>
+                        <button (click)="clearFilters()"
+                            class="text-xs font-black text-emerald-600 hover:text-emerald-700 uppercase tracking-wider transition-all hover:scale-105 active:scale-95">
+                            Clear
+                        </button>
+                    </div>
+                    <button (click)="toggleFilterSidebar()"
+                        class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:text-slate-600 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Consultation Mode -->
+                    <div>
+                        <label
+                            class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Consultation
+                            Mode</label>
+                        <div class="grid grid-cols-1 gap-2">
+                            <button (click)="toggleMode('online')" [class.bg-emerald-600]="filters.mode === 'online'"
+                                [class.text-white]="filters.mode === 'online'"
+                                [class.border-emerald-600]="filters.mode === 'online'"
+                                [class.bg-white]="filters.mode !== 'online'"
+                                class="flex items-center justify-between px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all shadow-sm">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-video text-xs opacity-70"></i>
+                                    <span>Online</span>
+                                </div>
+                                <i *ngIf="filters.mode === 'online'" class="fas fa-check-circle"></i>
+                            </button>
+                            <button (click)="toggleMode('in-person')"
+                                [class.bg-emerald-600]="filters.mode === 'in-person'"
+                                [class.text-white]="filters.mode === 'in-person'"
+                                [class.border-emerald-600]="filters.mode === 'in-person'"
+                                [class.bg-white]="filters.mode !== 'in-person'"
+                                class="flex items-center justify-between px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all shadow-sm">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-hospital-user text-xs opacity-70"></i>
+                                    <span>In-Person</span>
+                                </div>
+                                <i *ngIf="filters.mode === 'in-person'" class="fas fa-check-circle"></i>
+                            </button>
+                            <button (click)="toggleMode('both')" [class.bg-emerald-600]="filters.mode === 'both'"
+                                [class.text-white]="filters.mode === 'both'"
+                                [class.border-emerald-600]="filters.mode === 'both'"
+                                [class.bg-white]="filters.mode !== 'both'"
+                                class="flex items-center justify-between px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all shadow-sm">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-layer-group text-xs opacity-70"></i>
+                                    <span>All (Both)</span>
+                                </div>
+                                <i *ngIf="filters.mode === 'both'" class="fas fa-check-circle"></i>
+                            </button>
                         </div>
-                        <input type="text" [(ngModel)]="filters.search" (ngModelChange)="applyFilters()"
-                            class="block w-full pl-12 pr-4 py-4 bg-slate-50/50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-emerald-500/5 focus:border-emerald-500 focus:bg-white text-sm font-medium transition-all outline-none"
-                            placeholder="Name or specialist...">
                     </div>
-                </div>
 
-                <!-- Consultation Mode -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Consultation
-                        Mode</label>
-                    <div class="grid grid-cols-1 gap-2">
-                        <button (click)="toggleMode('online')" [class.bg-emerald-600]="filters.mode === 'online'"
-                            [class.text-white]="filters.mode === 'online'"
-                            [class.border-emerald-600]="filters.mode === 'online'"
-                            [class.bg-white]="filters.mode !== 'online'"
-                            class="flex items-center justify-between px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all shadow-sm">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-video text-xs opacity-70"></i>
-                                <span>Online</span>
-                            </div>
-                            <i *ngIf="filters.mode === 'online'" class="fas fa-check-circle"></i>
-                        </button>
-                        <button (click)="toggleMode('in-person')" [class.bg-emerald-600]="filters.mode === 'in-person'"
-                            [class.text-white]="filters.mode === 'in-person'"
-                            [class.border-emerald-600]="filters.mode === 'in-person'"
-                            [class.bg-white]="filters.mode !== 'in-person'"
-                            class="flex items-center justify-between px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all shadow-sm">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-hospital-user text-xs opacity-70"></i>
-                                <span>In-Person</span>
-                            </div>
-                            <i *ngIf="filters.mode === 'in-person'" class="fas fa-check-circle"></i>
-                        </button>
-                        <button (click)="toggleMode('both')" [class.bg-emerald-600]="filters.mode === 'both'"
-                            [class.text-white]="filters.mode === 'both'"
-                            [class.border-emerald-600]="filters.mode === 'both'"
-                            [class.bg-white]="filters.mode !== 'both'"
-                            class="flex items-center justify-between px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all shadow-sm">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-layer-group text-xs opacity-70"></i>
-                                <span>All (Both)</span>
-                            </div>
-                            <i *ngIf="filters.mode === 'both'" class="fas fa-check-circle"></i>
-                        </button>
+                    <!-- Price Range -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Max Fee
+                            (₹)</label>
+                        <select [(ngModel)]="filters.maxFee" (ngModelChange)="applyFilters()"
+                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:border-emerald-500 transition-all cursor-pointer">
+                            <option [ngValue]="null">Any Price</option>
+                            <option [ngValue]="500">Under ₹500</option>
+                            <option [ngValue]="1000">Under ₹1000</option>
+                            <option [ngValue]="2000">Under ₹2000</option>
+                        </select>
                     </div>
-                </div>
 
-                <!-- Price Range -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Max Fee
-                        (₹)</label>
-                    <select [(ngModel)]="filters.maxFee" (ngModelChange)="applyFilters()"
-                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:border-emerald-500 transition-all cursor-pointer">
-                        <option [ngValue]="null">Any Price</option>
-                        <option [ngValue]="500">Under ₹500</option>
-                        <option [ngValue]="1000">Under ₹1000</option>
-                        <option [ngValue]="2000">Under ₹2000</option>
-                    </select>
-                </div>
-
-                <!-- Experience -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Min
-                        Experience</label>
-                    <div class="flex flex-wrap gap-2">
-                        <button *ngFor="let exp of [5, 10, 15]"
-                            (click)="filters.minExperience = (filters.minExperience === exp ? null : exp); applyFilters()"
-                            [class.bg-teal-500]="filters.minExperience === exp"
-                            [class.text-white]="filters.minExperience === exp"
-                            [class.border-teal-500]="filters.minExperience === exp"
-                            [class.bg-white]="filters.minExperience !== exp"
-                            class="px-3 py-2 border border-slate-200 rounded-lg text-xs font-bold transition-all hover:border-teal-500">
-                            {{exp}}+ Yrs
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Price Range Slider -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Price Range
-                        (₹)</label>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-slate-600 font-semibold">₹{{ filters.minFee }}</span>
-                            <span class="text-emerald-600 font-bold">₹{{ filters.maxFee }}</span>
+                    <!-- Experience -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Min
+                            Experience</label>
+                        <div class="flex flex-wrap gap-2">
+                            <button *ngFor="let exp of [5, 10, 15]"
+                                (click)="filters.minExperience = (filters.minExperience === exp ? null : exp); applyFilters()"
+                                [class.bg-teal-500]="filters.minExperience === exp"
+                                [class.text-white]="filters.minExperience === exp"
+                                [class.border-teal-500]="filters.minExperience === exp"
+                                [class.bg-white]="filters.minExperience !== exp"
+                                class="px-3 py-2 border border-slate-200 rounded-lg text-xs font-bold transition-all hover:border-teal-500">
+                                {{exp}}+ Yrs
+                            </button>
                         </div>
-                        <input type="range" [(ngModel)]="filters.maxFee" (ngModelChange)="onPriceRangeChange()" min="0"
-                            max="5000" step="100"
-                            class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
                     </div>
-                </div>
 
-                <!-- Minimum Rating -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Minimum
-                        Rating</label>
-                    <div class="flex gap-2">
-                        <button *ngFor="let rating of [3, 4, 4.5]"
-                            (click)="filters.minRating = (filters.minRating === rating ? 0 : rating); applyFilters()"
-                            [class.bg-yellow-500]="filters.minRating === rating"
-                            [class.text-white]="filters.minRating === rating"
-                            [class.border-yellow-500]="filters.minRating === rating"
-                            [class.bg-white]="filters.minRating !== rating"
-                            class="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-xs font-bold transition-all hover:border-yellow-500">
-                            <i class="fas fa-star text-xs"></i> {{rating}}+
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Gender Filter -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Gender
-                        Preference</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button (click)="toggleGender('male')" [class.bg-blue-600]="filters.gender === 'male'"
-                            [class.text-white]="filters.gender === 'male'"
-                            [class.border-blue-600]="filters.gender === 'male'"
-                            [class.bg-white]="filters.gender !== 'male'"
-                            class="flex items-center justify-center gap-2 px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-blue-500 transition-all shadow-sm">
-                            <i class="fas fa-mars"></i> Male
-                        </button>
-                        <button (click)="toggleGender('female')" [class.bg-pink-600]="filters.gender === 'female'"
-                            [class.text-white]="filters.gender === 'female'"
-                            [class.border-pink-600]="filters.gender === 'female'"
-                            [class.bg-white]="filters.gender !== 'female'"
-                            class="flex items-center justify-center gap-2 px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-pink-500 transition-all shadow-sm">
-                            <i class="fas fa-venus"></i> Female
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Language Filter -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Languages
-                        Spoken</label>
-                    <div class="flex flex-wrap gap-2">
-                        <button *ngFor="let lang of languages.slice(0, 6)" (click)="toggleLanguage(lang)"
-                            [class.bg-indigo-600]="filters.languages.includes(lang)"
-                            [class.text-white]="filters.languages.includes(lang)"
-                            [class.border-indigo-600]="filters.languages.includes(lang)"
-                            [class.bg-white]="!filters.languages.includes(lang)"
-                            class="px-3 py-2 border border-slate-200 rounded-lg text-xs font-bold transition-all hover:border-indigo-500">
-                            {{ lang }}
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Available Now Toggle -->
-                <div>
-                    <label
-                        class="flex items-center justify-between p-4 bg-emerald-50 rounded-xl cursor-pointer group hover:bg-emerald-100 transition-all">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200 transition-all">
-                                <i class="fas fa-clock text-emerald-600"></i>
+                    <!-- Price Range Slider -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Price Range
+                            (₹)</label>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-slate-600 font-semibold">₹{{ filters.minFee }}</span>
+                                <span class="text-emerald-600 font-bold">₹{{ filters.maxFee }}</span>
                             </div>
-                            <div>
-                                <div class="text-sm font-bold text-slate-800">Available Now</div>
-                                <div class="text-xs text-slate-500">Show only available doctors</div>
-                            </div>
+                            <input type="range" [(ngModel)]="filters.maxFee" (ngModelChange)="onPriceRangeChange()"
+                                min="0" max="5000" step="100"
+                                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
                         </div>
-                        <input type="checkbox" [(ngModel)]="filters.availableNow" (ngModelChange)="applyFilters()"
-                            class="w-5 h-5 text-emerald-600 bg-white border-slate-300 rounded focus:ring-emerald-500 cursor-pointer">
-                    </label>
-                </div>
+                    </div>
 
-                <!-- Specialization -->
-                <div>
-                    <label
-                        class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Specialization</label>
-                    <div class="space-y-1.5 max-h-[400px] overflow-y-auto pr-3 custom-scrollbar">
-                        <div *ngFor="let spec of specializations" (click)="toggleSpecialization(spec)"
-                            class="flex items-center p-3.5 rounded-2xl cursor-pointer transition-all group" [ngClass]="{
+                    <!-- Minimum Rating -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Minimum
+                            Rating</label>
+                        <div class="flex gap-2">
+                            <button *ngFor="let rating of [3, 4, 4.5]"
+                                (click)="filters.minRating = (filters.minRating === rating ? 0 : rating); applyFilters()"
+                                [class.bg-yellow-500]="filters.minRating === rating"
+                                [class.text-white]="filters.minRating === rating"
+                                [class.border-yellow-500]="filters.minRating === rating"
+                                [class.bg-white]="filters.minRating !== rating"
+                                class="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-xs font-bold transition-all hover:border-yellow-500">
+                                <i class="fas fa-star text-xs"></i> {{rating}}+
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Gender Filter -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Gender
+                            Preference</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button (click)="toggleGender('male')" [class.bg-blue-600]="filters.gender === 'male'"
+                                [class.text-white]="filters.gender === 'male'"
+                                [class.border-blue-600]="filters.gender === 'male'"
+                                [class.bg-white]="filters.gender !== 'male'"
+                                class="flex items-center justify-center gap-2 px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-blue-500 transition-all shadow-sm">
+                                <i class="fas fa-mars"></i> Male
+                            </button>
+                            <button (click)="toggleGender('female')" [class.bg-pink-600]="filters.gender === 'female'"
+                                [class.text-white]="filters.gender === 'female'"
+                                [class.border-pink-600]="filters.gender === 'female'"
+                                [class.bg-white]="filters.gender !== 'female'"
+                                class="flex items-center justify-center gap-2 px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-pink-500 transition-all shadow-sm">
+                                <i class="fas fa-venus"></i> Female
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Language Filter -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Languages
+                            Spoken</label>
+                        <div class="flex flex-wrap gap-2">
+                            <button *ngFor="let lang of languages.slice(0, 6)" (click)="toggleLanguage(lang)"
+                                [class.bg-indigo-600]="filters.languages.includes(lang)"
+                                [class.text-white]="filters.languages.includes(lang)"
+                                [class.border-indigo-600]="filters.languages.includes(lang)"
+                                [class.bg-white]="!filters.languages.includes(lang)"
+                                class="px-3 py-2 border border-slate-200 rounded-lg text-xs font-bold transition-all hover:border-indigo-500">
+                                {{ lang }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Available Now Toggle -->
+                    <div>
+                        <label
+                            class="flex items-center justify-between p-4 bg-emerald-50 rounded-xl cursor-pointer group hover:bg-emerald-100 transition-all">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200 transition-all">
+                                    <i class="fas fa-clock text-emerald-600"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-bold text-slate-800">Available Now</div>
+                                    <div class="text-xs text-slate-500">Show only available doctors</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" [(ngModel)]="filters.availableNow" (ngModelChange)="applyFilters()"
+                                class="w-5 h-5 text-emerald-600 bg-white border-slate-300 rounded focus:ring-emerald-500 cursor-pointer">
+                        </label>
+                    </div>
+
+                    <!-- Specialization -->
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Specialization</label>
+                        <div class="space-y-1.5 max-h-[400px] overflow-y-auto pr-3 custom-scrollbar">
+                            <div *ngFor="let spec of specializations" (click)="toggleSpecialization(spec)"
+                                class="flex items-center p-3.5 rounded-2xl cursor-pointer transition-all group"
+                                [ngClass]="{
                                 'bg-emerald-50/50': filters.specialization.includes(spec),
                                 'hover:bg-slate-50': !filters.specialization.includes(spec)
                             }">
 
-                            <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center mr-4 transition-all"
-                                [class.border-emerald-500]="filters.specialization.includes(spec)"
-                                [class.bg-emerald-500]="filters.specialization.includes(spec)"
-                                [class.border-slate-200]="!filters.specialization.includes(spec)"
-                                [class.group-hover:border-emerald-300]="!filters.specialization.includes(spec)">
-                                <i *ngIf="filters.specialization.includes(spec)"
-                                    class="fas fa-check text-white text-[10px] scale-110"></i>
+                                <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center mr-4 transition-all"
+                                    [class.border-emerald-500]="filters.specialization.includes(spec)"
+                                    [class.bg-emerald-500]="filters.specialization.includes(spec)"
+                                    [class.border-slate-200]="!filters.specialization.includes(spec)"
+                                    [class.group-hover:border-emerald-300]="!filters.specialization.includes(spec)">
+                                    <i *ngIf="filters.specialization.includes(spec)"
+                                        class="fas fa-check text-white text-[10px] scale-110"></i>
+                                </div>
+                                <span class="text-sm font-bold tracking-tight"
+                                    [class.text-emerald-700]="filters.specialization.includes(spec)"
+                                    [class.text-slate-500]="!filters.specialization.includes(spec)">
+                                    {{ spec }}
+                                </span>
                             </div>
-                            <span class="text-sm font-bold tracking-tight"
-                                [class.text-emerald-700]="filters.specialization.includes(spec)"
-                                [class.text-slate-500]="!filters.specialization.includes(spec)">
-                                {{ spec }}
-                            </span>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </aside>
-
-    <!-- Filter Toggle Button for Desktop -->
-    <button (click)="toggleFilterSidebar()"
-        class="hidden lg:flex fixed top-28 z-30 items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-r-xl shadow-lg hover:bg-emerald-700 transition-all"
-        [class.left-80]="!isFilterCollapsed" [class.left-0]="isFilterCollapsed">
-        <i [class]="isFilterCollapsed ? 'fas fa-chevron-right' : 'fas fa-chevron-left'"></i>
-    </button>
+        </aside>
+    </div>
 
     <!-- Main Content Pane -->
-    <main class="flex-1 h-full overflow-y-auto bg-slate-50 custom-scrollbar">
+    <main class="flex-1 bg-slate-50 custom-scrollbar">
         <!-- Hero Section -->
-        <div class="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-800 pb-8 pt-6">
+        <div class="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-800 py-6">
             <!-- Animated background elements -->
             <div class="absolute inset-0 overflow-hidden pointer-events-none">
                 <div class="absolute -top-24 -left-20 w-64 h-64 bg-white/5 rounded-full blur-3xl animate-pulse"></div>
                 <div class="absolute top-1/2 -right-20 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl animate-pulse"
-                    style="animation-delay: 2s"></div>
+                    style="animation-delay: 2s">
+                </div>
             </div>
 
             <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10 text-center">
-                <h1 class="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight">
+                <h1 class="text-2xl md:text-3xl font-extrabold mb-1.5 tracking-tight">
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-200">
                         Find Your Perfect Doctor
                     </span>
                 </h1>
-                <p class="text-base md:text-lg text-emerald-100/90 max-w-2xl mx-auto font-medium">
+                <p class="text-xs md:text-sm text-emerald-100/90 max-w-3xl mx-auto">
                     Connect with certified medical professionals specializing in Ayurveda, Homeopathy, and
                     modern medicine.
                 </p>
             </div>
         </div>
 
-        <!-- Context Banner for Medicine Type Filtering -->
-        <div class="px-6 lg:px-10 pt-6">
-            <app-context-banner [currentType]="currentMedicineType" [resultCount]="doctors.length"
-                [itemName]="'doctors'" (toggleFilter)="onToggleFilter()" (clearFilter)="onClearFilter()"
-                (switchType)="onSwitchType($event)">
-            </app-context-banner>
-        </div>
 
         <!-- Sticky Results Header -->
-        <div
-            class="sticky top-0 z-20 bg-slate-50/90 backdrop-blur-md px-6 lg:px-10 py-6 border-b border-slate-200/60 flex items-center justify-between">
-            <div>
-                <h2 class="text-xl md:text-2xl font-black text-slate-800 tracking-tight">
-                    {{ doctors.length }} <span
-                        class="font-bold text-slate-400 ml-1 text-sm uppercase tracking-widest">{{
-                        doctors.length === 1 ? 'Specialist' : 'Specialists' }} Found</span>
-                </h2>
+        <div class="sticky top-16 z-20 bg-white border-b border-slate-200 shadow-sm">
+            <!-- Mobile Header Layout (Visible only on < 1024px) -->
+            <div class="lg:hidden px-4 py-3 bg-white">
+                <!-- Mobile Row 1: Count, Sort, Filter -->
+                <div class="flex items-center justify-between gap-3 mb-3">
+                    <!-- Specialists Found -->
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span class="text-xl font-black text-slate-800">{{ doctors.length }}</span>
+                        <span class="text-[10px] text-slate-500 font-black uppercase tracking-widest">Specialists</span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <!-- Compact Sort Button -->
+                        <div id="mobileSortDropdown" class="relative">
+                            <button (click)="toggleSortDropdown()"
+                                class="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 active:scale-95 transition-all">
+                                <span class="truncate max-w-[80px]">{{ getSortLabel(sortBy) }}</span>
+                                <i class="fas fa-chevron-down text-[10px] text-slate-400 transition-transform"
+                                    [class.rotate-180]="showSortDropdown"></i>
+                            </button>
+
+                            <!-- Sort Dropdown Menu (Mobile) -->
+                            <div *ngIf="showSortDropdown"
+                                class="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-2xl z-[110] overflow-hidden animate-fade-in">
+                                <div class="py-1">
+                                    <button
+                                        *ngFor="let option of ['relevance', 'rating', 'experience', 'fee_low', 'fee_high']"
+                                        (click)="selectSort(option)"
+                                        class="w-full px-4 py-3 text-left text-xs font-bold hover:bg-emerald-50 hover:text-emerald-700 transition-colors flex items-center justify-between border-b border-slate-50 last:border-0"
+                                        [class.bg-emerald-50]="sortBy === option"
+                                        [class.text-emerald-700]="sortBy === option">
+                                        <span>{{ getSortLabel(option) }}</span>
+                                        <i *ngIf="sortBy === option"
+                                            class="fas fa-check text-[10px] text-emerald-500"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Short Filter Button (Icon Only) -->
+                        <button (click)="toggleMobileFilters()"
+                            class="w-10 h-10 flex items-center justify-center bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-100 active:scale-90 transition-all">
+                            <i class="fas fa-filter text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Row 2: Full Search Field -->
+                <div id="mobileSearchContainer" class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-slate-400"></i>
+                    </div>
+                    <input type="text" [(ngModel)]="filters.search" (ngModelChange)="onSearchInput(filters.search)"
+                        class="w-full pl-11 pr-11 py-3 bg-slate-100 border-none rounded-2xl text-sm font-medium focus:ring-2 focus:ring-emerald-500 transition-all outline-none"
+                        placeholder="Search name, specialty, clinic...">
+
+                    <!-- Clear Search Icon (Mobile) -->
+                    <button *ngIf="filters.search" (click)="clearSearch($event)"
+                        class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 p-2">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+
+                    <!-- Mobile Suggestions Dropdown -->
+                    <div *ngIf="showSuggestions"
+                        class="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-[100] overflow-hidden animate-fade-in">
+                        <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
+                            <div *ngFor="let s of suggestions" (click)="selectSuggestion(s)"
+                                class="flex items-center gap-3 p-4 hover:bg-slate-50 cursor-pointer border-b border-slate-50 last:border-0">
+                                <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+                                    <img *ngIf="s.image" [src]="s.image" class="w-full h-full object-cover rounded-xl">
+                                    <i *ngIf="!s.image" class="fas text-[12px] text-slate-400"
+                                        [ngClass]="s.icon || 'fa-user-md'"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="text-xs font-black text-slate-800 truncate">{{ s.text }}</div>
+                                    <div class="text-[9px] font-bold text-emerald-600 uppercase tracking-wider">{{
+                                        s.type }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="flex items-center gap-4">
-                <!-- Sort Dropdown -->
-                <select [(ngModel)]="sortBy" (ngModelChange)="onSortChange()"
-                    class="hidden sm:block px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:border-emerald-500 transition-all cursor-pointer shadow-sm">
-                    <option value="relevance">Sort: Relevance</option>
-                    <option value="rating">Sort: Highest Rated</option>
-                    <option value="experience">Sort: Most Experienced</option>
-                    <option value="fee_low">Sort: Price (Low to High)</option>
-                    <option value="fee_high">Sort: Price (High to Low)</option>
-                </select>
+            <!-- Desktop Header Layout (Visible only on >= 1024px) -->
+            <div class="hidden lg:flex items-center justify-between px-10 py-3 gap-6">
+                <!-- Left: Specialists Found -->
+                <div class="flex items-center gap-3 shrink-0">
+                    <h2 class="text-2xl font-black text-slate-800">{{ doctors.length }}</h2>
+                    <span class="text-xs text-slate-500 font-black uppercase tracking-widest">Specialists Found</span>
+                </div>
 
-                <!-- Mobile Filter Toggle -->
-                <button (click)="toggleMobileFilters()"
-                    class="lg:hidden flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-emerald-200 transition-all active:scale-95">
-                    <i class="fas fa-sliders-h"></i> Filters
-                </button>
+                <!-- Middle: Omni-Search Bar -->
+                <div class="flex-1 max-w-xl relative">
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i
+                                class="fas fa-search text-slate-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                        </div>
+                        <input type="text" [(ngModel)]="filters.search" (ngModelChange)="onSearchInput(filters.search)"
+                            (focus)="showSuggestions = suggestions.length > 0"
+                            class="block w-full pl-11 pr-11 py-2.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-8 focus:ring-emerald-500/5 focus:border-emerald-500 focus:bg-white text-sm font-medium transition-all outline-none"
+                            placeholder="Search name, specialty, clinic...">
+
+                        <!-- Clear Search (Desktop) -->
+                        <button *ngIf="filters.search" (click)="clearSearch($event)"
+                            class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-300 hover:text-slate-500 transition-colors">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+
+                        <!-- Desktop Suggestions Dropdown -->
+                        <div *ngIf="showSuggestions"
+                            class="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-[100] overflow-hidden animate-fade-in mx-auto">
+                            <div class="max-h-[400px] overflow-y-auto custom-scrollbar">
+                                <div *ngFor="let s of suggestions" (click)="selectSuggestion(s)"
+                                    class="flex items-center gap-4 p-4 hover:bg-slate-50 cursor-pointer border-b border-slate-50 last:border-0 transition-all group/item">
+                                    <div
+                                        class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center shrink-0 group-hover/item:scale-105 transition-transform">
+                                        <img *ngIf="s.image" [src]="s.image"
+                                            class="w-full h-full object-cover rounded-xl">
+                                        <i *ngIf="!s.image" class="fas text-slate-400"
+                                            [ngClass]="s.icon || 'fa-user-md'"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div
+                                            class="text-sm font-black text-slate-800 group-hover/item:text-emerald-600 transition-colors">
+                                            {{ s.text }}</div>
+                                        <div *ngIf="s.subtext"
+                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{
+                                            s.subtext }}</div>
+                                    </div>
+                                    <div
+                                        class="text-[8px] font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md uppercase tracking-widest">
+                                        {{ s.type }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Filters & Sort -->
+                <div class="flex items-center gap-3">
+                    <!-- Sort Dropdown (Desktop) -->
+                    <div id="desktopSortDropdown" class="relative">
+                        <button (click)="toggleSortDropdown()"
+                            class="flex items-center justify-between gap-4 px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-black text-slate-700 hover:border-emerald-500 transition-all shadow-sm">
+                            <span class="truncate">{{ getSortLabel(sortBy) }}</span>
+                            <i class="fas fa-chevron-down text-[10px] transition-transform"
+                                [class.rotate-180]="showSortDropdown"></i>
+                        </button>
+
+                        <div *ngIf="showSortDropdown"
+                            class="absolute right-0 mt-3 w-60 bg-white border border-slate-200 rounded-2xl shadow-2xl z-[110] overflow-hidden animate-fade-in text-left">
+                            <div class="py-1">
+                                <button
+                                    *ngFor="let option of ['relevance', 'rating', 'experience', 'fee_low', 'fee_high']"
+                                    (click)="selectSort(option)"
+                                    class="w-full px-5 py-4 text-left text-sm font-bold hover:bg-emerald-50 hover:text-emerald-700 transition-colors flex items-center justify-between border-b border-slate-50 last:border-0"
+                                    [class.bg-emerald-50]="sortBy === option"
+                                    [class.text-emerald-700]="sortBy === option">
+                                    <span>{{ getSortLabel(option) }}</span>
+                                    <i *ngIf="sortBy === option" class="fas fa-check text-xs text-emerald-500"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter Button (Desktop) -->
+                    <button (click)="toggleFilterSidebar()"
+                        class="flex items-center gap-2.5 px-6 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-black hover:bg-slate-800 transition-all shadow-lg active:scale-95">
+                        <i class="fas fa-sliders-h text-xs"></i>
+                        <span>Filters</span>
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Content Area -->
-        <div class="px-6 lg:px-10 py-8">
+        <div class="px-3 md:px-6 lg:px-10 py-6 md:py-8">
             <!-- Loading Skeletons -->
-            <div *ngIf="isLoading" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                <div *ngFor="let i of [1,2,3,4,5,6]"
+            <div *ngIf="isLoading" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+                <div *ngFor="let i of [1,2,3,4]"
                     class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 animate-pulse h-96">
                     <div class="flex items-center space-x-4 mb-8">
                         <div class="w-16 h-16 bg-slate-100 rounded-2xl"></div>
@@ -315,7 +449,9 @@
                 <div class="inline-flex items-center justify-center w-24 h-24 bg-red-50 rounded-full mb-8">
                     <i class="fas fa-exclamation-triangle text-red-400 text-4xl"></i>
                 </div>
-                <h3 class="text-3xl font-black text-slate-800 mb-4 tracking-tight">Oops! Something went wrong
+                <h3 class="text-3xl font-black text-slate-800 mb-4 tracking-tight">Oops! Something
+                    went
+                    wrong
                 </h3>
                 <p class="text-slate-500 mb-10 text-lg leading-relaxed">{{ error }}</p>
                 <button (click)="loadDoctors()"
@@ -326,9 +462,11 @@
 
             <!-- Doctor Cards Grid -->
             <div *ngIf="!isLoading && !error && doctors.length > 0"
-                class="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-8">
-                <div *ngFor="let doctor of paginatedDoctors" class="transition-all duration-500 hover:-translate-y-3">
-                    <app-doctor-card [doctor]="doctor" (book)="openBooking($event)" (viewDetails)="openDetails($event)">
+                class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 md:gap-4 lg:gap-6">
+                <div *ngFor="let doctor of paginatedDoctors" class="vc-fade-in">
+                    <app-doctor-card [doctor]="doctor" [isOnline]="isDoctorOnline(doctor.id)" [isFree]="isFirstTimeUser"
+                        (book)="openBooking($event)" (viewDetails)="openDetails($event)"
+                        (instantConsult)="onInstantConsult($event)">
                     </app-doctor-card>
                 </div>
             </div>
@@ -384,8 +522,11 @@
                 <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-8">
                     <i class="fas fa-user-md-slash text-slate-300 text-5xl"></i>
                 </div>
-                <h3 class="text-3xl font-black text-slate-800 mb-4 tracking-tight">No Doctors Found</h3>
-                <p class="text-slate-500 max-w-md mx-auto mb-10 text-lg">We couldn't find any doctors matching
+                <h3 class="text-3xl font-black text-slate-800 mb-4 tracking-tight">No Doctors Found
+                </h3>
+                <p class="text-slate-500 max-w-md mx-auto mb-10 text-lg">We couldn't find any
+                    doctors
+                    matching
                     your selection. Try adjusting your filters.</p>
                 <button (click)="clearFilters()"
                     class="px-10 py-4 bg-white border-2 border-slate-100 text-slate-600 rounded-2xl font-black hover:bg-slate-50 transition-all shadow-lg active:scale-95">
@@ -396,7 +537,7 @@
     </main>
 
     <!-- Mobile Filter Drawer -->
-    <div *ngIf="showMobileFilters" class="fixed inset-0 z-[100] lg:hidden">
+    <div *ngIf="showMobileFilters" class="fixed inset-0 z-[120] lg:hidden">
         <!-- Overlay -->
         <div (click)="toggleMobileFilters()" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
         </div>
@@ -407,7 +548,11 @@
             <!-- Header -->
             <div
                 class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0 z-10">
-                <h2 class="text-xl font-bold text-slate-800">Filter Specialists</h2>
+                <div class="flex items-center gap-3">
+                    <h2 class="text-xl font-bold text-slate-800">Filters</h2>
+                    <button (click)="clearFilters()"
+                        class="text-xs font-black text-emerald-600 uppercase tracking-wider">Clear</button>
+                </div>
                 <button (click)="toggleMobileFilters()"
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:text-slate-600 transition-colors">
                     <i class="fas fa-times text-xl"></i>
@@ -416,20 +561,6 @@
 
             <!-- Scrollable Content -->
             <div class="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
-                <!-- Search -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Search
-                        Doctor</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-slate-400"></i>
-                        </div>
-                        <input type="text" [(ngModel)]="filters.search" (ngModelChange)="applyFilters()"
-                            class="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 text-sm transition-all"
-                            placeholder="Name or specialty...">
-                    </div>
-                </div>
-
                 <!-- Consultation Mode -->
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Consultation
@@ -455,37 +586,57 @@
                             </div>
                             <i *ngIf="filters.mode === 'in-person'" class="fas fa-check-circle"></i>
                         </button>
-                        <button (click)="toggleMode('both')" [class.bg-emerald-600]="filters.mode === 'both'"
-                            [class.text-white]="filters.mode === 'both'"
-                            [class.border-emerald-600]="filters.mode === 'both'"
-                            class="flex items-center justify-between px-4 py-3.5 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 transition-all">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-layer-group opacity-70"></i>
-                                <span>All (Both)</span>
-                            </div>
-                            <i *ngIf="filters.mode === 'both'" class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+
+                <!-- Gender Preference -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Gender
+                        Preference</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button (click)="toggleGender('male')" [class.bg-blue-600]="filters.gender === 'male'"
+                            [class.text-white]="filters.gender === 'male'"
+                            [class.border-blue-600]="filters.gender === 'male'"
+                            [class.bg-white]="filters.gender !== 'male'"
+                            class="flex items-center justify-center gap-2 px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-blue-500 transition-all shadow-sm">
+                            <i class="fas fa-mars"></i> Male
+                        </button>
+                        <button (click)="toggleGender('female')" [class.bg-pink-600]="filters.gender === 'female'"
+                            [class.text-white]="filters.gender === 'female'"
+                            [class.border-pink-600]="filters.gender === 'female'"
+                            [class.bg-white]="filters.gender !== 'female'"
+                            class="flex items-center justify-center gap-2 px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:border-pink-500 transition-all shadow-sm">
+                            <i class="fas fa-venus"></i> Female
                         </button>
                     </div>
                 </div>
 
-                <!-- Price Range -->
+                <!-- Price Range Slider -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Max Fee
-                        (₹)</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button *ngFor="let fee of [500, 1000, 2000, null]"
-                            (click)="filters.maxFee = (filters.maxFee === fee ? null : fee); applyFilters()"
-                            [class.bg-slate-800]="filters.maxFee === fee" [class.text-white]="filters.maxFee === fee"
-                            [class.border-slate-800]="filters.maxFee === fee"
-                            class="px-4 py-3 border border-slate-200 rounded-xl text-xs font-bold transition-all">
-                            {{ fee ? 'Under ₹' + fee : 'Any Price' }}
-                        </button>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Max
+                        Consultation Fee (₹)</label>
+                    <div class="space-y-3 px-1">
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-slate-600 font-semibold">₹0</span>
+                            <span class="text-emerald-600 font-bold">₹{{ filters.maxFee || 5000 }}</span>
+                        </div>
+                        <input type="range" [(ngModel)]="filters.maxFee" (ngModelChange)="onPriceRangeChange()" min="0"
+                            max="5000" step="100"
+                            class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                            <button (click)="filters.maxFee = 500; applyFilters()"
+                                class="py-2 bg-slate-50 border border-slate-100 rounded-lg text-[10px] font-bold text-slate-600">Under
+                                ₹500</button>
+                            <button (click)="filters.maxFee = 1000; applyFilters()"
+                                class="py-2 bg-slate-50 border border-slate-100 rounded-lg text-[10px] font-bold text-slate-600">Under
+                                ₹1000</button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Experience -->
                 <div>
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Min
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Min
                         Experience</label>
                     <div class="flex flex-wrap gap-2">
                         <button *ngFor="let exp of [5, 10, 15]"
@@ -493,12 +644,42 @@
                             [class.bg-teal-600]="filters.minExperience === exp"
                             [class.text-white]="filters.minExperience === exp"
                             [class.border-teal-600]="filters.minExperience === exp"
-                            [class.shadow-md]="filters.minExperience === exp"
-                            [class.bg-white]="filters.minExperience !== exp"
-                            class="px-5 py-2.5 border border-slate-100 rounded-xl text-xs font-black transition-all hover:border-teal-500 hover:bg-teal-50/30">
+                            class="px-5 py-2.5 border border-slate-100 rounded-xl text-xs font-black transition-all">
                             {{exp}}+ Yrs
                         </button>
                     </div>
+                </div>
+
+                <!-- Language Filter -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Languages
+                        Spoken</label>
+                    <div class="flex flex-wrap gap-2">
+                        <button *ngFor="let lang of languages" (click)="toggleLanguage(lang)"
+                            [class.bg-indigo-600]="filters.languages.includes(lang)"
+                            [class.text-white]="filters.languages.includes(lang)"
+                            [class.border-indigo-600]="filters.languages.includes(lang)"
+                            class="px-3 py-2 border border-slate-200 rounded-lg text-xs font-bold transition-all">
+                            {{ lang }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Available Now Toggle -->
+                <div class="pt-2">
+                    <label class="flex items-center justify-between p-4 bg-emerald-50 rounded-2xl cursor-pointer">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-clock text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold text-slate-800">Available Now</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Show online doctors</div>
+                            </div>
+                        </div>
+                        <input type="checkbox" [(ngModel)]="filters.availableNow" (ngModelChange)="applyFilters()"
+                            class="w-5 h-5 text-emerald-600 bg-white border-slate-300 rounded-lg focus:ring-emerald-500">
+                    </label>
                 </div>
 
                 <!-- Specialization -->
@@ -542,7 +723,8 @@
 
     <!-- Doctor Detail Modal -->
     <app-doctor-detail-modal *ngIf="selectedDoctorForDetails" [doctor]="selectedDoctorForDetails"
-        (close)="closeDetails()" (book)="openBookingFromDetails($event)">
+        [isOnline]="isDoctorOnline(selectedDoctorForDetails.id)" [isFree]="isFirstTimeUser" (close)="closeDetails()"
+        (book)="openBookingFromDetails($event)">
     </app-doctor-detail-modal>
 
     <!-- Booking Modal -->

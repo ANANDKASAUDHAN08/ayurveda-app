@@ -1,8 +1,9 @@
 import { environment } from '@env/environment';
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface TimeSlot {
     id: number;
@@ -120,5 +121,88 @@ export class AppointmentService {
 
     deleteDateException(date: string): Observable<any> {
         return this.http.delete(`${this.apiUrl}/doctors/availability/exceptions/${date}`);
+    }
+
+    // =============================================
+    // Video Consultancy Methods
+    // =============================================
+
+    /**
+     * Create Razorpay payment order for consultation
+     * @param doctor_id - Doctor ID
+     * @param amount - Consultation fee amount
+     */
+    createPaymentOrder(doctor_id: number, amount: number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/video-consultancy/payment/create-order`, {
+            doctor_id,
+            amount
+        });
+    }
+
+    /**
+     * Book video consultation appointment
+     * @param appointmentData - Complete appointment data including payment details
+     */
+    bookVideoConsultation(appointmentData: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/video-consultancy/appointments/book`, appointmentData);
+    }
+
+    /**
+     * Get user's video consultation appointments
+     * @param filters - Optional filters (type: upcoming/past, status, page, limit)
+     */
+    getMyVideoAppointments(filters?: any): Observable<any> {
+        let params = new HttpParams();
+        if (filters?.type) params = params.set('type', filters.type);
+        if (filters?.status) params = params.set('status', filters.status);
+        if (filters?.page) params = params.set('page', filters.page.toString());
+        if (filters?.limit) params = params.set('limit', filters.limit.toString());
+
+        return this.http.get(`${this.apiUrl}/video-consultancy/appointments`, { params });
+    }
+
+    /**
+     * Get single video appointment details
+     * @param appointmentId - Appointment ID
+     */
+    getVideoAppointmentById(appointmentId: number): Observable<any> {
+        return this.http.get(`${this.apiUrl}/video-consultancy/appointments/${appointmentId}`);
+    }
+
+    /**
+     * Cancel video consultation appointment  
+     * @param appointmentId - Appointment ID
+     * @param reason - Cancellation reason
+     */
+    cancelVideoAppointment(appointmentId: number, reason: string): Observable<any> {
+        return this.http.put(
+            `${this.apiUrl}/video-consultancy/appointments/${appointmentId}/cancel`,
+            { reason }
+        );
+    }
+
+    /**
+     * Add review after consultation
+     * @param appointmentId - Appointment ID
+     * @param doctorId - Doctor ID
+     * @param rating - Rating (1-5)
+     * @param review - Review text
+     */
+    addReview(appointmentId: number, doctorId: number, rating: number, review: string): Observable<any> {
+        return this.http.post(`${this.apiUrl}/video-consultancy/reviews`, {
+            appointment_id: appointmentId,
+            doctor_id: doctorId,
+            rating,
+            review
+        });
+    }
+
+    /**
+     * Check if user is first-time (for free consultation)
+     */
+    isFirstTimeUser(): Observable<boolean> {
+        return this.getMyVideoAppointments({ limit: 1 }).pipe(
+            map((res: any) => res.pagination && res.pagination.total === 0)
+        );
     }
 }

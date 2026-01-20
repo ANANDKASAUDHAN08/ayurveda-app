@@ -39,8 +39,10 @@ class NotificationController {
                 query += ' AND is_read = FALSE';
             }
 
-            query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-            params.push(parseInt(limit), parseInt(offset));
+            const parsedLimit = parseInt(limit) || 20;
+            const parsedOffset = parseInt(offset) || 0;
+
+            query += ` ORDER BY created_at DESC LIMIT ${parsedLimit} OFFSET ${parsedOffset}`;
 
             const [notifications] = await db.query(query, params);
 

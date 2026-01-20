@@ -1,0 +1,278 @@
+<!-- Loading State -->
+<div *ngIf="loading" class="fixed inset-0 bg-slate-900 flex items-center justify-center">
+    <div class="text-center">
+        <div
+            class="inline-flex items-center justify-center w-20 h-20 bg-primary-500/20 rounded-full mb-6 animate-pulse">
+            <i class="fas fa-video text-primary-500 text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-white mb-2">Connecting to call...</h2>
+        <p class="text-slate-400">Please wait while we set up your connection</p>
+        <div class="mt-6 flex justify-center">
+            <div class="animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-t-transparent"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Error State -->
+<div *ngIf="error && !loading" class="fixed inset-0 bg-slate-900 flex items-center justify-center p-4">
+    <div class="vc-card vc-glass max-w-md w-full p-8 text-center">
+        <div class="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-exclamation-triangle text-rose-500 text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-slate-800 mb-4">Connection Error</h2>
+        <p class="text-slate-600 mb-6">{{ error }}</p>
+        <button (click)="router.navigate(['/appointments/video'])" class="vc-btn vc-btn-primary w-full">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to Appointments
+        </button>
+    </div>
+</div>
+
+<!-- Video Call Interface -->
+<div *ngIf="!loading && !error && callActive" class="fixed inset-0 bg-slate-900">
+
+    <!-- Remote Video (Full Screen) -->
+    <div class="absolute inset-0">
+        <video #remoteVideo autoplay playsinline class="w-full h-full object-cover">
+        </video>
+
+        <!-- No Remote Stream Placeholder -->
+        <div *ngIf="connectionStatus !== 'connected'"
+            class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900">
+            <div class="text-center">
+                <div
+                    class="w-32 h-32 rounded-full bg-gradient-to-br from-primary-500 to-blue-500 flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-user text-white text-5xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">{{ peerName }}</h3>
+                <div class="flex flex-col items-center gap-2">
+                    <p class="text-slate-400">{{ connectionText }}</p>
+                    <div *ngIf="connectionStatus === 'connecting' || connectionStatus === 'idle'" class="flex gap-1">
+                        <div class="w-1.5 h-1.5 bg-primary-500 rounded-full animate-bounce [animation-delay:-0.3s]">
+                        </div>
+                        <div class="w-1.5 h-1.5 bg-primary-500 rounded-full animate-bounce [animation-delay:-0.15s]">
+                        </div>
+                        <div class="w-1.5 h-1.5 bg-primary-500 rounded-full animate-bounce"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Local Video (Picture-in-Picture) + Local Info -->
+    <div [class.top-4]="!showChat" [class.right-4]="!showChat" [class.bottom-32]="showChat" [class.left-4]="showChat"
+        class="absolute w-48 md:w-64 z-50 transition-all duration-300">
+
+        <!-- Video Feed -->
+        <div class="aspect-video bg-slate-800 rounded-xl overflow-hidden shadow-2xl border-2 border-white/20 relative">
+            <video #localVideo autoplay muted playsinline class="w-full h-full object-cover transform scale-x-[-1]">
+            </video>
+
+            <!-- Local Name Tag -->
+            <div
+                class="absolute bottom-2 left-2 bg-slate-900/60 backdrop-blur-md px-2 py-0.5 rounded text-[10px] text-white font-medium border border-white/10">
+                You: {{ localName }}
+            </div>
+
+            <!-- Muted Indicator -->
+            <div *ngIf="!videoEnabled" class="absolute inset-0 flex items-center justify-center bg-slate-800/90">
+                <i class="fas fa-video-slash text-white text-3xl"></i>
+            </div>
+        </div>
+
+        <!-- Timer UNDER Video per request -->
+        <div class="mt-2 flex justify-center">
+            <div
+                class="bg-slate-800/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></div>
+                <span class="font-mono text-sm text-white font-bold">{{ formattedDuration }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Panel -->
+    <div *ngIf="showChat"
+        class="absolute top-0 right-0 bottom-0 w-80 bg-slate-800/95 backdrop-blur-md shadow-2xl z-40 flex flex-col border-l border-white/10">
+        <div class="p-4 border-b border-white/10 flex items-center justify-between">
+            <h3 class="text-white font-bold flex items-center gap-2">
+                <i class="fas fa-comments text-primary-400"></i>
+                Room Chat
+            </h3>
+            <button (click)="toggleChat()" class="text-slate-400 hover:text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Messages List -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4">
+            <div *ngFor="let msg of messages" class="flex flex-col" [class.items-end]="msg.isMe">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-[10px] text-slate-400">{{ msg.sender }}</span>
+                    <span class="text-[10px] text-slate-500">{{ msg.timestamp | date:'shortTime' }}</span>
+                </div>
+                <div [class]="msg.isMe ? 'bg-primary-600 text-white rounded-l-lg rounded-tr-lg' : 'bg-slate-700 text-white rounded-r-lg rounded-tl-lg'"
+                    class="px-3 py-2 text-sm max-w-[90%] shadow-sm">
+                    {{ msg.message }}
+                </div>
+            </div>
+            <div *ngIf="messages.length === 0"
+                class="h-full flex items-center justify-center text-slate-500 text-sm italic">
+                No messages yet
+            </div>
+        </div>
+
+        <!-- Message Input -->
+        <div class="p-4 bg-slate-900/50">
+            <form (submit)="sendMessage()" class="flex gap-2">
+                <input [(ngModel)]="newMessage" name="chatInput" placeholder="Type a message..."
+                    class="flex-1 bg-slate-800 border-none rounded-lg px-3 py-2 text-white text-sm focus:ring-1 focus:ring-primary-500">
+                <button type="submit" [disabled]="!newMessage.trim()"
+                    class="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center text-white hover:bg-primary-700 disabled:opacity-50">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Header (Top) -->
+    <div class="absolute top-0 left-0 right-0 z-20 bg-gradient-to-b from-slate-900/80 to-transparent p-6 md:transition-opacity md:duration-300"
+        [class.md:opacity-0]="!showControls" [class.md:pointer-events-none]="!showControls">
+        <div class="flex items-center justify-between max-w-7xl mx-auto">
+            <!-- Branding/Context + Status -->
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-primary-600 flex items-center justify-center text-white shadow-lg">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-white leading-tight">Video Consultation</h2>
+                        <p class="text-[10px] text-slate-300">Session: #{{ appointmentId }}</p>
+                    </div>
+                </div>
+
+                <!-- Connection Status Moved Here -->
+                <div
+                    class="flex items-center gap-2 bg-slate-800/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+                    <div [class]="'w-2 h-2 rounded-full ' + (connectionStatus === 'connected' ? 'bg-green-500' : 
+                                  connectionStatus === 'idle' ? 'bg-primary-400 animate-pulse' :
+                                  connectionStatus === 'connecting' ? 'bg-yellow-500 animate-pulse' : 'bg-rose-500')">
+                    </div>
+                    <span class="text-white text-[10px] font-bold tracking-wide uppercase">{{ connectionText }}</span>
+                </div>
+            </div>
+
+            <!-- Right Side remains empty to avoid PiP overlap -->
+            <div></div>
+        </div>
+    </div>
+
+    <!-- Controls (Bottom) - Always visible on mobile -->
+    <div class="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-slate-900/90 to-transparent p-6 md:transition-opacity md:duration-300"
+        [class.md:opacity-0]="!showControls" [class.md:pointer-events-none]="!showControls">
+        <div class="flex items-center justify-center gap-4 max-w-2xl mx-auto">
+
+            <!-- Microphone Toggle -->
+            <button (click)="toggleAudio()" [ngClass]="{
+                    'bg-rose-500 hover:bg-rose-600': !audioEnabled,
+                    'bg-white/20 hover:bg-white/30': audioEnabled
+                }"
+                class="w-14 h-14 rounded-full backdrop-blur-md flex items-center justify-center text-white transition-all hover:scale-110">
+                <i *ngIf="audioEnabled" class="fas fa-microphone text-xl"></i>
+                <i *ngIf="!audioEnabled" class="fas fa-microphone-slash text-xl"></i>
+            </button>
+
+            <!-- Video Toggle -->
+            <button (click)="toggleVideo()" [ngClass]="{
+                    'bg-rose-500 hover:bg-rose-600': !videoEnabled,
+                    'bg-white/20 hover:bg-white/30': videoEnabled
+                }"
+                class="w-14 h-14 rounded-full backdrop-blur-md flex items-center justify-center text-white transition-all hover:scale-110">
+                <i *ngIf="videoEnabled" class="fas fa-video text-xl"></i>
+                <i *ngIf="!videoEnabled" class="fas fa-video-slash text-xl"></i>
+            </button>
+
+            <!-- End Call -->
+            <button (click)="endCall()"
+                class="w-16 h-16 rounded-full bg-rose-600 hover:bg-rose-700 flex items-center justify-center text-white transition-all hover:scale-110 shadow-lg">
+                <i class="fas fa-phone-slash text-2xl"></i>
+            </button>
+
+            <!-- More Options (Future) -->
+            <!-- More Options -->
+            <div class="relative">
+                <button (click)="toggleMoreMenu()"
+                    class="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md hover:bg-white/30 flex items-center justify-center text-white transition-all hover:scale-110"
+                    title="More options">
+                    <i class="fas fa-ellipsis-v text-xl"></i>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div *ngIf="showMoreMenu"
+                    class="absolute bottom-16 right-0 bg-slate-800 rounded-lg shadow-xl border border-slate-700 py-2 min-w-[200px] z-50 overflow-hidden">
+
+                    <!-- Screen Share -->
+                    <button (click)="toggleScreenShare()"
+                        class="w-full px-4 py-3 text-left hover:bg-slate-700 flex items-center gap-3 transition-colors"
+                        [class.text-primary-400]="isScreenSharing" [class.text-white]="!isScreenSharing">
+                        <i class="fas fa-{{ isScreenSharing ? 'video' : 'desktop' }} w-5 text-center"></i>
+                        <span>{{ isScreenSharing ? 'Stop Sharing' : 'Share Screen' }}</span>
+                    </button>
+
+                    <!-- Chat Toggle -->
+                    <button (click)="toggleChat()"
+                        class="w-full px-4 py-3 text-left text-white hover:bg-slate-700 flex items-center gap-3 transition-colors">
+                        <i class="fas fa-comments w-5 text-center"></i>
+                        <span>{{ showChat ? 'Hide Chat' : 'Show Chat' }}</span>
+                    </button>
+
+                    <div class="h-[1px] bg-slate-700 my-1"></div>
+
+                    <button (click)="toggleFullscreen()"
+                        class="w-full px-4 py-3 text-left text-white hover:bg-slate-700 flex items-center gap-3 transition-colors">
+                        <i class="fas fa-expand w-5 text-center"></i>
+                        <span>Full Screen</span>
+                    </button>
+
+                    <button (click)="endCall()"
+                        class="w-full px-4 py-3 text-left text-rose-400 hover:bg-slate-700 flex items-center gap-3 transition-colors">
+                        <i class="fas fa-phone-slash w-5 text-center"></i>
+                        <span>End Call</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Labels -->
+        <div class="flex items-center justify-center gap-4 max-w-2xl mx-auto mt-2">
+            <span class="text-xs text-white/70 w-14 text-center">
+                {{ audioEnabled ? 'Mute' : 'Unmute' }}
+            </span>
+            <span class="text-xs text-white/70 w-14 text-center">
+                {{ videoEnabled ? 'Stop Video' : 'Start Video' }}
+            </span>
+            <span class="text-xs text-white/70 w-16 text-center">End Call</span>
+            <span class="text-xs text-white/70 w-14 text-center">More</span>
+        </div>
+    </div>
+
+    <!-- Reconnecting Overlay -->
+    <div *ngIf="connectionStatus === 'disconnected' || connectionStatus === 'failed'"
+        class="absolute inset-0 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center z-30">
+        <div class="text-center">
+            <div
+                class="inline-flex items-center justify-center w-20 h-20 bg-yellow-500/20 rounded-full mb-6 animate-pulse">
+                <i class="fas fa-exclamation-triangle text-yellow-500 text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-2">Connection {{ connectionStatus === 'failed' ? 'Failed' :
+                'Lost' }}</h3>
+            <p class="text-slate-400 mb-6">{{ connectionStatus === 'failed' ? 'Unable to establish connection' :
+                'Attempting to reconnect...' }}</p>
+            <button (click)="endCall()" class="vc-btn vc-btn-primary">
+                <i class="fas fa-times mr-2"></i>
+                End Call
+            </button>
+        </div>
+    </div>
+
+</div>

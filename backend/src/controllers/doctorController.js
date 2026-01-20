@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
+const crypto = require('crypto');
+
 
 const emailService = require('../services/email.service');
 const { generateVerificationToken, getTokenExpiration } = require('../../utils/tokenGenerator');
@@ -100,7 +102,7 @@ exports.registerDoctor = async (req, res) => {
 
 exports.getDoctors = async (req, res) => {
     try {
-        const { specialization, mode, search, maxFee, minExperience, medicine_type } = req.query;
+        const { specialization, mode, search, maxFee, minExperience, medicine_type, gender } = req.query;
 
         let query = 'SELECT * FROM doctors WHERE 1=1';
         const params = [];
@@ -127,8 +129,9 @@ exports.getDoctors = async (req, res) => {
         }
 
         if (search) {
-            query += ' AND name LIKE ?';
-            params.push(`%${search}%`);
+            query += ' AND (name LIKE ? OR specialization LIKE ? OR medicine_type LIKE ? OR qualifications LIKE ? OR clinic_name LIKE ?)';
+            const searchPattern = `%${search}%`;
+            params.push(searchPattern, searchPattern, searchPattern, searchPattern, searchPattern);
         }
 
         if (maxFee) {
@@ -139,6 +142,11 @@ exports.getDoctors = async (req, res) => {
         if (minExperience) {
             query += ' AND experience >= ?';
             params.push(parseInt(minExperience, 10));
+        }
+
+        if (gender) {
+            query += ' AND gender = ?';
+            params.push(gender);
         }
 
         const [doctors] = await db.execute(query, params);
@@ -203,7 +211,8 @@ exports.updateDoctorProfile = async (req, res) => {
                 specialization, mode, experience,
                 about, qualifications, consultationFee, languages, phone,
                 registration_number, title, awards, clinic_name, clinic_address,
-                clinic_timings, website, linkedin
+                clinic_timings, website, linkedin,
+                dob, gender, full_address, blood_group
             } = req.body;
 
             // Check if doctor exists
@@ -237,6 +246,12 @@ exports.updateDoctorProfile = async (req, res) => {
             if (clinic_timings !== undefined) { updates.push('clinic_timings = ?'); params.push(clinic_timings); }
             if (website !== undefined) { updates.push('website = ?'); params.push(website); }
             if (linkedin !== undefined) { updates.push('linkedin = ?'); params.push(linkedin); }
+
+            // Personal fields
+            if (dob !== undefined) { updates.push('dob = ?'); params.push(dob === '' ? null : dob); }
+            if (gender !== undefined) { updates.push('gender = ?'); params.push(gender); }
+            if (full_address !== undefined) { updates.push('full_address = ?'); params.push(full_address); }
+            if (blood_group !== undefined) { updates.push('blood_group = ?'); params.push(blood_group); }
 
             if (req.file) {
                 updates.push('image = ?');
@@ -496,5 +511,306 @@ exports.verifyResetToken = async (req, res) => {
     } catch (err) {
         console.error('Verify reset token error:', err);
         res.status(500).json({ valid: false, message: 'Server error' });
+    }
+};
+
+// =============================================
+// Video Consultancy Features
+// =============================================
+
+// Get doctor's available slots for a specific date
+exports.getDoctorAvailableSlots = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { date } = req.query; // Format: YYYY-MM-DD
+
+        if (!date) {
+            return res.status(400).json({
+                success: false,
+                message: 'Date is required (format: YYYY-MM-DD)'
+            });
+        }
+
+        // Get day of week (1=Monday, 2=Tuesday, ..., 7=Sunday)
+        const [dayResult] = await db.execute(
+            'SELECT DAYOFWEEK(?) as day_of_week',
+            [date]
+        );
+        const dayOfWeek = dayResult[0].day_of_week;
+
+        // Get availability for this day
+        const [availability] = await db.execute(
+            `SELECT 
+                da.id,
+                da.start_time,
+                da.end_time,
+                da.slot_duration
+            FROM doctor_availability da
+            WHERE da.doctor_id = ?
+              AND da.day_of_week = ?
+              AND da.is_active = 1`,
+            [id, dayOfWeek]
+        );
+
+        if (availability.length === 0) {
+            return res.json({
+                success: true,
+                message: 'Doctor not available on this day',
+                data: []
+            });
+        }
+
+        // Get existing appointments for this date
+        const [bookedSlots] = await db.execute(
+            `SELECT start_time, end_time
+            FROM appointments
+            WHERE doctor_id = ?
+              AND appointment_date = ?
+              AND status NOT IN ('cancelled')`,
+            [id, date]
+        );
+
+        // Generate available time slots
+        const slots = [];
+        for (const avail of availability) {
+            const startTime = avail.start_time;
+            const endTime = avail.end_time;
+            const slotDuration = avail.slot_duration || 30;
+
+            // Generate slots between start and end time
+            let current = new Date(`2000-01-01 ${startTime}`);
+            const end = new Date(`2000-01-01 ${endTime}`);
+
+            while (current < end) {
+                const slotStart = current.toTimeString().slice(0, 5);
+                current.setMinutes(current.getMinutes() + slotDuration);
+                const slotEnd = current.toTimeString().slice(0, 5);
+
+                // Check if this slot is already booked
+                const isBooked = bookedSlots.some(booked => {
+                    return slotStart >= booked.start_time && slotStart < booked.end_time;
+                });
+
+                if (!isBooked && current <= end) {
+                    slots.push({
+                        start_time: slotStart,
+                        end_time: slotEnd,
+                        duration: slotDuration,
+                        available: true
+                    });
+                }
+            }
+        }
+
+        res.json({
+            success: true,
+            data: slots
+        });
+
+    } catch (error) {
+        console.error('Error fetching available slots:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch available slots',
+            error: error.message
+        });
+    }
+};
+
+// Get doctor reviews
+exports.getDoctorReviews = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { page = 1, limit = 10 } = req.query;
+
+        const parsedLimit = parseInt(limit) || 10;
+        const parsedPage = parseInt(page) || 1;
+        const parsedOffset = (parsedPage - 1) * parsedLimit;
+
+        // Get total count
+        const [countResult] = await db.execute(
+            'SELECT COUNT(*) as total FROM doctor_reviews WHERE doctor_id = ?',
+            [id]
+        );
+        const total = countResult[0].total;
+
+        // Get reviews - use direct values for LIMIT/OFFSET
+        const [reviews] = await db.execute(
+            `SELECT 
+                dr.id,
+                dr.rating,
+                dr.review,
+                dr.created_at,
+                u.name as user_name
+            FROM doctor_reviews dr
+            LEFT JOIN users u ON dr.user_id = u.id
+            WHERE dr.doctor_id = ?
+            ORDER BY dr.created_at DESC
+            LIMIT ${parsedLimit} OFFSET ${parsedOffset}`,
+            [id]  // Only WHERE parameter
+        );
+
+        res.json({
+            success: true,
+            data: reviews,
+            pagination: {
+                total,
+                page: parsedPage,
+                limit: parsedLimit,
+                totalPages: Math.ceil(total / parsedLimit)
+            }
+        });
+
+    } catch (error) {
+        console.error('Error fetching reviews:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch reviews',
+            error: error.message
+        });
+    }
+};
+
+// Get specializations (for filter dropdown)
+exports.getSpecializations = async (req, res) => {
+    try {
+        const [specializations] = await db.execute(
+            `SELECT DISTINCT specialization 
+            FROM doctors 
+            WHERE specialization IS NOT NULL 
+              AND specialization != ''
+              AND isVerified = 1
+            ORDER BY specialization`
+        );
+
+        res.json({
+            success: true,
+            data: specializations.map(s => s.specialization)
+        });
+
+    } catch (error) {
+        console.error('Error fetching specializations:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch specializations',
+            error: error.message
+        });
+    }
+};
+
+// Get locations (for filter dropdown)
+exports.getLocations = async (req, res) => {
+    try {
+        const [locations] = await db.execute(
+            `SELECT DISTINCT location 
+            FROM doctors 
+            WHERE location IS NOT NULL 
+              AND location != ''
+              AND isVerified = 1
+            ORDER BY location`
+        );
+
+        res.json({
+            success: true,
+            data: locations.map(l => l.location)
+        });
+
+    } catch (error) {
+        console.error('Error fetching locations:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch locations',
+            error: error.message
+        });
+    }
+};
+
+exports.getDoctorSuggestions = async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q || q.length < 2) {
+            return res.json({ success: true, data: [] });
+        }
+
+        const pattern = `%${q}%`;
+        const suggestions = [];
+
+        // 1. Match Doctor Names
+        const [nameMatches] = await db.execute(
+            'SELECT id, name, specialization, image FROM doctors WHERE name LIKE ? LIMIT 5',
+            [pattern]
+        );
+        nameMatches.forEach(d => suggestions.push({
+            id: d.id,
+            text: d.name,
+            subtext: d.specialization,
+            type: 'doctor',
+            image: d.image
+        }));
+
+        // 2. Match Specializations
+        const [specMatches] = await db.execute(
+            'SELECT DISTINCT specialization FROM doctors WHERE specialization LIKE ? LIMIT 3',
+            [pattern]
+        );
+        specMatches.forEach(s => suggestions.push({
+            text: s.specialization,
+            type: 'specialization',
+            icon: 'fa-stethoscope'
+        }));
+
+        // 3. Match Medicine Types
+        const medicineTypes = ['Ayurveda', 'Homeopathy', 'Allopathy'];
+        medicineTypes.forEach(t => {
+            if (t.toLowerCase().includes(q.toLowerCase())) {
+                suggestions.push({
+                    text: t,
+                    type: 'medicine_type',
+                    icon: 'fa-pills'
+                });
+            }
+        });
+
+        // 4. Match Clinic Names
+        const [clinicMatches] = await db.execute(
+            'SELECT DISTINCT clinic_name FROM doctors WHERE clinic_name LIKE ? LIMIT 2',
+            [pattern]
+        );
+        clinicMatches.forEach(c => suggestions.push({
+            text: c.clinic_name,
+            type: 'clinic',
+            icon: 'fa-hospital'
+        }));
+
+        // 5. Match Price/Fee Keywords
+        if (q.toLowerCase().includes('price') || q.toLowerCase().includes('fee') || (!isNaN(q) && parseInt(q) > 100)) {
+            const numeric = parseInt(q.replace(/[^0-9]/g, '')) || 500;
+            suggestions.push({
+                text: `Doctors under ₹${numeric}`,
+                type: 'price',
+                icon: 'fa-wallet',
+                value: numeric
+            });
+        }
+
+        // 6. Match Experience Keywords
+        if (q.toLowerCase().includes('exp') || q.toLowerCase().includes('year') || (!isNaN(q) && parseInt(q) < 50)) {
+            const numeric = parseInt(q.replace(/[^0-9]/g, '')) || 5;
+            suggestions.push({
+                text: `${numeric}+ Years of Experience`,
+                type: 'experience',
+                icon: 'fa-history',
+                value: numeric
+            });
+        }
+
+        res.json({
+            success: true,
+            data: suggestions
+        });
+
+    } catch (err) {
+        console.error('getDoctorSuggestions error:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
     }
 };

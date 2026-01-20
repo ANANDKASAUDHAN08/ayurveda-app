@@ -49,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   hamburgerMenuOpen = false;
   isAdminRoute = false;
+  isVideoCallRoute = false;
   isUserLoggedIn = false;
   isLocationSheetOpen = false;
   showMapModal = false;
@@ -72,6 +73,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.routerSubscription = this.router.events.subscribe(() => {
       this.isAdminRoute = this.router.url.startsWith('/admin');
+      this.isVideoCallRoute = this.router.url.includes('/video-call');
       this.closeHamburgerMenu();
     });
 

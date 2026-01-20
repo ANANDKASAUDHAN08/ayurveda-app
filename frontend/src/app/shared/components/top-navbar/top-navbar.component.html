@@ -130,6 +130,11 @@
                             <i class="fas fa-id-card text-purple-600 w-5"></i>
                             <span class="text-sm font-bold text-slate-700">{{ 'nav.profile' | translate }}</span>
                         </a>
+                        <a routerLink="/appointments/video" (click)="myHealthDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all cursor-pointer">
+                            <i class="fas fa-video text-rose-600 w-5"></i>
+                            <span class="text-sm font-bold text-slate-700">My Appointments</span>
+                        </a>
                         <a routerLink="/wellness/calendar" (click)="myHealthDropdownOpen = false"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all cursor-pointer">
                             <i class="fas fa-calendar-alt text-emerald-600 w-5"></i>
@@ -218,6 +223,11 @@
                                     class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
                                     <i class="fas fa-shopping-bag w-4 text-center text-emerald-600"></i>
                                     {{ 'nav.orders' | translate }}
+                                </button>
+                                <button routerLink="/appointments/video" (click)="profileMenuOpen = false"
+                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
+                                    <i class="fas fa-video w-4 text-center text-rose-600"></i>
+                                    My Appointments
                                 </button>
                                 <button (click)="navigateToFavorites()"
                                     class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">

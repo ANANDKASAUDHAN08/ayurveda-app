@@ -1,6 +1,9 @@
 /* Premium Design System */
 @import 'styles/design-system.css';
 
+/* Video Consultancy Theme */
+@import 'styles/video-consultancy.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

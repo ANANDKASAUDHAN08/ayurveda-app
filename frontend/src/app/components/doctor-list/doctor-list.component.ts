@@ -1,52 +1,54 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../../shared/services/doctor.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
+import { AppointmentService } from '../../shared/services/appointment.service';
 import { DoctorCardComponent } from '../doctor-card/doctor-card.component';
 import { BookingModalComponent } from '../booking-modal/booking-modal.component';
 import { DoctorDetailModalComponent } from '../doctor-detail-modal/doctor-detail-modal.component';
-import { MedicineTypeService, MedicineType, FilterMode } from '../../shared/services/medicine-type.service';
-import { ContextBannerComponent } from '../../shared/components/context-banner/context-banner.component';
-import { Subscription, combineLatest, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-doctor-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, DoctorCardComponent, BookingModalComponent, DoctorDetailModalComponent, ContextBannerComponent],
+  imports: [CommonModule, FormsModule, DoctorCardComponent, BookingModalComponent, DoctorDetailModalComponent],
   templateUrl: './doctor-list.component.html'
 })
-export class DoctorListComponent implements OnInit {
+export class DoctorListComponent implements OnInit, OnDestroy {
 
   Math = Math;
   doctors: any[] = [];
-  filteredDoctors: any[] = [];
   isLoading = true;
   error: string = '';
+
+  // Video Consultancy Features
+  doctorOnlineStatus: Map<number, boolean> = new Map();
+  isFirstTimeUser: boolean = false;
 
   filters: any = {
     search: '',
     specialization: [],
     mode: '',
-    maxFee: 2000,
+    maxFee: null, // default was 2000, changed to null to show all doctors
     minFee: 0,
     minExperience: null,
-    medicine_type: 'all', // NEW: Medicine type filter
+
     minRating: 0,
     gender: '', // 'male', 'female', ''
     languages: [],
-    availableNow: false
+    availableNow: false,
+    medicine_type: 'all'
   };
 
-  private medicineTypeSubscription?: Subscription;
   private destroy$ = new Subject<void>();
 
   // Pagination
   currentPage = 1;
-  itemsPerPage = 10;
+  itemsPerPage = 8;
 
   specializations = [
     'Cardiology', 'Orthopedics', 'Dermatology', 'Pediatrics', 'Neurology',
@@ -66,32 +68,39 @@ export class DoctorListComponent implements OnInit {
   selectedDoctor: any = null;
   selectedDoctorForDetails: any = null;
   showMobileFilters = false;
-  isFilterCollapsed = false;
+  showDesktopFilters = false;
+  showSortDropdown = false;
 
-  // Medicine type context
-  currentMedicineType: MedicineType | 'all' = 'all';
+  // Search Suggestions & Omni-search
+  suggestions: any[] = [];
+  showSuggestions = false;
+  searchDebounce: any;
 
   constructor(
     private doctorService: DoctorService,
     private authService: AuthService,
     private snackbar: SnackbarService,
-    private medicineTypeService: MedicineTypeService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private appointmentService: AppointmentService,
+    private elementRef: ElementRef
   ) { }
 
+
   ngOnInit() {
-    combineLatest([
-      this.route.queryParams,
-      this.medicineTypeService.getCurrentType()
-    ]).pipe(takeUntil(this.destroy$)).subscribe(([params, type]) => {
+    // Check if first-time user for free consultation
+    if (this.authService.isLoggedIn()) {
+      this.appointmentService.isFirstTimeUser().subscribe({
+        next: (isFree) => this.isFirstTimeUser = isFree,
+        error: () => this.isFirstTimeUser = false
+      });
+    }
+
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       if (params['search']) {
         this.filters.search = params['search'];
       }
 
       const bookId = params['bookId'];
-      this.filters.medicine_type = type;
-      this.currentMedicineType = type;
-
       this.loadDoctorsInternal(bookId);
     });
   }
@@ -127,17 +136,17 @@ export class DoctorListComponent implements OnInit {
 
           if (matchedDoctor) {
             this.doctors = [matchedDoctor];
-            this.filteredDoctors = [matchedDoctor];
             this.openBooking(matchedDoctor);
           } else {
             console.warn(`Doctor with ID ${idToFind} not found in filtered list`);
             this.doctors = data;
-            this.filteredDoctors = data;
           }
         } else {
           this.doctors = data;
-          this.filteredDoctors = data;
         }
+
+        // Check online status for each doctor
+        this.checkDoctorsOnlineStatus();
 
         setTimeout(() => {
           this.isLoading = false;
@@ -177,20 +186,18 @@ export class DoctorListComponent implements OnInit {
   }
 
   clearFilters() {
-    // Don't clear medicine_type - it's controlled by the navbar selector
-    const currentMedicineType = this.filters.medicine_type;
     this.filters = {
       search: '',
       specialization: [],
       mode: '',
-      maxFee: 2000,
+      maxFee: null,
       minFee: 0,
       minExperience: null,
-      medicine_type: currentMedicineType,
       minRating: 0,
       gender: '',
       languages: [],
-      availableNow: false
+      availableNow: false,
+      medicine_type: 'all'
     };
     this.sortBy = 'relevance';
     this.loadDoctors();
@@ -239,17 +246,46 @@ export class DoctorListComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.medicineTypeSubscription?.unsubscribe();
     this.destroy$.next();
     this.destroy$.complete();
+    // Reset body overflow when component is destroyed
+    document.body.style.overflow = '';
   }
 
   toggleMobileFilters() {
     this.showMobileFilters = !this.showMobileFilters;
+
+    // Prevent body scroll when mobile filters are open
+    if (this.showMobileFilters) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
   }
 
   toggleFilterSidebar() {
-    this.isFilterCollapsed = !this.isFilterCollapsed;
+    this.showDesktopFilters = !this.showDesktopFilters;
+  }
+
+  toggleSortDropdown() {
+    this.showSortDropdown = !this.showSortDropdown;
+  }
+
+  selectSort(value: string) {
+    this.sortBy = value;
+    this.showSortDropdown = false;
+    this.onSortChange();
+  }
+
+  getSortLabel(value: string): string {
+    const labels: { [key: string]: string } = {
+      'relevance': 'Relevance',
+      'rating': 'Highest Rated',
+      'experience': 'Most Experienced',
+      'fee_low': 'Price (Low to High)',
+      'fee_high': 'Price (High to Low)'
+    };
+    return labels[value] || 'Relevance';
   }
 
   goToPage(page: number) {
@@ -258,9 +294,11 @@ export class DoctorListComponent implements OnInit {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
+
   nextPage() {
     this.goToPage(this.currentPage + 1);
   }
+
   previousPage() {
     this.goToPage(this.currentPage - 1);
   }
@@ -296,17 +334,138 @@ export class DoctorListComponent implements OnInit {
   }
 
   onToggleFilter() {
-    // Filter mode toggle not implemented in service
     this.applyFilters();
   }
 
   onClearFilter() {
-    this.currentMedicineType = 'all';
     this.filters.medicine_type = 'all';
     this.applyFilters();
   }
 
-  onSwitchType(type: MedicineType) {
-    this.medicineTypeService.setMedicineType(type);
+  // Video Consultancy Methods
+
+  checkDoctorsOnlineStatus() {
+    this.doctors.forEach(doctor => {
+      this.doctorService.isOnlineNow(doctor.id).subscribe({
+        next: (isOnline) => {
+          this.doctorOnlineStatus.set(doctor.id, isOnline);
+        },
+        error: () => {
+          this.doctorOnlineStatus.set(doctor.id, false);
+        }
+      });
+    });
+  }
+
+  isDoctorOnline(doctorId: number): boolean {
+    return this.doctorOnlineStatus.get(doctorId) || false;
+  }
+
+  onInstantConsult(doctor: any) {
+    if (!this.authService.isLoggedIn()) {
+      this.snackbar.warning('Please login to start instant consultation');
+      return;
+    }
+
+    // Open booking modal in instant mode
+    this.selectedDoctor = { ...doctor, instantMode: true };
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+
+    // Close suggestions if clicked outside
+    const isSearchClick = target.closest('#omniSearchContainer') || target.closest('#mobileSearchContainer');
+    if (!isSearchClick) {
+      this.showSuggestions = false;
+    }
+
+    // Close Sort Dropdown on outside click
+    const mobileSort = document.getElementById('mobileSortDropdown');
+    const desktopSort = document.getElementById('desktopSortDropdown');
+    const isSortClick = (mobileSort && mobileSort.contains(target)) || (desktopSort && desktopSort.contains(target));
+    if (!isSortClick) {
+      this.showSortDropdown = false;
+    }
+  }
+
+  onSearchInput(query: string) {
+    if (this.searchDebounce) clearTimeout(this.searchDebounce);
+
+    if (!query || query.length < 2) {
+      this.suggestions = [];
+      this.showSuggestions = false;
+      return;
+    }
+
+    this.searchDebounce = setTimeout(() => {
+      this.doctorService.getDoctorSuggestions(query).subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.suggestions = res.data;
+            this.showSuggestions = this.suggestions.length > 0;
+          }
+        },
+        error: () => {
+          this.suggestions = [];
+          this.showSuggestions = false;
+        }
+      });
+    }, 300);
+  }
+
+  selectSuggestion(suggestion: any) {
+    this.showSuggestions = false;
+
+    if (suggestion.type === 'doctor') {
+      this.doctorService.getDoctorById(suggestion.id).subscribe(doctor => {
+        this.openDetails(doctor);
+      });
+    } else if (suggestion.type === 'specialization') {
+      this.filters.specialization = [suggestion.text];
+      this.filters.search = '';
+      this.applyFilters();
+    } else if (suggestion.type === 'medicine_type') {
+      this.filters.medicine_type = suggestion.text.toLowerCase();
+      this.filters.search = '';
+      this.applyFilters();
+    } else if (suggestion.type === 'clinic') {
+      this.filters.search = suggestion.text;
+      this.applyFilters();
+    } else if (suggestion.type === 'price') {
+      this.filters.maxFee = suggestion.value;
+      this.filters.search = '';
+      this.applyFilters();
+    } else if (suggestion.type === 'experience') {
+      this.filters.minExperience = suggestion.value;
+      this.filters.search = '';
+      this.applyFilters();
+    } else {
+      this.filters.search = suggestion.text;
+      this.applyFilters();
+    }
+  }
+
+  clearSearch(event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.filters.search = '';
+    this.suggestions = [];
+    this.showSuggestions = false;
+    this.applyFilters();
+
+    // Maintain focus on mobile if clear was clicked
+    if (!this.isDesktop()) {
+      setTimeout(() => {
+        const input = document.getElementById('mobileSearchInput') as HTMLInputElement;
+        if (input) input.focus();
+      }, 0);
+    }
+  }
+
+  isDesktop(): boolean {
+    return window.innerWidth >= 1024;
   }
 }

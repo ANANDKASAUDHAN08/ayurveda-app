@@ -1,0 +1,362 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 py-4 px-3 sm:py-8 sm:px-4">
+    <div class="max-w-6xl mx-auto">
+
+        <!-- Header & Tab Navigation Container -->
+        <div class="mb-6 sm:mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <!-- Header -->
+            <div>
+                <h1 class="text-xl sm:text-2xl md:text-4xl font-bold text-slate-800 mb-2">
+                    My Video Consultations
+                </h1>
+                <p class="text-sm md:text-lg text-slate-600">Manage your appointments and join video calls</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex-shrink-0">
+                <div class="vc-glass inline-flex p-1 rounded-xl w-full sm:w-auto">
+                    <button (click)="switchTab('upcoming')" [class.bg-primary-500]="activeTab === 'upcoming'"
+                        [class.text-white]="activeTab === 'upcoming'" [class.text-slate-600]="activeTab !== 'upcoming'"
+                        class="text-xs sm:text-sm md:text-md px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-bold transition-all flex-1 sm:flex-none">
+                        <i class="fas fa-calendar-check mr-1 sm:mr-2"></i>
+                        Upcoming ({{ upcomingAppointments.length }})
+                    </button>
+                    <button (click)="switchTab('past')" [class.bg-primary-500]="activeTab === 'past'"
+                        [class.text-white]="activeTab === 'past'" [class.text-slate-600]="activeTab !== 'past'"
+                        class="text-xs sm:text-sm md:text-md px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-bold transition-all flex-1 sm:flex-none">
+                        <i class="fas fa-history mr-1 sm:mr-2"></i>
+                        Past ({{ pastAppointments.length }})
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="mb-6">
+            <div class="vc-card bg-rose-50 border-rose-200 p-4">
+                <i class="fas fa-exclamation-triangle text-rose-600 mr-2"></i>
+                <span class="text-rose-700">{{ error }}</span>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div *ngFor="let i of [1,2,3,4]" class="vc-skeleton-card"></div>
+        </div>
+
+        <!-- Upcoming Appointments -->
+        <div *ngIf="!loading && activeTab === 'upcoming'">
+            <div *ngIf="upcomingAppointments.length === 0" class="text-center py-16">
+                <div class="vc-card max-w-md mx-auto p-8">
+                    <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-calendar-plus text-slate-400 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">No Upcoming Appointments</h3>
+                    <p class="text-slate-600 mb-6">You don't have any scheduled consultations</p>
+                    <button class="vc-btn vc-btn-primary" routerLink="/doctors">
+                        <i class="fas fa-search mr-2"></i>
+                        Find a Doctor
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+                <div *ngFor="let appointment of upcomingAppointments" class="vc-card vc-glass animate-fade-in">
+
+                    <!-- Doctor Info -->
+                    <div class="p-2 sm:p-4 md:p-6 border-b border-white/20">
+                        <div class="flex items-center gap-1.5 sm:gap-3 md:gap-4">
+                            <div
+                                class="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white text-xs sm:text-lg md:text-2xl font-bold flex-shrink-0">
+                                {{ appointment.doctor_name?.charAt(0) || 'D' }}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3
+                                    class="text-[11px] leading-tight sm:text-base md:text-lg font-bold text-slate-800 mb-0 sm:mb-1 line-clamp-2">
+                                    {{ appointment.doctor_name }}
+                                </h3>
+                                <p class="text-[10px] sm:text-sm text-slate-600 line-clamp-1">{{
+                                    appointment.specialization || 'General Physician' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Details -->
+                    <div class="p-2 sm:p-4 md:p-6 space-y-1 sm:space-y-2 md:space-y-3">
+                        <!-- Date & Time -->
+                        <div class="flex items-center text-slate-700">
+                            <i
+                                class="fas fa-calendar w-3 sm:w-4 md:w-5 text-primary-500 mr-1.5 sm:mr-3 text-[10px] sm:text-sm"></i>
+                            <span class="text-[10px] sm:text-sm font-medium">
+                                {{ formatDate(appointment.appointment_date) }}
+                            </span>
+                        </div>
+                        <div class="flex items-center text-slate-700">
+                            <i
+                                class="fas fa-clock w-3 sm:w-4 md:w-5 text-primary-500 mr-1.5 sm:mr-3 text-[10px] sm:text-sm"></i>
+                            <span class="text-[10px] sm:text-sm font-medium">
+                                {{ formatTime(appointment.start_time) }}
+                            </span>
+                        </div>
+
+                        <!-- Type -->
+                        <div class="flex items-center text-slate-700">
+                            <i
+                                class="fas fa-video w-3 sm:w-4 md:w-5 text-primary-500 mr-1.5 sm:mr-3 text-[10px] sm:text-sm"></i>
+                            <span class="text-[10px] sm:text-sm font-medium capitalize">
+                                {{ appointment.consultation_type }} <span class="hidden xs:inline">Consultation</span>
+                            </span>
+                        </div>
+
+                        <!-- Status Badge -->
+                        <div class="pt-0.5 sm:pt-2">
+                            <span
+                                [class]="'inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-xs font-bold border ' + getStatusClass(appointment.status)">
+                                <i [class]="'fas ' + getStatusIcon(appointment.status) + ' mr-1 sm:mr-2'"></i>
+                                {{ getStatusLabel(appointment.status) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="px-2 sm:px-4 md:px-6 pb-2 sm:pb-4 md:pb-6 flex flex-row gap-1.5 sm:gap-3">
+                        <!-- Join Call Button -->
+                        <button *ngIf="isJoinable(appointment)" (click)="joinVideoCall(appointment)"
+                            class="vc-btn vc-btn-primary flex-[2] text-[10px] sm:text-sm md:text-base py-2 min-h-0 h-auto">
+                            <i class="fas fa-video mr-1"></i>
+                            Join
+                        </button>
+
+                        <!-- Cancel Button -->
+                        <button *ngIf="canCancel(appointment)" (click)="openCancelModal(appointment)"
+                            class="vc-btn vc-btn-ghost flex-1 text-[10px] sm:text-sm md:text-base py-2 min-h-0 h-auto px-1">
+                            <i class="fas fa-times-circle mr-1"></i>
+                            Cancel
+                        </button>
+
+                        <!-- View Details (Time Display) -->
+                        <div *ngIf="!isJoinable(appointment)"
+                            class="flex-1 flex items-center justify-center bg-slate-50 border border-slate-200 rounded-lg p-1 text-primary-600">
+                            <div class="text-center">
+                                <div class="text-[8px] md:text-[10px] uppercase font-bold opacity-60 leading-none">
+                                    Starts
+                                </div>
+                                <div class="text-[10px] md:text-base font-bold leading-tight">
+                                    {{ formatTime(appointment.start_time) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Past Appointments -->
+        <div *ngIf="!loading && activeTab === 'past'">
+            <div *ngIf="pastAppointments.length === 0" class="text-center py-16">
+                <div class="vc-card max-w-md mx-auto p-8">
+                    <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-history text-slate-400 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">No Past Appointments</h3>
+                    <p class="text-slate-600">Your consultation history will appear here</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+                <div *ngFor="let appointment of paginatedPastAppointments" class="vc-card vc-glass animate-fade-in">
+
+                    <!-- Doctor Info -->
+                    <div class="p-2 sm:p-4 md:p-6 border-b border-white/20">
+                        <div class="flex items-center gap-1.5 sm:gap-3 md:gap-4">
+                            <div
+                                class="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-slate-400 to-slate-500 flex items-center justify-center text-white text-xs sm:text-lg md:text-2xl font-bold flex-shrink-0">
+                                {{ appointment.doctor_name?.charAt(0) || 'D' }}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3
+                                    class="text-[11px] leading-tight sm:text-base md:text-lg font-bold text-slate-800 mb-0 sm:mb-1 line-clamp-2">
+                                    {{ appointment.doctor_name }}
+                                </h3>
+                                <p class="text-[10px] sm:text-sm text-slate-600 line-clamp-1">
+                                    {{ appointment.specialization || 'General Physician' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Details -->
+                    <div class="p-2 sm:p-4 md:p-6 space-y-1 sm:space-y-2 md:space-y-3">
+                        <!-- Date & Time -->
+                        <div class="flex items-center text-slate-700">
+                            <i
+                                class="fas fa-calendar w-3 sm:w-4 md:w-5 text-slate-500 mr-1.5 sm:mr-3 text-[10px] sm:text-sm"></i>
+                            <span class="text-[10px] sm:text-sm font-medium">{{ formatDate(appointment.appointment_date)
+                                }}</span>
+                        </div>
+                        <div class="flex items-center text-slate-700">
+                            <i
+                                class="fas fa-clock w-3 sm:w-4 md:w-5 text-slate-500 mr-1.5 sm:mr-3 text-[10px] sm:text-sm"></i>
+                            <span class="text-[10px] sm:text-sm font-medium">{{ formatTime(appointment.start_time)
+                                }}</span>
+                        </div>
+
+                        <!-- Status Badge -->
+                        <div class="pt-0.5 sm:pt-2">
+                            <span
+                                [class]="'inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-xs font-bold border ' + getStatusClass(appointment.status)">
+                                <i [class]="'fas ' + getStatusIcon(appointment.status) + ' mr-1 sm:mr-2'"></i>
+                                {{ getStatusLabel(appointment.status) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="px-2 sm:px-4 md:px-6 pb-2 sm:pb-4 md:pb-6">
+                        <button *ngIf="canReview(appointment)" (click)="openReviewModal(appointment)"
+                            class="vc-btn vc-btn-primary w-full text-[10px] sm:text-sm md:text-base py-2 min-h-0 h-auto">
+                            <i class="fas fa-star mr-1"></i>
+                            Add Review
+                        </button>
+                        <div *ngIf="!canReview(appointment) && appointment.status === 'completed'"
+                            class="text-center text-[10px] sm:text-sm text-slate-500">
+                            <i class="fas fa-check-circle mr-1"></i>
+                            Review submitted
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div *ngIf="pastAppointments.length > pageSize" class="mt-8 flex items-center justify-center gap-2">
+                <button (click)="prevPage()" [disabled]="currentPage === 1"
+                    class="p-2 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center transition-all bg-white text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50">
+                    <i class="fas fa-chevron-left text-sm"></i>
+                </button>
+
+                <div class="flex items-center gap-1.5 overflow-x-auto px-2 max-w-[200px] xs:max-w-none">
+                    <button *ngFor="let page of pageNumbers" (click)="goToPage(page)"
+                        [class.bg-primary-600]="currentPage === page" [class.text-white]="currentPage === page"
+                        [class.border-primary-600]="currentPage === page" [class.bg-white]="currentPage !== page"
+                        [class.text-slate-600]="currentPage !== page" [class.border-slate-200]="currentPage !== page"
+                        class="w-10 h-10 rounded-full border text-sm font-bold flex items-center justify-center transition-all hover:border-primary-600">
+                        {{ page }}
+                    </button>
+                </div>
+
+                <button (click)="nextPage()" [disabled]="currentPage === totalPages"
+                    class="p-2 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center transition-all bg-white text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50">
+                    <i class="fas fa-chevron-right text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Cancel Modal -->
+<div *ngIf="showCancelModal"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/60 backdrop-blur-sm animate-fade-in"
+    (click)="closeCancelModal()">
+
+    <div (click)="$event.stopPropagation()" class="vc-card vc-glass w-full max-w-md animate-scale-in">
+
+        <!-- Header -->
+        <div class="px-6 py-4 border-b border-white/20">
+            <h3 class="text-xl font-bold text-slate-800">Cancel Appointment</h3>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6 space-y-4">
+            <p class="text-slate-600">
+                Are you sure you want to cancel this appointment with
+                <strong>{{ selectedAppointment?.doctor_name }}</strong>?
+            </p>
+
+            <!-- Reason Input -->
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">
+                    Reason for Cancellation <span class="text-rose-500">*</span>
+                </label>
+                <textarea [(ngModel)]="cancelReason" rows="3" placeholder="Please provide a reason..."
+                    class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all resize-none"></textarea>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="px-6 pb-6 flex gap-3">
+            <button (click)="closeCancelModal()" [disabled]="cancelling" class="vc-btn vc-btn-ghost flex-1">
+                Keep Appointment
+            </button>
+            <button (click)="confirmCancellation()" [disabled]="cancelling || !cancelReason.trim()"
+                class="vc-btn vc-btn-primary flex-1 bg-rose-600 hover:bg-rose-700">
+                <span *ngIf="!cancelling">
+                    <i class="fas fa-times-circle mr-2"></i>
+                    Cancel Appointment
+                </span>
+                <span *ngIf="cancelling">
+                    <i class="fas fa-spinner fa-spin mr-2"></i>
+                    Cancelling...
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Review Modal -->
+<div *ngIf="showReviewModal"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in"
+    (click)="closeReviewModal()">
+
+    <div (click)="$event.stopPropagation()" class="vc-card vc-glass w-full max-w-md animate-scale-in">
+
+        <!-- Header -->
+        <div class="px-6 py-4 border-b border-white/20">
+            <h3 class="text-xl font-bold text-slate-800">Add Review</h3>
+            <p class="text-sm text-slate-600">How was your consultation with {{ selectedAppointment?.doctor_name }}?</p>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6 space-y-6">
+            <!-- Rating -->
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-3">
+                    Rating <span class="text-rose-500">*</span>
+                </label>
+                <div class="flex gap-2">
+                    <button *ngFor="let star of [1,2,3,4,5]" (click)="reviewRating = star"
+                        class="text-3xl transition-transform hover:scale-110">
+                        <i [class.text-yellow-400]="star <= reviewRating" [class.text-slate-300]="star > reviewRating"
+                            class="fas fa-star"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Review Text -->
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">
+                    Your Review <span class="text-rose-500">*</span>
+                </label>
+                <textarea [(ngModel)]="reviewText" rows="4" placeholder="Share your experience with this doctor..."
+                    class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all resize-none"></textarea>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="px-6 pb-6 flex gap-3">
+            <button (click)="closeReviewModal()" [disabled]="submittingReview" class="vc-btn vc-btn-ghost flex-1">
+                Cancel
+            </button>
+            <button (click)="submitReview()" [disabled]="submittingReview || !reviewText.trim()"
+                class="vc-btn vc-btn-primary flex-1">
+                <span *ngIf="!submittingReview">
+                    <i class="fas fa-paper-plane mr-2"></i>
+                    Submit Review
+                </span>
+                <span *ngIf="submittingReview">
+                    <i class="fas fa-spinner fa-spin mr-2"></i>
+                    Submitting...
+                </span>
+            </button>
+        </div>
+    </div>
+</div>

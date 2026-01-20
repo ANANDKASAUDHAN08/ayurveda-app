@@ -50,13 +50,22 @@ export class DoctorDashboardComponent implements OnInit {
     this.http.get<any[]>(environment.apiUrl + '/doctors').subscribe({
       next: (doctors) => {
         this.doctor = doctors.find(d => d.userId === this.user.id);
-        this.loading = false; // Keep loading true until both complete? Or just handle gracefully.
+        this.loading = false;
       },
       error: (err) => {
         console.error('Failed to fetch doctor profile', err);
         this.loading = false;
       }
     });
+  }
+
+  formatDate(date: any): string {
+    if (!date) return '';
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   fetchAppointments() {
@@ -72,12 +81,12 @@ export class DoctorDashboardComponent implements OnInit {
   }
 
   calculateStats() {
-    const now = new Date();
+    const todayStr = this.formatDate(new Date());
+
     this.upcomingAppointmentsCount = this.appointments.filter(app => {
-      // Assuming appointment_date is YYYY-MM-DD and start_time is HH:mm:ss
-      const dateStr = new Date(app.slot_date || app.appointment_date).toISOString().split('T')[0];
-      const appDate = new Date(`${dateStr}T${app.start_time}`);
-      return appDate >= now && app.status !== 'cancelled';
+      const appDateStr = this.formatDate(app.slot_date || app.appointment_date);
+      // Include all appointments from today onwards
+      return appDateStr >= todayStr && app.status !== 'cancelled';
     }).length;
 
     // Count unique patients
@@ -100,14 +109,12 @@ export class DoctorDashboardComponent implements OnInit {
   }
 
   getUpcomingAppointments() {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const todayStr = this.formatDate(new Date());
 
     return this.appointments.filter(app => {
-      const dateStr = new Date(app.slot_date || app.appointment_date).toISOString().split('T')[0];
-      const appDate = new Date(dateStr);
-      // Show appointments from today onwards (ignoring time for the date check)
-      return appDate >= today && app.status !== 'cancelled';
+      const appDateStr = this.formatDate(app.slot_date || app.appointment_date);
+      // Show appointments from today onwards
+      return appDateStr >= todayStr && app.status !== 'cancelled';
     });
   }
 
@@ -138,5 +145,24 @@ export class DoctorDashboardComponent implements OnInit {
       patientMap.get(app.user_id).appointmentCount++;
     });
     return Array.from(patientMap.values());
+  }
+
+  isJoinable(appointment: any): boolean {
+    if (appointment.status !== 'confirmed') return false;
+    if (!appointment.start_time) return false;
+
+    // Use IST time for comparison
+    const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+    const dateStr = this.formatDate(appointment.slot_date || appointment.appointment_date);
+    const aptDateTime = new Date(`${dateStr}T${appointment.start_time}`);
+
+    const diffMinutes = (aptDateTime.getTime() - now.getTime()) / (1000 * 60);
+
+    // Available 10 mins before and 30 mins after
+    return diffMinutes <= 10 && diffMinutes >= -30;
+  }
+
+  joinVideoCall(appointment: any) {
+    this.router.navigate(['/video-call', appointment.id]);
   }
 }

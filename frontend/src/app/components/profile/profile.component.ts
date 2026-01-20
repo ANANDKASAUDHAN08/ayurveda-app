@@ -182,7 +182,12 @@ export class ProfileComponent implements OnInit {
               clinic_address: myProfile.clinic_address,
               clinic_timings: myProfile.clinic_timings,
               website: myProfile.website,
-              linkedin: myProfile.linkedin
+              linkedin: myProfile.linkedin,
+              // Personal profile fields
+              dob: this.formatDateToIST(myProfile.dob),
+              gender: myProfile.gender,
+              blood_group: myProfile.blood_group,
+              address: myProfile.full_address
             });
 
             // Member since from user_created_at
@@ -290,7 +295,12 @@ export class ProfileComponent implements OnInit {
       Object.keys(this.profileForm.controls).forEach(key => {
         const value = this.profileForm.get(key)?.value;
         if (value !== null && value !== undefined) {
-          formData.append(key, value);
+          // Map internal 'address' back to 'full_address' for doctor API if needed
+          if (this.isDoctor && key === 'address') {
+            formData.append('full_address', value);
+          } else {
+            formData.append(key, value);
+          }
         }
       });
 

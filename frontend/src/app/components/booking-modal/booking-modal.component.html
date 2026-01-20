@@ -1,194 +1,311 @@
-<ng-container *ngIf="isInline; else modalWrapper">
-    <ng-container *ngTemplateOutlet="modalContent"></ng-container>
-</ng-container>
+<!-- Modern Emerald Booking Modal -->
+<div *ngIf="isOpen"
+    class="fixed inset-0 z-[110] flex items-center justify-center p-0 md:p-6 bg-slate-900/80 backdrop-blur-md animate-fade-in"
+    (click)="onClose()">
 
-<ng-template #modalWrapper>
-    <div *ngIf="isOpen" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
-        aria-modal="true">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" (click)="onClose()"></div>
+    <!-- Desktop Modal Container -->
+    <div (click)="$event.stopPropagation()"
+        class="hidden md:flex relative w-full max-w-2xl bg-white rounded-[2.5rem] shadow-2xl flex-col overflow-hidden animate-scale-in max-h-[90vh]">
 
-        <!-- Modal -->
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="relative bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all w-full max-w-md"
-                (click)="$event.stopPropagation()">
-                <ng-container *ngTemplateOutlet="modalContent"></ng-container>
+        <!-- Premium Header Area -->
+        <div class="relative px-8 pt-8 pb-6 bg-gradient-to-br from-emerald-50 to-white">
+            <div class="flex items-start justify-between mb-6">
+                <div class="flex-1">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-100/50 rounded-full mb-3">
+                        <i class="fas fa-calendar-check text-emerald-600 text-[10px]"></i>
+                        <span class="text-[10px] font-black text-emerald-700 uppercase tracking-widest">{{ isInstant ?
+                            'Priority Care' : 'Secure Booking' }}</span>
+                    </div>
+                    <h2 class="text-3xl font-black text-slate-800 leading-tight">
+                        {{ isInstant ? 'Instant Consultation' : 'Book Appointment' }}
+                    </h2>
+                    <p class="text-slate-500 font-bold mt-1">Consulting with <span class="text-emerald-600">{{
+                            doctor?.name }}</span></p>
+                </div>
+                <button (click)="onClose()"
+                    class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-slate-100 hover:bg-slate-50 text-slate-400 hover:text-slate-600 transition-all group">
+                    <i class="fas fa-times text-xl group-hover:rotate-90 transition-transform duration-300"></i>
+                </button>
+            </div>
+
+            <!-- Enhanced Progress Stepper -->
+            <div class="flex items-center gap-2 max-w-sm">
+                <ng-container *ngIf="!isInstant">
+                    <div [class.bg-emerald-600]="step === 'calendar'" [class.bg-slate-200]="step !== 'calendar'"
+                        class="h-1.5 flex-1 rounded-full transition-all duration-500"></div>
+                    <div [class.bg-emerald-600]="step === 'time'" [class.bg-slate-200]="step !== 'time'"
+                        class="h-1.5 flex-1 rounded-full transition-all duration-500"></div>
+                </ng-container>
+                <div [class.bg-emerald-600]="step === 'patient-info'" [class.bg-slate-200]="step !== 'patient-info'"
+                    class="h-1.5 flex-1 rounded-full transition-all duration-500"></div>
+                <div [class.bg-emerald-600]="step === 'payment' || step === 'confirm'"
+                    [class.bg-slate-200]="step !== 'payment' && step !== 'confirm'"
+                    class="h-1.5 flex-1 rounded-full transition-all duration-500"></div>
+            </div>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto px-8 py-8 custom-scrollbar">
+            <!-- Reuse mobile sections for consistency but with desktop spacing -->
+            <ng-container [ngTemplateOutlet]="modalContent"></ng-container>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Sheet Container -->
+    <div (click)="$event.stopPropagation()"
+        class="md:hidden fixed inset-x-0 bottom-0 w-full max-h-[92vh] bg-white rounded-t-[3rem] shadow-2xl flex flex-col overflow-hidden animate-slide-up">
+
+        <!-- Mobile Header Handle -->
+        <div class="flex justify-center pt-3 pb-1">
+            <div class="w-12 h-1.5 bg-slate-100 rounded-full"></div>
+        </div>
+
+        <div class="px-6 pt-6 pb-4">
+            <div class="flex items-start justify-between">
+                <div>
+                    <h2 class="text-xl font-black text-slate-800">{{ isInstant ? 'Instant Connect' : 'Book Slots' }}
+                    </h2>
+                    <p class="text-xs font-bold text-slate-400 uppercase mt-1">Dr. {{ doctor?.name }}</p>
+                </div>
+                <button (click)="onClose()"
+                    class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Compact Stepper Mobile -->
+            <div class="flex gap-1.5 mt-4">
+                <div *ngFor="let s of (!isInstant ? [1,2,3,4] : [1,2])" [class.bg-emerald-500]="isCurrentStep(s)"
+                    [class.bg-slate-100]="!isCurrentStep(s)" class="h-1 flex-1 rounded-full"></div>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-6 py-4 pb-24">
+            <ng-container [ngTemplateOutlet]="modalContent"></ng-container>
+        </div>
+    </div>
+</div>
+
+<!-- Shared Content Template -->
+<ng-template #modalContent>
+    <!-- Error State -->
+    <div *ngIf="error"
+        class="mb-6 p-4 bg-rose-50 border-2 border-rose-100 rounded-[1.5rem] flex items-start gap-3 animate-shake">
+        <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 shrink-0">
+            <i class="fas fa-exclamation"></i>
+        </div>
+        <p class="text-sm font-black text-rose-700 leading-tight py-1">{{ error }}</p>
+    </div>
+
+    <!-- STEP 1: CALENDAR -->
+    <div *ngIf="step === 'calendar' && !isInstant" class="space-y-6">
+        <!-- Custom Calendar -->
+        <div class="bg-slate-50 rounded-[2rem] p-6 border border-slate-100">
+            <!-- Centralized Navigation -->
+            <div class="flex items-center justify-between mb-8">
+                <button (click)="previousMonth()"
+                    class="w-11 h-11 rounded-2xl bg-white shadow-sm flex items-center justify-center text-emerald-600 hover:scale-105 active:scale-95 transition-all border border-slate-100">
+                    <i class="fas fa-chevron-left text-sm"></i>
+                </button>
+
+                <p class="hidden md:block font-black text-slate-800 tracking-tight">Select a Date</p>
+
+                <div class="px-6 py-2.5 bg-emerald-50 rounded-2xl border border-emerald-100/50">
+                    <span class="text-emerald-700 font-black text-sm tracking-wide">{{ currentMonthYear }}</span>
+                </div>
+
+                <button (click)="nextMonth()"
+                    class="w-11 h-11 rounded-2xl bg-white shadow-sm flex items-center justify-center text-emerald-600 hover:scale-105 active:scale-95 transition-all border border-slate-100">
+                    <i class="fas fa-chevron-right text-sm"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-7 gap-2">
+                <div *ngFor="let day of dayNames"
+                    class="text-[10px] font-black text-slate-400 uppercase text-center pb-4">
+                    {{ day }}
+                </div>
+                <button *ngFor="let day of calendarDays" (click)="selectDate(day)"
+                    [disabled]="day.isPast || !day.isCurrentMonth"
+                    [class.bg-emerald-600]="selectedDate === day.dateString"
+                    [class.text-black]="selectedDate === day.dateString"
+                    [class.shadow-xl]="selectedDate === day.dateString"
+                    [class.shadow-emerald-200]="selectedDate === day.dateString"
+                    [class.text-slate-300]="day.isPast || !day.isCurrentMonth"
+                    class="h-12 w-full rouned-2xl text-sm font-black flex items-center justify-center relative transition-all border-2 border-transparent hover:border-emerald-200">
+                    {{ day.dayNumber }}
+                    <span *ngIf="day.isToday && selectedDate !== day.dateString"
+                        class="absolute top-1 right-1 w-1 h-1 bg-emerald-500 rounded-full">
+                    </span>
+                    <span *ngIf="day.hasSlots && !day.isPast && selectedDate !== day.dateString"
+                        class="absolute bottom-1 w-1 h-1 bg-blue-400 rounded-full">
+                    </span>
+                </button>
             </div>
         </div>
     </div>
-</ng-template>
 
-<ng-template #modalContent>
-    <div class="bg-white h-full flex flex-col">
-        <!-- Header (Hidden in Inline Mode) -->
-        <div *ngIf="!isInline" class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-4 flex-shrink-0">
-            <div class="flex items-start justify-between">
-                <div class="flex-1">
-                    <h3 class="text-lg font-bold text-white mb-1">
-                        Book Appointment
-                    </h3>
-                    <p class="text-emerald-100 text-sm">Dr. {{doctor?.name}}</p>
-                    <p class="text-emerald-200 text-xs mt-0.5">{{doctor?.specialty}}</p>
+    <!-- STEP 2: TIME SLOTS -->
+    <div *ngIf="step === 'time' && !isInstant" class="space-y-6">
+        <div class="flex items-center gap-3">
+            <button (click)="goBack()"
+                class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h3 class="text-xl font-black text-slate-800">Available Slots</h3>
+        </div>
+
+        <div class="p-4 bg-emerald-50 rounded-2xl flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-emerald-600 shadow-sm">
+                <i class="fas fa-calendar-day"></i>
+            </div>
+            <p class="text-sm font-black text-emerald-800">{{ formatDate(selectedDate) }}</p>
+        </div>
+
+        <div *ngIf="loading" class="flex flex-col items-center py-12">
+            <div class="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+            <p class="text-xs font-black text-slate-400 uppercase mt-4 tracking-widest">Searching Slots...</p>
+        </div>
+
+        <div *ngIf="!loading && availableSlots.length > 0" class="grid grid-cols-3 gap-3">
+            <button *ngFor="let slot of availableSlots" (click)="selectSlot(slot)"
+                [class.bg-emerald-600]="selectedSlot && (selectedSlot.id ? selectedSlot.id === slot.id : selectedSlot.start_time === slot.start_time)"
+                [class.text-white]="selectedSlot && (selectedSlot.id ? selectedSlot.id === slot.id : selectedSlot.start_time === slot.start_time)"
+                [class.shadow-xl]="selectedSlot && (selectedSlot.id ? selectedSlot.id === slot.id : selectedSlot.start_time === slot.start_time)"
+                [class.bg-slate-50]="!selectedSlot || (selectedSlot.id ? selectedSlot.id !== slot.id : selectedSlot.start_time !== slot.start_time)"
+                [class.text-slate-700]="!selectedSlot || (selectedSlot.id ? selectedSlot.id !== slot.id : selectedSlot.start_time !== slot.start_time)"
+                class="py-4 px-2 rounded-2xl border-2 border-transparent hover:border-emerald-200 text-xs font-black transition-all">
+                {{ formatTime(slot.start_time) }}
+            </button>
+        </div>
+
+        <div *ngIf="!loading && availableSlots.length === 0" class="text-center py-12">
+            <div
+                class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
+                <i class="fas fa-history text-3xl"></i>
+            </div>
+            <h4 class="font-black text-slate-500">Waitlist Only</h4>
+            <p class="text-xs text-slate-400 font-bold mt-1">Try another date for immediate booking</p>
+        </div>
+    </div>
+
+    <!-- STEP 3: PATIENT INFO -->
+    <div *ngIf="step === 'patient-info'" class="space-y-6">
+        <div class="flex items-center gap-3">
+            <button *ngIf="!isInstant" (click)="goBack()"
+                class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h3 class="text-xl font-black text-slate-800">Patient Details</h3>
+        </div>
+
+        <!-- Appointment Brief -->
+        <div class="grid grid-cols-2 gap-3">
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                <p class="text-[10px] font-black text-black uppercase mb-1">Fee</p>
+                <div class="flex items-center gap-1.5">
+                    <span class="text-lg font-black text-emerald-600">₹{{ consultationFee }}</span>
+                    <span *ngIf="isFree"
+                        class="text-[9px] font-black bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded uppercase">Free</span>
                 </div>
-                <button (click)="onClose()"
-                    class="ml-3 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
-                    <i class="fas fa-times text-white text-sm"></i>
-                </button>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                <p class="text-[10px] font-black text-black uppercase mb-1">Time</p>
+                <p *ngIf="!isInstant && selectedSlot" class="text-xs font-black text-emerald-600 truncate">
+                    {{ formatTime(selectedSlot.start_time) }}
+                </p>
+                <p *ngIf="isInstant" class="text-xs font-black text-emerald-600 uppercase">Immediate</p>
             </div>
         </div>
 
-        <!-- Body -->
-        <div class="flex-1 overflow-y-auto px-4 py-4 max-h-[65vh]">
-            <!-- Error Message -->
-            <div *ngIf="error" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p class="text-red-700 text-xs">{{error}}</p>
+        <!-- Form Fields -->
+        <div class="space-y-5">
+            <div>
+                <label class="block text-xs font-black text-black uppercase tracking-widest mb-2 px-1">
+                    Patient Age <span class="text-rose-500 font-bold ml-1">*</span>
+                </label>
+                <input type="number" [(ngModel)]="patientAge" min="1" max="120" placeholder=""
+                    class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl text-slate-800 font-extrabold outline-none transition-all">
             </div>
 
-            <!-- Step 1: Calendar View -->
-            <div *ngIf="step === 'calendar'">
-                <div class="mb-4">
-                    <!-- Month Navigation -->
-                    <div class="flex items-center justify-between mb-3 bg-slate-50 rounded-xl p-2">
-                        <button (click)="previousMonth()"
-                            class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-lg transition-colors shadow-sm">
-                            <i class="fas fa-chevron-left text-emerald-600 text-sm"></i>
-                        </button>
-                        <h4 class="text-sm font-bold text-slate-800">{{currentMonthYear}}</h4>
-                        <button (click)="nextMonth()"
-                            class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-lg transition-colors shadow-sm">
-                            <i class="fas fa-chevron-right text-emerald-600 text-sm"></i>
-                        </button>
-                    </div>
-
-                    <!-- Calendar Grid -->
-                    <div class="border border-gray-200 rounded-xlg overflow-hidden shadow-sm">
-                        <!-- Day Headers -->
-                        <div class="grid grid-cols-7 bg-gray-50 border-b border-gray-200">
-                            <div *ngFor="let dayName of dayNames"
-                                class="p-2 text-center text-xs font-semibold text-gray-600">
-                                {{dayName | slice:0:1}}
-                            </div>
-                        </div>
-
-                        <!-- Calendar Days -->
-                        <div class="grid grid-cols-7">
-                            <button *ngFor="let day of calendarDays" (click)="selectDate(day)"
-                                [disabled]="day.isPast || !day.isCurrentMonth"
-                                class="h-11 w-full flex items-center justify-center border-r border-b border-slate-100 hover:bg-emerald-50 transition-all relative font-medium"
-                                [class.bg-slate-50]="!day.isCurrentMonth"
-                                [class.text-slate-400]="!day.isCurrentMonth || day.isPast"
-                                [class.cursor-not-allowed]="day.isPast || !day.isCurrentMonth"
-                                [class.bg-emerald-600]="day.isToday && day.isCurrentMonth && !day.isPast"
-                                [class.text-white]="day.isToday && day.isCurrentMonth && !day.isPast"
-                                [class.font-bold]="day.isToday" [class.shadow-inner]="day.isToday">
-
-                                <span class="text-sm">{{day.dayNumber}}</span>
-
-                                <!-- Today Indicator -->
-                                <div *ngIf="day.isToday && day.isCurrentMonth"
-                                    class="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full">
-                                </div>
-
-                                <!-- Available Slots Indicator -->
-                                <div *ngIf="day.hasSlots && !day.isToday && !day.isPast && day.isCurrentMonth"
-                                    class="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-emerald-500 rounded-full">
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <p class="text-xs text-gray-500 mt-4 text-center">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        Select a date to view available time slots
-                    </p>
-                </div>
-            </div>
-
-            <!-- Step 2: Select Time Slot -->
-            <div *ngIf="step === 'time'">
-                <div class="flex items-center justify-between mb-4">
-                    <h4 class="text-lg font-semibold text-gray-900">Select Time Slot</h4>
-                    <button (click)="goBack()" class="text-emerald-600 hover:text-emerald-700 text-sm font-medium">
-                        <i class="fas fa-arrow-left mr-1"></i> Change Date
-                    </button>
-                </div>
-                <p class="text-sm text-gray-600 mb-4">{{formatDate(selectedDate)}}</p>
-
-                <div *ngIf="loading" class="text-center py-8">
-                    <i class="fas fa-spinner fa-spin text-4xl text-emerald-600"></i>
-                    <p class="text-gray-600 mt-4">Loading available slots...</p>
-                </div>
-
-                <div *ngIf="!loading && availableSlots.length > 0"
-                    class="grid grid-cols-3 md:grid-cols-3 gap-3 max-h-[50vh] overflow-y-auto pr-1">
-                    <button *ngFor="let slot of availableSlots" (click)="selectSlot(slot)"
-                        class="p-3 border-2 border-slate-200 rounded-xl transition-all hover:border-emerald-500 hover:bg-emerald-50 hover:shadow-md text-center active:scale-95"
-                        [class.border-emerald-600]="selectedSlot?.id === slot.id"
-                        [class.bg-gradient-to-br]="selectedSlot?.id === slot.id"
-                        [class.from-emerald-50]="selectedSlot?.id === slot.id"
-                        [class.to-emerald-100]="selectedSlot?.id === slot.id"
-                        [class.shadow-md]="selectedSlot?.id === slot.id">
-                        <div class="text-sm font-bold text-slate-800">
-                            {{formatTime(slot.start_time)}}
-                        </div>
-                        <div class="text-xs text-slate-500 mt-0.5">
-                            {{formatTime(slot.end_time)}}
-                        </div>
-                    </button>
-                </div>
-
-                <div *ngIf="!loading && availableSlots.length === 0 && !error" class="text-center py-8">
-                    <i class="fas fa-calendar-times text-4xl text-gray-400"></i>
-                    <p class="text-gray-600 mt-4">No available slots for this date</p>
-                    <button (click)="goBack()" class="mt-4 text-emerald-600 hover:text-emerald-700 font-medium">
-                        Choose another date
+            <div>
+                <label class="block text-xs font-black text-black uppercase tracking-widest mb-2 px-1">
+                    Gender <span class="text-rose-500 font-bold ml-1">*</span>
+                </label>
+                <div class="grid grid-cols-3 gap-3">
+                    <button *ngFor="let g of genders" (click)="patientGender = g"
+                        [class.bg-emerald-600]="patientGender === g" [class.text-white]="patientGender === g"
+                        [class.shadow-xl]="patientGender === g" [class.bg-slate-50]="patientGender !== g"
+                        [class.text-slate-600]="patientGender !== g"
+                        class="py-3 rounded-xl border border-slate-100 text-[10px] font-black uppercase tracking-widest transition-all">
+                        {{ g }}
                     </button>
                 </div>
             </div>
 
-            <!-- Step 3: Confirmation -->
-            <div *ngIf="step === 'confirm'">
-                <div class="flex items-center justify-between mb-4">
-                    <h4 class="text-lg font-semibold text-gray-900">Confirm Appointment</h4>
-                    <button (click)="goBack()" class="text-emerald-600 hover:text-emerald-700 text-sm font-medium">
-                        <i class="fas fa-arrow-left mr-1"></i> Change Time
-                    </button>
-                </div>
-
-                <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                    <div class="flex items-start">
-                        <i class="fas fa-calendar-check text-emerald-600 text-xl mr-3 mt-1"></i>
-                        <div class="flex-1">
-                            <p class="font-semibold text-gray-900">{{formatDate(selectedDate)}}</p>
-                            <p class="text-sm text-gray-600 mt-1">
-                                {{formatTime(selectedSlot!.start_time)}} - {{formatTime(selectedSlot!.end_time)}}
-                            </p>
-                            <p class="text-sm text-gray-600 mt-2">
-                                <span class="font-medium">Doctor:</span> Dr. {{doctor?.name}}
-                            </p>
-                            <p class="text-sm text-gray-600">
-                                <span class="font-medium">Specialty:</span> {{doctor?.specialty}}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Notes (Optional)
-                    </label>
-                    <textarea [(ngModel)]="notes" rows="3"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                        placeholder="Any specific concerns or questions for the doctor..."></textarea>
-                </div>
-
-                <button (click)="confirmBooking()" [disabled]="loading"
-                    class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]">
-                    <i *ngIf="loading" class="fas fa-spinner fa-spin mr-2"></i>
-                    <i *ngIf="!loading" class="fas fa-check mr-2"></i>
-                    {{loading ? 'Booking...' : 'Confirm Booking'}}
-                </button>
+            <div>
+                <label class="block text-xs font-black text-black uppercase tracking-widest mb-2 px-1">
+                    Symptoms / Reason <span class="text-rose-500 font-bold ml-1">*</span>
+                </label>
+                <textarea [(ngModel)]="consultationReason" rows="3"
+                    placeholder="Briefly describe why you are consulting..."
+                    class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl text-slate-800 font-medium outline-none transition-all resize-none"></textarea>
             </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="pt-2">
+            <button (click)="proceedFromPatientInfo()"
+                [disabled]="loading || !patientAge || !patientGender || !consultationReason.trim()"
+                class="w-full py-5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-y-0 text-white rounded-2xl font-black shadow-xl shadow-emerald-100 hover:shadow-2xl hover:-translate-y-1 active:scale-95 transition-all flex items-center justify-center gap-3">
+                <i class="fas" [class.fa-credit-card]="!isFree" [class.fa-check-circle]="isFree" *ngIf="!loading"></i>
+                <i class="fas fa-spinner fa-spin" *ngIf="loading"></i>
+                <span>{{ isFree ? 'CONFIRM BOOKING' : 'PROCEED TO PAYMENT' }}</span>
+            </button>
+            <p class="text-center text-[10px] text-slate-400 font-black uppercase mt-4 tracking-tighter">
+                <i class="fas fa-shield-alt mr-1"></i> 256-Bit Encrypted Data Protection
+            </p>
+        </div>
+    </div>
+
+    <!-- STEP 4: PAYMENT PROGRESS -->
+    <div *ngIf="paymentInProgress" class="text-center py-16 space-y-6">
+        <div class="relative w-24 h-24 mx-auto mb-8">
+            <div class="absolute inset-0 bg-emerald-100 rounded-full animate-ping opacity-25"></div>
+            <div
+                class="relative w-24 h-24 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-xl">
+                <i class="fas fa-credit-card text-white text-3xl"></i>
+            </div>
+        </div>
+        <div>
+            <h3 class="text-2xl font-black text-slate-800 mb-2">Payment in Progress</h3>
+            <p class="text-slate-500 font-medium">Please complete the transaction in the secured pop-up window.</p>
+        </div>
+        <div class="pt-6">
+            <div class="flex items-center justify-center gap-4 text-slate-300">
+                <i class="fab fa-cc-visa text-2xl"></i>
+                <i class="fab fa-cc-mastercard text-2xl"></i>
+                <i class="fas fa-shield-check text-2xl text-emerald-500/50"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 5: PROCESSING CONFIRMATION -->
+    <div *ngIf="step === 'confirm' && loading" class="text-center py-16 space-y-6">
+        <div class="relative w-24 h-24 mx-auto mb-8">
+            <div class="absolute inset-0 bg-emerald-100 rounded-full animate-ping opacity-25"></div>
+            <div
+                class="relative w-24 h-24 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-xl">
+                <i class="fas fa-check-circle text-white text-3xl"></i>
+            </div>
+        </div>
+        <div>
+            <h3 class="text-2xl font-black text-slate-800 mb-2">Processing Your Booking</h3>
+            <p class="text-slate-500 font-medium">Please wait while we finalize your appointment...</p>
+        </div>
+        <div class="flex items-center justify-center gap-2">
+            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
         </div>
     </div>
 </ng-template>
