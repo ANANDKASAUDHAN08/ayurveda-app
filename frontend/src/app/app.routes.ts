@@ -90,6 +90,7 @@ export const routes: Routes = [
     { path: 'about-us', component: AboutUsComponent },
     { path: 'help-support', component: HelpSupportComponent },
     { path: 'contact', component: ContactComponent },
+    { path: 'feedback', loadComponent: () => import('./components/feedback/feedback.component').then(m => m.FeedbackComponent) },
     { path: 'wellness', component: AyurvedaWellnessComponent },
     { path: 'emergency', component: EmergencyHubComponent }, // Emergency services - no auth required for quick access
     { path: 'first-aid', component: FirstAidGuideComponent }, // First Aid Guide - no auth required

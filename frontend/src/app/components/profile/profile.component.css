@@ -132,10 +132,6 @@ textarea:disabled {
 
 /* Responsive utilities */
 @media (max-width: 768px) {
-    .grid-cols-2 {
-        grid-template-columns: 1fr;
-    }
-
     .lg\:col-span-2 {
         grid-column: span 1;
     }

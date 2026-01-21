@@ -173,24 +173,44 @@
             </div>
 
             <!-- Navigation Tabs (Integrated in Header) -->
-            <div class="px-4 md:px-8 flex gap-4 md:gap-8 overflow-x-auto bg-white">
+            <div
+                class="px-4 md:px-8 flex gap-1 md:gap-8 overflow-x-auto bg-white scrollbar-hide w-full border-b border-slate-100">
+                <!-- Dashboard Tab (Mobile & Tablet Only) -->
+                <button (click)="switchTab('dashboard')"
+                    class="lg:hidden flex-shrink-0 py-3 md:py-4 px-4 text-xs md:text-sm font-bold border-b-2 transition-all flex items-center gap-2 whitespace-nowrap"
+                    [ngClass]="activeTab === 'dashboard' ? 'border-amber-500 text-amber-700' : 'border-transparent text-slate-500 hover:text-slate-800'">
+                    <i class="fas fa-th-large flex-shrink-0"
+                        [ngClass]="activeTab === 'dashboard' ? 'text-amber-500' : 'text-slate-400'"></i>
+                    <span>Overview</span>
+                </button>
+
                 <button (click)="switchTab('profile')"
-                    class="py-3 md:py-4 text-sm font-bold border-b-2 transition-all flex items-center gap-2 whitespace-nowrap"
+                    class="flex-shrink-0 py-3 md:py-4 px-4 text-xs md:text-sm font-bold border-b-2 transition-all flex items-center gap-2 whitespace-nowrap"
                     [ngClass]="activeTab === 'profile' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-800'">
-                    <i class="fas fa-user-circle"
-                        [ngClass]="activeTab === 'profile' ? 'text-emerald-500' : 'text-slate-400'"></i> Profile Details
+                    <i class="fas fa-user-circle flex-shrink-0"
+                        [ngClass]="activeTab === 'profile' ? 'text-emerald-500' : 'text-slate-400'"></i>
+                    <span>Profile Details</span>
                 </button>
                 <button (click)="switchTab('activity')"
-                    class="py-3 md:py-4 text-sm font-bold border-b-2 transition-all flex items-center gap-2 whitespace-nowrap"
+                    class="flex-shrink-0 py-3 md:py-4 px-4 text-xs md:text-sm font-bold border-b-2 transition-all flex items-center gap-2 whitespace-nowrap"
                     [ngClass]="activeTab === 'activity' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-800'">
-                    <i class="fas fa-history"
-                        [ngClass]="activeTab === 'activity' ? 'text-emerald-500' : 'text-slate-400'"></i> Activity Log
+                    <i class="fas fa-history flex-shrink-0"
+                        [ngClass]="activeTab === 'activity' ? 'text-emerald-500' : 'text-slate-400'"></i>
+                    <span>Activity Log</span>
                 </button>
                 <button (click)="switchTab('security')"
-                    class="py-3 md:py-4 text-sm font-bold border-b-2 transition-all flex items-center gap-2 whitespace-nowrap"
+                    class="flex-shrink-0 py-3 md:py-4 px-4 text-xs md:text-sm font-bold border-b-2 transition-all flex items-center gap-2 whitespace-nowrap"
                     [ngClass]="activeTab === 'security' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-800'">
-                    <i class="fas fa-shield-alt"
-                        [ngClass]="activeTab === 'security' ? 'text-emerald-500' : 'text-slate-400'"></i> Security
+                    <i class="fas fa-shield-alt flex-shrink-0"
+                        [ngClass]="activeTab === 'security' ? 'text-emerald-500' : 'text-slate-400'"></i>
+                    <span>Security</span>
+                </button>
+                <button (click)="switchTab('reviews')"
+                    class="flex-shrink-0 py-3 md:py-4 px-4 text-xs md:text-sm font-bold border-b-2 transition-all flex items-center gap-2 whitespace-nowrap"
+                    [ngClass]="activeTab === 'reviews' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-800'">
+                    <i class="fas fa-star flex-shrink-0"
+                        [ngClass]="activeTab === 'reviews' ? 'text-emerald-500' : 'text-slate-400'"></i>
+                    <span>My Reviews</span>
                 </button>
 
                 <!-- Save Button - Desktop Only (moved from top) -->
@@ -236,6 +256,20 @@
                                     <span class="text-sm font-medium text-slate-600">Verified Email</span>
                                 </div>
                                 <i class="fas fa-check-circle text-emerald-500"></i>
+                            </div>
+
+                            <!-- My Reviews -->
+                            <div (click)="switchTab('reviews')"
+                                class="flex items-center justify-between group cursor-pointer hover:bg-slate-50 -mx-5 px-5 py-2 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="h-8 w-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="text-sm font-medium text-slate-600">Total Reviews</span>
+                                </div>
+                                <span class="text-sm font-bold text-slate-800">{{ totalWebsiteReviews +
+                                    totalHospitalReviews }}</span>
                             </div>
 
                             <!-- Phone Verified -->
@@ -315,47 +349,142 @@
             <main class="flex-1 overflow-y-auto bg-slate-50/50 p-4 md:p-6 lg:p-10 scroll-smooth">
                 <div class="w-full mx-auto">
 
-                    <!-- Mobile Stats Cards (visible only on mobile/tablet) -->
-                    <div class="lg:hidden mb-6">
-                        <div class="grid gap-3" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+                    <!-- Mobile Overview Tab View -->
+                    <div *ngIf="activeTab === 'dashboard' && stats"
+                        class="lg:hidden animate-fade-in-up space-y-6 pb-20">
+                        <!-- Welcome Message -->
+                        <div class="px-1 pt-2">
+                            <h2 class="text-xl font-bold text-slate-800">Hello, {{ user?.name?.split(' ')[0] }}!</h2>
+                            <p class="text-sm text-slate-500">Welcome to your health dashboard</p>
+                        </div>
+
+                        <!-- Stats Grid -->
+                        <div class="grid w-full gap-3 pb-2" style="grid-template-columns: 1fr 1fr;">
                             <!-- Total Consultations -->
-                            <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200">
-                                <div class="flex flex-col">
-                                    <span class="text-xs font-bold text-slate-500 mb-1">Consultations</span>
-                                    <span class="text-xl md:text-2xl font-bold text-emerald-600">
-                                        {{ stats.totalConsultations }}
-                                    </span>
+                            <div
+                                class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col justify-center min-h-[100px] min-w-0">
+                                <div class="flex items-center gap-2 mb-2 overflow-hidden">
+                                    <div
+                                        class="flex-shrink-0 h-6 w-6 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                                        <i class="fas fa-video text-[10px]"></i>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate">Consults</span>
                                 </div>
+                                <span class="text-xl font-black text-slate-800 truncate">
+                                    {{ stats.totalConsultations }}
+                                </span>
                             </div>
 
                             <!-- Upcoming Appointments -->
-                            <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200">
-                                <div class="flex flex-col">
-                                    <span class="text-xs font-bold text-slate-500 mb-1">Upcoming</span>
-                                    <span class="text-xl md:text-2xl font-bold text-blue-600">
-                                        {{ stats.upcomingAppointments }}
-                                    </span>
+                            <div (click)="switchTab('activity')"
+                                class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col justify-center min-h-[100px] min-w-0 active:scale-95 transition-transform">
+                                <div class="flex items-center gap-2 mb-2 overflow-hidden">
+                                    <div
+                                        class="flex-shrink-0 h-6 w-6 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                                        <i class="fas fa-calendar-alt text-[10px]"></i>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate">Upcoming</span>
                                 </div>
+                                <span class="text-xl font-black text-slate-800 truncate">
+                                    {{ stats.upcomingAppointments }}
+                                </span>
                             </div>
 
                             <!-- Member Since -->
-                            <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200">
-                                <div class="flex flex-col">
-                                    <span class="text-xs font-bold text-slate-500 mb-1">Member</span>
-                                    <span class="text-xs md:text-sm font-bold text-slate-800">
-                                        {{ getMemberSince() }}
-                                    </span>
+                            <div
+                                class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col justify-center min-h-[100px] min-w-0">
+                                <div class="flex items-center gap-2 mb-2 overflow-hidden">
+                                    <div
+                                        class="flex-shrink-0 h-6 w-6 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
+                                        <i class="fas fa-id-card text-[10px]"></i>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate">Member</span>
                                 </div>
+                                <span class="text-sm font-black text-slate-800 truncate">{{ getMemberSince() }}</span>
                             </div>
 
                             <!-- Profile Completion -->
-                            <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200">
-                                <div class="flex flex-col">
-                                    <span class="text-xs font-bold text-slate-500 mb-1">Profile</span>
-                                    <span class="text-xl md:text-2xl font-bold text-purple-600">
-                                        {{ profileCompletion }}%
-                                    </span>
+                            <div (click)="switchTab('profile')"
+                                class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col justify-center min-h-[100px] min-w-0 ring-2 ring-emerald-500/5 active:scale-95 transition-transform">
+                                <div class="flex items-center gap-2 mb-2 overflow-hidden">
+                                    <div
+                                        class="flex-shrink-0 h-6 w-6 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
+                                        <i class="fas fa-user-check text-[10px]"></i>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate">Profile</span>
                                 </div>
+                                <span class="text-xl font-black text-emerald-600 truncate">
+                                    {{ profileCompletion }}%
+                                </span>
+                            </div>
+                            <!-- Total Reviews -->
+                            <div (click)="switchTab('reviews')"
+                                class="col-span-2 bg-gradient-to-r from-slate-800 to-slate-700 rounded-2xl p-5 shadow-lg border border-slate-700 flex items-center justify-between active:scale-[0.98] transition-transform">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="h-10 w-10 rounded-xl bg-amber-400/20 text-amber-400 flex items-center justify-center">
+                                        <i class="fas fa-star text-sm"></i>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">My
+                                            Contributions</span>
+                                        <span class="text-xl font-black text-white">
+                                            {{ totalWebsiteReviews + totalHospitalReviews }} Reviews
+                                        </span>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right text-slate-500"></i>
+                            </div>
+                        </div>
+
+                        <!-- Quick Access Hub -->
+                        <div class="space-y-4">
+                            <h3 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] px-1">
+                                Quick Access
+                            </h3>
+                            <div class="grid grid-cols-1 gap-3">
+                                <button (click)="switchTab('profile')"
+                                    class="w-full p-4 bg-white border border-slate-100 rounded-2xl flex items-center gap-4 shadow-sm active:bg-slate-50 transition-colors">
+                                    <div
+                                        class="h-10 w-10 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center">
+                                        <i class="fas fa-user-edit"></i>
+                                    </div>
+                                    <div class="flex-1 text-left">
+                                        <h4 class="text-sm font-bold text-slate-800">Personal Details</h4>
+                                        <p class="text-xs text-slate-500">Edit your health profile</p>
+                                    </div>
+                                    <i class="fas fa-arrow-right text-slate-300 text-xs"></i>
+                                </button>
+
+                                <button (click)="switchTab('activity')"
+                                    class="w-full p-4 bg-white border border-slate-100 rounded-2xl flex items-center gap-4 shadow-sm active:bg-slate-50 transition-colors">
+                                    <div
+                                        class="h-10 w-10 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center">
+                                        <i class="fas fa-notes-medical"></i>
+                                    </div>
+                                    <div class="flex-1 text-left">
+                                        <h4 class="text-sm font-bold text-slate-800">Health History</h4>
+                                        <p class="text-xs text-slate-500">View recent activities & appointments</p>
+                                    </div>
+                                    <i class="fas fa-arrow-right text-slate-300 text-xs"></i>
+                                </button>
+
+                                <button (click)="switchTab('security')"
+                                    class="w-full p-4 bg-white border border-slate-100 rounded-2xl flex items-center gap-4 shadow-sm active:bg-slate-50 transition-colors">
+                                    <div
+                                        class="h-10 w-10 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                    <div class="flex-1 text-left">
+                                        <h4 class="text-sm font-bold text-slate-800">Account Security</h4>
+                                        <p class="text-xs text-slate-500">Manage password & verification</p>
+                                    </div>
+                                    <i class="fas fa-arrow-right text-slate-300 text-xs"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -781,6 +910,189 @@
                                 class="w-full md:w-auto px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-200">
                                 Delete
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- REVIEWS TAB -->
+                    <div *ngIf="activeTab === 'reviews'" class="animate-fade-in space-y-8">
+                        <!-- Website Reviews Section -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                            <div
+                                class="px-6 md:px-8 py-4 md:py-6 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-slate-50 to-white">
+                                <div class="flex items-center gap-3 md:gap-4">
+                                    <div
+                                        class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-lg md:text-xl shadow-sm">
+                                        <i class="fas fa-comment-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base md:text-lg font-bold text-slate-800 leading-tight">Website
+                                            Feedback</h3>
+                                        <p class="hidden sm:block text-sm text-slate-500">Reviews sharing your platform
+                                            experience</p>
+                                    </div>
+                                </div>
+                                <span
+                                    class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[10px] md:text-xs font-bold">{{
+                                    totalWebsiteReviews }} Reviews</span>
+                            </div>
+
+                            <div class="p-4 md:p-8">
+                                <div *ngIf="isLoadingReviews" class="space-y-4">
+                                    <div *ngFor="let i of [1,2]"
+                                        class="h-32 w-full bg-slate-100 rounded-2xl animate-pulse"></div>
+                                </div>
+
+                                <div *ngIf="!isLoadingReviews && userWebsiteReviews.length > 0"
+                                    class="grid grid-cols-1 gap-4 md:gap-6">
+                                    <div *ngFor="let review of userWebsiteReviews"
+                                        class="group relative bg-slate-50/50 rounded-2xl p-4 md:p-6 border border-slate-100 hover:border-amber-200 hover:bg-white transition-all">
+                                        <div
+                                            class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
+                                            <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                                                <div class="flex text-amber-400 text-[10px] md:text-sm">
+                                                    <i *ngFor="let s of [1,2,3,4,5]" class="fas fa-star"
+                                                        [class.opacity-30]="s > review.rating"></i>
+                                                </div>
+                                                <span class="text-[10px] font-bold text-slate-300">•</span>
+                                                <span
+                                                    class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider">{{
+                                                    review.created_at | date:'mediumDate' }}</span>
+                                            </div>
+                                            <div
+                                                class="flex items-center justify-between sm:justify-end w-full sm:w-auto">
+                                                <span
+                                                    class="sm:hidden px-2 py-0.5 bg-slate-200 text-slate-600 rounded text-[9px] font-black uppercase tracking-wider">{{
+                                                    review.category }}</span>
+                                                <button (click)="deleteWebsiteReview(review.id)"
+                                                    class="p-2 -mr-2 text-red-300 hover:text-red-500 transition-colors bg-red-50 sm:bg-transparent rounded-lg sm:rounded-none">
+                                                    <i class="fas fa-trash-alt text-sm"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <h4 class="font-bold text-slate-800 text-sm md:text-base mb-2">{{ review.title
+                                            || 'Platform Review' }}</h4>
+                                        <p class="text-slate-600 text-xs md:text-sm leading-relaxed mb-4 italic">"{{
+                                            review.comment }}"</p>
+                                        <div class="hidden sm:flex items-center gap-2">
+                                            <span
+                                                class="px-2 py-0.5 bg-slate-200 text-slate-600 rounded text-[9px] md:text-[10px] font-black uppercase tracking-wider">{{
+                                                review.category }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="!isLoadingReviews && userWebsiteReviews.length === 0"
+                                    class="py-12 text-center">
+                                    <div
+                                        class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 opacity-50">
+                                        <i class="fas fa-comment-slash text-2xl text-slate-400"></i>
+                                    </div>
+                                    <p class="text-slate-500 font-medium">You haven't shared platform feedback yet.</p>
+                                    <button routerLink="/feedback"
+                                        class="mt-4 text-emerald-600 font-bold hover:underline text-sm">Share your first
+                                        review</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hospital Reviews Section -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                            <div
+                                class="px-6 md:px-8 py-4 md:py-6 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-slate-50 to-white">
+                                <div class="flex items-center gap-3 md:gap-4">
+                                    <div
+                                        class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg md:text-xl shadow-sm">
+                                        <i class="fas fa-hospital"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base md:text-lg font-bold text-slate-800">Hospital Reviews</h3>
+                                        <p class="hidden sm:block text-sm text-slate-500">Your experiences at medical
+                                            facilities</p>
+                                    </div>
+                                </div>
+                                <span
+                                    class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[10px] md:text-xs font-bold">{{
+                                    totalHospitalReviews }} Reviews</span>
+                            </div>
+
+                            <div class="p-4 md:p-8">
+                                <div *ngIf="isLoadingReviews" class="space-y-4">
+                                    <div *ngFor="let i of [1,2]"
+                                        class="h-32 w-full bg-slate-100 rounded-2xl animate-pulse"></div>
+                                </div>
+
+                                <div *ngIf="!isLoadingReviews && userHospitalReviews.length > 0"
+                                    class="grid grid-cols-1 gap-4 md:gap-6">
+                                    <div *ngFor="let review of userHospitalReviews"
+                                        class="group relative bg-slate-50/50 rounded-2xl p-4 md:p-6 border border-slate-100 hover:border-emerald-200 hover:bg-white transition-all">
+                                        <div
+                                            class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
+                                            <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                                                <div class="flex text-amber-400 text-[10px] md:text-sm">
+                                                    <i *ngFor="let s of [1,2,3,4,5]" class="fas fa-star"
+                                                        [class.opacity-30]="s > review.rating"></i>
+                                                </div>
+                                                <span class="text-[10px] font-bold text-slate-300">•</span>
+                                                <span
+                                                    class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider">{{
+                                                    review.created_at | date:'mediumDate' }}</span>
+                                            </div>
+                                            <button (click)="deleteHospitalReview(review.id)"
+                                                class="p-2 -mr-2 text-red-300 hover:text-red-500 transition-colors bg-red-50 sm:bg-transparent rounded-lg sm:rounded-none self-end sm:self-auto">
+                                                <i class="fas fa-trash-alt text-sm"></i>
+                                            </button>
+                                        </div>
+                                        <h4 class="font-bold text-slate-800 text-sm md:text-base mb-2">{{ review.title
+                                            || 'Hospital Review' }}</h4>
+                                        <p class="text-slate-600 text-xs md:text-sm leading-relaxed mb-4 italic">"{{
+                                            review.comment }}"</p>
+
+                                        <!-- Aspect Ratings -->
+                                        <div *ngIf="review.aspects"
+                                            class="flex flex-wrap gap-2 md:gap-3 pt-3 border-t border-slate-100 mt-auto">
+                                            <div *ngIf="review.aspects.cleanliness"
+                                                class="bg-white px-2 py-1 rounded-lg border border-slate-100 flex flex-col min-w-[60px]">
+                                                <span
+                                                    class="text-[8px] md:text-[10px] uppercase font-black text-slate-400 mb-1">Clean</span>
+                                                <div class="flex text-amber-400 text-[8px] md:text-[9px]">
+                                                    <i *ngFor="let s of [1,2,3,4,5]" class="fas fa-star"
+                                                        [class.opacity-30]="s > review.aspects.cleanliness"></i>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="review.aspects.staff"
+                                                class="bg-white px-2 py-1 rounded-lg border border-slate-100 flex flex-col min-w-[60px]">
+                                                <span
+                                                    class="text-[8px] md:text-[10px] uppercase font-black text-slate-400 mb-1">Staff</span>
+                                                <div class="flex text-amber-400 text-[8px] md:text-[9px]">
+                                                    <i *ngFor="let s of [1,2,3,4,5]" class="fas fa-star"
+                                                        [class.opacity-30]="s > review.aspects.staff"></i>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="review.aspects.facilities"
+                                                class="bg-white px-2 py-1 rounded-lg border border-slate-100 flex flex-col min-w-[60px]">
+                                                <span
+                                                    class="text-[8px] md:text-[10px] uppercase font-black text-slate-400 mb-1">Facility</span>
+                                                <div class="flex text-amber-400 text-[8px] md:text-[9px]">
+                                                    <i *ngFor="let s of [1,2,3,4,5]" class="fas fa-star"
+                                                        [class.opacity-30]="s > review.aspects.facilities"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="!isLoadingReviews && userHospitalReviews.length === 0"
+                                    class="py-12 text-center">
+                                    <div
+                                        class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 opacity-50">
+                                        <i class="fas fa-hospital-alt text-2xl text-slate-400"></i>
+                                    </div>
+                                    <p class="text-slate-500 font-medium">You haven't reviewed any hospitals yet.</p>
+                                    <button routerLink="/hospitals"
+                                        class="mt-4 text-emerald-600 font-bold hover:underline text-sm">Find a hospital
+                                        to review</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

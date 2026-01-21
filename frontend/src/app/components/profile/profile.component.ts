@@ -2,13 +2,17 @@ import { environment } from '@env/environment';
 import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { HttpClient } from '@angular/common/http';
 import { ProfileService } from '../../shared/services/profile.service';
 import { AuthService } from '../../shared/services/auth.service';
+import { HospitalReviewService } from '../../shared/services/hospital-review.service';
+import { WebsiteReviewService } from '../../shared/services/website-review.service';
 import { PhoneVerificationModalComponent } from '../phone-verification-modal/phone-verification-modal.component';
 import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
+import { ReviewListComponent } from '../../shared/components/review-list/review-list.component';
+import { HospitalReview, WebsiteReview } from '../../shared/models/review.model';
 import { ProfileExportService } from '../../shared/services/profile-export.service';
 
 interface ActivityItem {
@@ -27,7 +31,8 @@ interface ActivityItem {
     ReactiveFormsModule,
     FormsModule,
     PhoneVerificationModalComponent,
-    PasswordStrengthIndicatorComponent
+    PasswordStrengthIndicatorComponent,
+    ReviewListComponent
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
@@ -56,7 +61,7 @@ export class ProfileComponent implements OnInit {
   @ViewChild(PhoneVerificationModalComponent) phoneModal!: PhoneVerificationModalComponent;
 
   // Tab navigation
-  activeTab: 'profile' | 'activity' | 'security' = 'profile';
+  activeTab: 'profile' | 'activity' | 'security' | 'reviews' | 'dashboard' = 'profile';
 
   // Profile completion
   profileCompletion = 0;
@@ -73,6 +78,13 @@ export class ProfileComponent implements OnInit {
     rating: 0
   };
 
+  // User Reviews Section
+  userWebsiteReviews: WebsiteReview[] = [];
+  userHospitalReviews: HospitalReview[] = [];
+  isLoadingReviews = false;
+  totalWebsiteReviews = 0;
+  totalHospitalReviews = 0;
+
   // Scroll to top
   showScrollToTop = false;
 
@@ -83,6 +95,9 @@ export class ProfileComponent implements OnInit {
     private profileService: ProfileService,
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
+    private hospitalReviewService: HospitalReviewService,
+    private websiteReviewService: WebsiteReviewService,
     private cdr: ChangeDetectorRef,
     private profileExportService: ProfileExportService
   ) {
@@ -107,6 +122,19 @@ export class ProfileComponent implements OnInit {
     this.loadUser();
     this.loadActivityFeed(); // Load real activity feed
     this.loadStats(); // Load real stats
+
+    // Subscribe to query params to handle tab switching
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        const tab = params['tab'] as any;
+        if (['profile', 'activity', 'security', 'reviews', 'dashboard'].includes(tab)) {
+          this.switchTab(tab);
+        }
+      } else if (window.innerWidth < 1024) {
+        // Default to dashboard on mobile
+        this.switchTab('dashboard');
+      }
+    });
   }
 
   loadUser() {
@@ -194,11 +222,15 @@ export class ProfileComponent implements OnInit {
             if (myProfile.user_created_at) {
               this.memberSince = new Date(myProfile.user_created_at);
             }
+
+            this.loadUserReviews();
           }
+
           this.calculateProfileCompletion();
+
           setTimeout(() => {
             this.isLoadingProfile = false;
-          }, 1000);
+          }, 500);
         },
         error: (err) => {
           console.error('Error loading doctor profile:', err);
@@ -209,6 +241,7 @@ export class ProfileComponent implements OnInit {
             email: localUser.email,
             phone: localUser.phone || ''
           });
+
           this.calculateProfileCompletion();
           this.isLoadingProfile = false;
         }
@@ -238,10 +271,18 @@ export class ProfileComponent implements OnInit {
             weight: this.user.weight,
             allergies: this.user.allergies
           });
+
+          // Member since from user_created_at
+          if (this.user.created_at) {
+            this.memberSince = new Date(this.user.created_at);
+          }
+
+          this.loadUserReviews();
           this.calculateProfileCompletion();
+
           setTimeout(() => {
             this.isLoadingProfile = false;
-          }, 1000);
+          }, 500);
         },
         error: (err: any) => {
           console.error('Error loading user profile:', err);
@@ -265,6 +306,65 @@ export class ProfileComponent implements OnInit {
     this.isEditing = !this.isEditing;
     if (!this.isEditing) {
       this.loadUser(); //  Reset form if cancelling
+    }
+  }
+
+  // --- REVIEW METHODS ---
+
+  loadUserReviews() {
+    if (!this.user?.id) return;
+    this.isLoadingReviews = true;
+
+    // Load Website Reviews
+    this.websiteReviewService.getUserWebsiteReviews(this.user.id).subscribe({
+      next: (res) => {
+        this.userWebsiteReviews = res.data;
+        this.totalWebsiteReviews = res.pagination?.total || res.data.length;
+      },
+      error: (err) => {
+        console.error('Error loading website reviews:', err);
+      }
+    });
+
+    // Load Hospital Reviews
+    this.hospitalReviewService.getUserHospitalReviews(this.user.id).subscribe({
+      next: (res) => {
+        this.userHospitalReviews = res.data;
+        this.totalHospitalReviews = res.pagination?.total || res.data.length;
+        this.isLoadingReviews = false;
+      },
+      error: (err) => {
+        console.error('Error loading hospital reviews:', err);
+        this.isLoadingReviews = false;
+      }
+    });
+  }
+
+  deleteWebsiteReview(id: number) {
+    if (confirm('Are you sure you want to delete this review?')) {
+      this.websiteReviewService.deleteWebsiteReview(id).subscribe({
+        next: () => {
+          this.snackbar.success('Review deleted successfully');
+          this.loadUserReviews();
+        },
+        error: (err) => {
+          this.snackbar.error(err.error?.message || 'Failed to delete review');
+        }
+      });
+    }
+  }
+
+  deleteHospitalReview(id: number) {
+    if (confirm('Are you sure you want to delete this review?')) {
+      this.hospitalReviewService.deleteHospitalReview(id).subscribe({
+        next: () => {
+          this.snackbar.success('Review deleted successfully');
+          this.loadUserReviews();
+        },
+        error: (err) => {
+          this.snackbar.error(err.error?.message || 'Failed to delete review');
+        }
+      });
     }
   }
 
@@ -342,8 +442,11 @@ export class ProfileComponent implements OnInit {
   }
 
   // Tab navigation
-  switchTab(tab: 'profile' | 'activity' | 'security') {
+  switchTab(tab: 'profile' | 'activity' | 'security' | 'reviews' | 'dashboard') {
     this.activeTab = tab;
+    if (tab === 'reviews') {
+      this.loadUserReviews();
+    }
   }
 
   // Calculate profile completion percentage

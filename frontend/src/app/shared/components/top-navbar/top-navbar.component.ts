@@ -432,12 +432,14 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     this.profileMenuOpen = false;
   }
 
-  navigateToProfile() {
+  navigateToProfile(tab?: string) {
     const role = this.authService.getRole();
-    if (role === 'doctor') {
-      this.router.navigate(['/doctor/profile']);
+    const basePath = role === 'doctor' ? '/doctor/profile' : '/user/profile';
+
+    if (tab) {
+      this.router.navigate([basePath], { queryParams: { tab } });
     } else {
-      this.router.navigate(['/user/profile']);
+      this.router.navigate([basePath]);
     }
     this.profileMenuOpen = false;
   }

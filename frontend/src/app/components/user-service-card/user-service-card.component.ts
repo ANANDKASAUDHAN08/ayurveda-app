@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ServiceCard } from '../../models/service-card.interface';
+import { ServiceCard } from '../../shared/models/service-card.interface';
 
 @Component({
     selector: 'app-service-card',

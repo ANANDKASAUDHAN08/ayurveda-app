@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,7 @@ import { ContentService } from '../../shared/services/content.service';
 import { SearchService } from '../../shared/services/search.service';
 import { MedicineTypeService, MedicineType } from '../../shared/services/medicine-type.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
+import { WebsiteReviewService } from '../../shared/services/website-review.service';
 import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
 import { AuthService } from '../../shared/services/auth.service';
 import { Subscription } from 'rxjs';
@@ -22,6 +23,9 @@ import { DealCardComponent, DealCardData } from 'src/app/shared/components/deal-
 import { TrustBadgeComponent, TrustBadgeData } from 'src/app/shared/components/trust-badge/trust-badge.component';
 import { SkeletonLoaderComponent } from 'src/app/shared/components/skeleton-loader/skeleton-loader.component';
 import { EmptyStateComponent } from 'src/app/shared/components/empty-state/empty-state.component';
+import { RatingDisplayComponent } from '../../shared/components/rating-display/rating-display.component';
+import { ReviewFormComponent } from '../../shared/components/review-form/review-form.component';
+import { WebsiteReview } from '../../shared/models/review.model';
 
 interface Doctor {
   id: number;
@@ -70,12 +74,14 @@ interface Service {
     TrustBadgeComponent,
     SkeletonLoaderComponent,
     EmptyStateComponent,
-    MobileLocationBarComponent
+    MobileLocationBarComponent,
+    RatingDisplayComponent,
+    ReviewFormComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   userName = 'Guest';
   loadingDoctors = true;
   loadingArticles = true;
@@ -120,6 +126,55 @@ export class HomeComponent implements OnInit {
   topDoctors: any[] = [];
   articles: any[] = [];
 
+  // Reviews
+  userReviews: WebsiteReview[] = [];
+  loadingReviews = false;
+  showReviewForm = false;
+
+  loadLatestReviews() {
+    this.loadingReviews = true;
+    this.websiteReviewService.getWebsiteReviews({ page: 1, limit: 5 }).subscribe({
+      next: (response: any) => {
+        this.userReviews = response.data || [];
+        this.loadingReviews = false;
+      },
+      error: (error: any) => {
+        console.error('Error loading reviews:', error);
+        this.loadingReviews = false;
+      }
+    });
+  }
+
+  openReviewForm() {
+    if (!this.authService.isLoggedIn()) {
+      this.snackbar.info('Please login to share your feedback');
+      // Optional: redirect to login
+      return;
+    }
+    this.showReviewForm = true;
+    this.toggleBodyScroll(true);
+  }
+
+  closeReviewForm() {
+    this.showReviewForm = false;
+    this.toggleBodyScroll(false);
+  }
+
+  submitReview(reviewData: any) {
+    this.websiteReviewService.submitWebsiteReview(reviewData).subscribe({
+      next: (response) => {
+        this.showReviewForm = false;
+        this.toggleBodyScroll(false);
+        this.loadLatestReviews();
+        this.snackbar.success('Feedback submitted successfully! Thank you.');
+      },
+      error: (error) => {
+        console.error('Error submitting feedback:', error);
+        this.snackbar.error(error.error?.message || 'Failed to submit feedback');
+      }
+    });
+  }
+
   // Search autocomplete
   searchQuery = '';
   showSuggestions = false;
@@ -137,13 +192,22 @@ export class HomeComponent implements OnInit {
   private pauseDuration = 2000;
   isTyping = true;
 
+  private toggleBodyScroll(show: boolean) {
+    if (show) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+  }
+
   constructor(
     private router: Router,
     private contentService: ContentService,
     private searchService: SearchService,
     private snackbar: SnackbarService,
     private medicineTypeService: MedicineTypeService,
-    private authService: AuthService
+    private authService: AuthService,
+    private websiteReviewService: WebsiteReviewService
   ) { }
 
   ngOnInit() {
@@ -221,7 +285,7 @@ export class HomeComponent implements OnInit {
 
     this.loadFeaturedDoctors();
     this.loadHealthArticles();
-
+    this.loadLatestReviews();
 
     this.loadingServices = true;
     // Simulate API delay (remove in production)
@@ -327,21 +391,25 @@ export class HomeComponent implements OnInit {
   openDoctorDetails(doctor: any) {
     this.selectedDoctor = doctor;
     this.showDoctorModal = true;
+    this.toggleBodyScroll(true);
   }
 
   closeDoctorModal() {
     this.showDoctorModal = false;
     this.selectedDoctor = null;
+    this.toggleBodyScroll(false);
   }
 
   openArticle(article: any) {
     this.selectedArticle = article;
     this.showArticleModal = true;
+    this.toggleBodyScroll(true);
   }
 
   closeArticle() {
     this.selectedArticle = null;
     this.showArticleModal = false;
+    this.toggleBodyScroll(false);
   }
 
   trackByServiceId(index: number, service: any): number {

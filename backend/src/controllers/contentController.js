@@ -76,45 +76,62 @@ exports.getHospitals = async (req, res) => {
     const offset = (parseInt(page) - 1) * parseInt(limit);
 
     try {
-        // Build the combined query
-        // We'll normalize columns between nabh_hospitals and hospitals_with_specialties
+        // Build the combined query with ratings from hospital_reviews
         let baseQuery = `
             SELECT 
-                id, 
-                name, 
-                address, 
+                n.id, 
+                n.name, 
+                n.address, 
                 NULL as city, 
-                state, 
+                n.state, 
                 NULL as pincode, 
-                contact as phone, 
+                n.contact as phone, 
                 NULL as email, 
-                website, 
-                category as type, 
-                specialties, 
+                n.website, 
+                n.category as type, 
+                n.specialties, 
                 NULL as facilities, 
-                NULL as rating, 
+                COALESCE(r.avg_rating, 0) as rating,
+                COALESCE(r.review_count, 0) as review_count,
                 'NABH' as data_source
-            FROM nabh_hospitals
+            FROM nabh_hospitals n
+            LEFT JOIN (
+                SELECT hospital_id, hospital_source, 
+                       ROUND(AVG(rating), 1) as avg_rating,
+                       COUNT(*) as review_count
+                FROM hospital_reviews 
+                WHERE hospital_source = 'nabh_hospitals'
+                GROUP BY hospital_id, hospital_source
+            ) r ON n.id = r.hospital_id
             WHERE 1=1
             
             UNION ALL
             
             SELECT 
-                id, 
-                hospital_name as name, 
-                address, 
-                city, 
-                state, 
-                pincode, 
+                h.id, 
+                h.hospital_name as name, 
+                h.address, 
+                h.city, 
+                h.state, 
+                h.pincode, 
                 NULL as phone, 
-                email, 
-                website, 
-                hospital_type as type, 
-                specialties, 
-                facilities, 
-                NULL as rating, 
+                h.email, 
+                h.website, 
+                h.hospital_type as type, 
+                h.specialties, 
+                h.facilities, 
+                COALESCE(r.avg_rating, 0) as rating,
+                COALESCE(r.review_count, 0) as review_count,
                 'Specialty' as data_source
-            FROM hospitals_with_specialties
+            FROM hospitals_with_specialties h
+            LEFT JOIN (
+                SELECT hospital_id, hospital_source, 
+                       ROUND(AVG(rating), 1) as avg_rating,
+                       COUNT(*) as review_count
+                FROM hospital_reviews 
+                WHERE hospital_source = 'hospitals_with_specialties'
+                GROUP BY hospital_id, hospital_source
+            ) r ON h.id = r.hospital_id
             WHERE 1=1
         `;
 

@@ -61,7 +61,10 @@ app.use(cors({
 }));
 
 // 2. Security Middleware
-app.use(helmet()); // Basic security headers
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+})); // Basic security headers with CORS policy for static files
+
 app.use('/api', apiLimiter); // Apply to all API routes
 
 app.use(bodyParser.json());
@@ -112,6 +115,8 @@ app.use('/api/subscription', require('./routes/subscription')); // Subscription 
 app.use('/api/calendar', require('./routes/calendarRoutes')); // Wellness Calendar API
 app.use('/api/medicines', require('./routes/medicines')); // Dedicated Medicines Discovery API
 app.use('/api/video-consultancy', require('./routes/videoConsultancy')); // Video Consultancy - Appointments & Payment
+app.use('/api/hospital-reviews', require('./routes/hospitalReview.routes')); // Hospital Reviews API
+app.use('/api/website-reviews', require('./routes/websiteReview.routes')); // Website/Platform Feedback API
 
 // Health check
 app.get('/health', (req, res) => {

@@ -1,0 +1,14 @@
+<div class="flex items-center gap-2">
+    <div class="flex gap-1">
+        <i *ngFor="let star of stars"
+            class="text-3xl cursor-pointer transition-all duration-200 select-none hover:scale-110"
+            [class.text-yellow-400]="getStarClass(star) === 'filled'"
+            [class.text-gray-300]="getStarClass(star) === 'empty'" [class.cursor-default]="readonly"
+            [class.hover:scale-100]="readonly"
+            [style.text-shadow]="getStarClass(star) === 'filled' ? '0 0 5px rgba(251, 191, 36, 0.5)' : 'none'"
+            (mouseenter)="onStarHover(star)" (mouseleave)="onStarLeave()" (click)="onStarClick(star)">
+            ★
+        </i>
+    </div>
+    <span class="text-sm font-medium text-gray-600" *ngIf="rating > 0">{{ rating }} / 5</span>
+</div>

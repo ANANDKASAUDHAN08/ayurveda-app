@@ -140,6 +140,11 @@
                             <i class="fas fa-calendar-alt text-emerald-600 w-5"></i>
                             <span class="text-sm font-bold text-slate-700">Wellness Calendar</span>
                         </a>
+                        <a routerLink="/feedback" (click)="myHealthDropdownOpen = false"
+                            class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all cursor-pointer">
+                            <i class="fas fa-comment-alt text-emerald-600 w-5"></i>
+                            <span class="text-sm font-bold text-slate-700">Share Feedback</span>
+                        </a>
                         <a (click)="navigateToBilling()"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all cursor-pointer">
                             <i class="fas fa-credit-card text-emerald-600 w-5"></i>
@@ -228,6 +233,11 @@
                                     class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
                                     <i class="fas fa-video w-4 text-center text-rose-600"></i>
                                     My Appointments
+                                </button>
+                                <button (click)="navigateToProfile('reviews')"
+                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
+                                    <i class="fas fa-star w-4 text-center text-amber-500"></i>
+                                    My Reviews
                                 </button>
                                 <button (click)="navigateToFavorites()"
                                     class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">

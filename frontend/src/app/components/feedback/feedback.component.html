@@ -1,0 +1,90 @@
+<div class="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-6 md:py-10 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-2xl md:text-5xl font-black mb-4 leading-tight">We Value Your Feedback</h1>
+            <p class="text-base md:text-lg text-emerald-50 mb-8 max-w-3xl mx-auto">
+                Help us improve HealthConnect by sharing your experience and suggestions
+            </p>
+            <button (click)="openReviewForm()"
+                class="px-6 py-3.5 md:px-8 md:py-4 bg-white text-emerald-600 font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all text-base md:text-lg w-full sm:w-auto">
+                <i class="fas fa-comment-dots mr-2"></i>Share Your Feedback
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <!-- Stats Section -->
+        <div *ngIf="stats" class="mb-10 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            <div
+                class="bg-white rounded-2xl shadow-md p-4 md:p-6 text-center border border-gray-100 col-span-2 md:col-span-1">
+                <div class="text-3xl md:text-4xl font-black text-emerald-600 mb-1 md:mb-2">
+                    {{ stats.averageRating | number:'1.1-1' }}
+                </div>
+                <app-rating-display [rating]="stats.averageRating" [totalReviews]="0" [showCount]="false" size="small"
+                    class="flex justify-center mb-1 md:mb-2"></app-rating-display>
+                <p class="text-xs md:text-sm text-gray-600">Overall Rating</p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-md p-4 md:p-6 text-center border border-gray-100">
+                <div class="text-3xl md:text-4xl font-black text-blue-600 mb-1 md:mb-2">
+                    {{ stats.totalReviews }}
+                </div>
+                <p class="text-xs md:text-sm text-gray-600">Total Feedback</p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-md p-4 md:p-6 text-center border border-gray-100">
+                <div class="text-3xl md:text-4xl font-black text-purple-600 mb-1 md:mb-2">
+                    {{ stats.categoryDistribution['suggestion'] || 0 }}
+                </div>
+                <p class="text-xs md:text-sm text-gray-600">Suggestions</p>
+            </div>
+        </div>
+
+        <!-- Filter & Header -->
+        <div
+            class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white rounded-xl p-4 md:p-6 shadow-md border border-gray-100">
+            <div>
+                <h2 class="text-xl md:text-2xl font-black text-gray-900 mb-1">Community Feedback</h2>
+                <p class="text-xs md:text-sm text-gray-600">See what others are saying about HealthConnect</p>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="flex items-center gap-2 md:gap-3 w-full md:w-auto">
+                <label class="text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Filter:</label>
+                <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()"
+                    class="w-full md:w-auto px-3 md:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-xs md:text-sm font-medium">
+                    <option *ngFor="let cat of categories" [value]="cat.value">
+                        {{ cat.label }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Reviews List -->
+        <app-review-list [reviews]="reviews" [type]="'website'"
+            [currentUserId]="authService.isLoggedIn() ? 1 : undefined" [loading]="loading" [showPagination]="true"
+            [currentPage]="currentPage" [totalPages]="totalPages" (editReview)="onEditReview($event)"
+            (deleteReview)="onDeleteReview($event)" (pageChange)="onPageChange($event)"></app-review-list>
+    </div>
+
+    <!-- Review Form Modal -->
+    <div *ngIf="showReviewForm" (click)="closeReviewForm()"
+        class="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
+        <div (click)="$event.stopPropagation()"
+            class="bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col animate-scale-in">
+            <div class="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center bg-white">
+                <h3 class="text-xl md:text-2xl font-bold text-gray-900">Share Your Feedback</h3>
+                <button (click)="closeReviewForm()"
+                    class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times text-gray-500 text-lg"></i>
+                </button>
+            </div>
+            <div class="overflow-y-auto flex-grow p-1">
+                <app-review-form [type]="'website'" [showAspects]="false" [showCategory]="true"
+                    (submitReview)="submitReview($event)" (cancel)="closeReviewForm()"></app-review-form>
+            </div>
+        </div>
+    </div>
+</div>

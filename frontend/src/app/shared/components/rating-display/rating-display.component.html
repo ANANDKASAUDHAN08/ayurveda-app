@@ -1,0 +1,29 @@
+<div class="flex items-center gap-2" [class.cursor-pointer]="clickable" [ngClass]="{
+    'text-sm': size === 'small',
+    'text-base': size === 'medium',
+    'text-xl': size === 'large'
+  }" (click)="onRatingClick()">
+    <div class="flex gap-0.5 transition-opacity duration-200" [class.opacity-80]="clickable">
+        <i *ngFor="let star of stars" class="inline-block" [ngClass]="{
+        'text-sm': size === 'small',
+        'text-lg': size === 'medium',
+        'text-2xl': size === 'large'
+      }">
+            <span *ngIf="star.filled" class="text-yellow-400"
+                [style.text-shadow]="'0 0 3px rgba(251, 191, 36, 0.3)'">★</span>
+            <span *ngIf="star.half" class="relative inline-block">
+                <span class="absolute left-0 text-yellow-400 overflow-hidden w-1/2">★</span>
+                <span class="text-gray-300">★</span>
+            </span>
+            <span *ngIf="!star.filled && !star.half" class="text-gray-300">★</span>
+        </i>
+    </div>
+
+    <div class="flex items-center gap-1 text-gray-600" *ngIf="showCount || rating > 0">
+        <span class="font-semibold">{{ rating | number:'1.1-1' }}</span>
+        <span class="text-gray-500" *ngIf="showCount && totalReviews > 0"
+            [ngClass]="{ 'text-xs': size === 'small', 'text-sm': size !== 'small' }">
+            ({{ totalReviews }} {{ totalReviews === 1 ? 'review' : 'reviews' }})
+        </span>
+    </div>
+</div>

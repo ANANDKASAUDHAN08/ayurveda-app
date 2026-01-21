@@ -5,7 +5,7 @@ import { AppointmentService } from '../../shared/services/appointment.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { UserServiceCardComponent } from '../user-service-card/user-service-card.component';
-import { ServiceCard } from '../../models/service-card.interface';
+import { ServiceCard } from '../../shared/models/service-card.interface';
 import { CalendarService } from '../../shared/services/calendar.service';
 
 @Component({

@@ -1,0 +1,91 @@
+<div class="p-4 md:p-6 bg-white rounded-lg">
+    <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 md:gap-6">
+
+        <!-- Overall Rating -->
+        <div class="flex flex-col gap-2">
+            <label class="font-semibold text-sm text-gray-700">
+                Your Rating <span class="text-red-500">*</span>
+            </label>
+            <app-rating-input formControlName="rating"></app-rating-input>
+            <div class="text-xs text-red-500 mt-1" *ngIf="rating?.touched && rating?.invalid">
+                Please select a rating
+            </div>
+        </div>
+
+        <!-- Category (Website reviews only) -->
+        <div class="flex flex-col gap-2" *ngIf="type === 'website' && showCategory">
+            <label for="category" class="font-semibold text-sm text-gray-700">
+                Category <span class="text-red-500">*</span>
+            </label>
+            <select id="category" formControlName="category"
+                class="px-2.5 py-2.5 border border-gray-300 rounded-md text-sm transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                <option *ngFor="let cat of categories" [value]="cat.value">
+                    {{ cat.label }}
+                </option>
+            </select>
+        </div>
+
+        <!-- Title -->
+        <div class="flex flex-col gap-2">
+            <label for="title" class="font-semibold text-sm text-gray-700">Title (Optional)</label>
+            <input type="text" id="title" formControlName="title"
+                class="px-2.5 py-2.5 border border-gray-300 rounded-md text-sm transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                placeholder="Summarize your experience" maxlength="255" />
+        </div>
+
+        <!-- Comment -->
+        <div class="flex flex-col gap-2">
+            <label for="comment" class="font-semibold text-sm text-gray-700">
+                Your Review <span class="text-red-500">*</span>
+            </label>
+            <textarea id="comment" formControlName="comment"
+                class="px-2.5 py-2.5 border border-gray-300 rounded-md text-sm transition-all resize-y font-sans focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                rows="5" placeholder="Share your experience (minimum 10 characters)"></textarea>
+            <div class="text-xs text-gray-600 text-right">
+                {{ comment?.value?.length || 0 }} characters
+            </div>
+            <div class="text-xs text-red-500 mt-1" *ngIf="comment?.touched && comment?.invalid">
+                <span *ngIf="comment?.errors?.['required']">Review comment is required</span>
+                <span *ngIf="comment?.errors?.['minlength']">Comment must be at least 10 characters</span>
+            </div>
+        </div>
+
+        <!-- Aspect Ratings (Hospital reviews only) -->
+        <div class="p-4 bg-gray-50 rounded-md" *ngIf="type === 'hospital' && showAspects" formGroupName="aspects">
+            <label class="block mb-4 text-sm font-semibold text-gray-700">Rate Specific Aspects (Optional)</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                    <span class="text-xs font-medium text-gray-600">Cleanliness</span>
+                    <app-rating-input formControlName="cleanliness"></app-rating-input>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <span class="text-xs font-medium text-gray-600">Staff Behavior</span>
+                    <app-rating-input formControlName="staff"></app-rating-input>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <span class="text-xs font-medium text-gray-600">Facilities</span>
+                    <app-rating-input formControlName="facilities"></app-rating-input>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <span class="text-xs font-medium text-gray-600">Waiting Time</span>
+                    <app-rating-input formControlName="waiting_time"></app-rating-input>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200">
+            <button type="button"
+                class="w-full sm:w-auto px-6 py-2.5 bg-gray-100 text-gray-700 rounded-md font-medium text-sm transition-all hover:bg-gray-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                (click)="onCancel()" [disabled]="isSubmitting">
+                Cancel
+            </button>
+            <button type="submit"
+                class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-md font-medium text-sm transition-all hover:shadow-lg hover:-translate-y-0.5 hover:shadow-blue-500/30 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
+                [disabled]="isSubmitting">
+                <span *ngIf="!isSubmitting">{{ initialData ? 'Update' : 'Submit' }} Review</span>
+                <span *ngIf="isSubmitting">Submitting...</span>
+            </button>
+        </div>
+    </form>
+</div>

@@ -4,13 +4,27 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ContentService } from '../../shared/services/content.service';
 import { FavoritesService } from '../../shared/services/favorites.service';
+import { HospitalReviewService } from '../../shared/services/hospital-review.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
+import { RatingDisplayComponent } from '../../shared/components/rating-display/rating-display.component';
+import { ReviewListComponent } from '../../shared/components/review-list/review-list.component';
+import { ReviewFormComponent } from '../../shared/components/review-form/review-form.component';
 import { getEncyclopediaKey } from '../../shared/utils/specialty-mapping';
+import { HospitalReview, ReviewStats } from '../../shared/models/review.model';
 
 @Component({
     selector: 'app-hospitals',
     standalone: true,
-    imports: [CommonModule, RouterModule, FormsModule, MobileLocationBarComponent],
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        MobileLocationBarComponent,
+        RatingDisplayComponent,
+        ReviewListComponent,
+        ReviewFormComponent
+    ],
     templateUrl: './hospitals.component.html',
     styleUrl: './hospitals.component.css'
 })
@@ -44,9 +58,20 @@ export class HospitalsComponent implements OnInit {
         pages: 0
     };
 
+    // Review Related Properties
+    reviews: HospitalReview[] = [];
+    reviewStats: ReviewStats | null = null;
+    reviewsLoading = false;
+    showReviewForm = false;
+    reviewsCurrentPage = 1;
+    reviewsTotalPages = 1;
+    activeTab: 'details' | 'reviews' = 'details';
+
     constructor(
         private contentService: ContentService,
         private favoritesService: FavoritesService,
+        private hospitalReviewService: HospitalReviewService,
+        public authService: AuthService,
         private elementRef: ElementRef
     ) { }
 
@@ -169,11 +194,18 @@ export class HospitalsComponent implements OnInit {
     openDetails(hospital: any) {
         this.selectedHospital = hospital;
         this.showModal = true;
+        this.activeTab = 'details';
+        this.loadHospitalReviews();
+        this.loadReviewStats();
     }
 
     closeModal() {
         this.showModal = false;
         this.selectedHospital = null;
+        this.reviews = [];
+        this.reviewStats = null;
+        this.showReviewForm = false;
+        this.activeTab = 'details';
     }
 
     toggleFavorite(event: Event, hospital: any) {
@@ -299,5 +331,111 @@ export class HospitalsComponent implements OnInit {
 
     getSpecialtyKey(specialty: string): string | null {
         return getEncyclopediaKey(specialty);
+    }
+
+    // Review Methods
+    loadHospitalReviews() {
+        if (!this.selectedHospital) return;
+
+        this.reviewsLoading = true;
+        const source = this.selectedHospital.data_source === 'NABH' ? 'nabh_hospitals' :
+            this.selectedHospital.data_source === 'Specialty' ? 'hospitals_with_specialties' : 'hospitals';
+
+        this.hospitalReviewService.getHospitalReviews(
+            this.selectedHospital.id,
+            source,
+            this.reviewsCurrentPage,
+            5
+        ).subscribe({
+            next: (response) => {
+                this.reviews = response.data;
+                this.reviewsTotalPages = response.pagination?.totalPages || 1;
+                this.reviewsLoading = false;
+            },
+            error: (error) => {
+                console.error('Error loading reviews:', error);
+                this.reviewsLoading = false;
+            }
+        });
+    }
+
+    loadReviewStats() {
+        if (!this.selectedHospital) return;
+
+        const source = this.selectedHospital.data_source === 'NABH' ? 'nabh_hospitals' :
+            this.selectedHospital.data_source === 'Specialty' ? 'hospitals_with_specialties' : 'hospitals';
+
+        this.hospitalReviewService.getHospitalReviewStats(
+            this.selectedHospital.id,
+            source
+        ).subscribe({
+            next: (response) => {
+                this.reviewStats = response.data;
+            },
+            error: (error) => {
+                console.error('Error loading stats:', error);
+            }
+        });
+    }
+
+    openReviewForm() {
+        if (!this.authService.isLoggedIn()) {
+            alert('Please login to write a review');
+            return;
+        }
+        this.showReviewForm = true;
+    }
+
+    closeReviewForm() {
+        this.showReviewForm = false;
+    }
+
+    submitReview(reviewData: any) {
+        if (!this.selectedHospital) return;
+
+        const source = this.selectedHospital.data_source === 'NABH' ? 'nabh_hospitals' :
+            this.selectedHospital.data_source === 'Specialty' ? 'hospitals_with_specialties' : 'hospitals';
+
+        this.hospitalReviewService.submitHospitalReview({
+            hospital_id: this.selectedHospital.id,
+            hospital_source: source,
+            ...reviewData
+        }).subscribe({
+            next: (response) => {
+                this.showReviewForm = false;
+                this.loadHospitalReviews();
+                this.loadReviewStats();
+                alert('Review submitted successfully!');
+            },
+            error: (error) => {
+                console.error('Error submitting review:', error);
+                alert(error.error?.message || 'Failed to submit review');
+            }
+        });
+    }
+
+    onReviewPageChange(page: number) {
+        this.reviewsCurrentPage = page;
+        this.loadHospitalReviews();
+    }
+
+    onEditReview(review: HospitalReview) {
+        // Open review form with existing data
+        console.log('Edit review:', review);
+        // TODO: Implement edit functionality
+    }
+
+    onDeleteReview(reviewId: number) {
+        this.hospitalReviewService.deleteHospitalReview(reviewId).subscribe({
+            next: () => {
+                this.loadHospitalReviews();
+                this.loadReviewStats();
+                alert('Review deleted successfully');
+            },
+            error: (error) => {
+                console.error('Error deleting review:', error);
+                alert('Failed to delete review');
+            }
+        });
     }
 }

@@ -1,0 +1,122 @@
+<div class="flex flex-col gap-4">
+    <!-- Loading State -->
+    <div class="flex flex-col gap-4" *ngIf="loading">
+        <div class="p-4 md:p-6 bg-white rounded-lg border border-gray-200 animate-pulse" *ngFor="let i of [1,2,3]">
+            <div class="h-12 bg-gray-200 rounded mb-4"></div>
+            <div class="h-4 bg-gray-200 rounded mb-2"></div>
+            <div class="h-4 bg-gray-200 rounded w-3/5"></div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="p-8 md:p-12 text-center bg-gray-50 rounded-lg" *ngIf="!loading && reviews.length === 0">
+        <div class="text-4xl md:text-5xl mb-4">📝</div>
+        <h3 class="text-lg md:text-xl font-semibold text-gray-700 mb-2">No reviews yet</h3>
+        <p class="text-xs md:text-sm text-gray-500">Be the first to share your experience!</p>
+    </div>
+
+    <!-- Reviews List -->
+    <div class="flex flex-col gap-4" *ngIf="!loading && reviews.length > 0">
+        <div class="p-4 md:p-6 bg-white border border-gray-200 rounded-lg transition-shadow hover:shadow-lg animate-fade-in"
+            *ngFor="let review of reviews">
+            <!-- Review Header -->
+            <div class="flex justify-between items-start mb-4">
+                <div class="flex items-center gap-2 md:gap-3">
+                    <div
+                        class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center font-semibold text-sm md:text-base">
+                        {{ (review.user_name?.charAt(0) || '?').toUpperCase() }}
+                    </div>
+                    <div class="flex flex-col gap-0.5">
+                        <span class="font-semibold text-gray-900 text-xs md:text-sm">{{ review.user_name || 'Anonymous'
+                            }}</span>
+                        <span class="text-[10px] md:text-xs text-gray-500">{{ formatDate(review.created_at) }}</span>
+                    </div>
+                </div>
+
+                <!-- Actions (Edit/Delete) -->
+                <div class="flex gap-1 md:gap-2" *ngIf="canEditReview(review)">
+                    <button class="p-1.5 md:p-2 rounded transition-colors hover:bg-gray-100"
+                        (click)="onEditClick(review)" title="Edit review">
+                        ✏️
+                    </button>
+                    <button class="p-1.5 md:p-2 rounded transition-colors hover:bg-red-50"
+                        (click)="onDeleteClick(review.id)" title="Delete review">
+                        🗑️
+                    </button>
+                </div>
+            </div>
+
+            <!-- Rating -->
+            <div class="flex flex-wrap items-center gap-2 md:gap-3 mb-3">
+                <app-rating-display [rating]="review.rating" [showCount]="false" size="small"></app-rating-display>
+
+                <!-- Category badge for website reviews -->
+                <span
+                    class="px-2 py-0.5 md:px-2.5 md:py-1 bg-blue-50 text-blue-800 text-[10px] md:text-xs font-medium rounded-full"
+                    *ngIf="isWebsiteReview(review)">
+                    {{ getCategoryLabel(review.category) }}
+                </span>
+            </div>
+
+            <!-- Title -->
+            <h4 class="text-sm md:text-base font-semibold text-gray-900 mb-1.5 md:mb-2" *ngIf="review.title">{{
+                review.title }}</h4>
+
+            <!-- Comment -->
+            <p class="text-gray-700 text-xs md:text-sm leading-relaxed mb-3">{{ review.comment }}</p>
+
+            <!-- Hospital Aspects (if available) -->
+            <div class="flex flex-wrap gap-2 md:gap-4 p-3 md:p-4 bg-gray-50 rounded-md mt-4"
+                *ngIf="isHospitalReview(review) && review.aspects">
+                <div class="flex items-center gap-1 md:gap-2" *ngIf="review.aspects.cleanliness">
+                    <span class="text-[10px] md:text-xs font-medium text-gray-600">Cleanliness:</span>
+                    <app-rating-display [rating]="review.aspects.cleanliness" [showCount]="false"
+                        size="small"></app-rating-display>
+                </div>
+                <!-- ... other aspects refined similarly ... -->
+                <div class="flex items-center gap-1 md:gap-2" *ngIf="review.aspects.staff">
+                    <span class="text-[10px] md:text-xs font-medium text-gray-600">Staff:</span>
+                    <app-rating-display [rating]="review.aspects.staff" [showCount]="false"
+                        size="small"></app-rating-display>
+                </div>
+                <div class="flex items-center gap-1 md:gap-2" *ngIf="review.aspects.facilities">
+                    <span class="text-[10px] md:text-xs font-medium text-gray-600">Facilities:</span>
+                    <app-rating-display [rating]="review.aspects.facilities" [showCount]="false"
+                        size="small"></app-rating-display>
+                </div>
+                <div class="flex items-center gap-1 md:gap-2" *ngIf="review.aspects.waiting_time">
+                    <span class="text-[10px] md:text-xs font-medium text-gray-600">Waiting:</span>
+                    <app-rating-display [rating]="review.aspects.waiting_time" [showCount]="false"
+                        size="small"></app-rating-display>
+                </div>
+            </div>
+
+            <!-- Updated indicator -->
+            <span class="text-[10px] text-gray-500 italic" *ngIf="review.updated_at !== review.created_at">
+                (edited)
+            </span>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex flex-col sm:flex-row justify-center items-center gap-3 md:gap-4 p-4"
+        *ngIf="!loading && showPagination && totalPages > 1">
+        <div class="flex gap-2 w-full sm:w-auto">
+            <button
+                class="flex-1 sm:flex-none px-4 py-2 bg-white border border-gray-300 rounded-lg text-xs md:text-sm font-medium transition-all hover:bg-gray-50 disabled:opacity-50"
+                [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
+                ← Prev
+            </button>
+
+            <button
+                class="flex-1 sm:flex-none px-4 py-2 bg-white border border-gray-300 rounded-lg text-xs md:text-sm font-medium transition-all hover:bg-gray-50 disabled:opacity-50"
+                [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
+                Next →
+            </button>
+        </div>
+
+        <span class="text-xs md:text-sm text-gray-500 font-medium">
+            Page {{ currentPage }} of {{ totalPages }}
+        </span>
+    </div>
+</div>
