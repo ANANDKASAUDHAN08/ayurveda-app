@@ -30,6 +30,10 @@ const app = express();
 const helmet = require('helmet');
 const { apiLimiter } = require('./middleware/security');
 
+// Trust proxy - Required for Render deployment to correctly identify client IPs
+// This allows express-rate-limit to work properly with the X-Forwarded-For header
+app.set('trust proxy', 1);
+
 const PORT = process.env.PORT || 3000;
 
 // 1. CORS Configuration (Should be first to handle pre-flights)
