@@ -142,60 +142,9 @@ process.on('uncaughtException', (err) => {
     console.error('Uncaught Exception:', err);
 });
 
-// Create HTTP server and attach Socket.io
-const http = require('http');
-const server = http.createServer(app);
-
-// Socket.io for WebRTC signaling
-const { Server } = require('socket.io');
-const io = new Server(server, {
-    cors: {
-        origin: allowedOrigins,
-        methods: ['GET', 'POST'],
-        credentials: true
-    }
-});
-
-// Socket.io connection handling for video calls
-io.on('connection', (socket) => {
-    console.log('👤 Client connected:', socket.id);
-
-    // Join a video room
-    socket.on('join-room', (roomId) => {
-        const room = io.sockets.adapter.rooms.get(roomId);
-        const numClients = room ? room.size : 0;
-
-        socket.join(roomId);
-
-        // Notify others in the room
-        socket.to(roomId).emit('peer-joined', socket.id);
-
-        // Tell the joining user if they should expect a peer
-        if (numClients > 0) {
-            socket.emit('room-ready', { numClients });
-        }
-    });
-
-    // Handle WebRTC signaling
-    socket.on('signal', ({ roomId, signal }) => {
-        socket.to(roomId).emit('signal', signal);
-    });
-
-    // Handle Chat Messages
-    socket.on('chat-message', ({ roomId, message, sender }) => {
-        socket.to(roomId).emit('chat-message', { message, sender, timestamp: new Date() });
-    });
-
-    // Handle disconnection
-    socket.on('disconnect', () => {
-        console.log('👋 Client disconnected:', socket.id);
-    });
-});
-
 // Start server
-server.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    console.log(`🎥 WebRTC signaling server ready`);
 });
 
 async function startServer() {
@@ -209,4 +158,3 @@ async function startServer() {
 }
 
 startServer();
-

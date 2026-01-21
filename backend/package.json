@@ -33,6 +33,7 @@
     "express": "^5.1.0",
     "express-rate-limit": "^8.2.1",
     "express-session": "^1.18.2",
+    "googleapis": "^170.1.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "libphonenumber-js": "^1.12.31",
@@ -46,8 +47,7 @@
     "playwright": "^1.57.0",
     "qrcode": "^1.5.4",
     "razorpay": "^2.9.6",
-    "sequelize": "^6.37.7",
-    "socket.io": "^4.8.3"
+    "sequelize": "^6.37.7"
   },
   "devDependencies": {
     "cheerio": "^1.1.2",

@@ -1,5 +1,6 @@
 const db = require('../config/database');
 const Razorpay = require('razorpay');
+const googleMeetService = require('../services/googleCalendarService');
 
 /**
  * Video Consultancy Appointments Controller
@@ -198,10 +199,31 @@ exports.bookAppointment = async (req, res) => {
 
         // Create video session entry
         if (consultation_type === 'video') {
-            await db.execute(
-                `INSERT INTO video_sessions (appointment_id, status)
-                VALUES (?, 'waiting')`,
+            // Get data for meeting creation
+            const [details] = await db.execute(
+                `SELECT a.*, d.name as doctor_name, u_p.name as patient_name, u_p.email as patient_email, u_d.email as doctor_email
+                 FROM appointments a
+                 JOIN doctors d ON a.doctor_id = d.id
+                 JOIN users u_p ON a.user_id = u_p.id
+                 LEFT JOIN users u_d ON d.userId = u_d.id
+                 WHERE a.id = ?`,
                 [appointmentId]
+            );
+
+            let meetingLink = null;
+            if (details.length > 0) {
+                const aptDetails = details[0];
+                aptDetails.emails = [aptDetails.patient_email];
+                if (aptDetails.doctor_email) {
+                    aptDetails.emails.push(aptDetails.doctor_email);
+                }
+                meetingLink = await googleMeetService.createMeeting(aptDetails);
+            }
+
+            await db.execute(
+                `INSERT INTO video_sessions (appointment_id, status, meeting_link, meeting_platform)
+                VALUES (?, 'waiting', ?, ?)`,
+                [appointmentId, meetingLink, meetingLink ? 'google_meet' : 'custom']
             );
         }
 
@@ -296,7 +318,8 @@ exports.getUserAppointments = async (req, res) => {
                 d.clinic_name,
                 vs.id as video_session_id,
                 vs.status as video_status,
-                vs.room_id
+                vs.meeting_link,
+                vs.meeting_platform
             FROM appointments a
             JOIN doctors d ON a.doctor_id = d.id
             LEFT JOIN video_sessions vs ON a.id = vs.appointment_id
@@ -357,10 +380,10 @@ exports.getAppointmentById = async (req, res) => {
                 u.email as patient_email,
                 vs.id as video_session_id,
                 vs.status as video_status,
-                vs.room_id,
-                vs.session_token,
                 vs.started_at,
-                vs.ended_at
+                vs.ended_at,
+                vs.meeting_link,
+                vs.meeting_platform
             FROM appointments a
             JOIN doctors d ON a.doctor_id = d.id
             JOIN users u ON a.user_id = u.id

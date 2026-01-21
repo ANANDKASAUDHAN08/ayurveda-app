@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AppointmentService } from '../../shared/services/appointment.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Component({
   selector: 'app-doctor-dashboard',
@@ -26,7 +27,8 @@ export class DoctorDashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private http: HttpClient,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private snackbar: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -163,6 +165,10 @@ export class DoctorDashboardComponent implements OnInit {
   }
 
   joinVideoCall(appointment: any) {
-    this.router.navigate(['/video-call', appointment.id]);
+    if (appointment.meeting_link) {
+      window.open(appointment.meeting_link, '_blank');
+    } else {
+      this.snackbar.error('This appointment does not have a Meeting link. Please contact the administrator.');
+    }
   }
 }

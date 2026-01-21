@@ -101,9 +101,12 @@ exports.getUserAppointments = async (req, res) => {
                 d.specialization as specialty,
                 d.clinic_name,
                 d.clinic_address,
-                d.phone as doctor_phone
+                d.phone as doctor_phone,
+                vs.meeting_link,
+                vs.meeting_platform
             FROM appointments a
             JOIN doctors d ON a.doctor_id = d.id
+            LEFT JOIN video_sessions vs ON a.id = vs.appointment_id
             WHERE a.user_id = ?
         `;
 
@@ -150,9 +153,12 @@ exports.getDoctorAppointments = async (req, res) => {
                 a.user_id,
                 u.name as user_name,
                 u.email as user_email,
-                u.phone as user_phone
+                u.phone as user_phone,
+                vs.meeting_link,
+                vs.meeting_platform
             FROM appointments a
             JOIN users u ON a.user_id = u.id
+            LEFT JOIN video_sessions vs ON a.id = vs.appointment_id
             WHERE a.doctor_id = ?
         `;
 

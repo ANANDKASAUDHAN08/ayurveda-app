@@ -132,8 +132,13 @@ export class MyAppointmentsComponent implements OnInit {
             return;
         }
 
-        // Navigate to video call component
-        this.router.navigate(['/video-call', appointment.id]);
+        // If an external meeting link exists, open it in a new tab
+        if (appointment.meeting_link) {
+            window.open(appointment.meeting_link, '_blank');
+        } else {
+            // Friendly error for old appointments that didn't have auto-generation
+            this.snackbar.error('This appointment does not have a Meeting link. Please contact the clinic.');
+        }
     }
 
     isJoinable(appointment: any): boolean {
