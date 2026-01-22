@@ -62,7 +62,12 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         { value: 'device', label: 'Medical Devices' },
         { value: 'doctor', label: 'Doctors' },
         { value: 'hospital', label: 'Hospitals' },
-        { value: 'pharmacy', label: 'Pharmacies' }
+        { value: 'pharmacy', label: 'Pharmacies' },
+        { value: 'lab_test', label: 'Lab Tests' },
+        { value: 'health_package', label: 'Health Packages' },
+        { value: 'ayurveda_medicine', label: 'Ayurveda Medicines' },
+        { value: 'page', label: 'Information' },
+        { value: 'herb', label: 'Ayurveda Herbs' }
     ];
 
     sortOptions = [
@@ -284,14 +289,25 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
             return;
         }
 
-        // Navigate to list pages (detail pages don't exist yet)
+        // Navigate to specific pages
         const routes: { [key: string]: string } = {
             'hospital': '/hospitals',
             'pharmacy': '/pharmacies',
+            'lab_test': '/lab-tests',
+            'health_package': '/health-plans',
+            'ayurveda_medicine': '/ayurveda',
+            'ayurveda_exercise': '/ayurveda/ayurveda-wellness',
+            'ayurveda_article': '/ayurveda/ayurveda-article',
+            'page': '', // Handled specially below
+            'herb': '/ayurveda/dictionary'
         };
 
-        const basePath = routes[item.product_type];
+        if (item.product_type === 'page') {
+            this.router.navigate(['/', item.image_url]); // slug is stored in image_url for pages
+            return;
+        }
 
+        const basePath = routes[item.product_type];
         if (!basePath) {
             this.snackbarService.show('Page not available', 'info');
             return;
@@ -348,7 +364,12 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
             'device': 'Medical Devices',
             'doctor': 'Doctors',
             'hospital': 'Hospitals',
-            'pharmacy': 'Pharmacies'
+            'pharmacy': 'Pharmacies',
+            'lab_test': 'Lab Tests',
+            'health_package': 'Health Packages',
+            'ayurveda_medicine': 'Ayurveda Medicines',
+            'page': 'Information',
+            'herb': 'Ayurveda Herb'
         };
         return labels[type] || type;
     }
@@ -359,7 +380,11 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
             'device': 'fa-stethoscope',
             'doctor': 'fa-user-md',
             'hospital': 'fa-hospital',
-            'pharmacy': 'fa-prescription-bottle'
+            'pharmacy': 'fa-prescription-bottle',
+            'lab_test': 'fa-flask',
+            'health_package': 'fa-heart-circle-check',
+            'page': 'fa-info-circle',
+            'herb': 'fa-leaf'
         };
         return icons[type] || 'fa-box';
     }

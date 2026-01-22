@@ -6,8 +6,8 @@
             <!-- <div class="flex items-center justify-between gap-4 flex-wrap"> -->
             <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
                 <!-- Search Query & Results Count -->
-                <div class="flex-1 min-w-0">
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-900 truncate">
+                <div class="flex-1 min-w-0 pr-4">
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900 whitespace-normal break-words">
                         {{ filters.q ? 'Search Results for "' + filters.q + '"' : 'All Products' }}
                     </h1>
                     <p class="text-sm text-gray-500 mt-1" *ngIf="!loading">
@@ -169,8 +169,8 @@
                                 </span>
                             </div>
 
-                            <!-- Grid for this category - 4 COLUMNS -->
-                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                            <!-- Grid for this category -->
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-4">
                                 <div *ngFor="let product of groupedResults[type]"
                                     [class]="'bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden group flex flex-col h-full ' + 
                                     (product.product_type === 'hospital' || product.product_type === 'pharmacy' ? 'min-h-[280px]' : 'min-h-[380px]')">
@@ -246,16 +246,16 @@
                                             <div class="mt-auto pt-3">
                                                 <!-- Medicine/Device buttons -->
                                                 <div *ngIf="product.product_type === 'medicine' || product.product_type === 'device'"
-                                                    class="grid grid-cols-2 gap-2">
+                                                    class="flex flex-col sm:flex-row gap-2">
                                                     <button (click)="addToCart(product)"
                                                         [disabled]="addingToCart[product.product_type + '-' + product.id]"
-                                                        class="product-card-button px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors disabled:bg-gray-300 text-sm">
+                                                        class="flex-1 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors disabled:bg-gray-300 text-sm whitespace-nowrap">
                                                         <i class="fas fa-shopping-cart mr-1"></i>
                                                         {{ addingToCart[product.product_type + '-' + product.id] ?
-                                                        'Adding...' : 'Add' }}
+                                                        'Adding' : 'Add' }}
                                                     </button>
                                                     <button (click)="viewDetails(product)"
-                                                        class="product-card-button px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors text-sm">
+                                                        class="flex-1 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors text-sm whitespace-nowrap">
                                                         <i class="fas fa-info-circle mr-1"></i>
                                                         Details
                                                     </button>
@@ -263,14 +263,14 @@
 
                                                 <!-- Doctor buttons -->
                                                 <div *ngIf="product.product_type === 'doctor'"
-                                                    class="grid grid-cols-2 gap-2">
+                                                    class="flex flex-col sm:flex-row gap-2">
                                                     <button (click)="bookAppointment(product)"
-                                                        class="product-card-button px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm">
+                                                        class="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm whitespace-nowrap">
                                                         <i class="fas fa-calendar-check mr-1"></i>
                                                         Book
                                                     </button>
                                                     <button (click)="viewDetails(product)"
-                                                        class="product-card-button px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors text-sm">
+                                                        class="flex-1 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors text-sm whitespace-nowrap">
                                                         <i class="fas fa-info-circle mr-1"></i>
                                                         Details
                                                     </button>
@@ -388,27 +388,113 @@
                 </div>
 
                 <!-- Empty State -->
-                <div *ngIf="!loading && !hasResults" class="text-center py-16">
-                    <div class="max-w-md mx-auto">
-                        <i class="fas fa-search text-gray-300 text-6xl mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">No results found</h3>
-                        <p class="text-gray-600 mb-6">Try adjusting your filters or search query</p>
-
-                        <!-- Search Suggestions -->
-                        <div class="bg-gray-50 rounded-lg p-6">
-                            <h4 class="font-semibold text-gray-900 mb-3">Suggestions:</h4>
-                            <ul class="text-left text-gray-700 space-y-2">
-                                <li>• Try different keywords</li>
-                                <li>• Remove some filters</li>
-                                <li>• Check spelling</li>
-                                <li>• Try broader search terms</li>
-                            </ul>
+                <div *ngIf="!loading && !hasResults" class="text-center py-20 px-4">
+                    <div class="max-w-2xl mx-auto">
+                        <div class="mb-8">
+                            <div
+                                class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-search text-4xl text-gray-300"></i>
+                            </div>
+                            <h3 class="text-3xl font-bold text-gray-900 mb-3">No results found for "{{ filters.q }}"
+                            </h3>
+                            <p class="text-gray-600 text-lg mb-8">We couldn't find what you're looking for. Try
+                                adjusting your filters or search terms.</p>
                         </div>
 
-                        <button (click)="clearFilters()"
-                            class="mt-6 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
-                            Clear All Filters
-                        </button>
+                        <!-- Helpful Suggestions -->
+                        <div class="grid md:grid-cols-2 gap-6 text-left mb-12">
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                                <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                    <i class="fas fa-lightbulb text-amber-500"></i>
+                                    Search Tips
+                                </h4>
+                                <ul class="space-y-3 text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-emerald-500 mt-1">•</span>
+                                        Check for typos or spelling errors
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-emerald-500 mt-1">•</span>
+                                        Use more general keywords
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-emerald-500 mt-1">•</span>
+                                        Try searching for a category (e.g., "Fever", "Heart")
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                                <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                    <i class="fas fa-filter text-blue-500"></i>
+                                    Filter Tips
+                                </h4>
+                                <ul class="space-y-3 text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-emerald-500 mt-1">•</span>
+                                        Broaden your price range
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-emerald-500 mt-1">•</span>
+                                        Switch to "All Results" in Product Type
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-emerald-500 mt-1">•</span>
+                                        Clear all filters to see everything
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Popular Categories -->
+                        <div class="mb-12">
+                            <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6 text-center">Or
+                                Explore Popular Categories</h4>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                <a routerLink="/medicines"
+                                    class="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all group">
+                                    <div
+                                        class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-pills text-emerald-600 text-xl"></i>
+                                    </div>
+                                    <span class="text-sm font-bold text-gray-700">Medicines</span>
+                                </a>
+                                <a routerLink="/find-doctors"
+                                    class="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all group">
+                                    <div
+                                        class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-user-md text-blue-600 text-xl"></i>
+                                    </div>
+                                    <span class="text-sm font-bold text-gray-700">Doctors</span>
+                                </a>
+                                <a routerLink="/lab-tests"
+                                    class="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all group">
+                                    <div
+                                        class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-flask text-indigo-600 text-xl"></i>
+                                    </div>
+                                    <span class="text-sm font-bold text-gray-700">Lab Tests</span>
+                                </a>
+                                <a routerLink="/ayurveda"
+                                    class="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all group">
+                                    <div
+                                        class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-leaf text-rose-600 text-xl"></i>
+                                    </div>
+                                    <span class="text-sm font-bold text-gray-700">Ayurveda</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <button (click)="clearFilters()"
+                                class="w-full sm:w-auto px-8 py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-200">
+                                Clear All Filters
+                            </button>
+                            <a routerLink="/"
+                                class="w-full sm:w-auto px-8 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-colors">
+                                Back to Home
+                            </a>
+                        </div>
                     </div>
                 </div>
 

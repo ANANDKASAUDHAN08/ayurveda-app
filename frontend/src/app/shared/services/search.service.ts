@@ -17,7 +17,7 @@ export interface SearchResult {
     stock?: number;
     stock_quantity?: number;
     image_url?: string;
-    product_type: 'medicine' | 'device' | 'doctor' | 'hospital' | 'pharmacy';
+    product_type: 'medicine' | 'device' | 'doctor' | 'hospital' | 'pharmacy' | 'lab_test' | 'health_package' | 'ayurveda_medicine' | 'ayurveda_exercise' | 'ayurveda_article' | 'page' | 'herb';
     manufacturer?: string;
     composition?: string;
     storage?: string;

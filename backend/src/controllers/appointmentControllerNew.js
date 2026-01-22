@@ -423,28 +423,28 @@ exports.getActivityFeed = async (req, res) => {
 
         // Get user's timestamps
         const [user] = await db.query(`
-            SELECT created_at, updated_at 
+            SELECT createdAt, updatedAt 
             FROM users 
             WHERE id = ?
         `, [userId]);
 
         if (user[0]) {
-            if (user[0].updated_at) {
+            if (user[0].updatedAt) {
                 activities.push({
                     type: 'profile_update',
                     title: 'Profile Updated',
                     description: 'Updated profile information',
-                    date: user[0].updated_at,
+                    date: user[0].updatedAt,
                     icon: 'fa-user-edit'
                 });
             }
 
-            if (user[0].created_at) {
+            if (user[0].createdAt) {
                 activities.push({
                     type: 'account',
                     title: 'Account Created',
                     description: 'Welcome to HealthConnect!',
-                    date: user[0].created_at,
+                    date: user[0].createdAt,
                     icon: 'fa-user-plus'
                 });
             }

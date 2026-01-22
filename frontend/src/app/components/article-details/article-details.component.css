@@ -30,8 +30,14 @@
 
 /* First Letter Drop Cap Styling */
 .first-letter\:text-6xl:first-letter {
-    font-size: 3.75rem;
+    font-size: 3.5rem;
     line-height: 1;
+}
+
+@media (min-width: 768px) {
+    .first-letter\:text-6xl:first-letter {
+        font-size: 4.5rem;
+    }
 }
 
 .first-letter\:font-bold:first-letter {
@@ -39,7 +45,7 @@
 }
 
 .first-letter\:text-emerald-600:first-letter {
-    color: #059669;
+    color: #10b981;
 }
 
 .first-letter\:float-left:first-letter {

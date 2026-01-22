@@ -232,12 +232,21 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   toggleSearchOverlay() {
     this.showSearchOverlay = !this.showSearchOverlay;
     if (this.showSearchOverlay) {
+      this.searchQuery = ''; // Reset only the search field whenever opening
       setTimeout(() => {
         const input = document.getElementById('search-overlay-input');
         input?.focus();
       }, 100);
       this.closeAllDropdowns();
     }
+  }
+
+  clearSearchQuery() {
+    this.searchQuery = '';
+    this.suggestions = [];
+    this.showSuggestions = false;
+    const input = document.getElementById('search-overlay-input');
+    input?.focus();
   }
 
   toggleCartSidebar() {
@@ -351,6 +360,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   selectSuggestion(suggestion: any) {
     this.searchQuery = suggestion.name;
     this.showSuggestions = false;
+    this.showSearchOverlay = false; // Close overlay on selection
     this.onSearch();
   }
 
@@ -358,6 +368,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   searchFromHistory(term: string) {
     this.searchQuery = term;
     this.showSuggestions = false;
+    this.showSearchOverlay = false; // Close overlay on selection
     this.onSearch();
   }
 
@@ -365,6 +376,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   searchPopular(term: string) {
     this.searchQuery = term;
     this.showSuggestions = false;
+    this.showSearchOverlay = false; // Close overlay on selection
     this.onSearch();
   }
 
@@ -520,6 +532,36 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     if (this.careDropdownOpen && !target.closest('.care-dropdown-container')) {
       this.careDropdownOpen = false;
     }
+  }
+
+  getTypeIcon(type: string): string {
+    const icons: { [key: string]: string } = {
+      'medicine': 'fa-pills',
+      'device': 'fa-stethoscope',
+      'doctor': 'fa-user-md',
+      'hospital': 'fa-hospital',
+      'pharmacy': 'fa-prescription-bottle',
+      'lab_test': 'fa-flask',
+      'health_package': 'fa-heart-circle-check',
+      'page': 'fa-info-circle',
+      'herb': 'fa-leaf'
+    };
+    return icons[type] || 'fa-search';
+  }
+
+  getTypeIconColor(type: string): string {
+    const colors: { [key: string]: string } = {
+      'medicine': 'text-emerald-500',
+      'device': 'text-blue-500',
+      'doctor': 'text-indigo-500',
+      'hospital': 'text-rose-500',
+      'pharmacy': 'text-teal-500',
+      'lab_test': 'text-purple-500',
+      'health_package': 'text-pink-500',
+      'page': 'text-slate-400',
+      'herb': 'text-green-600'
+    };
+    return colors[type] || 'text-slate-400';
   }
 
   installApp() {

@@ -72,8 +72,8 @@ exports.searchProducts = async (req, res) => {
             let deviceParams = [];
 
             if (q) {
-                deviceQuery += ` AND(name LIKE ? OR description LIKE ? OR category LIKE ? OR manufacturer LIKE ?)`;
-                deviceParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `, ` % ${q}% `);
+                deviceQuery += ` AND (name LIKE ? OR description LIKE ? OR category LIKE ? OR manufacturer LIKE ?)`;
+                deviceParams.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
             }
             if (category) {
                 deviceQuery += ` AND category = ? `;
@@ -111,8 +111,8 @@ exports.searchProducts = async (req, res) => {
 
             let doctorParams = [];
             if (q) {
-                doctorQuery += ` AND(name LIKE ? OR specialization LIKE ? OR location LIKE ?)`;
-                doctorParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `);
+                doctorQuery += ` AND (name LIKE ? OR specialization LIKE ? OR location LIKE ?)`;
+                doctorParams.push(`%${q}%`, `%${q}%`, `%${q}%`);
             }
 
             try {
@@ -142,8 +142,8 @@ exports.searchProducts = async (req, res) => {
             let hospitalParams = [];
 
             if (q) {
-                hospitalQuery += ` AND(name LIKE ? OR address LIKE ? OR city LIKE ?)`;
-                hospitalParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `);
+                hospitalQuery += ` AND (name LIKE ? OR address LIKE ? OR city LIKE ?)`;
+                hospitalParams.push(`%${q}%`, `%${q}%`, `%${q}%`);
             }
 
             try {
@@ -174,8 +174,8 @@ exports.searchProducts = async (req, res) => {
             let pharmacyParams = [];
 
             if (q) {
-                pharmacyQuery += ` AND(name LIKE ? OR address LIKE ? OR city LIKE ?)`;
-                pharmacyParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `);
+                pharmacyQuery += ` AND (name LIKE ? OR address LIKE ? OR city LIKE ?)`;
+                pharmacyParams.push(`%${q}%`, `%${q}%`, `%${q}%`);
             }
 
             try {
@@ -190,17 +190,59 @@ exports.searchProducts = async (req, res) => {
             }
         }
 
-        // Search Ayurveda Medicines
+        // Search Lab Tests
+        if (!type || type === 'lab_test' || type === 'all') {
+            let labQuery = `
+                SELECT 
+                    id, name, description, discounted_price as price, price as mrp, 
+                    category, 'lab_test' as product_type
+                FROM lab_tests
+                WHERE 1 = 1
+            `;
+            let labParams = [];
+            if (q) {
+                labQuery += ` AND (name LIKE ? OR description LIKE ? OR category LIKE ?)`;
+                labParams.push(`%${q}%`, `%${q}%`, `%${q}%`);
+            }
+            try {
+                const [rows] = await db.execute(labQuery, labParams);
+                allResults.push(...rows);
+            } catch (error) {
+                console.log('Lab tests query failed:', error.message);
+            }
+        }
+
+        // Search Health Packages
+        if (!type || type === 'health_package' || type === 'all') {
+            let packageQuery = `
+                SELECT 
+                    id, name, description, discounted_price as price, price as mrp, 
+                    'health_package' as product_type
+                FROM health_packages
+                WHERE 1 = 1
+            `;
+            let packageParams = [];
+            if (q) {
+                packageQuery += ` AND (name LIKE ? OR description LIKE ?)`;
+                packageParams.push(`%${q}%`, `%${q}%`);
+            }
+            try {
+                const [rows] = await db.execute(packageQuery, packageParams);
+                allResults.push(...rows);
+            } catch (error) {
+                console.log('Health packages query failed:', error.message);
+            }
+        }
         if (!type || type === 'ayurveda_medicine' || type === 'all') {
             let ayurQuery = `
-                SELECT id, name, description, price, category, 'ayurveda_medicine' as product_type, image_url, benefits
+                SELECT id, name, description, price, category, 'ayurveda_medicine' as product_type, benefits
                 FROM ayurveda_medicines
                 WHERE 1 = 1
                 `;
             let ayurParams = [];
             if (q) {
-                ayurQuery += ` AND(name LIKE ? OR description LIKE ? OR category LIKE ? OR benefits LIKE ?)`;
-                ayurParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `, ` % ${q}% `);
+                ayurQuery += ` AND (name LIKE ? OR description LIKE ? OR category LIKE ? OR benefits LIKE ?)`;
+                ayurParams.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
             }
             try {
                 const [rows] = await db.execute(ayurQuery, ayurParams);
@@ -213,14 +255,14 @@ exports.searchProducts = async (req, res) => {
         // Search Ayurveda Exercises
         if (!type || type === 'ayurveda_exercise' || type === 'all') {
             let exerciseQuery = `
-                SELECT id, name, description, NULL as price, type as category, 'ayurveda_exercise' as product_type, image_url, benefits
+                SELECT id, name, description, NULL as price, type as category, 'ayurveda_exercise' as product_type, benefits
                 FROM ayurveda_exercises
                 WHERE 1 = 1
                 `;
             let exParams = [];
             if (q) {
-                exerciseQuery += ` AND(name LIKE ? OR description LIKE ? OR type LIKE ? OR benefits LIKE ?)`;
-                exParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `, ` % ${q}% `);
+                exerciseQuery += ` AND (name LIKE ? OR description LIKE ? OR type LIKE ? OR benefits LIKE ?)`;
+                exParams.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
             }
             try {
                 const [rows] = await db.execute(exerciseQuery, exParams);
@@ -233,14 +275,14 @@ exports.searchProducts = async (req, res) => {
         // Search Ayurveda Articles
         if (!type || type === 'ayurveda_article' || type === 'all') {
             let articleQuery = `
-                SELECT id, title as name, excerpt as description, NULL as price, category, 'ayurveda_article' as product_type, image_url
+                SELECT id, title as name, excerpt as description, NULL as price, category, 'ayurveda_article' as product_type
                 FROM ayurveda_articles
                 WHERE 1 = 1
                 `;
             let artParams = [];
             if (q) {
-                articleQuery += ` AND(title LIKE ? OR excerpt LIKE ? OR category LIKE ? OR content LIKE ?)`;
-                artParams.push(`% ${q}% `, ` % ${q}% `, ` % ${q}% `, ` % ${q}% `);
+                articleQuery += ` AND (title LIKE ? OR excerpt LIKE ? OR category LIKE ? OR content LIKE ?)`;
+                artParams.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
             }
             try {
                 const [rows] = await db.execute(articleQuery, artParams);
@@ -250,7 +292,45 @@ exports.searchProducts = async (req, res) => {
             }
         }
 
-        // Apply sorting
+        // Search Static Pages
+        if (!type || type === 'page' || type === 'all') {
+            let pageQuery = `
+                SELECT id, title as name, content as description, NULL as price, 'page' as product_type, slug as image_url
+                FROM static_pages
+                WHERE 1 = 1
+            `;
+            let pageParams = [];
+            if (q) {
+                pageQuery += ` AND (title LIKE ? OR content LIKE ?)`;
+                pageParams.push(`%${q}%`, `%${q}%`);
+            }
+            try {
+                const [rows] = await db.execute(pageQuery, pageParams);
+                allResults.push(...rows);
+            } catch (error) {
+                console.log('Static pages query failed:', error.message);
+            }
+        }
+
+        // Search Ayurveda Herbs
+        if (!type || type === 'herb' || type === 'all') {
+            let herbQuery = `
+                SELECT id, name, description, NULL as price, 'herb' as product_type, benefits
+                FROM ayurveda_herbs
+                WHERE 1 = 1
+            `;
+            let herbParams = [];
+            if (q) {
+                herbQuery += ` AND (name LIKE ? OR description LIKE ? OR benefits LIKE ?)`;
+                herbParams.push(`%${q}%`, `%${q}%`, `%${q}%`);
+            }
+            try {
+                const [rows] = await db.execute(herbQuery, herbParams);
+                allResults.push(...rows);
+            } catch (error) {
+                console.log('Ayurveda herbs query failed:', error.message);
+            }
+        }
         const sortMap = {
             'price_asc': (a, b) => (a.price || 0) - (b.price || 0),
             'price_desc': (a, b) => (b.price || 0) - (a.price || 0),
@@ -305,11 +385,11 @@ exports.getSuggestions = async (req, res) => {
         // Medicines
         try {
             const [medicines] = await db.execute(`
-                SELECT name, price, category, 'medicine' as type
+                SELECT name, price, category, 'medicine' as product_type
                 FROM medicines
                 WHERE name LIKE ?
                 LIMIT 3
-                    `, [` % ${q}% `]);
+            `, [`%${q}%`]);
             allSuggestions.push(...medicines);
         } catch (err) {
             console.log('Medicine suggestions failed:', err.message);
@@ -318,11 +398,11 @@ exports.getSuggestions = async (req, res) => {
         // Devices
         try {
             const [devices] = await db.execute(`
-                SELECT name, price, category, 'device' as type
+                SELECT name, price, category, 'device' as product_type
                 FROM medical_devices
                 WHERE name LIKE ?
                 LIMIT 3
-                    `, [` % ${q}% `]);
+            `, [`%${q}%`]);
             allSuggestions.push(...devices);
         } catch (err) {
             console.log('Device suggestions failed:', err.message);
@@ -331,11 +411,11 @@ exports.getSuggestions = async (req, res) => {
         // Doctors
         try {
             const [doctors] = await db.execute(`
-                SELECT name, consultationFee as price, specialization as category, 'doctor' as type
+                SELECT name, consultationFee as price, specialization as category, 'doctor' as product_type
                 FROM doctors
                 WHERE name LIKE ? OR specialization LIKE ?
                 LIMIT 2
-                    `, [` % ${q}% `, ` % ${q}% `]);
+            `, [`%${q}%`, `%${q}%`]);
             allSuggestions.push(...doctors);
         } catch (err) {
             console.log('Doctor suggestions failed:', err.message);
@@ -344,11 +424,11 @@ exports.getSuggestions = async (req, res) => {
         // Hospitals
         try {
             const [hospitals] = await db.execute(`
-                SELECT name, NULL as price, 'Hospital' as category, 'hospital' as type
+                SELECT name, NULL as price, 'Hospital' as category, 'hospital' as product_type
                 FROM hospitals
                 WHERE name LIKE ?
                 LIMIT 2
-                    `, [` % ${q}% `]);
+            `, [`%${q}%`]);
             allSuggestions.push(...hospitals);
         } catch (err) {
             console.log('Hospital suggestions failed:', err.message);
@@ -357,11 +437,11 @@ exports.getSuggestions = async (req, res) => {
         // Pharmacies
         try {
             const [pharmacies] = await db.execute(`
-                SELECT name, NULL as price, 'Pharmacy' as category, 'pharmacy' as type
+                SELECT name, NULL as price, 'Pharmacy' as category, 'pharmacy' as product_type
                 FROM pharmacies
                 WHERE name LIKE ? OR address LIKE ?
                 LIMIT 2
-                    `, [` % ${q}% `, ` % ${q}% `]);
+            `, [`%${q}%`, `%${q}%`]);
             allSuggestions.push(...pharmacies);
         } catch (err) {
             console.log('Pharmacy suggestions failed:', err.message);
@@ -370,24 +450,76 @@ exports.getSuggestions = async (req, res) => {
         // Ayurveda Medicines
         try {
             const [ayurMeds] = await db.execute(`
-                SELECT name, price, category, 'ayurveda_medicine' as type
+                SELECT name, price, category, 'ayurveda_medicine' as product_type
                 FROM ayurveda_medicines
                 WHERE name LIKE ?
                 LIMIT 2
-                    `, [` % ${q}% `]);
+            `, [`%${q}%`]);
             allSuggestions.push(...ayurMeds);
         } catch (err) {
             console.log('Ayurveda suggestions failed:', err.message);
         }
 
+        // Lab Tests
+        try {
+            const [labTests] = await db.execute(`
+                SELECT name, discounted_price as price, category, 'lab_test' as product_type
+                FROM lab_tests
+                WHERE name LIKE ?
+                LIMIT 2
+            `, [`%${q}%`]);
+            allSuggestions.push(...labTests);
+        } catch (err) {
+            console.log('Lab test suggestions failed:', err.message);
+        }
+
+        // Health Packages
+        try {
+            const [packages] = await db.execute(`
+                SELECT name, discounted_price as price, 'Health Package' as category, 'health_package' as product_type
+                FROM health_packages
+                WHERE name LIKE ?
+                LIMIT 2
+            `, [`%${q}%`]);
+            allSuggestions.push(...packages);
+        } catch (err) {
+            console.log('Health package suggestions failed:', err.message);
+        }
+
+        // Static Pages
+        try {
+            const [pages] = await db.execute(`
+                SELECT title as name, NULL as price, 'Page' as category, 'page' as product_type
+                FROM static_pages
+                WHERE title LIKE ?
+                LIMIT 2
+            `, [`%${q}%`]);
+            allSuggestions.push(...pages);
+        } catch (err) {
+            console.log('Static page suggestions failed:', err.message);
+        }
+
+        // Ayurveda Herbs
+        try {
+            const [herbs] = await db.execute(`
+                SELECT name, NULL as price, 'Herb' as category, 'herb' as product_type
+                FROM ayurveda_herbs
+                WHERE name LIKE ?
+                LIMIT 2
+            `, [`%${q}%`]);
+            allSuggestions.push(...herbs);
+        } catch (err) {
+            console.log('Herb suggestions failed:', err.message);
+        }
+
         // Ayurveda Articles
         try {
             const [ayurArts] = await db.execute(`
-                SELECT title as name, NULL as price, category, 'ayurveda_article' as type
+                SELECT title as name, NULL as price, category, 'ayurveda_article' as product_type
                 FROM ayurveda_articles
                 WHERE title LIKE ?
                 LIMIT 2
-                    `, [` % ${q}% `]);
+            `, [`%${q}%`]);
             allSuggestions.push(...ayurArts);
         } catch (err) {
             console.log('Ayurveda article suggestions failed:', err.message);

@@ -297,14 +297,32 @@
     <div (click)="$event.stopPropagation()" class="w-full max-w-3xl mx-4 animate-scale-in">
         <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
             <!-- Search Input Area -->
-            <div class="p-6 border-b border-slate-100">
-                <div class="relative flex items-center">
-                    <i class="fas fa-search absolute left-5 text-slate-400 text-xl"></i>
-                    <input id="search-overlay-input" type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()"
-                        (keyup.enter)="performSearch()" [placeholder]="'search.placeholder' | translate"
-                        class="w-full pl-14 pr-6 py-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 text-lg text-slate-900 placeholder-slate-400 transition-all"
-                        autofocus>
-                    <button (click)="toggleSearchOverlay()" class="ml-4 p-2 text-slate-400 hover:text-slate-600">
+            <div class="p-4 md:p-6 border-b border-slate-100">
+                <!-- Mobile only: Close button top-left -->
+                <!-- <div class="md:hidden flex justify-end">
+                    <button (click)="toggleSearchOverlay()" class="p-2 text-slate-400 hover:text-slate-600">
+                        <i class="fas fa-times text-base"></i>
+                    </button>
+                </div> -->
+
+                <div class="flex flex-col md:flex-row md:items-center w-full gap-4">
+                    <!-- Search Input Container -->
+                    <div class="relative flex items-center flex-1">
+                        <i class="fas fa-search absolute left-4 md:left-5 text-slate-400 text-base md:text-xl"></i>
+                        <input id="search-overlay-input" type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()"
+                            (keyup.enter)="performSearch()" [placeholder]="'search.placeholder' | translate"
+                            class="w-full pl-11 md:pl-14 pr-10 md:pr-12 py-3 md:py-5 bg-slate-50 border-none rounded-xl md:rounded-2xl focus:ring-2 focus:ring-emerald-500 text-base md:text-lg text-slate-900 placeholder-slate-400 transition-all">
+
+                        <!-- Clear Field Button -->
+                        <button *ngIf="searchQuery" (click)="clearSearchQuery()"
+                            class="absolute right-3 md:right-4 p-1 text-slate-300 hover:text-slate-500 transition-colors">
+                            <i class="fas fa-times-circle text-lg md:text-xl"></i>
+                        </button>
+                    </div>
+
+                    <!-- Desktop only: Close button next to input -->
+                    <button (click)="toggleSearchOverlay()"
+                        class="hidden md:flex p-2 text-slate-400 hover:text-slate-600 transition-all">
                         <i class="fas fa-times text-2xl"></i>
                     </button>
                 </div>
@@ -314,22 +332,38 @@
             <div class="max-h-[60vh] overflow-y-auto custom-scrollbar p-6">
                 <!-- Autocomplete Suggestions -->
                 <div *ngIf="searchQuery.length >= 2 && suggestions.length > 0">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 px-2">{{
-                        'search.suggestions' | translate }}</h3>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 px-2">
+                        {{ 'search.suggestions' | translate }}
+                    </h3>
                     <div class="grid grid-cols-1 gap-2">
                         <button *ngFor="let item of suggestions" (click)="selectSuggestion(item)"
-                            class="flex items-center justify-between p-4 hover:bg-emerald-50 rounded-2xl transition-all group">
-                            <div class="flex items-center gap-4">
-                                <div
-                                    class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
-                                    <i class="fas fa-search text-slate-400 group-hover:text-emerald-600"></i>
+                            class="flex items-center justify-between p-1.5 md:p-4 hover:bg-emerald-50 rounded-2xl transition-all group">
+                            <div
+                                class="flex-1 flex flex-nowrap items-center md:justify-between justify-start gap-1 md:gap-2 min-w-0">
+                                <div class="flex items-center gap-1.5 md:gap-4 min-w-0">
+                                    <!-- Desktop: Original Gray Box with Generic Icon -->
+                                    <div
+                                        class="hidden md:flex w-10 h-10 bg-slate-100 rounded-xl flex-shrink-0 items-center justify-center group-hover:bg-emerald-100 transition-colors">
+                                        <i class="fas fa-search text-slate-400 group-hover:text-emerald-600"></i>
+                                    </div>
+
+                                    <!-- Mobile: Contextual Colored Icon -->
+                                    <i
+                                        [class]="'fas ' + getTypeIcon(item.product_type) + ' ' + getTypeIconColor(item.product_type) + ' md:hidden flex-shrink-0 w-5 text-center text-base'"></i>
+                                    <span
+                                        class="text-slate-700 font-bold md:font-medium text-[13px] md:text-base truncate">
+                                        {{ item.name }}
+                                    </span>
                                 </div>
-                                <span class="text-slate-700 font-medium">{{ item.name }}</span>
-                                <span class="text-[10px] text-slate-400 uppercase font-bold">{{ item.product_type ||
-                                    'Product' }}</span>
+                                <span
+                                    class="text-[9px] md:text-[10px] text-slate-400 uppercase font-bold flex-shrink-0 bg-slate-50 px-2 py-0.5 rounded shadow-sm">
+                                    {{ item.product_type }}
+                                </span>
                             </div>
+                            <!-- Arrow only on Desktop -->
                             <i
-                                class="fas fa-arrow-right text-slate-300 group-hover:text-emerald-500 opacity-0 group-hover:opacity-100 transition-all translate-x-[-10px] group-hover:translate-x-0"></i>
+                                class="hidden md:block fas fa-arrow-right text-slate-300 group-hover:text-emerald-500 opacity-0 group-hover:opacity-100 transition-all translate-x-[-10px] group-hover:translate-x-0">
+                            </i>
                         </button>
                     </div>
                 </div>
@@ -352,7 +386,7 @@
                 </div>
 
                 <!-- Popular Searches -->
-                <div *ngIf="searchQuery.length === 0 && popularSearches.length > 0" class="mt-8">
+                <!-- <div *ngIf="searchQuery.length === 0 && popularSearches.length > 0" class="mt-8">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 px-2">{{ 'search.popular'
                         | translate }}
                     </h3>
@@ -363,14 +397,49 @@
                             <span class="text-sm font-semibold">{{ term }}</span>
                         </button>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- No Results Empty State -->
-                <div *ngIf="searchQuery.length >= 2 && suggestions.length === 0" class="py-12 text-center">
-                    <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-search-minus text-3xl text-slate-300"></i>
+                <div *ngIf="searchQuery.length >= 2 && suggestions.length === 0" class="py-6 px-4">
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-search-minus text-3xl text-slate-300"></i>
+                        </div>
+                        <p class="text-slate-500 font-medium">{{ 'search.no_results' | translate }} "{{ searchQuery }}"
+                        </p>
+                        <p class="text-sm text-slate-400 mt-1">Try checking your spelling or use more general terms.</p>
                     </div>
-                    <p class="text-slate-500 font-medium">{{ 'search.no_results' | translate }} "{{ searchQuery }}"</p>
+
+                    <div class="border-t border-slate-100 pt-8">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 px-2">Popular
+                            Categories</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <a routerLink="/medicines" (click)="toggleSearchOverlay()"
+                                class="flex flex-col items-center p-4 bg-slate-50 hover:bg-emerald-50 rounded-2xl transition-all group">
+                                <i
+                                    class="fas fa-pills text-emerald-600 mb-2 text-xl group-hover:scale-110 transition-transform"></i>
+                                <span class="text-sm font-semibold text-slate-700">Medicines</span>
+                            </a>
+                            <a routerLink="/find-doctors" (click)="toggleSearchOverlay()"
+                                class="flex flex-col items-center p-4 bg-slate-50 hover:bg-emerald-50 rounded-2xl transition-all group">
+                                <i
+                                    class="fas fa-user-md text-blue-600 mb-2 text-xl group-hover:scale-110 transition-transform"></i>
+                                <span class="text-sm font-semibold text-slate-700">Doctors</span>
+                            </a>
+                            <a routerLink="/lab-tests" (click)="toggleSearchOverlay()"
+                                class="flex flex-col items-center p-4 bg-slate-50 hover:bg-emerald-50 rounded-2xl transition-all group">
+                                <i
+                                    class="fas fa-flask text-indigo-600 mb-2 text-xl group-hover:scale-110 transition-transform"></i>
+                                <span class="text-sm font-semibold text-slate-700">Lab Tests</span>
+                            </a>
+                            <a routerLink="/ayurveda" (click)="toggleSearchOverlay()"
+                                class="flex flex-col items-center p-4 bg-slate-50 hover:bg-emerald-50 rounded-2xl transition-all group">
+                                <i
+                                    class="fas fa-leaf text-emerald-600 mb-2 text-xl group-hover:scale-110 transition-transform"></i>
+                                <span class="text-sm font-semibold text-slate-700">Ayurveda</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
