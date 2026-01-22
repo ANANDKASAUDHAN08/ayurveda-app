@@ -31,9 +31,44 @@ exports.createMeeting = async (appointment) => {
 
         const { patient_name, doctor_name, appointment_date, start_time, end_time, reason } = appointment;
 
+        // Ensure appointment_date is in YYYY-MM-DD format
+        let datePart = appointment_date;
+        if (appointment_date instanceof Date) {
+            // Use local date parts to avoid UTC shift issues
+            const year = appointment_date.getFullYear();
+            const month = String(appointment_date.getMonth() + 1).padStart(2, '0');
+            const day = String(appointment_date.getDate()).padStart(2, '0');
+            datePart = `${year}-${month}-${day}`;
+        } else if (typeof appointment_date === 'string') {
+            datePart = appointment_date.split('T')[0];
+        }
+
+        // Ensure time includes seconds (HH:mm:ss)
+        const formatTime = (time) => {
+            if (!time) return '00:00:00';
+            const parts = time.split(':');
+            if (parts.length === 2) return `${time}:00`;
+            return time;
+        };
+
+        const startTimeFormatted = formatTime(start_time);
+        const endTimeFormatted = formatTime(end_time);
+
         // Combine date and time
-        const startDateTime = new Date(`${appointment_date}T${start_time}`);
-        const endDateTime = new Date(`${appointment_date}T${end_time}`);
+        const startDateTime = new Date(`${datePart}T${startTimeFormatted}`);
+        const endDateTime = new Date(`${datePart}T${endTimeFormatted}`);
+
+        if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
+            console.error('❌ Invalid Date created:', {
+                originalDate: appointment_date,
+                originalStart: start_time,
+                originalEnd: end_time,
+                parsedDate: datePart,
+                parsedStart: startTimeFormatted,
+                parsedEnd: endTimeFormatted
+            });
+            throw new RangeError('Invalid time value after parsing appointment dates');
+        }
 
         const event = {
             summary: `Consultation: ${patient_name} & Dr. ${doctor_name}`,
@@ -61,6 +96,8 @@ exports.createMeeting = async (appointment) => {
             calendarId: 'primary',
             resource: event,
             conferenceDataVersion: 1,
+            sendUpdates: 'none',
+            sendNotifications: false
         });
 
         return response.data.hangoutLink;

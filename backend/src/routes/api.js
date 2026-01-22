@@ -3,8 +3,6 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const doctorController = require('../controllers/doctorController');
 const userController = require('../controllers/userController');
-const slotController = require('../controllers/slotController');
-const appointmentController = require('../controllers/appointmentController');
 const slotControllerNew = require('../controllers/slotControllerNew');
 const appointmentControllerNew = require('../controllers/appointmentControllerNew');
 const labTestController = require('../controllers/labTestController');
@@ -52,11 +50,7 @@ router.get('/doctors/:id/available-slots', doctorController.getDoctorAvailableSl
 router.get('/doctors/:id/reviews', doctorController.getDoctorReviews);
 
 
-// Legacy Slots (keep for backward compatibility)
-router.get('/slots', slotController.getSlots);
-router.post('/slots/lock', auth, slotController.lockSlot);
-
-// New Appointment Slots Management
+// Appointment Slots Management
 router.get('/doctors/:doctorId/slots', slotControllerNew.getAvailableSlots);
 router.get('/doctors/:doctorId/slots/range', slotControllerNew.getSlotsByDateRange);
 router.get('/doctors/:doctorId/availability', slotControllerNew.getDoctorAvailability);
@@ -68,20 +62,14 @@ router.get('/doctors/my-availability/exceptions', auth, slotControllerNew.getMyD
 router.get('/doctors/:doctorId/availability/exceptions', slotControllerNew.getDateExceptions); // Public endpoint for patients
 router.delete('/doctors/availability/exceptions/:date', auth, slotControllerNew.deleteDateException);
 
-// Legacy Appointments (keep for backward compatibility)
-router.post('/appointments', auth, appointmentController.bookAppointment);
-router.get('/appointments', auth, appointmentController.getMyAppointments);
-router.post('/appointments/:id/cancel', auth, appointmentController.cancelAppointment);
-
-// Appointment Stats and Activity Feed
-router.get('/appointments/stats', auth, appointmentController.getStats);
-router.get('/appointments/activity-feed', auth, appointmentController.getActivityFeed);
-
-// New Enhanced Appointments
+// Enhanced Appointments
 router.post('/appointments/book', auth, appointmentControllerNew.bookAppointment);
 router.get('/appointments/user', auth, appointmentControllerNew.getUserAppointments);
 router.get('/appointments/doctor', auth, appointmentControllerNew.getDoctorAppointments);
 router.put('/appointments/:id/cancel', auth, appointmentControllerNew.cancelAppointment);
+router.get('/appointments/stats', auth, appointmentControllerNew.getStats);
+router.get('/appointments/activity-feed', auth, appointmentControllerNew.getActivityFeed);
+
 
 // Lab Tests
 router.get('/lab-tests', labTestController.getLabTests);

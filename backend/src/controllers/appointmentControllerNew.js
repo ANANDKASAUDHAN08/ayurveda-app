@@ -1,4 +1,6 @@
 const db = require('../config/database');
+const emailService = require('../services/email.service');
+const NotificationController = require('./notification.controller');
 
 // Book an appointment
 exports.bookAppointment = async (req, res) => {
@@ -61,6 +63,43 @@ exports.bookAppointment = async (req, res) => {
 
         // Commit transaction
         await connection.commit();
+
+        // Get details for notification
+        try {
+            const [details] = await connection.query(`
+                SELECT u.email as patient_email, u.name as patient_name, d.name as doctor_name
+                FROM users u, doctors d
+                WHERE u.id = ? AND d.id = ?
+            `, [userId, slot.doctor_id]);
+
+            if (details.length > 0) {
+                const info = details[0];
+                // 1. Send Email
+                await emailService.sendAppointmentConfirmation({
+                    to: info.patient_email,
+                    patientName: info.patient_name,
+                    doctorName: info.doctor_name,
+                    date: new Date(slot.slot_date).toLocaleDateString(),
+                    time: slot.start_time,
+                    type: 'general'
+                });
+
+                // 2. Add Notification
+                await NotificationController.createNotification({
+                    user_id: userId,
+                    type: 'appointment_confirmed',
+                    category: 'appointment',
+                    title: 'Booking Confirmed!',
+                    message: `Your appointment with Dr. ${info.doctor_name} on ${new Date(slot.slot_date).toLocaleDateString()} at ${slot.start_time} is confirmed.`,
+                    related_id: result.insertId,
+                    related_type: 'appointment',
+                    action_url: '/my-appointments'
+                });
+            }
+        } catch (notifErr) {
+            console.error('Notification Error:', notifErr.message);
+        }
+
         connection.release();
 
         res.status(201).json({
@@ -120,6 +159,28 @@ exports.getUserAppointments = async (req, res) => {
         query += ' ORDER BY a.appointment_date DESC, a.start_time DESC';
 
         const [results] = await db.query(query, queryParams);
+
+        // --- Meeting Link Security Logic ---
+        results.forEach(apt => {
+            if (apt.meeting_link) {
+                const now = new Date();
+                const aptDate = new Date(apt.appointment_date);
+                const [hours, minutes] = apt.start_time.split(':');
+                const [endHours, endMinutes] = apt.end_time.split(':');
+
+                const startLimit = new Date(aptDate);
+                startLimit.setHours(parseInt(hours), parseInt(minutes) - 15, 0);
+
+                const endLimit = new Date(aptDate);
+                endLimit.setHours(parseInt(endHours), parseInt(endMinutes) + 15, 0);
+
+                if (now < startLimit || now > endLimit) {
+                    apt.meeting_link = null;
+                    apt.link_hidden = true;
+                }
+            }
+        });
+
         res.json(results);
     } catch (error) {
         console.error('Error in getUserAppointments:', error);
@@ -261,5 +322,140 @@ exports.cancelAppointment = async (req, res) => {
         connection.release();
         console.error('Error in cancelAppointment:', error);
         res.status(500).json({ message: 'Error cancelling appointment' });
+    }
+};
+
+// Get appointment statistics for a user
+exports.getStats = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const userRole = req.user.role;
+
+        // Get total consultations (completed appointments)
+        const [totalResult] = await db.query(`
+            SELECT COUNT(*) as total 
+            FROM appointments 
+            WHERE ${userRole === 'doctor' ? 'doctor_id' : 'user_id'} = ? 
+            AND status = 'completed'
+        `, [userId]);
+
+        // Get upcoming appointments
+        const [upcomingResult] = await db.query(`
+            SELECT COUNT(*) as upcoming 
+            FROM appointments 
+            WHERE ${userRole === 'doctor' ? 'doctor_id' : 'user_id'} = ? 
+            AND status IN ('pending', 'booked', 'confirmed') 
+            AND appointment_date >= CURDATE()
+        `, [userId]);
+
+        // Get consultations completed this month
+        const [monthResult] = await db.query(`
+            SELECT COUNT(*) as this_month 
+            FROM appointments 
+            WHERE ${userRole === 'doctor' ? 'doctor_id' : 'user_id'} = ? 
+            AND status = 'completed'
+            AND MONTH(appointment_date) = MONTH(CURRENT_DATE())
+            AND YEAR(appointment_date) = YEAR(CURRENT_DATE())
+        `, [userId]);
+
+        const stats = {
+            totalConsultations: totalResult[0].total || 0,
+            upcomingAppointments: upcomingResult[0].upcoming || 0,
+            completedThisMonth: monthResult[0].this_month || 0
+        };
+
+        res.json(stats);
+    } catch (err) {
+        console.error('Get stats error:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Get activity feed for a user
+exports.getActivityFeed = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const userRole = req.user.role;
+        const activities = [];
+
+        // Get recent appointments
+        const [appointments] = await db.query(`
+            SELECT a.*, 
+                   u.name as other_person_name
+            FROM appointments a
+            LEFT JOIN users u ON u.id = ${userRole === 'doctor' ? 'a.user_id' : 'a.doctor_id'}
+            WHERE ${userRole === 'doctor' ? 'a.doctor_id' : 'a.user_id'} = ?
+            ORDER BY a.created_at DESC
+            LIMIT 10
+        `, [userId]);
+
+        // Add appointment activities
+        for (const appt of appointments) {
+            let title, description;
+            if (appt.status === 'completed') {
+                title = 'Consultation Completed';
+                description = userRole === 'doctor'
+                    ? `Consultation with ${appt.other_person_name || 'Patient'}`
+                    : `Consultation with Dr. ${appt.other_person_name || 'Doctor'}`;
+            } else if (appt.status === 'booked' || appt.status === 'confirmed') {
+                title = 'Appointment Confirmed';
+                description = userRole === 'doctor'
+                    ? `Upcoming appointment with ${appt.other_person_name || 'Patient'}`
+                    : `Upcoming appointment with Dr. ${appt.other_person_name || 'Doctor'}`;
+            } else if (appt.status === 'cancelled') {
+                title = 'Appointment Cancelled';
+                description = userRole === 'doctor'
+                    ? `Cancelled appointment with ${appt.other_person_name || 'Patient'}`
+                    : `Cancelled appointment with Dr. ${appt.other_person_name || 'Doctor'}`;
+            } else {
+                continue;
+            }
+
+            activities.push({
+                type: 'appointment',
+                title,
+                description,
+                date: appt.created_at,
+                icon: appt.status === 'completed' ? 'fa-calendar-check' :
+                    (appt.status === 'booked' || appt.status === 'confirmed') ? 'fa-calendar' : 'fa-calendar-times'
+            });
+        }
+
+        // Get user's timestamps
+        const [user] = await db.query(`
+            SELECT created_at, updated_at 
+            FROM users 
+            WHERE id = ?
+        `, [userId]);
+
+        if (user[0]) {
+            if (user[0].updated_at) {
+                activities.push({
+                    type: 'profile_update',
+                    title: 'Profile Updated',
+                    description: 'Updated profile information',
+                    date: user[0].updated_at,
+                    icon: 'fa-user-edit'
+                });
+            }
+
+            if (user[0].created_at) {
+                activities.push({
+                    type: 'account',
+                    title: 'Account Created',
+                    description: 'Welcome to HealthConnect!',
+                    date: user[0].created_at,
+                    icon: 'fa-user-plus'
+                });
+            }
+        }
+
+        // Sort by date descending
+        activities.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+        res.json(activities);
+    } catch (err) {
+        console.error('Get activity feed error:', err);
+        res.status(500).json({ message: 'Server error' });
     }
 };

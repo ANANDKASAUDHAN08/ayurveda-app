@@ -1,6 +1,8 @@
 const db = require('../config/database');
 const Razorpay = require('razorpay');
 const googleMeetService = require('../services/googleCalendarService');
+const emailService = require('../services/email.service');
+const NotificationController = require('./notification.controller');
 
 /**
  * Video Consultancy Appointments Controller
@@ -225,6 +227,36 @@ exports.bookAppointment = async (req, res) => {
                 VALUES (?, 'waiting', ?, ?)`,
                 [appointmentId, meetingLink, meetingLink ? 'google_meet' : 'custom']
             );
+
+            // Send Confirmation Email & In-App Notification
+            if (details.length > 0) {
+                const apt = details[0];
+                try {
+                    // 1. Email
+                    await emailService.sendAppointmentConfirmation({
+                        to: apt.patient_email,
+                        patientName: apt.patient_name,
+                        doctorName: apt.doctor_name,
+                        date: new Date(apt.appointment_date).toLocaleDateString(),
+                        time: apt.start_time,
+                        type: 'video'
+                    });
+
+                    // 2. Notification
+                    await NotificationController.createNotification({
+                        user_id: userId,
+                        type: 'appointment_confirmed',
+                        category: 'appointment',
+                        title: 'Appointment Booked! ✅',
+                        message: `Your video consultation with Dr. ${apt.doctor_name} on ${new Date(apt.appointment_date).toLocaleDateString()} at ${apt.start_time} is confirmed.`,
+                        related_id: appointmentId,
+                        related_type: 'appointment',
+                        action_url: '/my-appointments'
+                    });
+                } catch (err) {
+                    console.error('Notification Error:', err.message);
+                }
+            }
         }
 
         // Mark slot as booked if it's a specific slot
@@ -392,16 +424,35 @@ exports.getAppointmentById = async (req, res) => {
             [id, userId]
         );
 
-        if (appointments.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Appointment not found'
-            });
+        const appointment = appointments[0];
+
+        // --- Meeting Link Security Logic ---
+        // Only show meeting link 15 mins before and until the end of session
+        if (appointment.meeting_link) {
+            const now = new Date();
+            const aptDate = new Date(appointment.appointment_date);
+            const [hours, minutes] = appointment.start_time.split(':');
+            const [endHours, endMinutes] = appointment.end_time.split(':');
+
+            const startLimit = new Date(aptDate);
+            startLimit.setHours(parseInt(hours), parseInt(minutes) - 15, 0); // 15 mins early
+
+            const endLimit = new Date(aptDate);
+            endLimit.setHours(parseInt(endHours), parseInt(endMinutes) + 15, 0); // 15 mins buffer after
+
+            if (now < startLimit || now > endLimit) {
+                // Not the right time, hide the link
+                appointment.meeting_link = null;
+                appointment.link_status = 'hidden';
+                appointment.link_message = 'Link will be available 15 minutes before the session starts.';
+            } else {
+                appointment.link_status = 'available';
+            }
         }
 
         res.json({
             success: true,
-            data: appointments[0]
+            data: appointment
         });
 
     } catch (error) {

@@ -69,11 +69,6 @@ export class AppointmentService {
         return this.http.post(`${this.apiUrl}/appointments/book`, { slotId, notes });
     }
 
-    // Legacy booking (keep for compatibility)
-    bookAppointmentLegacy(bookingData: any): Observable<any> {
-        return this.http.post(`${this.apiUrl}/appointments`, bookingData);
-    }
-
     // Get user's appointments
     getMyAppointments(): Observable<Appointment[]> {
         return this.http.get<Appointment[]>(`${this.apiUrl}/appointments/user`);
@@ -197,9 +192,6 @@ export class AppointmentService {
         });
     }
 
-    /**
-     * Check if user is first-time (for free consultation)
-     */
     isFirstTimeUser(): Observable<boolean> {
         return this.getMyVideoAppointments({ limit: 1 }).pipe(
             map((res: any) => res.pagination && res.pagination.total === 0)

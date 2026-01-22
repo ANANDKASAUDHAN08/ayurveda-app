@@ -90,35 +90,6 @@ async function seed() {
         // Fetch all created doctors to get their IDs
         const [allDoctors] = await db.execute('SELECT id FROM doctors');
 
-        // Generate Slots
-        const slots = [];
-        for (const doctor of allDoctors) {
-            // Create 10 slots per doctor
-            for (let i = 1; i <= 10; i++) {
-                const date = new Date();
-                date.setDate(date.getDate() + i);
-                date.setHours(10, 0, 0, 0);
-
-                const startTime = date;
-                const endTime = new Date(date.getTime() + 30 * 60000); // 30 mins later
-
-                slots.push([doctor.id, startTime, endTime, false]);
-            }
-        }
-
-        // Bulk Insert Slots
-        // Splitting into chunks to avoid query size limits if necessary, but 1000 slots should be fine
-        const slotPlaceholders = slots.map(() => '(?, ?, ?, ?)').join(', ');
-        const flatSlotValues = slots.flat();
-
-        const insertSlotsQuery = `
-            INSERT INTO slots (doctorId, startTime, endTime, isBooked) 
-            VALUES ${slotPlaceholders}
-        `;
-
-        await db.execute(insertSlotsQuery, flatSlotValues);
-        console.log(`✅ Created ${slots.length} slots`);
-
         console.log('\n🎉 Seeding completed successfully!');
         process.exit(0);
     } catch (error) {

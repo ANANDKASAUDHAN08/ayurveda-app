@@ -91,9 +91,9 @@ export class UserLandingComponent implements OnInit, OnDestroy {
     }
   }
 
-  signInWithGoogle() {
-    // Redirect to backend OAuth endpoint
-    window.location.href = environment.apiUrl + '/auth/google/user';
+  signInWithGoogle(mode: 'login' | 'register' = 'login') {
+    // Redirect to backend OAuth endpoint with mode
+    window.location.href = environment.apiUrl + `/auth/google/user?mode=${mode}`;
   }
 
   switchTab(tab: 'login' | 'register') {

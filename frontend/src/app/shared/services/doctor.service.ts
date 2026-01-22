@@ -10,7 +10,6 @@ import { map } from 'rxjs/operators';
 })
 export class DoctorService {
     private apiUrl = environment.apiUrl + '/doctors';
-    private slotsUrl = environment.apiUrl + '/slots';
 
     constructor(private http: HttpClient) { }
 
@@ -45,16 +44,6 @@ export class DoctorService {
         return this.http.get<any>(`${this.apiUrl}/${id}`);
     }
 
-    getSlots(doctorId: number, date?: string): Observable<any[]> {
-        let params = new HttpParams().set('doctorId', doctorId);
-        if (date) params = params.set('date', date);
-        return this.http.get<any[]>(this.slotsUrl, { params });
-    }
-
-    lockSlot(slotId: number): Observable<any> {
-        return this.http.post(`${this.slotsUrl}/lock`, { slotId });
-    }
-
     // =============================================
     // Video Consultancy Methods
     // =============================================
@@ -87,18 +76,14 @@ export class DoctorService {
         });
     }
 
-    /**
-     * Get list of specializations for filter dropdown
-     */
+    // Get list of specializations for filter dropdown
     getSpecializations(): Observable<string[]> {
         return this.http.get<any>(`${this.apiUrl}/filters/specializations`).pipe(
             map((res: any) => res.success ? res.data : [])
         );
     }
 
-    /**
-     * Get list of locations for filter dropdown
-     */
+    // Get list of locations for filter dropdown
     getLocations(): Observable<string[]> {
         return this.http.get<any>(`${this.apiUrl}/filters/locations`).pipe(
             map((res: any) => res.success ? res.data : [])

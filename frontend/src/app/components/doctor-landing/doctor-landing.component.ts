@@ -100,9 +100,9 @@ export class DoctorLandingComponent implements OnInit, OnDestroy {
     form.get(fieldName)?.markAsUntouched();
   }
 
-  signInWithGoogle() {
-    // Redirect to backend OAuth endpoint for doctors
-    window.location.href = environment.apiUrl + '/auth/google/doctor';
+  signInWithGoogle(mode: 'login' | 'register' = 'login') {
+    // Redirect to backend OAuth endpoint for doctors with mode
+    window.location.href = environment.apiUrl + `/auth/google/doctor?mode=${mode}`;
   }
 
   toggleLoginPassword() {

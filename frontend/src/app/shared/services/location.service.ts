@@ -50,6 +50,17 @@ export class LocationService {
         if (stored) {
             this.locationSubject.next(stored);
         }
+
+        // Auto-show permission dialog if access is denied
+        this.permissionService.locationPermission$.subscribe(status => {
+            if (status.state === 'denied') {
+                // We show it automatically if it's denied, unless we just showed something else
+                // This helps users who accidentally blocked it or are testing
+                this.showPermissionDialogSubject.next(true);
+            } else if (status.state === 'granted') {
+                this.showPermissionDialogSubject.next(false);
+            }
+        });
     }
 
     detectLocation(useGoogle: boolean = false): void {

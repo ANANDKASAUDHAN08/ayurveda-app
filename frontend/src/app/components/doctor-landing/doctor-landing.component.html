@@ -95,7 +95,7 @@
                                 (ngSubmit)="onLoginSubmit()" class="space-y-6">
 
                                 <!-- Google OAuth Button -->
-                                <button type="button" (click)="signInWithGoogle()"
+                                <button type="button" (click)="signInWithGoogle('login')"
                                     class="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-white border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all shadow-sm group">
                                     <svg class="w-5 h-5" viewBox="0 0 24 24">
                                         <path fill="#4285F4"
@@ -217,7 +217,7 @@
                                 (ngSubmit)="onRegisterSubmit()" class="space-y-4">
 
                                 <!-- Google OAuth Button -->
-                                <button type="button" (click)="signInWithGoogle()"
+                                <button type="button" (click)="signInWithGoogle('register')"
                                     class="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-white border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all shadow-sm group">
                                     <svg class="w-5 h-5" viewBox="0 0 24 24">
                                         <path fill="#4285F4"

@@ -8,10 +8,20 @@ const jwt = require('jsonwebtoken');
  * GET /api/auth/google/user
  */
 router.get('/google/user',
-    passport.authenticate('google-user', {
-        scope: ['profile', 'email'],
-        session: false
-    })
+    (req, res, next) => {
+        const mode = req.query.mode;
+        const authOptions = {
+            scope: ['profile', 'email'],
+            session: false
+        };
+
+        // Force account picker and consent screen ONLY during signup
+        if (mode === 'register') {
+            authOptions.prompt = 'select_account consent';
+        }
+
+        passport.authenticate('google-user', authOptions)(req, res, next);
+    }
 );
 
 /**
@@ -21,7 +31,7 @@ router.get('/google/user',
 router.get('/google/user/callback',
     passport.authenticate('google-user', {
         session: false,
-        failureRedirect: `${process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:4200'}/user-landing?error=oauth_failed`
+        failureRedirect: `${process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:4200'}/for-users?error=oauth_failed`
     }),
     (req, res) => {
         try {
@@ -55,10 +65,20 @@ router.get('/google/user/callback',
  * GET /api/auth/google/doctor
  */
 router.get('/google/doctor',
-    passport.authenticate('google-doctor', {
-        scope: ['profile', 'email'],
-        session: false
-    })
+    (req, res, next) => {
+        const mode = req.query.mode;
+        const authOptions = {
+            scope: ['profile', 'email'],
+            session: false
+        };
+
+        // Force account picker and consent screen ONLY during signup
+        if (mode === 'register') {
+            authOptions.prompt = 'select_account consent';
+        }
+
+        passport.authenticate('google-doctor', authOptions)(req, res, next);
+    }
 );
 
 /**
@@ -68,7 +88,7 @@ router.get('/google/doctor',
 router.get('/google/doctor/callback',
     passport.authenticate('google-doctor', {
         session: false,
-        failureRedirect: `${process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:4200'}/doctor-landing?error=oauth_failed`
+        failureRedirect: `${process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:4200'}/for-doctors?error=oauth_failed`
     }),
     (req, res) => {
         try {

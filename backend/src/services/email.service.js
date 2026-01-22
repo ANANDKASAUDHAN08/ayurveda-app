@@ -756,6 +756,67 @@ async function sendPasswordResetEmail(to, name, resetToken, userType = 'user') {
   });
 }
 
+/**
+ * Send appointment confirmation email
+ */
+async function sendAppointmentConfirmation(data) {
+  const { to, patientName, doctorName, date, time, type } = data;
+  const appUrl = process.env.APP_URL || 'http://localhost:4200';
+
+  const html = `
+    <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 10px; padding: 30px;">
+      <h2 style="color: #10b981; text-align: center;">Booking Confirmed! ✅</h2>
+      <p>Hello <strong>${patientName}</strong>,</p>
+      <p>Your appointment with <strong>Dr. ${doctorName}</strong> has been successfully booked.</p>
+      <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <p style="margin: 5px 0;">📅 <strong>Date:</strong> ${date}</p>
+        <p style="margin: 5px 0;">⏰ <strong>Time:</strong> ${time}</p>
+        <p style="margin: 5px 0;">🏥 <strong>Type:</strong> ${type === 'video' ? 'Video Consultation' : 'In-person'}</p>
+      </div>
+      <p>You can view your appointment details and join the session (for video calls) via your dashboard:</p>
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${appUrl}/my-appointments" style="background: #10b981; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Go to My Appointments</a>
+      </div>
+      <p style="font-size: 13px; color: #666;">Note: For video consultations, the "Join" button will become active 10 minutes before the session starts.</p>
+      <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+      <p style="text-align: center; font-size: 12px; color: #999;">&copy; ${new Date().getFullYear()} HealthConnect. All rights reserved.</p>
+    </div>
+  `;
+
+  return sendEmail({
+    to,
+    subject: `Booking Confirmed: Dr. ${doctorName} - ${date}`,
+    html
+  });
+}
+
+/**
+ * Send appointment reminder email
+ */
+async function sendAppointmentReminder(data) {
+  const { to, patientName, doctorName, timeRemaining, dashboardUrl } = data;
+
+  const html = `
+    <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 10px; padding: 30px;">
+      <h2 style="color: #3b82f6; text-align: center;">Appointment Reminder 🔔</h2>
+      <p>Hello <strong>${patientName}</strong>,</p>
+      <p>This is a friendly reminder that your appointment with <strong>Dr. ${doctorName}</strong> starts in <strong>${timeRemaining}</strong>.</p>
+      <p>Please ensure you are ready and have a stable internet connection for the session.</p>
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${dashboardUrl}" style="background: #3b82f6; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Join/View Appointment</a>
+      </div>
+      <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+      <p style="text-align: center; font-size: 12px; color: #999;">&copy; ${new Date().getFullYear()} HealthConnect. All rights reserved.</p>
+    </div>
+  `;
+
+  return sendEmail({
+    to,
+    subject: `Reminder: Appointment with Dr. ${doctorName} in ${timeRemaining}`,
+    html
+  });
+}
+
 // Export functions
 module.exports = {
   validateEmail,
@@ -765,5 +826,7 @@ module.exports = {
   sendPrescriptionShare,
   sendNewsletterWelcome,
   sendPasswordResetEmail,
+  sendAppointmentConfirmation,
+  sendAppointmentReminder,
   testConnection
 };

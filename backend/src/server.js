@@ -145,6 +145,10 @@ process.on('uncaughtException', (err) => {
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+
+    // Initialize Reminder Service (Cron Jobs)
+    const { initReminderCron } = require('./services/reminder.service');
+    initReminderCron();
 });
 
 async function startServer() {

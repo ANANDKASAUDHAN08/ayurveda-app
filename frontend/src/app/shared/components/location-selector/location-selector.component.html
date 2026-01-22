@@ -6,9 +6,8 @@
             <i class="fas fa-map-marker-alt text-emerald-600"></i>
         </div>
         <div class="text-left">
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Delivering to
-            </p>
             <p class="text-sm font-black text-slate-900 flex items-center gap-1.5 leading-tight">
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-tight">To:</span>
                 <span *ngIf="!isDetecting" class="truncate max-w-[150px] flex items-center gap-1.5">
                     {{ selectedLocation || 'Select Location' }}
                     <span *ngIf="getCurrentLocation()?.isEstimated"
