@@ -17,6 +17,8 @@ const path = require('path');
 // File paths
 const packageJsonPath = path.join(__dirname, 'package.json');
 const manifestPath = path.join(__dirname, 'src', 'manifest.webmanifest');
+const envPath = path.join(__dirname, 'src', 'environments', 'environment.ts');
+const envProdPath = path.join(__dirname, 'src', 'environments', 'environment.prod.ts');
 
 // Colors for console output
 const colors = {
@@ -81,12 +83,41 @@ function updateManifest(newVersion) {
         const oldVersion = manifest.version || 'not set';
         manifest.version = newVersion;
 
+        // Update start_url with MAJOR version parameter to trigger WebAPK update only on major changes
+        if (manifest.start_url) {
+            const majorVersion = newVersion.split('.')[0];
+            const baseUrl = manifest.start_url.split('?')[0];
+            manifest.start_url = `${baseUrl}?v=${majorVersion}`;
+        }
+
         fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 4) + '\n');
 
         log(`✓ Updated manifest.webmanifest: ${oldVersion} → ${newVersion}`, 'green');
         return true;
     } catch (error) {
         log(`✗ Error updating manifest.webmanifest: ${error.message}`, 'red');
+        return false;
+    }
+}
+
+function updateEnvironment(filePath, newVersion) {
+    try {
+        let content = fs.readFileSync(filePath, 'utf8');
+        const oldVersionMatch = content.match(/version: ['"]([^'"]+)['"]/);
+        const oldVersion = oldVersionMatch ? oldVersionMatch[1] : 'not set';
+
+        if (oldVersionMatch) {
+            content = content.replace(/version: ['"]([^'"]+)['"]/, `version: '${newVersion}'`);
+        } else {
+            // Add version field if it doesn't exist (assuming it's after production field)
+            content = content.replace(/(production: [^,]+,)/, `$1\n    version: '${newVersion}',`);
+        }
+
+        fs.writeFileSync(filePath, content);
+        log(`✓ Updated ${path.basename(filePath)}: ${oldVersion} → ${newVersion}`, 'green');
+        return true;
+    } catch (error) {
+        log(`✗ Error updating ${path.basename(filePath)}: ${error.message}`, 'red');
         return false;
     }
 }
@@ -130,8 +161,10 @@ function main() {
 
     const packageSuccess = updatePackageJson(newVersion);
     const manifestSuccess = updateManifest(newVersion);
+    const envSuccess = updateEnvironment(envPath, newVersion);
+    const envProdSuccess = updateEnvironment(envProdPath, newVersion);
 
-    if (packageSuccess && manifestSuccess) {
+    if (packageSuccess && manifestSuccess && envSuccess && envProdSuccess) {
         log('\n✅ Version updated successfully!', 'green');
         log('\nNext steps:', 'yellow');
         log('  1. Update CHANGELOG.md with your changes', 'cyan');

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NewsletterService } from '../../services/newsletter.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-footer',
@@ -13,6 +14,7 @@ import { NewsletterService } from '../../services/newsletter.service';
 })
 export class FooterComponent {
   currentYear = new Date().getFullYear();
+  appVersion = environment.version;
   newsletterName: string = '';
   newsletterEmail: string = '';
   newsletterMessage: string = '';
