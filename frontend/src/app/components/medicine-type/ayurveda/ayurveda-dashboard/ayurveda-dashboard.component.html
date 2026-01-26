@@ -66,6 +66,13 @@
                         <span>Calendar</span>
                     </button>
 
+                    <!-- Dictionary -->
+                    <button [routerLink]="['/ayurveda/dictionary']"
+                        class="px-5 py-2 flex items-center gap-2 rounded-full font-black text-xs uppercase tracking-widest transition-all text-emerald-700 hover:bg-emerald-100/80">
+                        <i class="fas fa-book text-[12px] nav-icon"></i>
+                        <span>Dictionary</span>
+                    </button>
+
                     <div class="w-[1px] h-6 bg-slate-200 mx-2"></div>
 
                     <!-- Quick Search Trigger -->
@@ -559,32 +566,9 @@
                             </div>
 
                             <div class="grid grid-cols-2 gap-3 md:gap-8">
-                                <div *ngFor="let medicine of medicines.slice(0, 2)"
-                                    class="bg-white/60 backdrop-blur-md rounded-2xl md:rounded-[2.5rem] p-2.5 md:p-6 border border-emerald-50 hover:border-emerald-100 transition-all group relative hover:-translate-y-1 shadow-sm">
-                                    <div *ngIf="medicine.is_bestseller"
-                                        class="absolute top-2 right-2 md:top-4 md:right-4 px-1.5 md:px-3 py-0.5 md:py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[6px] md:text-[10px] font-black rounded-full shadow-lg z-10 uppercase tracking-widest">
-                                        Satvic</div>
-                                    <div
-                                        class="w-full h-28 md:h-48 rounded-xl md:rounded-2xl flex items-center justify-center mb-2.5 md:mb-6 overflow-hidden bg-gray-50/50">
-                                        <img [src]="medicine.image_url" [alt]="medicine.name"
-                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                                    </div>
-                                    <div class="w-full text-left space-y-1 md:space-y-3 px-0.5">
-                                        <span
-                                            class="inline-block px-1.5 py-0.5 bg-emerald-50 text-emerald-700 text-[6px] md:text-[10px] font-black rounded-full uppercase tracking-widest">{{
-                                            medicine.category || 'Herbal' }}</span>
-                                        <h3
-                                            class="font-black text-gray-900 text-[10px] md:text-lg leading-tight truncate">
-                                            {{
-                                            medicine.name }}</h3>
-                                        <div class="flex items-center justify-between gap-1">
-                                            <p class="text-sm md:text-xl font-black text-emerald-900">${{ medicine.price
-                                                }}</p>
-                                            <button (click)="addToCart(medicine)"
-                                                class="w-7 h-7 md:w-10 md:h-10 bg-emerald-800 text-white rounded-lg md:rounded-xl flex items-center justify-center hover:bg-emerald-900 transition-all shadow-md text-[10px] md:text-base">🛒</button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <app-ayurveda-medicine-card *ngFor="let medicine of medicines.slice(0, 2)"
+                                    [medicine]="medicine" (viewDetails)="viewDetails($event)">
+                                </app-ayurveda-medicine-card>
                             </div>
                         </section>
 
@@ -881,12 +865,16 @@
 
     <!-- Quick Search Portal -->
     <app-ayurveda-quick-search *ngIf="showQuickSearch" (close)="toggleQuickSearch()"
-        (search)="handleQuickSearch($event)">
+        (search)="handleQuickSearch($event)" (selectItem)="handleHerbSelection($event)">
     </app-ayurveda-quick-search>
 
     <!-- Herb Detail Modal (Global Level) -->
     <app-herb-detail *ngIf="selectedHerbForModal" [herb]="selectedHerbForModal" (close)="selectedHerbForModal = null">
     </app-herb-detail>
+
+    <!-- Ayurveda Medicine Detail Modal -->
+    <app-ayurveda-medicine-detail-modal *ngIf="selectedMedicineForModal" [medicine]="selectedMedicineForModal"
+        (close)="closeMedicineDetails()"></app-ayurveda-medicine-detail-modal>
 
     <!-- Dosha Quiz Modal -->
     <div *ngIf="showDoshaQuiz"

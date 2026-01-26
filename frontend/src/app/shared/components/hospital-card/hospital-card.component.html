@@ -1,0 +1,76 @@
+<div (click)="onViewDetails()"
+    class="group bg-white rounded-xl md:rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 
+            transition-all duration-300 flex p-3 md:p-4 gap-3 md:gap-4 overflow-hidden cursor-pointer active:scale-[0.98]">
+
+    <!-- Compact Thumbnail -->
+    <div
+        class="relative w-20 h-20 md:w-24 md:h-24 shrink-0 rounded-xl md:rounded-2xl overflow-hidden bg-gray-50 border border-emerald-50 shadow-inner">
+        <img *ngIf="hospital.image_url" [src]="hospital.image_url" [alt]="hospital.name"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+
+        <div *ngIf="!hospital.image_url"
+            class="w-full h-full flex items-center justify-center bg-emerald-50/30 text-emerald-200">
+            <i class="fas fa-hospital text-2xl md:text-3xl"></i>
+        </div>
+
+        <!-- Source Badge (Mini) -->
+        <div class="absolute top-1 left-1 flex flex-col gap-0.5 pointer-events-none">
+            <span *ngIf="hospital.data_source === 'NABH'"
+                class="bg-blue-600/90 text-[7px] text-white px-1 rounded-sm font-black uppercase">NABH</span>
+            <span *ngIf="hospital.data_source === 'Specialty'"
+                class="bg-purple-600/90 text-[7px] text-white px-1 rounded-sm font-black uppercase">Specialty</span>
+        </div>
+    </div>
+
+    <!-- Info -->
+    <div class="flex-1 min-w-0 flex flex-col pt-0.5">
+        <div class="flex justify-between items-center gap-2 mb-1">
+            <h3
+                class="font-bold text-gray-900 group-hover:text-emerald-600 transition-colors line-clamp-1 leading-snug text-sm md:text-base flex-1">
+                {{ formatName(hospital.name) }}
+            </h3>
+            <button (click)="onToggleFavorite($event)"
+                class="shrink-0 w-3 h-3 md:w-7 md:h-7 flex items-center justify-center rounded-full transition-all duration-300 hover:bg-gray-100 hover:scale-110 bg-gray-50/50"
+                [class.text-red-500]="isFavorite" [class.text-gray-300]="!isFavorite">
+                <i class="fas fa-heart text-[12px] md:text-xs"></i>
+            </button>
+        </div>
+
+        <div class="text-[10px] md:text-xs text-gray-400 font-medium space-y-1 mb-2">
+            <div class="flex items-center gap-1">
+                <i class="fas fa-map-marker-alt text-emerald-500 text-[10px]"></i>
+                <span class="truncate">{{formatLocation(hospital)}}</span>
+            </div>
+            <div class="flex items-start gap-1">
+                <i class="fas fa-info-circle text-gray-300 text-[10px] mt-0.5"></i>
+                <span class="line-clamp-1 opacity-80">{{formatAddress(hospital)}}</span>
+            </div>
+            <!-- Rating Display -->
+            <div *ngIf="hospital.rating && hospital.rating > 0" class="flex items-center gap-2 mt-1">
+                <app-rating-display [rating]="hospital.rating" [totalReviews]="hospital.review_count" [showCount]="true"
+                    size="small">
+                </app-rating-display>
+            </div>
+        </div>
+
+        <!-- Specialties Tags - Mini -->
+        <div *ngIf="getSpecialtiesList(hospital.specialties).length > 0"
+            class="mt-auto flex flex-wrap items-center gap-1">
+            <ng-container *ngFor="let s of getSpecialtiesList(hospital.specialties).slice(0, 2)">
+                <span *ngIf="!getSpecialtyKey(s)"
+                    class="inline-flex items-center min-h-0 text-[7px] md:text-[9px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider truncate max-w-[80px]">
+                    {{s}}
+                </span>
+                <a *ngIf="getSpecialtyKey(s)" [routerLink]="['/specialties', getSpecialtyKey(s)]"
+                    class="inline-flex items-center min-h-0 text-[7px] md:text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider truncate max-w-[80px] hover:bg-emerald-200 transition-colors"
+                    (click)="$event.stopPropagation()">
+                    {{s}}
+                </a>
+            </ng-container>
+            <span *ngIf="getSpecialtiesList(hospital.specialties).length > 2"
+                class="text-[7px] md:text-[9px] text-gray-400 font-bold self-center">
+                +{{getSpecialtiesList(hospital.specialties).length - 2}}
+            </span>
+        </div>
+    </div>
+</div>

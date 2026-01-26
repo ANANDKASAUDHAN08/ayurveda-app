@@ -15,11 +15,12 @@ import { Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } fro
 export class AyurvedaQuickSearchComponent implements OnInit, OnDestroy {
     @Output() close = new EventEmitter<void>();
     @Output() search = new EventEmitter<string>();
+    @Output() selectItem = new EventEmitter<AyurvedaKnowledgeItem>();
     @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
     query: string = '';
     suggestions: AyurvedaKnowledgeItem[] = [];
-    recentSearches: string[] = [];
+    recentSearches: Array<{ term: string, item?: AyurvedaKnowledgeItem }> = [];
     isLoading: boolean = false;
 
     private searchTerms = new Subject<string>();
@@ -75,14 +76,33 @@ export class AyurvedaQuickSearchComponent implements OnInit, OnDestroy {
     }
 
     selectSuggestion(item: AyurvedaKnowledgeItem): void {
-        const searchTerm = item.name || item.disease || item.title || '';
-        this.performSearch(searchTerm);
+        // For herbs, emit the full item so the parent can open the detail modal directly
+        if (item.dataType === 'herb') {
+            this.addToRecent(item.name || '', item);
+            this.selectItem.emit(item);
+            this.close.emit();
+        } else {
+            const searchTerm = item.name || item.disease || item.title || '';
+            this.addToRecent(searchTerm);
+            this.performSearch(searchTerm);
+        }
     }
 
     performSearch(term: string): void {
         this.addToRecent(term);
         this.search.emit(term);
         this.close.emit();
+    }
+
+    selectRecentSearch(recent: { term: string, item?: AyurvedaKnowledgeItem }): void {
+        if (recent.item && recent.item.dataType === 'herb') {
+            // It's a herb, emit the item for direct modal
+            this.selectItem.emit(recent.item);
+            this.close.emit();
+        } else {
+            // Regular search
+            this.performSearch(recent.term);
+        }
     }
 
     loadRecentSearches(): void {
@@ -92,10 +112,11 @@ export class AyurvedaQuickSearchComponent implements OnInit, OnDestroy {
         }
     }
 
-    addToRecent(term: string): void {
+    addToRecent(term: string, item?: AyurvedaKnowledgeItem): void {
         let recent = [...this.recentSearches];
-        recent = recent.filter(r => r.toLowerCase() !== term.toLowerCase());
-        recent.unshift(term);
+        // Remove duplicates based on term
+        recent = recent.filter(r => r.term.toLowerCase() !== term.toLowerCase());
+        recent.unshift({ term, item });
         recent = recent.slice(0, 5); // Keep last 5
         this.recentSearches = recent;
         localStorage.setItem('ayurveda_recent_searches', JSON.stringify(recent));

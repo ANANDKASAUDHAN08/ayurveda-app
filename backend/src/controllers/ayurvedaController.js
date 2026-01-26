@@ -337,6 +337,49 @@ exports.getHerbs = async (req, res) => {
     }
 };
 
+// Get single herb by ID
+exports.getHerbById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [herb] = await db.query(
+            'SELECT * FROM ayurveda_herbs WHERE id = ?',
+            [id]
+        );
+
+        if (herb.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Herb not found'
+            });
+        }
+
+        const h = herb[0];
+        const parsedHerb = {
+            ...h,
+            link: (h.link && h.link.startsWith('/'))
+                ? `https://www.amidhaayurveda.com${h.link}`
+                : h.link,
+            pacify: h.pacify ? JSON.parse(h.pacify) : [],
+            aggravate: h.aggravate ? JSON.parse(h.aggravate) : [],
+            rasa: h.rasa ? JSON.parse(h.rasa) : [],
+            guna: h.guna ? JSON.parse(h.guna) : [],
+            prabhav: h.prabhav ? JSON.parse(h.prabhav) : []
+        };
+
+        res.json({
+            success: true,
+            data: parsedHerb
+        });
+    } catch (error) {
+        console.error('Error fetching herb:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch herb',
+            error: error.message
+        });
+    }
+};
+
 // Get all Yoga Poses
 exports.getYogaPoses = async (req, res) => {
     try {

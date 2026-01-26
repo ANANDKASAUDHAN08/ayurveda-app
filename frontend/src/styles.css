@@ -220,6 +220,19 @@ html.dark .shadow-xl {
   animation: slideUp 0.4s ease-out forwards;
 }
 
+/* CamelCase Aliases for Legacy/Consistency */
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
 /* Bounce Animation */
 @keyframes bounce {
 

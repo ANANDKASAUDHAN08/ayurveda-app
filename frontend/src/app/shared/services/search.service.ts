@@ -17,13 +17,14 @@ export interface SearchResult {
     stock?: number;
     stock_quantity?: number;
     image_url?: string;
-    product_type: 'medicine' | 'device' | 'doctor' | 'hospital' | 'pharmacy' | 'lab_test' | 'health_package' | 'ayurveda_medicine' | 'ayurveda_exercise' | 'ayurveda_article' | 'page' | 'herb';
+    product_type: string;
     manufacturer?: string;
+    medicine_type?: string;
     composition?: string;
     storage?: string;
     introduction?: string;
     uses?: string[];
-    benefits?: { title: string; description: string }[];
+    benefits?: any;
     side_effects?: { common: string[]; advice: string };
     side_effects_list?: string;
     safety_advice?: { category: string; tag: string; advice: string }[];
@@ -34,6 +35,22 @@ export interface SearchResult {
     interactions?: { drug: string; severity: string; advice: string }[];
     drug_interactions?: string;
     review_percent?: { excellent: number; average: number; poor: number };
+    scientific_name?: string;
+    sanskrit_name?: string;
+    difficulty?: string;
+    duration_minutes?: number;
+    steps?: string;
+    prevention?: string;
+    about?: string;
+    location?: string;
+    rating?: number;
+    specialties?: any;
+    facilities?: any;
+    city?: string;
+    state?: string;
+    address?: string;
+    data_source?: string;
+    review_count?: number;
 }
 
 export interface SearchResponse {
@@ -59,13 +76,16 @@ export interface Suggestion {
 export interface SearchFilters {
     q?: string;
     category?: string;
-    type?: 'medicine' | 'device' | '';
+    type?: string;
     minPrice?: number;
     maxPrice?: number;
     sortBy?: string;
     page?: number;
     limit?: number;
-    medicineSystem?: string;
+    medicineType?: string;
+    manufacturer?: string;
+    city?: string;
+    minRating?: number;
 }
 
 @Injectable({
@@ -98,6 +118,10 @@ export class SearchService {
         if (filters.sortBy) params = params.set('sortBy', filters.sortBy);
         if (filters.page) params = params.set('page', filters.page.toString());
         if (filters.limit) params = params.set('limit', filters.limit.toString());
+        if (filters.medicineType) params = params.set('medicineType', filters.medicineType);
+        if (filters.manufacturer) params = params.set('manufacturer', filters.manufacturer);
+        if (filters.city) params = params.set('city', filters.city);
+        if (filters.minRating) params = params.set('minRating', filters.minRating.toString());
 
         return this.http.get<SearchResponse>(`${this.apiUrl}/products`, { params }).pipe(
             tap(response => {

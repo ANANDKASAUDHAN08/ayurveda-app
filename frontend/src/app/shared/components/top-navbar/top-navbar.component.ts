@@ -543,6 +543,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
       'pharmacy': 'fa-prescription-bottle',
       'lab_test': 'fa-flask',
       'health_package': 'fa-heart-circle-check',
+      'ayurveda_medicine': 'fa-leaf',
       'page': 'fa-info-circle',
       'herb': 'fa-leaf'
     };
@@ -558,6 +559,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
       'pharmacy': 'text-teal-500',
       'lab_test': 'text-purple-500',
       'health_package': 'text-pink-500',
+      'ayurveda_medicine': 'text-green-600',
       'page': 'text-slate-400',
       'herb': 'text-green-600'
     };

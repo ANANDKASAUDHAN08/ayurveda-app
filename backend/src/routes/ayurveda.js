@@ -19,6 +19,7 @@ router.get('/rituals', ayurvedaController.getRituals);
 
 // Herbs Routes
 router.get('/herbs', ayurvedaController.getHerbs);
+router.get('/herbs/:id', ayurvedaController.getHerbById);
 
 // Yoga Poses Routes
 router.get('/yoga-poses', ayurvedaController.getYogaPoses);

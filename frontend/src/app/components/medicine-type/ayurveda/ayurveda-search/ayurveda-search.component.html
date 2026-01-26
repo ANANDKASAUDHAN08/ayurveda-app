@@ -235,4 +235,17 @@
 
     <!-- Detail View Component (Always modal-like) -->
     <app-ayurveda-detail *ngIf="selectedItem" [item]="selectedItem" (close)="closeDetails()"></app-ayurveda-detail>
+
+    <!-- Refactored Herb Detail View -->
+    <app-herb-detail *ngIf="selectedHerb" [herb]="selectedHerb" [isModal]="true" (close)="closeDetails()">
+    </app-herb-detail>
+
+    <!-- Global Loading Overlay for Herb Fetch -->
+    <div *ngIf="isHerbLoading"
+        class="fixed inset-0 z-[120] flex items-center justify-center bg-black/20 backdrop-blur-[2px]">
+        <div class="p-8 bg-white rounded-3xl shadow-2xl flex flex-col items-center gap-4">
+            <div class="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+            <span class="text-xs font-black uppercase tracking-widest text-emerald-900">Synthesizing Profile...</span>
+        </div>
+    </div>
 </div>

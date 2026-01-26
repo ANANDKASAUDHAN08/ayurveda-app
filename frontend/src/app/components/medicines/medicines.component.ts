@@ -4,17 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { SearchResult } from '../../shared/services/search.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { ProductDetailModalComponent } from '../product-detail-modal/product-detail-modal.component';
-
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
+import { CartService } from '../../shared/services/cart.service';
+import { MedicineCardComponent } from './medicine-card/medicine-card.component';
 
 @Component({
   selector: 'app-medicines',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProductDetailModalComponent, MobileLocationBarComponent],
+  imports: [CommonModule, FormsModule, ProductDetailModalComponent, MobileLocationBarComponent, MedicineCardComponent],
   templateUrl: './medicines.component.html',
   styleUrls: ['./medicines.component.css']
 })
@@ -24,6 +25,7 @@ export class MedicinesComponent implements OnInit, OnDestroy {
   loading = false;
   selectedProduct: SearchResult | null = null;
   Math = Math;
+  addingToCart: { [key: string]: boolean } = {};
 
   // Pagination
   currentPage = 1;
@@ -67,7 +69,28 @@ export class MedicinesComponent implements OnInit, OnDestroy {
   constructor(
     private snackbarService: SnackbarService,
     private http: HttpClient,
+    private cartService: CartService,
   ) { }
+
+  // Entity-specific actions
+  addToCart(product: SearchResult) {
+    const key = `medicine-${product.id}`;
+    this.addingToCart[key] = true;
+
+    this.cartService.addItem({
+      id: String(product.id),
+      name: product.name,
+      type: (product.product_type || 'medicine') as 'medicine' | 'device' | 'wellness' | 'other',
+      price: product.price || 0,
+      quantity: 1,
+      image: product.image_url || ''
+    });
+
+    setTimeout(() => {
+      this.addingToCart[key] = false;
+      this.snackbarService.show(`${product.name} added to cart!`, 'success');
+    }, 300);
+  }
 
   @HostListener('document:click')
   onDocumentClick() {

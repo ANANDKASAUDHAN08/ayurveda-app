@@ -11,11 +11,11 @@ import { Herb } from '../../../../shared/services/ayurveda.service';
 })
 export class HerbDetailComponent {
     @Input() herb!: Herb;
+    @Input() isModal: boolean = true;
     @Output() close = new EventEmitter<void>();
 
     onClose(): void {
         this.close.emit();
-        document.body.style.overflow = 'auto';
     }
 
     getDoshaClass(dosha: string): string {

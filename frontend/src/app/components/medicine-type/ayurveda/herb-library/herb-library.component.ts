@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AyurvedaService, Herb } from '../../../../shared/services/ayurveda.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { HerbCardComponent, HerbCardData } from '../herb-card/herb-card.component';
 
 @Component({
     selector: 'app-herb-library',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, HerbCardComponent],
     templateUrl: './herb-library.component.html',
     styleUrl: './herb-library.component.css',
     animations: [
@@ -124,10 +125,9 @@ export class HerbLibraryComponent implements OnInit {
         this.applyFilters();
     }
 
-    selectHerb(herb: Herb): void {
-        this.herbSelected.emit(herb);
+    selectHerb(herb: HerbCardData): void {
+        this.herbSelected.emit(herb as Herb);
     }
-
 
     getDoshaClass(dosha: string): string {
         switch (dosha.toLowerCase()) {

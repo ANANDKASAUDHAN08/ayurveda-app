@@ -111,7 +111,7 @@ export class AyurvedaKnowledgeService {
             catchError(() => of([]))
         );
 
-        // 2. Search in Backend (CSV Dataset)
+        // 2. Search in Backend (CSV Dataset - Ailments)
         const backendSearch$ = this.http.get<any>(`${this.apiUrl}?q=${q}`).pipe(
             map(res => (res.data || []).map((item: any) => ({
                 ...item,
@@ -121,18 +121,67 @@ export class AyurvedaKnowledgeService {
             catchError(() => of([]))
         );
 
-        // 3. Combine results
-        return forkJoin([localSearch$, backendSearch$]).pipe(
-            map(([localResults, backendResults]) => {
-                // If a specific category is requested (other than knowledge, all), 
-                // we might only return local results if that category is in JSON.
-                if (category && category !== 'all' && category !== 'knowledge') {
-                    return localResults;
+        // 3. Search in Backend (Herbs Table)
+        const backendHerbsUrl = `${environment.apiUrl}/ayurveda/herbs`;
+        const backendHerbsSearch$ = this.http.get<any>(`${backendHerbsUrl}?q=${q}`).pipe(
+            map(res => (res.data || []).map((item: any) => ({
+                ...item,
+                dataType: 'herb'
+            }))),
+            catchError(() => of([]))
+        );
+
+        // 4. Combine results
+        return forkJoin([localSearch$, backendSearch$, backendHerbsSearch$]).pipe(
+            map(([localResults, backendResults, backendHerbs]) => {
+                let results: AyurvedaKnowledgeItem[] = [];
+
+                if (category === 'herb') {
+                    results = [...backendHerbs, ...localResults.filter(i => i.dataType === 'herb')];
+                } else if (category === 'knowledge') {
+                    results = backendResults;
+                } else if (category && category !== 'all') {
+                    // Other specific local categories
+                    results = localResults.filter(i => i.dataType === category);
+                } else {
+                    // 'all' category
+                    results = [...backendHerbs, ...backendResults, ...localResults];
                 }
-                if (category === 'knowledge') {
-                    return backendResults;
-                }
-                return [...backendResults, ...localResults];
+
+                // Prioritization / Sorting Logic
+                results.sort((a, b) => {
+                    const nameA = (a.name || a.title || a.disease || a.ailment || '').toLowerCase();
+                    const nameB = (b.name || b.title || b.disease || b.ailment || '').toLowerCase();
+
+                    // 1. Exact Name match gets highest priority
+                    const exactA = nameA === q;
+                    const exactB = nameB === q;
+                    if (exactA && !exactB) return -1;
+                    if (!exactA && exactB) return 1;
+
+                    // 2. Inclusion match at start of string
+                    const startA = nameA.startsWith(q);
+                    const startB = nameB.startsWith(q);
+                    if (startA && !startB) return -1;
+                    if (!startA && startB) return 1;
+
+                    // 3. Type priority: Herbs > Medicines > Knowledge
+                    const priority: { [key: string]: number } = { 'herb': 1, 'medicine': 2, 'remedy': 3, 'knowledge': 4 };
+                    const pA = priority[a.dataType] || 10;
+                    const pB = priority[b.dataType] || 10;
+                    if (pA !== pB) return pA - pB;
+
+                    return 0;
+                });
+
+                // Remove duplicates if any (by ID and Type)
+                const seen = new Set();
+                return results.filter(item => {
+                    const key = `${item.dataType}-${item.id}`;
+                    if (seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                });
             })
         );
     }

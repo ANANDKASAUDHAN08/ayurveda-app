@@ -426,11 +426,11 @@
         <!-- Content Area -->
         <div class="px-3 md:px-6 lg:px-10 py-6 md:py-8">
             <!-- Loading Skeletons -->
-            <div *ngIf="isLoading" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+            <div *ngIf="isLoading" class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
                 <div *ngFor="let i of [1,2,3,4]"
-                    class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 animate-pulse h-96">
+                    class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 animate-pulse h-48 md:h-96">
                     <div class="flex items-center space-x-4 mb-8">
-                        <div class="w-16 h-16 bg-slate-100 rounded-2xl"></div>
+                        <div class="w-16 h-8 md:h-16 bg-slate-100 rounded-2xl"></div>
                         <div class="flex-1 space-y-3">
                             <div class="h-5 bg-slate-100 rounded-full w-3/4"></div>
                             <div class="h-4 bg-slate-100 rounded-full w-1/2"></div>
@@ -449,9 +449,8 @@
                 <div class="inline-flex items-center justify-center w-24 h-24 bg-red-50 rounded-full mb-8">
                     <i class="fas fa-exclamation-triangle text-red-400 text-4xl"></i>
                 </div>
-                <h3 class="text-3xl font-black text-slate-800 mb-4 tracking-tight">Oops! Something
-                    went
-                    wrong
+                <h3 class="text-3xl font-black text-slate-800 mb-4 tracking-tight">
+                    Oops! Something went wrong
                 </h3>
                 <p class="text-slate-500 mb-10 text-lg leading-relaxed">{{ error }}</p>
                 <button (click)="loadDoctors()"
@@ -462,7 +461,7 @@
 
             <!-- Doctor Cards Grid -->
             <div *ngIf="!isLoading && !error && doctors.length > 0"
-                class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 md:gap-4 lg:gap-6">
+                class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 md:gap-4 lg:gap-6">
                 <div *ngFor="let doctor of paginatedDoctors" class="vc-fade-in">
                     <app-doctor-card [doctor]="doctor" [isOnline]="isDoctorOnline(doctor.id)" [isFree]="isFirstTimeUser"
                         (book)="openBooking($event)" (viewDetails)="openDetails($event)"
@@ -522,12 +521,12 @@
                 <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-8">
                     <i class="fas fa-user-md-slash text-slate-300 text-5xl"></i>
                 </div>
-                <h3 class="text-3xl font-black text-slate-800 mb-4 tracking-tight">No Doctors Found
+                <h3 class="text-3xl font-black text-slate-800 mb-4 tracking-tight">
+                    No Doctors Found
                 </h3>
-                <p class="text-slate-500 max-w-md mx-auto mb-10 text-lg">We couldn't find any
-                    doctors
-                    matching
-                    your selection. Try adjusting your filters.</p>
+                <p class="text-slate-500 max-w-md mx-auto mb-10 text-lg">
+                    We couldn't find any doctors matching your selection. Try adjusting your filters.
+                </p>
                 <button (click)="clearFilters()"
                     class="px-10 py-4 bg-white border-2 border-slate-100 text-slate-600 rounded-2xl font-black hover:bg-slate-50 transition-all shadow-lg active:scale-95">
                     Clear All Filters

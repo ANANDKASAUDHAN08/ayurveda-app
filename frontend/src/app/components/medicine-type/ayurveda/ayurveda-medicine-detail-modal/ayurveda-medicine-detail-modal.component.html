@@ -1,0 +1,125 @@
+<!-- Modal Backdrop -->
+<div class="fixed top-16 bottom-16 inset-x-0 md:inset-0 bg-emerald-950/40 backdrop-blur-md z-[40] md:z-[1000] flex items-center justify-center p-0 md:p-5 animate-fade-in"
+    (click)="onClose()">
+
+    <!-- Modal Content -->
+    <div class="bg-white w-full h-full md:rounded-[2.5rem] md:w-full md:max-w-3xl md:h-auto md:max-h-[85vh] flex flex-col shadow-2xl animate-slide-up relative overflow-hidden"
+        (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-3 md:py-5 border-b border-emerald-50 shrink-0">
+            <div>
+                <h2 class="text-xl md:text-3xl font-black text-gray-900 serif-font italic">Medicine <span
+                        class="text-emerald-700">Details</span></h2>
+                <p class="text-[10px] md:text-xs font-black text-emerald-600 uppercase tracking-widest mt-1">Ayurvedic
+                    Pharmacopeia</p>
+            </div>
+            <button (click)="onClose()"
+                class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 transition-all flex items-center justify-center shrink-0 shadow-inner">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="flex-1 overflow-y-auto p-6 md:p-6 space-y-4 md:space-y-6">
+            <!-- Basic Info Row -->
+            <div class="flex flex-row gap-4 md:gap-12 items-start">
+                <!-- Image -->
+                <div
+                    class="w-32 md:w-36 aspect-square bg-emerald-50 rounded-[2rem] overflow-hidden shadow-inner border border-emerald-100/50 flex-shrink-0">
+                    <img [src]="medicine.image_url" [alt]="medicine.name" class="w-full h-full object-cover">
+                </div>
+
+                <!-- Core Details -->
+                <div class="flex-1 space-y-4 md:space-y-6">
+                    <div class="space-y-1 md:space-y-2">
+                        <span
+                            class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-black uppercase tracking-widest">
+                            {{ medicine.category || 'Herbal Formulation' }}
+                        </span>
+                        <h1 class="text-xl md:text-4xl font-black text-gray-900 leading-none tracking-tight">{{
+                            medicine.name }}</h1>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="text-xl md:text-3xl font-black text-emerald-900">₹{{ medicine.price }}</div>
+                        <div class="px-3 py-1 bg-amber-50 text-amber-700 border border-amber-100 rounded-lg text-[10px] font-bold uppercase"
+                            *ngIf="medicine.is_bestseller">
+                            Bestseller
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p
+                class="text-xs md:text-lg text-gray-500 font-medium leading-relaxed italic border-l-4 border-emerald-200 pl-4 py-1">
+                {{ medicine.description }}
+            </p>
+
+            <!-- Tabs Section -->
+            <div class="space-y-6 md:space-y-8">
+                <!-- Tab Headers -->
+                <div class="flex gap-4 border-b border-emerald-50">
+                    <button *ngFor="let tab of ['overview', 'benefits', 'usage']" (click)="setTab(tab)"
+                        class="pb-3 px-1 text-[11px] font-black uppercase tracking-widest transition-all relative"
+                        [class.text-emerald-900]="activeTab === tab" [class.text-gray-400]="activeTab !== tab">
+                        {{ tab }}
+                        <div *ngIf="activeTab === tab"
+                            class="absolute bottom-0 left-0 right-0 h-1 bg-emerald-800 rounded-t-full"></div>
+                    </button>
+                </div>
+
+                <!-- Tab Panels -->
+                <div class="animate-in fade-in slide-in-from-top-2 duration-300">
+                    <!-- Overview -->
+                    <div *ngIf="activeTab === 'overview'" class="space-y-6">
+                        <p class="text-sm md:text-base text-gray-600 leading-relaxed font-medium">
+                            This traditional Ayurvedic formulation is meticulously prepared following ancient Satvic
+                            principles to ensure maximum potency and purity. It works holistically to restore balance to
+                            your Doshas.
+                        </p>
+                    </div>
+
+                    <!-- Benefits -->
+                    <div *ngIf="activeTab === 'benefits'" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div *ngFor="let benefit of benefitsList"
+                            class="flex items-start gap-4 p-4 bg-emerald-50 rounded-2xl border border-emerald-100/50">
+                            <i class="fas fa-check-circle text-emerald-600 mt-1"></i>
+                            <span class="text-sm font-bold text-gray-800 leading-snug">{{ benefit }}</span>
+                        </div>
+                        <p *ngIf="benefitsList.length === 0" class="text-gray-400 italic font-medium">No specific
+                            benefits listed.</p>
+                    </div>
+
+                    <!-- Usage -->
+                    <div *ngIf="activeTab === 'usage'"
+                        class="bg-amber-50/50 p-6 md:p-8 rounded-[2rem] border border-amber-100/50 space-y-4">
+                        <h4 class="text-sm font-black text-amber-900 uppercase tracking-widest flex items-center gap-2">
+                            <i class="fas fa-mortar-pestle"></i> Usage Recommendation
+                        </h4>
+                        <p class="text-sm md:text-base text-amber-900/80 leading-relaxed font-medium">
+                            Always consult with a qualified Vaidya before starting any new herbal regimen. Generally, it
+                            is advised to take this with warm water or as directed by your physician.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div
+            class="px-6 py-3 md:px-10 md:py-4 bg-emerald-50/50 border-t border-emerald-100 shrink-0 flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">🌿</div>
+                <div>
+                    <h5 class="text-sm font-black text-gray-900 uppercase tracking-widest">Natural & Pure</h5>
+                    <p class="text-sm text-emerald-600 font-bold">100% Satvic Ingredients</p>
+                </div>
+            </div>
+            <!-- <button
+                class="w-full md:w-auto px-10 py-4 bg-emerald-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-emerald-200 hover:bg-emerald-800 transition-all active:scale-95">
+                Add to Ritual Cart
+            </button> -->
+        </div>
+    </div>
+</div>

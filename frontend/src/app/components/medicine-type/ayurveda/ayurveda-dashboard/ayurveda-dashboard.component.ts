@@ -15,6 +15,9 @@ import { AyurvedaQuickSearchComponent } from '../ayurveda-quick-search/ayurveda-
 import { HerbLibraryComponent } from '../herb-library/herb-library.component';
 import { HerbDetailComponent } from '../herb-detail/herb-detail.component';
 import { PrakritiService, PrakritiResult } from '../../../../shared/services/prakriti.service';
+import { AyurvedaKnowledgeItem } from '../../../../shared/services/ayurveda-knowledge.service';
+import { AyurvedaMedicineCardComponent, AyurvedaMedicineData } from '../ayurveda-medicine-card/ayurveda-medicine-card.component';
+import { AyurvedaMedicineDetailModalComponent } from '../ayurveda-medicine-detail-modal/ayurveda-medicine-detail-modal.component';
 
 @Component({
   selector: 'app-ayurveda-dashboard',
@@ -29,7 +32,9 @@ import { PrakritiService, PrakritiResult } from '../../../../shared/services/pra
     AyurvedaAboutComponent,
     AyurvedaQuickSearchComponent,
     HerbLibraryComponent,
-    HerbDetailComponent
+    HerbDetailComponent,
+    AyurvedaMedicineCardComponent,
+    AyurvedaMedicineDetailModalComponent
   ],
   templateUrl: './ayurveda-dashboard.component.html',
   styleUrl: './ayurveda-dashboard.component.css'
@@ -60,6 +65,7 @@ export class AyurvedaDashboardComponent implements OnInit {
   showDoshaQuiz = false;
   showAyurvedaInfo = false;
   selectedHerbForModal: Herb | null = null;
+  selectedMedicineForModal: AyurvedaMedicineData | null = null;
   showYogaInfo = false;
   dailyTip = '';
   currentSeason = '';
@@ -260,6 +266,16 @@ export class AyurvedaDashboardComponent implements OnInit {
     this.router.navigate(['/medicines']);
   }
 
+  viewDetails(medicine: any): void {
+    this.selectedMedicineForModal = medicine;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeMedicineDetails(): void {
+    this.selectedMedicineForModal = null;
+    document.body.style.overflow = 'auto';
+  }
+
   exploreAllYoga(): void {
     this.router.navigate(['/user/content']); // Or specific yoga page if available
   }
@@ -310,6 +326,24 @@ export class AyurvedaDashboardComponent implements OnInit {
   handleQuickSearch(term: string): void {
     this.searchQuery = term;
     this.switchTab('search');
+  }
+
+  handleHerbSelection(item: AyurvedaKnowledgeItem): void {
+    // Fetch the full herb details and open the modal
+    if (item.id) {
+      this.ayurvedaService.getHerbById(Number(item.id)).subscribe({
+        next: (herb) => {
+          this.selectedHerbForModal = herb;
+          document.body.style.overflow = 'hidden';
+        },
+        error: (err) => {
+          console.error('Failed to load herb details:', err);
+          // Fallback to search
+          this.searchQuery = item.name || '';
+          this.switchTab('search');
+        }
+      });
+    }
   }
 
   toggleAyurvedaInfo(): void {

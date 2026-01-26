@@ -1,119 +1,234 @@
-<div (click)="onViewDetails()"
-    class="group bg-white rounded-2xl md:rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100 hover:border-emerald-200 hover:-translate-y-1.5 overflow-hidden h-full flex flex-col cursor-pointer relative">
+<!-- Grid Layout -->
+<div *ngIf="viewMode === 'grid'" (click)="onViewDetails()"
+    class="group bg-white rounded-2xl md:rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100 hover:border-emerald-200 hover:-translate-y-1.5 overflow-hidden flex flex-col md:flex-col cursor-pointer relative h-auto md:h-full">
 
-    <!-- Top Section: Image/Avatar and Badges -->
-    <div class="relative p-3 md:p-4 pb-0">
-        <div class="flex items-start justify-between">
+    <!-- Unified Favorite Button (Absolute Top Right for all views) -->
+    <button (click)="toggleFavorite($event)"
+        class="absolute top-1 md:top-3 right-3 p-2 backdrop-blur-sm z-10 transition-all duration-300"
+        [class.text-red-500]="isFavorite()" [class.text-slate-300]="!isFavorite()">
+        <i class="fas" [ngClass]="isFavorite() ? 'fa-heart' : 'fa-heart'" style="font-size: 16px;"></i>
+    </button>
+
+    <!-- Top Section -->
+    <div class="flex flex-row p-3 md:p-5 gap-3 md:gap-4 items-start w-full relative">
+        <!-- Left Column: Avatar + Rating Below -->
+        <div class="shrink-0 flex flex-col items-center gap-1.5 md:gap-4">
             <div class="relative">
                 <div
-                    class="h-14 w-14 md:h-16 md:w-16 rounded-xl md:rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-50 flex items-center justify-center text-emerald-600 text-xl md:text-2xl font-black shadow-inner group-hover:scale-105 transition-transform duration-500">
+                    class="h-12 w-12 md:h-16 md:w-16 rounded-xl md:rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-50 flex items-center justify-center text-emerald-600 text-lg md:text-2xl font-black shadow-inner group-hover:scale-105 transition-transform duration-500">
                     {{ doctor.name.charAt(0) }}
                 </div>
-                <!-- Online Status Pulse -->
+                <div *ngIf="isOnline"
+                    class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full">
+                    <span class="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-75"></span>
+                </div>
+            </div>
+
+            <!-- Rating Section -->
+            <div class="flex flex-col items-center">
+                <div class="flex items-center bg-yellow-50 px-1.5 py-0.5 rounded-lg">
+                    <i class="fas fa-star text-yellow-500 text-[8px] mr-1"></i>
+                    <span class="text-[9px] font-black text-yellow-700">
+                        {{ (doctor.rating && doctor.rating > 0) ? doctor.rating : 'New' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column (Mobile) / Main Info Section -->
+        <div class="flex-1 min-w-0 flex flex-col pr-6 md:pr-0">
+            <div class="flex justify-between items-start gap-1 mb-0.5">
+                <h3
+                    class="text-sm md:text-base font-extrabold text-slate-800 group-hover:text-emerald-600 transition-colors leading-tight line-clamp-2">
+                    {{ doctor.name }}
+                </h3>
+
+            </div>
+
+            <div class="mb-1 text-[9px] md:text-[11px] font-bold text-slate-400 uppercase tracking-tight line-clamp-1">
+                {{ doctor.specialization || 'General Physician' }}
+            </div>
+
+            <!-- Mobile Only: Full-Width compact 2-Column Grid -->
+            <div class="md:hidden grid grid-cols-2 gap-x-2 gap-y-1 mt-1 border-t border-slate-50 pt-2 w-full">
+                <div class="flex items-center gap-1.5 overflow-hidden">
+                    <i class="fas fa-clock text-[7.5px] text-blue-400 shrink-0"></i>
+                    <span class="text-xs font-bold text-slate-600 truncate">{{ doctor.experience }}y+</span>
+                </div>
+                <div class="flex items-center gap-1.5 overflow-hidden">
+                    <i class="fas fa-rupee-sign text-[7.5px] text-emerald-500 shrink-0"></i>
+                    <span class="text-xs font-bold text-slate-600 truncate">₹{{ doctor.consultationFee }}</span>
+                </div>
+                <div class="flex items-center gap-1.5 overflow-hidden">
+                    <i class="fas fa-shield-alt text-[7.5px] text-purple-400 shrink-0"></i>
+                    <span class="text-xs font-bold text-slate-600 uppercase truncate">{{ doctor.medicine_type }}</span>
+                </div>
+                <div *ngIf="doctor.gender" class="flex items-center gap-1.5 overflow-hidden">
+                    <i class="fas fa-user text-[7.5px] text-slate-400 shrink-0"></i>
+                    <span class="text-xs font-bold text-slate-600 uppercase truncate">{{ doctor.gender }}</span>
+                </div>
+            </div>
+
+            <!-- Desktop Tags -->
+            <div class="hidden md:flex items-center gap-1.5 md:gap-2">
+                <span
+                    class="px-1.5 py-0.5 bg-emerald-50 text-emerald-600 text-[8px] md:text-[10px] font-bold rounded-md uppercase">
+                    {{ doctor.medicine_type || 'Modern' }}
+                </span>
+                <span *ngIf="doctor.gender"
+                    class="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[8px] md:text-[10px] font-bold rounded-md uppercase">
+                    {{ doctor.gender }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Section Actions -->
+    <div class="px-3 md:px-5 pb-3 md:pb-5 mt-auto flex flex-col w-full">
+        <!-- Desktop: Info Grid (Experience + Fee) -->
+        <div class="hidden md:grid grid-cols-2 gap-3 mb-4">
+            <div
+                class="flex items-center gap-2.5 p-2 rounded-2xl bg-slate-50/50 group-hover:bg-white transition-all duration-300">
+                <div class="w-7 h-7 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
+                    <i class="fas fa-history text-[10px]"></i>
+                </div>
+                <div class="flex flex-col min-w-0">
+                    <span class="text-[9px] font-bold text-slate-400 uppercase leading-none mb-0.5">Exp</span>
+                    <span class="text-xs font-black text-slate-700">{{ doctor.experience }}+ Yrs</span>
+                </div>
+            </div>
+            <div
+                class="flex items-center gap-2.5 p-2 rounded-2xl bg-slate-50/50 group-hover:bg-white transition-all duration-300">
+                <div
+                    class="w-7 h-7 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 shrink-0">
+                    <i class="fas fa-wallet text-[10px]"></i>
+                </div>
+                <div class="flex flex-col min-w-0">
+                    <span class="text-[9px] font-bold text-slate-400 uppercase leading-none mb-0.5">Fee</span>
+                    <span class="text-xs font-black text-slate-700">₹{{ doctor.consultationFee || 0 }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop Footer (Location + Book Now) -->
+        <div class="flex items-center justify-between gap-3 border-t border-slate-50 pt-2">
+            <div class="flex items-center gap-1.5 min-w-0">
+                <i class="fas fa-map-marker-alt text-emerald-700 text-[10px]"></i>
+                <span class="text-[11px] font-semibold text-slate-500 truncate">{{ doctor.location || 'Online Only'
+                    }}</span>
+            </div>
+            <button (click)="$event.stopPropagation(); onBook()"
+                class="shrink-0 h-8 md:h-10 px-4 md:px-6 bg-emerald-600 text-white text-xs font-black rounded-xl hover:bg-emerald-700 hover:scale-105 transition-all duration-300 shadow-md shadow-emerald-200">
+                BOOK NOW
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- List Layout (Used in Search Results specifically) -->
+<div *ngIf="viewMode === 'list'" (click)="onViewDetails()"
+    class="group bg-white rounded-2xl md:rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100 hover:border-emerald-200 hover:-translate-y-1.5 overflow-hidden flex flex-col cursor-pointer relative h-auto">
+
+    <!-- Top Part (Avatar + Info) -->
+    <div class="flex flex-row p-3 md:p-4 gap-4 md:gap-6 items-start">
+        <!-- Left Part: Avatar + Rating -->
+        <div class="shrink-0 flex flex-col items-center gap-3">
+            <div class="relative">
+                <div
+                    class="h-16 w-16 md:h-20 md:w-20 rounded-xl md:rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-50 flex items-center justify-center text-emerald-600 text-xl md:text-2xl font-black shadow-inner group-hover:scale-105 transition-transform duration-500">
+                    {{ doctor.name.charAt(0) }}
+                </div>
                 <div *ngIf="isOnline"
                     class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full">
                     <span class="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-75"></span>
                 </div>
             </div>
 
-            <div class="flex flex-col items-end gap-2">
+            <!-- Rating Below Avatar -->
+            <div class="flex flex-col items-center gap-0.5">
+                <div class="flex items-center bg-yellow-50 px-2 py-0.5 rounded-lg border border-yellow-100/50">
+                    <i class="fas fa-star text-yellow-500 text-[10px] mr-1.5"></i>
+                    <span class="text-[11px] font-black text-yellow-700">
+                        {{ (doctor.rating && doctor.rating > 0) ? doctor.rating : 'New' }}
+                    </span>
+                </div>
+                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tight">
+                    {{ (doctor.rating && doctor.rating > 0) ? (doctor.reviews_count || 0) + ' reviews' : 'No reviews' }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Right Part: Info Section -->
+        <div class="flex-1 min-w-0 flex flex-col">
+            <div class="flex justify-between items-start gap-4 mb-1">
+                <h3
+                    class="text-base md:text-lg font-extrabold text-slate-800 group-hover:text-emerald-600 transition-colors leading-tight line-clamp-1">
+                    {{ doctor.name }}
+                </h3>
                 <button (click)="toggleFavorite($event)"
-                    class="p-2 backdrop-blur-sm transition-all duration-300 hover:bg-white hover:shadow-md"
+                    class="p-2 backdrop-blur-sm transition-all duration-300 hover:bg-slate-50 rounded-full shrink-0"
                     [class.text-red-500]="isFavorite()" [class.text-slate-300]="!isFavorite()">
                     <svg xmlns="http://www.w3.org/2000/svg" [attr.fill]="isFavorite() ? 'currentColor' : 'none'"
-                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                        class="w-5 h-5 transition-transform duration-300" [class.scale-110]="isFavorite()">
+                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                     </svg>
                 </button>
-                <!-- <span *ngIf="isFree"
-                    class="px-2 py-1 bg-amber-100 text-amber-700 text-[10px] font-black uppercase tracking-wider rounded-lg shadow-sm">
-                    First Free
-                </span> -->
             </div>
-        </div>
-    </div>
 
-    <!-- Content Section -->
-    <div class="p-3 md:p-5 flex-1 flex flex-col">
-        <!-- Name and Specialization -->
-        <div class="mb-3 md:mb-4">
-            <h3
-                class="text-sm md:text-base font-extrabold text-slate-800 group-hover:text-emerald-600 transition-colors leading-tight mb-1 line-clamp-2">
-                {{ doctor.name }}
-            </h3>
-            <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1">
-                <span
-                    class="text-[10px] md:text-[11px] font-bold text-slate-400 uppercase tracking-tight md:tracking-wider truncate max-w-[80px] md:max-w-none">
-                    {{ doctor.specialization || 'General Physician' }}
-                </span>
-                <span class="hidden md:block w-1 h-1 bg-slate-300 rounded-full"></span>
-                <span
-                    class="px-1 py-0.5 bg-emerald-50 text-emerald-600 text-[8px] md:text-[10px] font-bold rounded-md uppercase">
+            <div
+                class="mb-2 text-[11px] md:text-sm font-bold text-slate-400 uppercase tracking-tight md:tracking-wider">
+                {{ doctor.specialization || 'General Physician' }}
+            </div>
+
+            <div class="flex items-center gap-2 mb-4">
+                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-bold rounded-md uppercase">
                     {{ doctor.medicine_type || 'Modern' }}
                 </span>
                 <span *ngIf="doctor.gender"
-                    class="px-1 py-0.5 bg-slate-100 text-slate-600 text-[8px] md:text-[10px] font-bold rounded-md uppercase">
+                    class="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-bold rounded-md uppercase">
                     {{ doctor.gender }}
                 </span>
             </div>
-        </div>
 
-        <!-- Rating Section -->
-        <div class="mb-3 md:mb-4 flex flex-wrap items-center gap-1.5 md:gap-2">
-            <div class="flex items-center bg-yellow-50 px-1.5 md:px-2 py-0.5 md:py-1 rounded-lg">
-                <i class="fas fa-star text-yellow-500 text-[9px] md:text-[10px] mr-1 md:mr-1.5"></i>
-                <span class="text-[10px] md:text-xs font-black text-yellow-700">{{ (doctor.rating && doctor.rating > 0)
-                    ? doctor.rating : 'New' }}</span>
-            </div>
-            <span class="text-[9px] md:text-[10px] font-medium text-slate-400 truncate">
-                {{ (doctor.rating && doctor.rating > 0) ? '(' + (doctor.reviews_count || 0) + ')' : 'No reviews' }}
-            </span>
-        </div>
+            <!-- Single Line Footer for List View -->
+            <div class="mt-auto flex items-center justify-between gap-4 border-t border-slate-50 pt-3">
+                <div class="flex items-center gap-4 md:gap-8 flex-wrap">
+                    <!-- Exp -->
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500">
+                            <i class="fas fa-history text-[11px]"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase leading-none">Exp</span>
+                            <span class="text-[11px] font-black text-slate-700">{{ doctor.experience }}+ Yrs</span>
+                        </div>
+                    </div>
+                    <!-- Fee -->
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500">
+                            <i class="fas fa-wallet text-[11px]"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase leading-none">Exp</span>
+                            <span class="text-[11px] font-black text-slate-700">₹{{ doctor.consultationFee || 0
+                                }}</span>
+                        </div>
+                    </div>
+                    <!-- Location -->
+                    <div class="flex items-center gap-2 px-4 border-l border-slate-100 hidden sm:flex">
+                        <i class="fas fa-map-marker-alt text-emerald-700 text-[11px]"></i>
+                        <span class="text-[11px] font-semibold text-slate-500 max-w-[200px] truncate">
+                            {{ doctor.location || 'Online Only' }}
+                        </span>
+                    </div>
+                </div>
 
-        <!-- Innovative Info Grid -->
-        <div class="grid grid-cols-2 gap-2 md:gap-3 mb-4 md:mb-6">
-            <div
-                class="flex items-center gap-1.5 md:gap-2.5 p-1.5 md:p-2 rounded-xl md:rounded-2xl bg-slate-50/50 group-hover:bg-white group-hover:shadow-sm transition-all duration-300">
-                <div
-                    class="w-6 h-6 md:w-7 md:h-7 rounded-lg md:rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
-                    <i class="fas fa-history text-[9px] md:text-[10px]"></i>
-                </div>
-                <div class="flex flex-col min-w-0">
-                    <span
-                        class="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase leading-none mb-0.5">Exp</span>
-                    <span class="text-[10px] md:text-xs font-black text-slate-700 truncate">{{ doctor.experience }}+
-                        Yrs</span>
-                </div>
+                <button (click)="$event.stopPropagation(); onBook()"
+                    class="shrink-0 h-10 px-8 md:px-10 bg-emerald-600 text-white text-xs font-black rounded-lg md:rounded-xl hover:bg-emerald-700 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md shadow-emerald-200">
+                    BOOK NOW
+                </button>
             </div>
-            <div
-                class="flex items-center gap-1.5 md:gap-2.5 p-1.5 md:p-2 rounded-xl md:rounded-2xl bg-slate-50/50 group-hover:bg-white group-hover:shadow-sm transition-all duration-300">
-                <div
-                    class="w-6 h-6 md:w-7 md:h-7 rounded-lg md:rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 shrink-0">
-                    <i class="fas fa-wallet text-[9px] md:text-[10px]"></i>
-                </div>
-                <div class="flex flex-col min-w-0">
-                    <span
-                        class="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase leading-none mb-0.5">Fee</span>
-                    <span class="text-[10px] md:text-xs font-black text-slate-700 truncate">₹{{ doctor.consultation_fee
-                        || 0 }}</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer Info: Location and Booking -->
-        <div class="mt-auto flex items-center justify-between gap-2 md:gap-3">
-            <div class="flex items-center gap-1 md:gap-1.5 min-w-0">
-                <i class="fas fa-map-marker-alt text-emerald-700 text-[10px]"></i>
-                <span class="text-[10px] md:text-[11px] font-semibold text-slate-500 truncate">
-                    {{ doctor.location || 'Online Only' }}</span>
-            </div>
-
-            <button (click)="$event.stopPropagation(); onBook()"
-                class="shrink-0 h-8 md:h-10 px-3 md:px-4 bg-emerald-600 text-white text-[10px] md:text-xs font-black rounded-lg md:rounded-xl hover:bg-emerald-700 hover:scale-105 active:scale-95 shadow-md shadow-emerald-200 transition-all duration-300">
-                BOOK
-            </button>
         </div>
     </div>
 </div>

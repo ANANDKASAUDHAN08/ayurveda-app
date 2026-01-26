@@ -4,14 +4,9 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ContentService } from '../../shared/services/content.service';
 import { FavoritesService } from '../../shared/services/favorites.service';
-import { HospitalReviewService } from '../../shared/services/hospital-review.service';
-import { AuthService } from '../../shared/services/auth.service';
 import { MobileLocationBarComponent } from '../../shared/components/mobile-location-bar/mobile-location-bar.component';
-import { RatingDisplayComponent } from '../../shared/components/rating-display/rating-display.component';
-import { ReviewListComponent } from '../../shared/components/review-list/review-list.component';
-import { ReviewFormComponent } from '../../shared/components/review-form/review-form.component';
-import { getEncyclopediaKey } from '../../shared/utils/specialty-mapping';
-import { HospitalReview, ReviewStats } from '../../shared/models/review.model';
+import { HospitalCardComponent } from '../../shared/components/hospital-card/hospital-card.component';
+import { HospitalDetailsModalComponent } from '../../shared/components/hospital-details-modal/hospital-details-modal.component';
 
 @Component({
     selector: 'app-hospitals',
@@ -21,9 +16,8 @@ import { HospitalReview, ReviewStats } from '../../shared/models/review.model';
         RouterModule,
         FormsModule,
         MobileLocationBarComponent,
-        RatingDisplayComponent,
-        ReviewListComponent,
-        ReviewFormComponent
+        HospitalCardComponent,
+        HospitalDetailsModalComponent
     ],
     templateUrl: './hospitals.component.html',
     styleUrl: './hospitals.component.css'
@@ -54,24 +48,13 @@ export class HospitalsComponent implements OnInit {
     pagination = {
         total: 0,
         page: 1,
-        limit: 12,
+        limit: window.innerWidth < 768 ? 6 : 20,
         pages: 0
     };
-
-    // Review Related Properties
-    reviews: HospitalReview[] = [];
-    reviewStats: ReviewStats | null = null;
-    reviewsLoading = false;
-    showReviewForm = false;
-    reviewsCurrentPage = 1;
-    reviewsTotalPages = 1;
-    activeTab: 'details' | 'reviews' = 'details';
 
     constructor(
         private contentService: ContentService,
         private favoritesService: FavoritesService,
-        private hospitalReviewService: HospitalReviewService,
-        public authService: AuthService,
         private elementRef: ElementRef
     ) { }
 
@@ -194,18 +177,11 @@ export class HospitalsComponent implements OnInit {
     openDetails(hospital: any) {
         this.selectedHospital = hospital;
         this.showModal = true;
-        this.activeTab = 'details';
-        this.loadHospitalReviews();
-        this.loadReviewStats();
     }
 
     closeModal() {
         this.showModal = false;
         this.selectedHospital = null;
-        this.reviews = [];
-        this.reviewStats = null;
-        this.showReviewForm = false;
-        this.activeTab = 'details';
     }
 
     toggleFavorite(event: Event, hospital: any) {
@@ -246,196 +222,5 @@ export class HospitalsComponent implements OnInit {
             this.showCategoryDropdown = false;
             this.showStateDropdown = false;
         }
-    }
-
-    formatLocation(hospital: any): string {
-        const city = hospital?.city?.trim();
-        const state = hospital?.state?.trim();
-
-        if (city && state) {
-            return `${city}, ${state}`;
-        } else if (state && state.toLowerCase() !== 'n/a') {
-            return state;
-        } else if (city && city.toLowerCase() !== 'n/a') {
-            return city;
-        }
-        return 'Location Verified';
-    }
-
-    // formatAddress(hospital: any): string {
-    //     const address = hospital?.address || '';
-    //     const name = hospital?.name || '';
-
-    //     if (address.toLowerCase().includes(name.toLowerCase())) {
-    //         // If the address contains the name, let's try to slice it or just return it if it's long enough
-    //         // For now, if it starts with the name, we'll try to refine it
-    //         if (address.toLowerCase().startsWith(name.toLowerCase())) {
-    //             const refined = address.substring(name.length).replace(/^[,-\s\n\t]+/, '').trim();
-    //             return refined || 'Address available in details';
-    //         }
-    //     }
-    //     return address || 'Address not available';
-    // }
-
-    formatAddress(hospital: any): string {
-        if (!hospital || !hospital.address) return '';
-
-        // 1. Remove quotes (both leading/trailing and any double quotes)
-        // 2. Clean up common redundant prefixes
-        let address = hospital.address.replace(/"/g, '').trim();
-
-        // Optional: Remove redundant hospital name if address starts with it
-        if (hospital.name && address.startsWith(hospital.name.replace(/"/g, ''))) {
-            address = address.substring(hospital.name.replace(/"/g, '').length).trim();
-            if (address.startsWith(',') || address.startsWith('-')) {
-                address = address.substring(1).trim();
-            }
-        }
-
-        return address || 'Address available on request';
-    }
-
-    formatName(name: string): string {
-        if (!name) return '';
-        // Removes leading/trailing quotes and extra whitespace
-        return name.replace(/^"+|"+$/g, '').trim();
-    }
-
-    getSpecialtiesList(specialties: string): string[] {
-        if (!specialties || typeof specialties !== 'string') return [];
-
-        const sanitized = specialties.trim();
-        if (sanitized === '' || sanitized === '[]' || sanitized === 'null') {
-            return [];
-        }
-
-        return sanitized
-            .split(',')
-            .map(s => s.trim())
-            .filter(s => s.length > 0 && s !== '[]');
-    }
-
-    getFacilitiesList(facilities: string): string[] {
-        if (!facilities || typeof facilities !== 'string') return [];
-
-        const sanitized = facilities.trim();
-        if (sanitized === '' || sanitized === '[]' || sanitized === 'null') {
-            return [];
-        }
-
-        return sanitized
-            .split(',')
-            .map(f => f.trim())
-            .filter(f => f.length > 0 && f !== '[]');
-    }
-
-    getSpecialtyKey(specialty: string): string | null {
-        return getEncyclopediaKey(specialty);
-    }
-
-    // Review Methods
-    loadHospitalReviews() {
-        if (!this.selectedHospital) return;
-
-        this.reviewsLoading = true;
-        const source = this.selectedHospital.data_source === 'NABH' ? 'nabh_hospitals' :
-            this.selectedHospital.data_source === 'Specialty' ? 'hospitals_with_specialties' : 'hospitals';
-
-        this.hospitalReviewService.getHospitalReviews(
-            this.selectedHospital.id,
-            source,
-            this.reviewsCurrentPage,
-            5
-        ).subscribe({
-            next: (response) => {
-                this.reviews = response.data;
-                this.reviewsTotalPages = response.pagination?.totalPages || 1;
-                this.reviewsLoading = false;
-            },
-            error: (error) => {
-                console.error('Error loading reviews:', error);
-                this.reviewsLoading = false;
-            }
-        });
-    }
-
-    loadReviewStats() {
-        if (!this.selectedHospital) return;
-
-        const source = this.selectedHospital.data_source === 'NABH' ? 'nabh_hospitals' :
-            this.selectedHospital.data_source === 'Specialty' ? 'hospitals_with_specialties' : 'hospitals';
-
-        this.hospitalReviewService.getHospitalReviewStats(
-            this.selectedHospital.id,
-            source
-        ).subscribe({
-            next: (response) => {
-                this.reviewStats = response.data;
-            },
-            error: (error) => {
-                console.error('Error loading stats:', error);
-            }
-        });
-    }
-
-    openReviewForm() {
-        if (!this.authService.isLoggedIn()) {
-            alert('Please login to write a review');
-            return;
-        }
-        this.showReviewForm = true;
-    }
-
-    closeReviewForm() {
-        this.showReviewForm = false;
-    }
-
-    submitReview(reviewData: any) {
-        if (!this.selectedHospital) return;
-
-        const source = this.selectedHospital.data_source === 'NABH' ? 'nabh_hospitals' :
-            this.selectedHospital.data_source === 'Specialty' ? 'hospitals_with_specialties' : 'hospitals';
-
-        this.hospitalReviewService.submitHospitalReview({
-            hospital_id: this.selectedHospital.id,
-            hospital_source: source,
-            ...reviewData
-        }).subscribe({
-            next: (response) => {
-                this.showReviewForm = false;
-                this.loadHospitalReviews();
-                this.loadReviewStats();
-                alert('Review submitted successfully!');
-            },
-            error: (error) => {
-                console.error('Error submitting review:', error);
-                alert(error.error?.message || 'Failed to submit review');
-            }
-        });
-    }
-
-    onReviewPageChange(page: number) {
-        this.reviewsCurrentPage = page;
-        this.loadHospitalReviews();
-    }
-
-    onEditReview(review: HospitalReview) {
-        // Open review form with existing data
-        console.log('Edit review:', review);
-        // TODO: Implement edit functionality
-    }
-
-    onDeleteReview(reviewId: number) {
-        this.hospitalReviewService.deleteHospitalReview(reviewId).subscribe({
-            next: () => {
-                this.loadHospitalReviews();
-                this.loadReviewStats();
-                alert('Review deleted successfully');
-            },
-            error: (error) => {
-                console.error('Error deleting review:', error);
-                alert('Failed to delete review');
-            }
-        });
     }
 }

@@ -52,12 +52,50 @@ export class ProductDetailModalComponent implements OnInit, OnDestroy {
     this.addToCart.emit(this.product);
   }
 
+  isArray(val: any): boolean {
+    return Array.isArray(val);
+  }
+
   getProductIcon(): string {
-    return this.product.product_type === 'medicine' ? 'fa-pills' : 'fa-stethoscope';
+    const icons: { [key: string]: string } = {
+      'medicine': 'fa-pills',
+      'device': 'fa-stethoscope',
+      'doctor': 'fa-user-md',
+      'hospital': 'fa-hospital',
+      'pharmacy': 'fa-notes-medical',
+      'lab_test': 'fa-flask',
+      'health_package': 'fa-heart-circle-check',
+      'ayurveda_medicine': 'fa-leaf',
+      'ayurveda_exercise': 'fa-spa',
+      'ayurveda_article': 'fa-book-open',
+      'page': 'fa-info-circle',
+      'herb': 'fa-leaf',
+      'disease': 'fa-book-medical',
+      'yoga_pose': 'fa-spa',
+      'article': 'fa-newspaper'
+    };
+    return icons[this.product.product_type] || 'fa-box';
   }
 
   getProductTypeLabel(): string {
-    return this.product.product_type === 'medicine' ? 'Medicine' : 'Medical Device';
+    const labels: { [key: string]: string } = {
+      'medicine': 'Allopathy Medicine',
+      'device': 'Medical Device',
+      'doctor': 'Doctor',
+      'hospital': 'Hospital',
+      'pharmacy': 'Pharmacy',
+      'lab_test': 'Lab Test',
+      'health_package': 'Health Package',
+      'ayurveda_medicine': 'Ayurveda Medicine',
+      'ayurveda_exercise': 'Yoga/Exercise',
+      'ayurveda_article': 'Health Information',
+      'page': 'Information',
+      'herb': 'Ayurveda Herb',
+      'disease': 'Condition / Disease',
+      'yoga_pose': 'Yoga Pose',
+      'article': 'Health Article'
+    };
+    return labels[this.product.product_type] || this.product.product_type;
   }
 
   getParsedSubstitutes(): any[] {

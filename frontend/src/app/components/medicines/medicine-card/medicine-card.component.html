@@ -1,0 +1,268 @@
+<div *ngIf="viewMode === 'grid'"
+    [class]="'bg-white rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden group flex flex-col h-full cursor-pointer ' + 
+     (product.product_type === 'pharmacy' ? 'min-h-[280px]' : (product.product_type === 'medicine' ? 'min-h-[320px] md:min-h-[380px]' : 'min-h-[380px]'))"
+    (click)="onViewDetails($event)">
+
+    <!-- Product Image -->
+    <div class="relative h-40 md:h-48 bg-slate-50 flex items-center justify-center overflow-hidden p-4">
+        <img *ngIf="product.image_url" [src]="product.image_url"
+            class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500"
+            [alt]="product.name" (error)="product.image_url = ''">
+
+        <div *ngIf="!product.image_url" class="text-center">
+            <i [class]="'fas ' + getTypeIcon(product.product_type) + ' text-5xl text-emerald-600/20'"></i>
+        </div>
+
+        <!-- Badges -->
+        <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+            <span *ngIf="product.category"
+                class="px-2.5 py-1 bg-white/95 rounded-lg text-[10px] font-bold text-emerald-600 uppercase tracking-wide shadow-sm border border-emerald-100/50">
+                {{ product.category }}
+            </span>
+            <span *ngIf="product.stock_quantity && product.stock_quantity < 10"
+                class="px-2 py-1 bg-rose-500 text-white text-[9px] font-bold rounded-lg uppercase tracking-wider shadow-lg shadow-rose-200">
+                Low Stock
+            </span>
+        </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="p-4 md:p-5 flex flex-col flex-1">
+        <!-- Pharmacy specific layout -->
+        <ng-container *ngIf="product.product_type === 'pharmacy'">
+            <h3 class="text-base md:text-lg leading-tight font-bold text-slate-900 mb-2 line-clamp-2"
+                [innerHTML]="highlight(product.name)">
+            </h3>
+            <p *ngIf="product.description" class="text-sm text-slate-500 mb-4 line-clamp-2">
+                {{ product.description }}
+            </p>
+
+            <div class="mt-auto flex items-center justify-between gap-3">
+                <span *ngIf="product.medicine_type"
+                    class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    {{ product.medicine_type }}
+                </span>
+                <button (click)="onViewDetails($event)"
+                    class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all text-xs shadow-lg shadow-emerald-100 active:scale-95">
+                    <i class="fas fa-info-circle mr-1.5"></i>
+                    Details
+                </button>
+            </div>
+        </ng-container>
+
+        <!-- General Product Layout -->
+        <ng-container *ngIf="product.product_type !== 'pharmacy'">
+            <div class="mb-3">
+                <h3 class="line-clamp-2 md:line-clamp-none text-base md:text-lg leading-tight font-bold text-slate-900 mb-1.5 line-clamp-2 group-hover:text-emerald-600 transition-colors"
+                    [innerHTML]="highlight(product.name | cusTruncate:(isMobile ? 12 : 60))">
+                </h3>
+
+                <div class="flex flex-wrap gap-1.5 mt-2">
+                    <!-- <span *ngIf="product.medicine_type"
+                        class="px-2 py-0.5 bg-amber-50 text-amber-700 text-[10px] font-bold rounded-md border border-amber-100 uppercase tracking-tight">
+                        {{ product.medicine_type }}
+                    </span> -->
+                    <span *ngIf="product.manufacturer"
+                        class="px-2 py-0.5 bg-slate-50 text-slate-500 text-[10px] font-bold rounded-md border border-slate-100 truncate max-w-[140px]">
+                        {{ product.manufacturer }}
+                    </span>
+                </div>
+            </div>
+
+            <p *ngIf="product.description"
+                class="hidden md:block text-[13px] text-slate-500 mb-0 md:mb-3 line-clamp-2 leading-relaxed truncate"
+                [innerHTML]="highlight(product.description)">
+            </p>
+
+            <p *ngIf="product.composition || product.about"
+                class="text-[11px] text-slate-400 italic mb-0 md:mb-4 line-clamp-1 border-l-2 border-slate-100 pl-2">
+                {{ product.composition || product.about }}
+            </p>
+
+            <!-- Price & Actions -->
+            <div class="mt-auto pt-0 md:pt-2" [class.border-t]="product.product_type !== 'medicine'"
+                [class.border-slate-50]="product.product_type !== 'medicine'">
+                <div class="flex items-end justify-between mb-0 md:mb-2">
+                    <div class="flex flex-col">
+                        <span *ngIf="+product.mrp > +product.price && +product.price > 0"
+                            class="text-[11px] font-bold text-slate-300 line-through mb-0.5">
+                            ₹{{ product.mrp }}
+                        </span>
+
+                        <div class="flex items-center gap-2 md:gap-3">
+                            <!-- Show selling price if available -->
+                            <span *ngIf="+product.price > 0" class="text-xl md:text-2xl font-black text-slate-900">
+                                ₹{{ product.price }}
+                            </span>
+
+                            <!-- Fallback to MRP if price is 0 -->
+                            <span *ngIf="+product.price <= 0 && +product.mrp > 0"
+                                class="text-xl md:text-2xl font-black text-slate-900">₹{{ product.mrp }}</span>
+
+                            <!-- Show NA only if both are 0 -->
+                            <span *ngIf="+product.price <= 0 && +product.mrp <= 0"
+                                class="text-[13px] md:text-sm font-bold text-slate-500 uppercase whitespace-nowrap">
+                                {{ isMobile ? 'Price: NA' : 'Price: Not Available' }}
+                            </span>
+                            <!-- Mobile: Eye Icon -->
+                            <button *ngIf="product.product_type === 'medicine'" (click)="onViewDetails($event)"
+                                class="md:hidden w-9 h-9 ml-5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 transition-all flex items-center justify-center"
+                                title="View Details">
+                                <i class="fas fa-eye text-xs"></i>
+                            </button>
+                            <!-- Desktop: View Details Button -->
+                            <button *ngIf="product.product_type === 'medicine'" (click)="onViewDetails($event)"
+                                class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold hover:bg-emerald-600 hover:text-white transition-all shadow-sm border border-emerald-100/50"
+                                title="View Details">
+                                <i class="fas fa-eye"></i>
+                                <span>View Details</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <ng-container *ngIf="product.product_type === 'medicine' || product.product_type === 'device'">
+                        <!-- Hide Add to Cart for medicine only -->
+                        <button *ngIf="product.product_type !== 'medicine'" (click)="onAddToCart($event)"
+                            [disabled]="isAddingToCart"
+                            class="flex-[2] px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all disabled:bg-slate-200 text-xs shadow-lg shadow-emerald-100 active:scale-95 flex items-center justify-center gap-2">
+                            <i *ngIf="!isAddingToCart" class="fas fa-shopping-cart"></i>
+                            <i *ngIf="isAddingToCart" class="fas fa-circle-notch animate-spin"></i>
+                            {{ isAddingToCart ? 'Adding' : 'Add to Cart' }}
+                        </button>
+
+                        <!-- Show Details button in footer ONLY for non-medicines (like devices) -->
+                        <button *ngIf="product.product_type !== 'medicine'" (click)="onViewDetails($event)"
+                            class="flex-1 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition-all text-xs active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fas fa-info-circle"></i>
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </ng-container>
+
+                    <button
+                        *ngIf="['ayurveda_medicine', 'ayurveda_exercise', 'ayurveda_article', 'disease', 'yoga_pose', 'herb', 'article', 'lab_test', 'health_package'].includes(product.product_type)"
+                        (click)="onViewDetails($event)"
+                        class="w-full px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all text-xs shadow-lg shadow-emerald-100 active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fas fa-info-circle"></i>
+                        View Details
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
+
+<!-- List View -->
+<div *ngIf="viewMode === 'list'"
+    class="bg-white rounded-2xl shadow-sm hover:shadow-lg border border-slate-100 p-4 flex gap-5 transition-all cursor-pointer group"
+    (click)="onViewDetails($event)">
+
+    <!-- Image -->
+    <div
+        class="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 bg-slate-50 rounded-2xl flex items-center justify-center overflow-hidden p-3 transition-colors group-hover:bg-emerald-50/50">
+        <img *ngIf="product.image_url" [src]="product.image_url"
+            class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500"
+            [alt]="product.name" (error)="product.image_url = ''">
+        <i *ngIf="!product.image_url"
+            [class]="'fas ' + getTypeIcon(product.product_type) + ' text-4xl text-emerald-600/30'"></i>
+    </div>
+
+    <!-- Info -->
+    <div class="flex-1 min-w-0 flex flex-col">
+        <div class="flex items-start justify-between gap-4">
+            <div class="flex-1">
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                    <h3
+                        class="font-extrabold text-lg md:text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">
+                        {{ product.name | cusTruncate:(isMobile ? 25 : 80) }}
+                    </h3>
+                    <span
+                        class="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase rounded-md border border-emerald-100">
+                        {{ (product.category || 'Product') | cusTruncate:(isMobile ? 12 : 30) }}
+                    </span>
+                </div>
+
+                <p *ngIf="product.description" class="text-slate-500 text-sm mb-3 line-clamp-2 leading-relaxed">
+                    {{ product.description }}
+                </p>
+
+                <div class="flex items-center gap-3 text-[11px] font-bold text-slate-400">
+                    <span *ngIf="product.manufacturer">
+                        <i class="fas fa-industry mr-1"></i> {{ product.manufacturer | cusTruncate:(isMobile ? 15 : 40)
+                        }}
+                    </span>
+                    <span *ngIf="product.manufacturer && product.medicine_type" class="text-slate-200">|</span>
+                    <span *ngIf="product.medicine_type">
+                        <i class="fas fa-tag mr-1"></i> {{ product.medicine_type | cusTruncate:(isMobile ? 12 : 30) }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="text-right flex flex-col items-end">
+                <div class="flex flex-col items-end">
+                    <p *ngIf="+product.mrp > +product.price && +product.price > 0"
+                        class="text-xs font-bold text-slate-300 line-through mb-0.5">
+                        ₹{{ product.mrp }}
+                    </p>
+
+                    <div class="flex items-center gap-3">
+                        <!-- Show selling price if available -->
+                        <p *ngIf="+product.price > 0" class="text-2xl font-black text-slate-900">₹{{ product.price }}
+                        </p>
+
+                        <!-- Fallback to MRP if price is 0 -->
+                        <p *ngIf="+product.price <= 0 && +product.mrp > 0" class="text-2xl font-black text-slate-900">
+                            ₹{{ product.mrp }}</p>
+
+                        <!-- Show NA only if both are 0 -->
+                        <p *ngIf="+product.price <= 0 && +product.mrp <= 0"
+                            class="text-sm font-bold text-slate-500 uppercase whitespace-nowrap">
+                            {{ isMobile ? 'Price: NA' : 'Price: Not Available' }}
+                        </p>
+                        <!-- Mobile: Eye Icon -->
+                        <button *ngIf="product.product_type === 'medicine'" (click)="onViewDetails($event)"
+                            class="md:hidden w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 transition-all flex items-center justify-center shadow-sm border border-slate-100"
+                            title="View Details">
+                            <i class="fas fa-eye text-xs"></i>
+                        </button>
+                        <!-- Desktop: View Details Button -->
+                        <button *ngIf="product.product_type === 'medicine'" (click)="onViewDetails($event)"
+                            class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold hover:bg-emerald-600 hover:text-white transition-all shadow-sm border border-emerald-100/50"
+                            title="View Details">
+                            <i class="fas fa-eye"></i>
+                            <span>View Details</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex gap-2">
+                    <ng-container *ngIf="product.product_type === 'medicine' || product.product_type === 'device'">
+                        <!-- Hide Add to Cart for medicine only -->
+                        <button *ngIf="product.product_type !== 'medicine'" (click)="onAddToCart($event)"
+                            [disabled]="isAddingToCart"
+                            class="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all disabled:bg-slate-200 text-xs shadow-lg shadow-emerald-100 whitespace-nowrap">
+                            <i *ngIf="!isAddingToCart" class="fas fa-shopping-cart mr-1.5"></i>
+                            <i *ngIf="isAddingToCart" class="fas fa-circle-notch animate-spin mr-1.5"></i>
+                            {{ isAddingToCart ? 'Adding' : 'Add' }}
+                        </button>
+
+                        <button *ngIf="product.product_type !== 'medicine'" (click)="onViewDetails($event)"
+                            class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition-all text-xs whitespace-nowrap flex items-center gap-2">
+                            <i class="fas fa-info-circle"></i>
+                            Details
+                        </button>
+                    </ng-container>
+
+                    <button
+                        *ngIf="['ayurveda_medicine', 'ayurveda_exercise', 'ayurveda_article', 'disease', 'yoga_pose', 'herb', 'article', 'lab_test', 'health_package', 'pharmacy'].includes(product.product_type)"
+                        (click)="onViewDetails($event)"
+                        class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all text-xs shadow-lg shadow-emerald-100">
+                        View Details
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

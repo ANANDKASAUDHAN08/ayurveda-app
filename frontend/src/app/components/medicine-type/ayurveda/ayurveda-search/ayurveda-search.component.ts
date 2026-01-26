@@ -1,19 +1,21 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AyurvedaKnowledgeService, AyurvedaKnowledgeItem } from '../../../../shared/services/ayurveda-knowledge.service';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 import { AyurvedaDetailComponent } from '../ayurveda-detail/ayurveda-detail.component';
+import { HerbDetailComponent } from '../herb-detail/herb-detail.component';
+import { AyurvedaService, Herb } from '../../../../shared/services/ayurveda.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-ayurveda-search',
     standalone: true,
-    imports: [CommonModule, FormsModule, AyurvedaDetailComponent],
+    imports: [CommonModule, FormsModule, AyurvedaDetailComponent, HerbDetailComponent],
     templateUrl: './ayurveda-search.component.html',
     styleUrl: './ayurveda-search.component.css'
 })
-export class AyurvedaSearchComponent implements OnInit {
+export class AyurvedaSearchComponent implements OnInit, OnChanges {
     @Input() isModal: boolean = true;
     @Input() initialQuery: string = '';
     @Output() close = new EventEmitter<void>();
@@ -29,6 +31,8 @@ export class AyurvedaSearchComponent implements OnInit {
     isLoading: boolean = false;
     hasSearched: boolean = false;
     selectedItem: AyurvedaKnowledgeItem | null = null;
+    selectedHerb: Herb | null = null;
+    isHerbLoading: boolean = false;
 
     // Sidebar Section States
     sections = {
@@ -66,6 +70,7 @@ export class AyurvedaSearchComponent implements OnInit {
 
     constructor(
         private knowledgeService: AyurvedaKnowledgeService,
+        private ayurvedaService: AyurvedaService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -102,6 +107,17 @@ export class AyurvedaSearchComponent implements OnInit {
                 this.onSearchChange();
             }
         });
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        // React to changes in initialQuery input
+        if (changes['initialQuery'] && !changes['initialQuery'].firstChange) {
+            const newQuery = changes['initialQuery'].currentValue;
+            if (newQuery && newQuery !== this.searchQuery) {
+                this.searchQuery = newQuery;
+                this.onSearchChange();
+            }
+        }
     }
 
     onSearchChange(): void {
@@ -156,11 +172,57 @@ export class AyurvedaSearchComponent implements OnInit {
     }
 
     viewDetails(item: AyurvedaKnowledgeItem): void {
-        this.selectedItem = item;
+        if (item.dataType === 'herb') {
+            this.fetchAndShowHerb(item);
+        } else {
+            this.selectedItem = item;
+        }
+    }
+
+    private fetchAndShowHerb(item: AyurvedaKnowledgeItem): void {
+        // If it's a numeric ID (backend), fetch full details
+        if (typeof item.id === 'number' || (typeof item.id === 'string' && !isNaN(Number(item.id)))) {
+            this.isHerbLoading = true;
+            this.ayurvedaService.getHerbById(Number(item.id)).subscribe({
+                next: (herb) => {
+                    this.selectedHerb = herb;
+                    this.isHerbLoading = false;
+                },
+                error: (err) => {
+                    console.error('Failed to fetch herb details:', err);
+                    this.isHerbLoading = false;
+                    // Fallback to basic view if backend fetch fails
+                    this.selectedItem = item;
+                }
+            });
+        } else {
+            // Local JSON herb mapping
+            this.selectedHerb = {
+                id: 0,
+                name: item.name || item.title || '',
+                scientific_name: item.botanicalName || '',
+                description: item.description || '',
+                preview: item.description || '',
+                benefits: Array.isArray(item.benefits) ? item.benefits.join(', ') : (item.benefit || ''),
+                usage_instructions: item.usage || '',
+                image_url: 'assets/images/herbs/default-herb.jpg',
+                link: '',
+                pacify: item.doshas ? [item.doshas] : [],
+                aggravate: [],
+                tridosha: item.doshas?.toLowerCase().includes('tridosha') || false,
+                rasa: (item as any).properties?.rasa?.split(',') || [],
+                guna: (item as any).properties?.guna?.split(',') || [],
+                virya: (item as any).properties?.virya || '',
+                vipaka: (item as any).properties?.vipaka || '',
+                prabhav: [],
+                is_herb_of_month: false
+            };
+        }
     }
 
     closeDetails(): void {
         this.selectedItem = null;
+        this.selectedHerb = null;
     }
 
     toggleSection(section: 'categories' | 'doshas' | 'severity'): void {

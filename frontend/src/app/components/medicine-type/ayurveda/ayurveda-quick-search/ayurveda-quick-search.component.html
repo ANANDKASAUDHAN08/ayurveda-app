@@ -22,9 +22,9 @@
                     <button class="clear-all" (click)="clearRecent()">Clear All</button>
                 </div>
                 <div class="chip-container">
-                    <div *ngFor="let term of recentSearches" class="recent-chip" (click)="performSearch(term)">
+                    <div *ngFor="let recent of recentSearches" class="recent-chip" (click)="selectRecentSearch(recent)">
                         <i class="fas fa-history"></i>
-                        <span>{{ term }}</span>
+                        <span>{{ recent.term }}</span>
                     </div>
                 </div>
             </div>

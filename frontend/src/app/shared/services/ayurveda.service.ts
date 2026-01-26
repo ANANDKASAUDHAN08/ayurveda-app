@@ -170,6 +170,11 @@ export class AyurvedaService {
             .pipe(map(response => response.data));
     }
 
+    getHerbById(id: number): Observable<Herb> {
+        return this.http.get<{ success: boolean, data: Herb }>(`${this.apiUrl}/herbs/${id}`)
+            .pipe(map(response => response.data));
+    }
+
     // Yoga Poses
     getYogaPoses(poseOfWeek?: boolean): Observable<YogaPose[]> {
         let url = `${this.apiUrl}/yoga-poses`;

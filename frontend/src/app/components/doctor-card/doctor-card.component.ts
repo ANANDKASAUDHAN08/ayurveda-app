@@ -14,6 +14,7 @@ export class DoctorCardComponent {
   @Input() showDetailsLink: boolean = true;
   @Input() isOnline: boolean = false; // NEW: Online status
   @Input() isFree: boolean = false; // NEW: Free consultation
+  @Input() viewMode: 'grid' | 'list' = 'grid'; // NEW: View mode
   @Output() book = new EventEmitter<any>();
   @Output() viewDetails = new EventEmitter<any>();
   @Output() instantConsult = new EventEmitter<any>(); // NEW: Instant consultation

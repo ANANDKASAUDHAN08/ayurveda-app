@@ -25,9 +25,15 @@
 
         <!-- Pricing -->
         <div class="flex items-center gap-2 mb-3">
-            <span class="text-xl md:text-2xl font-bold text-emerald-600">₹{{ deal.price }}</span>
-            <span class="text-sm text-slate-500 line-through">₹{{ deal.mrp }}</span>
-            <span class="text-xs text-emerald-600 font-semibold">Save ₹{{ savings }}</span>
+            <span *ngIf="+deal.price > 0" class="text-xl md:text-2xl font-bold text-emerald-600">₹{{
+                deal.price }}</span>
+            <span *ngIf="!deal.price || +deal.price === 0" class="text-sm font-bold text-slate-500 uppercase">Price
+                NA</span>
+
+            <span *ngIf="deal.mrp && +deal.mrp > +deal.price" class="text-sm text-slate-500 line-through">₹{{ deal.mrp
+                }}</span>
+            <span *ngIf="deal.mrp && +deal.mrp > +deal.price" class="text-xs text-emerald-600 font-semibold">Save ₹{{
+                savings }}</span>
         </div>
 
         <!-- Countdown Timer -->
@@ -50,7 +56,7 @@
         </div>
 
         <!-- Smart Add to Cart / Quantity Control -->
-        <div class="mt-4">
+        <div class="mt-4" *ngIf="deal.productType !== 'medicine'">
             <!-- Show "Add to Cart" when not in cart -->
             <button *ngIf="cartQuantity === 0" (click)="addToCart($event)" [disabled]="isAdding"
                 class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 md:py-3 px-3 md:px-4 text-sm md:text-base min-h-[44px] rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50">
@@ -61,7 +67,6 @@
             <!-- Show Quantity Controls when in cart -->
             <div *ngIf="cartQuantity > 0"
                 class="flex items-center justify-between bg-emerald-50 border-2 border-emerald-600 rounded-lg p-2">
-
                 <!-- Decrease Button -->
                 <button (click)="decreaseQuantity($event)" [disabled]="isUpdating"
                     class="w-10 h-10 bg-white hover:bg-emerald-100 rounded-lg flex items-center justify-center disabled:opacity-50 transition-colors">
@@ -83,6 +88,15 @@
                     <i *ngIf="isUpdating" class="fas fa-spinner fa-spin text-emerald-600"></i>
                 </button>
             </div>
+        </div>
+
+        <!-- Medicine specific footer (No Add to Cart) -->
+        <div class="mt-4" *ngIf="deal.productType === 'medicine'">
+            <button
+                class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2 md:py-3 rounded-lg transition-all text-sm md:text-base flex items-center justify-center gap-2">
+                <i class="fas fa-info-circle"></i>
+                View Details
+            </button>
         </div>
     </div>
 </div>

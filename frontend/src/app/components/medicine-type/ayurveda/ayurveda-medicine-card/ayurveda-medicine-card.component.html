@@ -1,0 +1,83 @@
+<!-- Grid View Structure -->
+<div *ngIf="viewMode === 'grid'" (click)="onViewDetails()"
+    class="bg-white/60 backdrop-blur-md rounded-2xl md:rounded-[2.5rem] p-2 md:p-6 border border-emerald-50 hover:border-emerald-100 transition-all group relative hover:-translate-y-1 shadow-sm cursor-pointer flex flex-col">
+
+    <div *ngIf="medicine.is_bestseller"
+        class="absolute top-2 right-2 md:top-4 md:right-4 px-1.5 md:px-3 py-0.5 md:py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[6px] md:text-[10px] font-black rounded-full shadow-lg z-10 uppercase tracking-widest">
+        Satvic
+    </div>
+
+    <div
+        class="w-full h-28 md:h-48 rounded-xl md:rounded-2xl flex items-center justify-center mb-2.5 md:mb-6 overflow-hidden bg-gray-50/50">
+        <img [src]="medicine.image_url" [alt]="medicine.name"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+    </div>
+
+    <div class="w-full text-left space-y-1 md:space-y-3 px-0.5">
+        <span
+            class="inline-block px-1.5 py-0.5 bg-emerald-50 text-emerald-700 text-[6px] md:text-[10px] font-black rounded-full uppercase tracking-widest">
+            {{ medicine.category || 'Herbal' }}
+        </span>
+        <h3 class="font-black text-gray-900 text-[10px] md:text-lg leading-tight truncate px-1">
+            {{ medicine.name }}
+        </h3>
+        <div class="flex items-center justify-between gap-1 px-1">
+            <p *ngIf="medicine.price && +medicine.price > 0" class="text-sm md:text-xl font-black text-emerald-900">
+                ₹{{ medicine.price }}
+            </p>
+            <p *ngIf="!medicine.price || +medicine.price === 0"
+                class="text-[10px] md:text-xs font-bold text-slate-500 uppercase">
+                Price NA
+            </p>
+            <button
+                class="w-5 h-5 md:w-10 md:h-10 md:bg-emerald-800 md:text-white text-emerald-900 md:rounded-xl flex items-center justify-center md:hover:bg-emerald-900 transition-all md:shadow-md text-[10px] md:text-base">
+                <i class="fas fa-eye"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- List View Structure -->
+<div *ngIf="viewMode === 'list'" (click)="onViewDetails()"
+    class="bg-white/60 backdrop-blur-md rounded-2xl md:rounded-[2.5rem] p-3 md:p-5 border border-emerald-50 hover:border-emerald-100 transition-all group relative hover:-translate-y-1 shadow-sm cursor-pointer flex flex-row items-center gap-4 md:gap-8">
+
+    <div *ngIf="medicine.is_bestseller"
+        class="absolute top-2 right-4 px-1.5 md:px-3 py-0.5 md:py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[6px] md:text-[10px] font-black rounded-full shadow-lg z-10 uppercase tracking-widest">
+        Satvic
+    </div>
+
+    <div
+        class="w-20 h-20 md:w-40 md:h-40 rounded-xl md:rounded-2xl shrink-0 flex items-center justify-center overflow-hidden bg-gray-50/50">
+        <img [src]="medicine.image_url" [alt]="medicine.name"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+    </div>
+
+    <div class="flex-1 text-left space-y-1 md:space-y-2">
+        <span
+            class="inline-block px-1.5 py-0.5 bg-emerald-50 text-emerald-700 text-[6px] md:text-[10px] font-black rounded-full uppercase tracking-widest">
+            {{ medicine.category || 'Herbal' }}
+        </span>
+        <h3 class="font-black text-gray-900 text-sm md:text-2xl leading-tight px-1">
+            {{ medicine.name }}
+        </h3>
+
+        <p *ngIf="medicine.description" class="hidden md:block text-slate-500 text-sm line-clamp-2 px-1 mb-4">
+            {{ medicine.description }}
+        </p>
+
+        <div class="flex items-center justify-between gap-1 px-1 mt-2">
+            <p *ngIf="medicine.price && +medicine.price > 0" class="text-base md:text-3xl font-black text-emerald-900">
+                ₹{{ medicine.price }}
+            </p>
+            <p *ngIf="!medicine.price || +medicine.price === 0"
+                class="text-[10px] md:text-xs font-bold text-slate-500 uppercase">
+                Price NA
+            </p>
+            <button
+                class="px-4 py-2 md:px-6 md:py-3 bg-emerald-800 text-white rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold uppercase tracking-widest flex items-center justify-center hover:bg-emerald-900 transition-all text-xs md:text-base">
+                <i class="fas fa-eye md:mr-2"></i>
+                <span class="hidden md:inline">View Details</span>
+            </button>
+        </div>
+    </div>
+</div>
