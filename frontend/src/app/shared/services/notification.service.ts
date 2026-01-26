@@ -32,6 +32,10 @@ export class NotificationService {
   public unreadCount$ = this.unreadCountSubject.asObservable();
   private pollingSubscription?: Subscription;
 
+  // Client-side notifications (e.g., app updates)
+  private localNotificationsSubject = new BehaviorSubject<Notification[]>([]);
+  public localNotifications$ = this.localNotificationsSubject.asObservable();
+
   constructor(private http: HttpClient, private authService: AuthService) {
     // Listen for auth state changes
     this.authService.authStatus$.subscribe(isLoggedIn => {
@@ -89,6 +93,11 @@ export class NotificationService {
     // Only fetch if user has valid token
     if (this.authService.isLoggedIn() && this.authService.getToken()) {
       this.getUnreadCount().subscribe({
+        next: (response) => {
+          // Merge with local unread count
+          const localUnreadCount = this.localNotificationsSubject.value.filter(n => !n.is_read).length;
+          this.unreadCountSubject.next(response.count + localUnreadCount);
+        },
         error: (err) => {
           // Silently handle 401 errors
           if (err.status === 401) {
@@ -96,6 +105,44 @@ export class NotificationService {
           }
         }
       });
+    }
+  }
+
+  addLocalNotification(notification: Partial<Notification>): void {
+    const defaultNotification: Notification = {
+      id: Math.floor(Math.random() * -1000000), // Negative IDs for local ones
+      user_id: 0,
+      type: 'system_update',
+      category: 'update',
+      title: 'New Update',
+      message: 'A new version is available',
+      priority: 'high',
+      is_read: false,
+      broadcast: false,
+      created_at: new Date().toISOString()
+    };
+
+    const newNotification = { ...defaultNotification, ...notification } as Notification;
+
+    // Check if a similar notification already exists (e.g., same type)
+    const current = this.localNotificationsSubject.value;
+    if (!current.some(n => n.type === newNotification.type)) {
+      this.localNotificationsSubject.next([newNotification, ...current]);
+      this.refreshUnreadCount();
+    }
+  }
+
+  getLocalNotifications(): Notification[] {
+    return this.localNotificationsSubject.value;
+  }
+
+  markLocalAsRead(id: number): void {
+    const current = this.localNotificationsSubject.value;
+    const index = current.findIndex(n => n.id === id);
+    if (index !== -1) {
+      current[index].is_read = true;
+      this.localNotificationsSubject.next([...current]);
+      this.refreshUnreadCount();
     }
   }
 

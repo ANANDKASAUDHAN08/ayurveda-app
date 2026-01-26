@@ -81,8 +81,15 @@ export class NotificationsPageComponent implements OnInit {
     this.loading = true;
     this.notificationService.getNotifications(this.filters).subscribe({
       next: (response) => {
-        this.notifications = response.notifications;
-        this.totalCount = response.total;
+        const backendNotifications = response.notifications;
+        const localNotifications = this.notificationService.getLocalNotifications()
+          .filter(n => this.filters.category === 'all' || n.category === this.filters.category)
+          .filter(n => !this.filters.unreadOnly || !n.is_read);
+
+        this.notifications = [...localNotifications, ...backendNotifications]
+          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+        this.totalCount = response.total + localNotifications.length;
         this.loading = false;
       },
       error: (error) => {
@@ -99,11 +106,17 @@ export class NotificationsPageComponent implements OnInit {
 
   markAsRead(notification: Notification) {
     if (!notification.is_read) {
-      this.notificationService.markAsRead(notification.id).subscribe({
-        next: () => {
-          notification.is_read = true;
-        }
-      });
+      if (notification.id < 0) {
+        // Local notification
+        this.notificationService.markLocalAsRead(notification.id);
+      } else {
+        // Backend notification
+        this.notificationService.markAsRead(notification.id).subscribe({
+          next: () => {
+            notification.is_read = true;
+          }
+        });
+      }
     }
   }
 
@@ -144,7 +157,7 @@ export class NotificationsPageComponent implements OnInit {
     this.notificationService.getNotifications(this.filters).subscribe({
       next: (response) => {
         this.notifications = [...this.notifications, ...response.notifications];
-        this.totalCount = response.total;
+        this.totalCount = response.total + this.notificationService.getLocalNotifications().length;
         this.loading = false;
       }
     });

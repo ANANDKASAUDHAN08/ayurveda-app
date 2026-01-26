@@ -57,7 +57,15 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.notificationService.getNotifications({ limit: 5 }).subscribe({
       next: (response) => {
-        this.notifications = response.notifications;
+        const backendNotifications = response.notifications;
+        const localNotifications = this.notificationService.getLocalNotifications();
+
+        // Merge and sort by date
+        const allNotifications = [...localNotifications, ...backendNotifications];
+        this.notifications = allNotifications
+          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+          .slice(0, 5);
+
         this.loading = false;
       },
       error: (error) => {
@@ -70,12 +78,19 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
   markAsRead(notification: Notification, event: Event) {
     event.stopPropagation();
     if (!notification.is_read) {
-      this.notificationService.markAsRead(notification.id).subscribe({
-        next: () => {
-          notification.is_read = true;
-          this.loadRecentNotifications();
-        }
-      });
+      if (notification.id < 0) {
+        // Local notification
+        this.notificationService.markLocalAsRead(notification.id);
+        this.loadRecentNotifications();
+      } else {
+        // Backend notification
+        this.notificationService.markAsRead(notification.id).subscribe({
+          next: () => {
+            notification.is_read = true;
+            this.loadRecentNotifications();
+          }
+        });
+      }
     }
   }
 

@@ -22,6 +22,7 @@ import { UpdateNotificationComponent } from './shared/components/update-notifica
 import { LocationPermissionDialogComponent } from './shared/components/location-permission-dialog/location-permission-dialog.component';
 import { LogoutConfirmationComponent } from './shared/components/logout-confirmation/logout-confirmation.component';
 import { LogoutConfirmationService } from './shared/services/logout-confirmation.service';
+import { NotificationService } from './shared/services/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -77,7 +78,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     public locationService: LocationService,
     private googleMapsLoader: GoogleMapsLoaderService,
     private swUpdate: SwUpdate,
-    private logoutConfirmationService: LogoutConfirmationService
+    private logoutConfirmationService: LogoutConfirmationService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -148,6 +150,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       ).subscribe(() => {
         // New version available - show visual notification
         this.showUpdateNotification = true;
+
+        // Also add to notification center
+        this.notificationService.addLocalNotification({
+          type: 'critical_update',
+          title: 'App Update Available',
+          message: 'A new version of the app is ready. Click to update now.',
+          action_url: '/notifications'
+        });
       });
 
       // Check for updates every 5 minutes
