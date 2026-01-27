@@ -38,10 +38,29 @@ interface ChatSession {
   styleUrls: ['./chatbot.component.css'],
   animations: [
     trigger('slideUp', [
-      state('void', style({ transform: 'translateY(100%)', opacity: 0 })),
-      state('*', style({ transform: 'translateY(0)', opacity: 1 })),
-      transition('void => *', animate('300ms ease-out')),
-      transition('* => void', animate('300ms ease-in'))
+      state('void', style({ transform: 'translateY(20px) scale(0.9)', opacity: 0 })),
+      state('*', style({ transform: 'translateY(0) scale(1)', opacity: 1 })),
+      transition('void => *', animate('400ms cubic-bezier(0.175, 0.885, 0.32, 1.275)')),
+      transition('* => void', animate('300ms cubic-bezier(0.6, -0.28, 0.735, 0.045)', style({ transform: 'translateY(20px) scale(0.9)', opacity: 0 })))
+    ]),
+    trigger('popIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8) translateY(10px)', opacity: 0 }),
+        animate('400ms cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+          style({ transform: 'scale(1) translateY(0)', opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ transform: 'scale(0.8) translateY(10px)', opacity: 0 }))
+      ])
+    ]),
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-out', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({ opacity: 0 }))
+      ])
     ])
   ]
 })
@@ -63,6 +82,9 @@ export class ChatbotComponent implements OnInit, AfterViewChecked, OnDestroy {
   historySearchQuery: string = '';
   showClearAllModal: boolean = false;
   isClearingAll: boolean = false;
+  isDismissed = false;
+  showCallout = false;
+  private calloutTimer: any;
 
   private activeSubscriptions: Subscription[] = [];
   private hasStartedSession = false;
@@ -111,6 +133,39 @@ export class ChatbotComponent implements OnInit, AfterViewChecked, OnDestroy {
       }
     });
     this.activeSubscriptions.push(authSub);
+
+    // Track dismissal status
+    const dismissSub = this.chatbotService.isDismissed$.subscribe(dismissed => {
+      this.isDismissed = dismissed;
+      if (!dismissed) {
+        this.startCalloutTimer();
+      } else {
+        this.clearCalloutTimer();
+        this.showCallout = false;
+      }
+    });
+    this.activeSubscriptions.push(dismissSub);
+  }
+
+  private startCalloutTimer() {
+    this.clearCalloutTimer();
+    // Only show callout if not open and not already showing
+    if (!this.isOpen && !this.showCallout && !this.isDismissed) {
+      this.calloutTimer = setTimeout(() => {
+        if (!this.isOpen) {
+          this.showCallout = true;
+          // Auto-hide callout after 10 seconds
+          setTimeout(() => this.showCallout = false, 10000);
+        }
+      }, 5000); // 5 seconds delay
+    }
+  }
+
+  private clearCalloutTimer() {
+    if (this.calloutTimer) {
+      clearTimeout(this.calloutTimer);
+      this.calloutTimer = null;
+    }
   }
 
   ngOnDestroy() {
@@ -132,6 +187,10 @@ export class ChatbotComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
 
     this.isOpen = !this.isOpen;
+    if (this.isOpen) {
+      this.showCallout = false;
+      this.clearCalloutTimer();
+    }
 
     if (this.isOpen && !this.hasStartedSession) {
       this.startSession();
@@ -141,6 +200,18 @@ export class ChatbotComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.unreadCount = 0;
       this.shouldScrollToBottom = true;
     }
+  }
+
+  dismissWidget(event: Event) {
+    event.stopPropagation();
+    this.chatbotService.setDismissed(true);
+    this.isOpen = false;
+  }
+
+  dismissCallout(event: Event) {
+    event.stopPropagation();
+    this.showCallout = false;
+    this.clearCalloutTimer();
   }
 
   // Update minimizeChat

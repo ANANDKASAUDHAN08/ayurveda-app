@@ -16,6 +16,7 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
   notifications: Notification[] = [];
   showDropdown = false;
   loading = false;
+  private lastBackendNotifications: Notification[] = [];
 
   private subscriptions: Subscription[] = [];
 
@@ -34,6 +35,13 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
 
     // Load initial notifications
     this.loadRecentNotifications();
+
+    // Subscribe to local notifications to ensure immediate updates
+    this.subscriptions.push(
+      this.notificationService.localNotifications$.subscribe(() => {
+        this.updateNotificationList(this.lastBackendNotifications);
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -54,25 +62,36 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
   }
 
   loadRecentNotifications() {
-    this.loading = true;
+    // Only show loading spinner if we have no notifications yet
+    if (this.notifications.length === 0) {
+      this.loading = true;
+    }
+
+    // Refresh the list immediately using current local notifications
+    this.updateNotificationList(this.lastBackendNotifications);
+
     this.notificationService.getNotifications({ limit: 5 }).subscribe({
       next: (response) => {
-        const backendNotifications = response.notifications;
-        const localNotifications = this.notificationService.getLocalNotifications();
-
-        // Merge and sort by date
-        const allNotifications = [...localNotifications, ...backendNotifications];
-        this.notifications = allNotifications
-          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-          .slice(0, 5);
-
+        this.lastBackendNotifications = response.notifications;
+        this.updateNotificationList(this.lastBackendNotifications);
         this.loading = false;
       },
       error: (error) => {
         console.error('Error loading notifications:', error);
+        // Even if backend fails, we've already shown the local ones
         this.loading = false;
       }
     });
+  }
+
+  private updateNotificationList(backendNotifications: Notification[]) {
+    const localNotifications = this.notificationService.getLocalNotifications();
+
+    // Merge and sort by date
+    const allNotifications = [...localNotifications, ...backendNotifications];
+    this.notifications = allNotifications
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .slice(0, 5);
   }
 
   markAsRead(notification: Notification, event: Event) {

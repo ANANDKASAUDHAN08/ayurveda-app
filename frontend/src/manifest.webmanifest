@@ -1,7 +1,7 @@
 {
     "name": "HealthConnect Platform",
     "short_name": "Health Connect",
-    "version": "2.2.0",
+    "version": "2.2.2",
     "theme_color": "#10b981",
     "background_color": "#10b981",
     "display": "standalone",

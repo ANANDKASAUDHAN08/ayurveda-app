@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 interface ChatMessage {
   sessionId: string;
@@ -27,8 +27,17 @@ interface SessionResponse {
 })
 export class ChatbotService {
   private apiUrl = `${environment.apiUrl}/chatbot`;
+  private isDismissedSubject = new BehaviorSubject<boolean>(false);
+  public isDismissed$ = this.isDismissedSubject.asObservable();
 
   constructor(private http: HttpClient) { }
+
+  /**
+   * Set the dismissal state of the chatbot
+   */
+  setDismissed(dismissed: boolean) {
+    this.isDismissedSubject.next(dismissed);
+  }
 
   /**
    * Start a new chat session

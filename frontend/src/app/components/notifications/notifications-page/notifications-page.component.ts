@@ -27,6 +27,8 @@ export class NotificationsPageComponent implements OnInit {
 
   totalCount = 0;
   unreadCount = 0;
+  private lastBackendNotifications: Notification[] = [];
+  private lastBackendTotal = 0;
 
   // App update notification
   updateAvailable = false;
@@ -75,28 +77,46 @@ export class NotificationsPageComponent implements OnInit {
         console.error('Error checking for updates:', err);
       });
     }
+
+    // Subscribe to local notifications
+    this.notificationService.localNotifications$.subscribe(() => {
+      this.loadNotifications();
+    });
   }
 
   loadNotifications() {
-    this.loading = true;
+    // Only show loading spinner if we have no notifications yet
+    if (this.notifications.length === 0) {
+      this.loading = true;
+    }
+
+    // Refresh the list immediately using current local notifications
+    this.updateNotificationList(this.lastBackendNotifications, this.lastBackendTotal);
+
     this.notificationService.getNotifications(this.filters).subscribe({
       next: (response) => {
-        const backendNotifications = response.notifications;
-        const localNotifications = this.notificationService.getLocalNotifications()
-          .filter(n => this.filters.category === 'all' || n.category === this.filters.category)
-          .filter(n => !this.filters.unreadOnly || !n.is_read);
-
-        this.notifications = [...localNotifications, ...backendNotifications]
-          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-
-        this.totalCount = response.total + localNotifications.length;
+        this.lastBackendNotifications = response.notifications;
+        this.lastBackendTotal = response.total;
+        this.updateNotificationList(this.lastBackendNotifications, this.lastBackendTotal);
         this.loading = false;
       },
       error: (error) => {
         console.error('Error loading notifications:', error);
+        // Even if backend fails, we've already shown the local ones
         this.loading = false;
       }
     });
+  }
+
+  private updateNotificationList(backendNotifications: Notification[], backendTotal: number) {
+    const localNotifications = this.notificationService.getLocalNotifications()
+      .filter(n => this.filters.category === 'all' || n.category === this.filters.category)
+      .filter(n => !this.filters.unreadOnly || !n.is_read);
+
+    this.notifications = [...localNotifications, ...backendNotifications]
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    this.totalCount = backendTotal + localNotifications.length;
   }
 
   onFilterChange() {

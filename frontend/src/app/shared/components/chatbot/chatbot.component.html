@@ -1,14 +1,36 @@
-<!-- Floating Chat Button -->
-<div class="fixed bottom-24 right-4 md:bottom-5 md:right-5 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white p-4 md:px-6 md:py-3.5 rounded-full cursor-pointer flex items-center gap-0 md:gap-3 shadow-lg shadow-emerald-500/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/50 z-[999] animate-pulse-glow"
-    *ngIf="!isOpen" (click)="toggleChat($event)">
-    <div class="relative text-2xl">
-        <i class="fa-solid fa-robot"></i>
-        <span
-            class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[11px] font-semibold"
-            *ngIf="unreadCount > 0">{{unreadCount}}</span>
+<!-- Floating Chat Widget Container -->
+<ng-container *ngIf="!isDismissed">
+    <!-- Proactive Callout Bubble -->
+    <div class="chat-callout animate-in fade-in slide-in-from-bottom-2 duration-500" *ngIf="showCallout && !isOpen"
+        @popIn>
+        <button
+            class="absolute -top-2 -right-2 w-5 h-5 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center text-[10px] hover:bg-slate-300 transition-colors"
+            (click)="dismissCallout($event)">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <p class="m-0 text-slate-700 text-xs font-bold leading-relaxed">
+            Hi! 👋 Have a health question? I'm here to help you find doctors or check symptoms!
+        </p>
     </div>
-    <span class="font-bold text-sm tracking-wide hidden md:inline">AI Health Chat</span>
-</div>
+
+    <!-- Floating Chat Button -->
+    <div class="fixed bottom-24 right-4 md:bottom-5 md:right-5 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white p-4 md:px-6 md:py-3.5 rounded-full cursor-pointer flex items-center gap-0 md:gap-3 shadow-lg shadow-emerald-500/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/50 z-[999] animate-pulse-glow"
+        *ngIf="!isOpen" (click)="toggleChat($event)">
+
+        <!-- Dismiss Launcher Button (Visible on hover) -->
+        <div class="dismiss-btn-small" (click)="dismissWidget($event)" title="Hide chat">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+
+        <div class="relative text-2xl">
+            <i class="fa-solid fa-robot"></i>
+            <span
+                class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[11px] font-semibold"
+                *ngIf="unreadCount > 0">{{unreadCount}}</span>
+        </div>
+        <span class="font-bold text-sm tracking-wide hidden md:inline">AI Health Chat</span>
+    </div>
+</ng-container>
 
 <!-- Chat Window -->
 <div class="fixed bottom-16 right-0 w-[80vw] h-[65vh] max-h-[calc(100vh-32px)] bg-white rounded-l-2xl rounded-r-none md:rounded-2xl shadow-2xl flex flex-col overflow-hidden z-[1000] transition-all md:w-[380px] md:h-[600px] md:max-h-[calc(100vh-40px)] md:bottom-5 md:right-5"
@@ -167,7 +189,8 @@
                 <!-- Messages Area -->
                 <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 bg-slate-50 flex flex-col gap-4 custom-scrollbar"
                     #messagesContainer>
-                    <div *ngFor="let message of messages; let i = index" class="flex gap-3 items-start w-full"
+                    <div *ngFor="let message of messages; let i = index"
+                        class="flex gap-3 items-start w-full message-animate"
                         [ngClass]="{'flex-row-reverse': message.sender === 'user'}">
 
                         <!-- Bot/User Avatar -->

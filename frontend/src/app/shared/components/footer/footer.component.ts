@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NewsletterService } from '../../services/newsletter.service';
+import { ChatbotService } from '../../services/chatbot.service';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -20,11 +21,17 @@ export class FooterComponent {
   newsletterMessage: string = '';
   newsletterSuccess: boolean = false;
   isSubmitting: boolean = false;
+  isChatDismissed$ = this.chatbotService.isDismissed$;
 
   constructor(
     private router: Router,
-    private newsletterService: NewsletterService
+    private newsletterService: NewsletterService,
+    private chatbotService: ChatbotService
   ) { }
+
+  enableChat(): void {
+    this.chatbotService.setDismissed(false);
+  }
 
   isAdminRoute(): boolean {
     return this.router.url.startsWith('/admin');

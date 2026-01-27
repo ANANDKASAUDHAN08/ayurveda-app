@@ -92,14 +92,21 @@ export class NotificationService {
   refreshUnreadCount(): void {
     // Only fetch if user has valid token
     if (this.authService.isLoggedIn() && this.authService.getToken()) {
+      // Merged unread count logic helper
+      const getMergedCount = (backendCount: number) => {
+        const localUnreadCount = this.localNotificationsSubject.value.filter(n => !n.is_read).length;
+        return backendCount + localUnreadCount;
+      };
+
       this.getUnreadCount().subscribe({
         next: (response) => {
-          // Merge with local unread count
-          const localUnreadCount = this.localNotificationsSubject.value.filter(n => !n.is_read).length;
-          this.unreadCountSubject.next(response.count + localUnreadCount);
+          this.unreadCountSubject.next(getMergedCount(response.count));
         },
         error: (err) => {
-          // Silently handle 401 errors
+          // If offline or error, we can only rely on local count
+          const localUnreadCount = this.localNotificationsSubject.value.filter(n => !n.is_read).length;
+          this.unreadCountSubject.next(localUnreadCount);
+
           if (err.status === 401) {
             this.unreadCountSubject.next(0);
           }
@@ -128,6 +135,10 @@ export class NotificationService {
     const current = this.localNotificationsSubject.value;
     if (!current.some(n => n.type === newNotification.type)) {
       this.localNotificationsSubject.next([newNotification, ...current]);
+
+      // Increment unread count immediately for instant UI feedback
+      this.unreadCountSubject.next(this.unreadCountSubject.value + 1);
+
       this.refreshUnreadCount();
     }
   }

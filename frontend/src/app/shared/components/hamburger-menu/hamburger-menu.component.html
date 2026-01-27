@@ -3,7 +3,7 @@
 </div>
 <!-- Menu Drawer -->
 <div *ngIf="isOpen"
-    class="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-[200] shadow-2xl md:hidden overflow-y-auto pb-5"
+    class="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-[200] shadow-2xl md:hidden overflow-y-auto pb-5 hide-scrollbar"
     [@slideIn]>
 
     <!-- Header (Logo & Name) -->
@@ -123,7 +123,33 @@
         <!-- Divider -->
         <div class="border-t border-slate-200 my-2"></div>
 
-        <!-- Section 2: Shop -->
+        <!-- Section 2: Find Care -->
+        <div class="px-6 pt-4 pb-2">
+            <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider">Find Care</h3>
+        </div>
+        <a routerLink="/find-doctors" (click)="closeMenu()"
+            class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+            <i class="fas fa-user-md text-emerald-600 w-5"></i>
+            <span class="text-slate-700">Doctors</span>
+            <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
+        </a>
+        <a routerLink="/hospitals" (click)="closeMenu()"
+            class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+            <i class="fas fa-hospital text-emerald-600 w-5"></i>
+            <span class="text-slate-700">Hospitals</span>
+            <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
+        </a>
+        <a routerLink="/pharmacies" (click)="closeMenu()"
+            class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+            <i class="fas fa-prescription-bottle-alt text-emerald-600 w-5"></i>
+            <span class="text-slate-700">Pharmacies</span>
+            <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
+        </a>
+
+        <!-- Divider -->
+        <div class="border-t border-slate-200 my-2"></div>
+
+        <!-- Section 3: Shop -->
         <div class="px-6 pt-4 pb-2">
             <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider">Shop</h3>
         </div>
@@ -149,32 +175,6 @@
             class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors">
             <i class="fas fa-shield-heart text-emerald-600 w-5"></i>
             <span class="text-slate-700">Health Plans</span>
-            <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
-        </a>
-
-        <!-- Divider -->
-        <div class="border-t border-slate-200 my-2"></div>
-
-        <!-- Section 3: Find Care -->
-        <div class="px-6 pt-4 pb-2">
-            <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider">Find Care</h3>
-        </div>
-        <a routerLink="/find-doctors" (click)="closeMenu()"
-            class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors">
-            <i class="fas fa-user-md text-emerald-600 w-5"></i>
-            <span class="text-slate-700">Doctors</span>
-            <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
-        </a>
-        <a routerLink="/hospitals" (click)="closeMenu()"
-            class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors">
-            <i class="fas fa-hospital text-emerald-600 w-5"></i>
-            <span class="text-slate-700">Hospitals</span>
-            <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
-        </a>
-        <a routerLink="/pharmacies" (click)="closeMenu()"
-            class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors">
-            <i class="fas fa-prescription-bottle-alt text-emerald-600 w-5"></i>
-            <span class="text-slate-700">Pharmacies</span>
             <i class="fas fa-chevron-right ml-auto text-slate-400 text-sm"></i>
         </a>
 

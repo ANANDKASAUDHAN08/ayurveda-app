@@ -139,12 +139,18 @@
             </div>
         </div>
 
-        <!-- Copyright -->
-        <div class="border-t border-slate-700 mt-8 pt-6">
-            <p class="text-center text-gray-400 text-sm">
+        <!-- Copyright and Chat Toggle -->
+        <div class="border-t border-slate-700 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-gray-400 text-sm">
                 © {{ currentYear }} HealthConnect. All rights reserved. <span class="ml-2 text-gray-500">v{{ appVersion
                     }}</span>
             </p>
+
+            <button *ngIf="isChatDismissed$ | async" (click)="enableChat()"
+                class="text-emerald-400 hover:text-emerald-300 text-sm font-bold flex items-center gap-2 transition-all hover:translate-y-[-2px]">
+                <i class="fa-solid fa-robot"></i>
+                Enable AI Health Chat
+            </button>
         </div>
     </div>
 </footer>

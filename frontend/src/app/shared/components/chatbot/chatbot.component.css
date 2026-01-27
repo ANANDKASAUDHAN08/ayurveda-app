@@ -3,7 +3,7 @@
    ======================================== */
 
 .animate-pulse-glow {
-    animation: pulse-glow 2s infinite;
+    animation: pulse-glow 3s infinite, float 6s ease-in-out infinite;
 }
 
 @keyframes pulse-glow {
@@ -11,10 +11,59 @@
     0%,
     100% {
         box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        transform: scale(1);
     }
 
     50% {
-        box-shadow: 0 6px 25px rgba(16, 185, 129, 0.6);
+        box-shadow: 0 8px 30px rgba(16, 185, 129, 0.6);
+        transform: scale(1.02);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Message Entrance Animation */
+.message-animate {
+    animation: message-slide 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    opacity: 0;
+}
+
+@keyframes message-slide {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Wiggle for Callout */
+.animate-wiggle {
+    animation: wiggle 2s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+
+    0%,
+    100% {
+        transform: rotate(-1deg);
+    }
+
+    50% {
+        transform: rotate(1deg);
     }
 }
 
@@ -34,6 +83,79 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #cbd5e1;
+}
+
+/* Proactive Callout Styling */
+.chat-callout {
+    position: fixed;
+    bottom: 165px;
+    /* Moved up for mobile to be above the bottom-24 launcher */
+    right: 16px;
+    background: white;
+    padding: 12px 16px;
+    border-radius: 16px 16px 2px 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    z-index: 998;
+    max-width: 240px;
+    border: 1px solid #f1f5f9;
+    animation: wiggle 4s ease-in-out infinite;
+}
+
+@media (min-width: 768px) {
+    .chat-callout {
+        bottom: 80px;
+        right: 20px;
+    }
+}
+
+.chat-callout::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    right: 15px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    transform: rotate(45deg);
+    border-right: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.dismiss-btn-small {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 20px;
+    height: 20px;
+    background: #ef4444;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 1001;
+}
+
+.fixed:hover .dismiss-btn-small {
+    opacity: 1;
+}
+
+@media (max-width: 767px) {
+    .dismiss-btn-small {
+        opacity: 1 !important;
+        top: -4px;
+        right: -4px;
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+        background: #ef4444;
+        border: 2px solid white;
+    }
 }
 
 /* Hide Scrollbar */
