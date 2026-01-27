@@ -75,7 +75,9 @@ export class FeedbackComponent implements OnInit {
             next: (response: any) => {
                 this.reviews = response.data;
                 this.totalPages = response.pagination?.totalPages || 1;
-                this.loading = false;
+                setTimeout(() => {
+                    this.loading = false;
+                }, 500);
             },
             error: (error: any) => {
                 console.error('Error loading reviews:', error);

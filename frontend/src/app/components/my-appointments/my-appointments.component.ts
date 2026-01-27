@@ -23,6 +23,7 @@ export class MyAppointmentsComponent implements OnInit {
 
     // Loading states
     loading = false;
+    tabLoading = false;
     error = '';
 
     // Modals
@@ -109,10 +110,18 @@ export class MyAppointmentsComponent implements OnInit {
     }
 
     switchTab(tab: 'upcoming' | 'past') {
+        if (this.activeTab === tab) return;
+
+        this.tabLoading = true;
         this.activeTab = tab;
         if (tab === 'past') {
             this.currentPage = 1; // Reset pagination when switching to past tab
         }
+
+        // Add a small artificial delay to show the loader for smoother UX
+        setTimeout(() => {
+            this.tabLoading = false;
+        }, 1000);
     }
 
     joinVideoCall(appointment: any) {

@@ -16,7 +16,8 @@ import { takeUntil } from 'rxjs/operators';
   selector: 'app-doctor-list',
   standalone: true,
   imports: [CommonModule, FormsModule, DoctorCardComponent, BookingModalComponent, DoctorDetailModalComponent],
-  templateUrl: './doctor-list.component.html'
+  templateUrl: './doctor-list.component.html',
+  styleUrls: ['./doctor-list.component.css']
 })
 export class DoctorListComponent implements OnInit, OnDestroy {
 
@@ -58,8 +59,7 @@ export class DoctorListComponent implements OnInit, OnDestroy {
   ];
 
   languages = [
-    'English', 'Hindi', 'Bengali', 'Tamil', 'Telugu',
-    'Marathi', 'Gujarati', 'Kannada', 'Malayalam'
+    'English', 'Hindi'
   ];
 
   // Sort Options

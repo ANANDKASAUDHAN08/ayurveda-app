@@ -102,7 +102,7 @@
                             <!-- Show NA only if both are 0 -->
                             <span *ngIf="+product.price <= 0 && +product.mrp <= 0"
                                 class="text-[13px] md:text-sm font-bold text-slate-500 uppercase whitespace-nowrap">
-                                {{ isMobile ? 'Price: NA' : 'Price: Not Available' }}
+                                Price: NA
                             </span>
                             <!-- Mobile: Eye Icon -->
                             <button *ngIf="product.product_type === 'medicine'" (click)="onViewDetails($event)"

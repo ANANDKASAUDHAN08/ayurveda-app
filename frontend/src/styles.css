@@ -324,9 +324,27 @@ html.dark .shadow-xl {
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background: linear-gradient(90deg, #f0f0f0 25%, #d1d5db 50%, #f0f0f0 75%);
   background-size: 1000px 100%;
-  animation: shimmer 2s infinite linear;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.centered-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  width: 100%;
+}
+
+.spinner-icon {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #10b981;
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
 }
 
 /* Pulse Glow Effect */

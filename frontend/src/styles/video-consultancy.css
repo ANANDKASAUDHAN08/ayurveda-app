@@ -86,13 +86,25 @@
    ======================================== */
 
 @keyframes vc-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
 }
 
 @keyframes vc-shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes vc-fade-slide-up {
@@ -100,6 +112,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -111,6 +124,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -122,6 +136,7 @@
     transform: scale(0);
     opacity: 1;
   }
+
   100% {
     transform: scale(4);
     opacity: 0;
@@ -326,12 +341,10 @@
   left: -200%;
   width: 200%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(255, 255, 255, 0) 100%);
   animation: vc-shimmer 2s infinite;
 }
 
@@ -346,13 +359,11 @@
    ======================================== */
 
 .vc-skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--vc-neutral-200) 0%,
-    var(--vc-neutral-100) 20%,
-    var(--vc-neutral-200) 40%,
-    var(--vc-neutral-200) 100%
-  );
+  background: linear-gradient(90deg,
+      var(--vc-neutral-200) 0%,
+      var(--vc-neutral-100) 20%,
+      var(--vc-neutral-200) 40%,
+      var(--vc-neutral-200) 100%);
   background-size: 200% 100%;
   animation: vc-shimmer 2s infinite;
   border-radius: var(--vc-radius-md);
@@ -373,6 +384,29 @@
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
+}
+
+.vc-skeleton-card {
+  height: 350px;
+  background: white;
+  border-radius: var(--vc-radius-xl);
+  border: 1px solid var(--vc-neutral-200);
+  position: relative;
+  overflow: hidden;
+}
+
+.vc-skeleton-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(0, 0, 0, 0.05) 50%,
+      rgba(255, 255, 255, 0) 100%);
+  animation: vc-shimmer 1.5s infinite;
 }
 
 /* ========================================
@@ -484,6 +518,7 @@
 
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

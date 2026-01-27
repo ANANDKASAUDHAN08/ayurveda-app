@@ -14,9 +14,26 @@
     </div>
 
     <!-- Main Content -->
-    <div class="max-w-6xl mx-auto px-4 py-12">
+    <div class="max-w-6xl mx-auto px-4 py-8 md:py-12">
+        <!-- Loading State for Stats & Content -->
+        <div *ngIf="loading" class="animate-fade-in">
+            <div class="centered-spinner mb-8">
+                <div class="spinner-icon mb-4"></div>
+                <p class="text-emerald-600 font-bold">Loading community feedback...</p>
+            </div>
+            <div class="mb-10 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                <div *ngFor="let i of [1,2,3]"
+                    class="h-32 bg-white rounded-2xl shadow-sm border border-gray-100 animate-pulse"></div>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-8 h-24 animate-pulse"></div>
+            <div class="space-y-4">
+                <div *ngFor="let i of [1,2,3]"
+                    class="h-40 bg-white rounded-xl shadow-sm border border-gray-100 animate-pulse"></div>
+            </div>
+        </div>
+
         <!-- Stats Section -->
-        <div *ngIf="stats" class="mb-10 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+        <div *ngIf="!loading && stats" class="mb-10 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 animate-fade-in">
             <div
                 class="bg-white rounded-2xl shadow-md p-4 md:p-6 text-center border border-gray-100 col-span-2 md:col-span-1">
                 <div class="text-3xl md:text-4xl font-black text-emerald-600 mb-1 md:mb-2">

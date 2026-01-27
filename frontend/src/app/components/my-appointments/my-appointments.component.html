@@ -39,12 +39,18 @@
         </div>
 
         <!-- Loading State -->
-        <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div *ngFor="let i of [1,2,3,4]" class="vc-skeleton-card"></div>
+        <div *ngIf="loading || tabLoading" class="animate-fade-in">
+            <div class="centered-spinner">
+                <div class="spinner-icon mb-4"></div>
+                <p class="text-slate-500 font-bold">Switching views...</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <div *ngFor="let i of [1,2,3,4,5,6]" class="vc-skeleton-card"></div>
+            </div>
         </div>
 
         <!-- Upcoming Appointments -->
-        <div *ngIf="!loading && activeTab === 'upcoming'">
+        <div *ngIf="!loading && !tabLoading && activeTab === 'upcoming'">
             <div *ngIf="upcomingAppointments.length === 0" class="text-center py-16">
                 <div class="vc-card max-w-md mx-auto p-8">
                     <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -151,7 +157,7 @@
         </div>
 
         <!-- Past Appointments -->
-        <div *ngIf="!loading && activeTab === 'past'">
+        <div *ngIf="!loading && !tabLoading && activeTab === 'past'">
             <div *ngIf="pastAppointments.length === 0" class="text-center py-16">
                 <div class="vc-card max-w-md mx-auto p-8">
                     <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
