@@ -26,7 +26,7 @@ export class HospitalCardComponent {
     }
 
     formatName(name: string): string {
-        if (!name) return '';
+        if (!name || name === '\\N') return '';
         return name.replace(/^"+|"+$/g, '').trim();
     }
 
@@ -37,13 +37,13 @@ export class HospitalCardComponent {
         const state = hospital.state?.toString().trim();
         const location = hospital.location?.toString().trim();
 
-        if (city && state && city.toLowerCase() !== 'null' && state.toLowerCase() !== 'null') {
+        if (city && state && city !== '\\N' && state !== '\\N' && city.toLowerCase() !== 'null' && state.toLowerCase() !== 'null') {
             return `${city}, ${state}`;
-        } else if (state && state.toLowerCase() !== 'null' && state.toLowerCase() !== 'n/a') {
+        } else if (state && state !== '\\N' && state.toLowerCase() !== 'null' && state.toLowerCase() !== 'n/a') {
             return state;
-        } else if (city && city.toLowerCase() !== 'null' && city.toLowerCase() !== 'n/a') {
+        } else if (city && city !== '\\N' && city.toLowerCase() !== 'null' && city.toLowerCase() !== 'n/a') {
             return city;
-        } else if (location && location.toLowerCase() !== 'null' && location.toLowerCase() !== 'n/a') {
+        } else if (location && location !== '\\N' && location.toLowerCase() !== 'null' && location.toLowerCase() !== 'n/a') {
             return location;
         }
 
@@ -59,7 +59,7 @@ export class HospitalCardComponent {
     }
 
     formatAddress(hospital: any): string {
-        if (!hospital || !hospital.address) return '';
+        if (!hospital || !hospital.address || hospital.address === '\\N') return '';
         let address = hospital.address.replace(/"/g, '').trim();
         if (hospital.name && address.startsWith(hospital.name.replace(/"/g, ''))) {
             address = address.substring(hospital.name.replace(/"/g, '').length).trim();

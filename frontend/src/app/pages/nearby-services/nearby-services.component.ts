@@ -15,8 +15,7 @@ import { GoogleMapsLoaderService } from '../../shared/services/google-maps-loade
   styleUrl: './nearby-services.component.css'
 })
 export class NearbyServicesComponent implements OnInit {
-  @ViewChild('districtSearchContainer') districtSearchContainer!: ElementRef;
-
+  @ViewChild('filterDrawerContainer') filterDrawerContainer!: ElementRef;
   // Map Options
   center: google.maps.LatLngLiteral = { lat: 28.6139, lng: 77.2090 }; // Delhi
   zoom = 13;
@@ -39,9 +38,38 @@ export class NearbyServicesComponent implements OnInit {
 
   // Pagination
   currentPage: number = 1;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 12;
+  totalItems: number = 0;
+  totalPages: number = 0;
   showMobileLegend: boolean = false;
   Math = Math;
+
+  get isMobile(): boolean {
+    return window.innerWidth < 1024;
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.updateMapOptions();
+  }
+
+  // View Mode
+  viewMode: 'list' | 'map' | 'both' = 'both';
+
+  toggleMobileLegend() {
+    this.showMobileLegend = !this.showMobileLegend;
+  }
+
+  // Advanced Filters
+  selectedState = '';
+  selectedCityDistrict = '';
+  selectedPincodeSubdistrict = '';
+
+  // Modal & Drawer
+  showInfoModal = false;
+  showFilterDrawer = false;
+  selectedItemDetails: any = null;
+  userRating = 0;
 
   // Markers
   markers: any[] = [];
@@ -59,12 +87,25 @@ export class NearbyServicesComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
-    if (this.districtSearchContainer && !this.districtSearchContainer.nativeElement.contains(event.target)) {
-      this.districtSuggestions = [];
+    // Close filter drawer on outside click (desktop both view only)
+    if (this.showFilterDrawer && this.filterDrawerContainer) {
+
+      // Check if click is on any filter button (don't close if it is)
+      const target = event.target as HTMLElement;
+      const isFilterButton = target.closest('.filter-toggle-btn');
+
+      // Only close if click is outside drawer AND not on the filter button
+      if (!this.filterDrawerContainer.nativeElement.contains(event.target) && !isFilterButton) {
+        this.showFilterDrawer = false;
+      }
     }
   }
 
   ngOnInit() {
+    this.viewMode = window.innerWidth < 1024 ? 'list' : 'both';
+
+    this.updateMapOptions();
+
     this.loading = true;
     this.googleLoader.isLoaded$.subscribe(loaded => {
       this.apiLoaded = loaded;
@@ -107,7 +148,6 @@ export class NearbyServicesComponent implements OnInit {
     );
   }
 
-
   loadNearby(forceRefresh: boolean = false) {
     this.loading = true;
     const lat = this.userLocation?.lat || 28.6139;
@@ -116,19 +156,19 @@ export class NearbyServicesComponent implements OnInit {
     let obs;
     switch (this.selectedType) {
       case 'hospital':
-        obs = this.mapService.getNearbyHospitals(lat, lng);
+        obs = this.mapService.getNearbyHospitals(lat, lng, 10, this.currentPage, this.itemsPerPage, this.selectedState, this.selectedCityDistrict, this.selectedPincodeSubdistrict, this.searchQuery);
         break;
       case 'pharmacy':
-        obs = this.mapService.getNearbyPharmacies(lat, lng);
+        obs = this.mapService.getNearbyPharmacies(lat, lng, 5, this.currentPage, this.itemsPerPage, this.selectedState, this.selectedCityDistrict, this.selectedPincodeSubdistrict, this.searchQuery);
         break;
       case 'doctor':
-        obs = this.mapService.getNearbyDoctors(lat, lng);
+        obs = this.mapService.getNearbyDoctors(lat, lng, 5, this.currentPage, this.itemsPerPage, this.selectedState, this.selectedCityDistrict, this.selectedPincodeSubdistrict, this.searchQuery);
         break;
       case 'health-centre':
         if (this.searchMode === 'district' && this.districtQuery) {
-          obs = this.mapService.getNearbyHealthCentres(lat, lng, 20, this.districtQuery);
+          obs = this.mapService.getNearbyHealthCentres(lat, lng, 20, this.districtQuery, this.selectedState, this.selectedPincodeSubdistrict, this.currentPage, this.itemsPerPage);
         } else {
-          obs = this.mapService.getNearbyHealthCentres(lat, lng);
+          obs = this.mapService.getNearbyHealthCentres(lat, lng, 15, this.selectedCityDistrict, this.selectedState, this.selectedPincodeSubdistrict, this.currentPage, this.itemsPerPage);
         }
         break;
     }
@@ -136,8 +176,18 @@ export class NearbyServicesComponent implements OnInit {
     obs.subscribe({
       next: (res) => {
         if (res.success) {
-          this.items = res.data.map((item: any) => ({ ...item, type: this.selectedType }));
-          this.onSearch(); // Apply initial filter
+          const rawItems = (res.data || res.hospitals || []);
+          this.items = rawItems.map((item: any) => ({ ...item, type: this.selectedType }));
+
+          if (res.pagination) {
+            this.totalItems = res.pagination.total;
+            this.totalPages = res.pagination.pages;
+          } else {
+            this.totalItems = this.items.length;
+            this.totalPages = 1;
+          }
+
+          this.filteredItems = this.items; // Directly set filtered items
           this.updateMarkers();
 
           // Update map center and zoom when district search returns results
@@ -163,10 +213,13 @@ export class NearbyServicesComponent implements OnInit {
           }
         }
         this.loading = false;
+        // Scroll to top to ensure header is visible in both mode
+        setTimeout(() => this.scrollToTop(), 50);
       },
       error: (err) => {
         console.error('API Error:', err);
         this.loading = false;
+        setTimeout(() => this.scrollToTop(), 50);
       }
     });
   }
@@ -177,6 +230,10 @@ export class NearbyServicesComponent implements OnInit {
     this.searchQuery = '';
     this.districtQuery = '';
     this.districtSuggestions = [];
+    this.currentPage = 1; // Reset to page 1
+    this.selectedState = '';
+    this.selectedCityDistrict = '';
+    this.selectedPincodeSubdistrict = '';
     if (type !== 'health-centre') {
       this.searchMode = 'nearby';
     }
@@ -210,33 +267,19 @@ export class NearbyServicesComponent implements OnInit {
   }
 
   onSearch() {
-    if (!this.searchQuery) {
-      this.filteredItems = this.items;
-    } else {
-      const q = this.searchQuery.toLowerCase();
-      this.filteredItems = this.items.filter(item =>
-        item.name.toLowerCase().includes(q) ||
-        (item.address && item.address.toLowerCase().includes(q))
-      );
-    }
-    this.currentPage = 1; // Reset to page 1 when searching
+    this.applyFilters();
   }
 
-  // Pagination computed property
+  // Pagination computed property - simplified as server handles pagination
   get paginatedItems() {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    return this.filteredItems.slice(startIndex, endIndex);
-  }
-
-  get totalPages(): number {
-    return Math.ceil(this.filteredItems.length / this.itemsPerPage);
+    return this.filteredItems;
   }
 
   // Pagination methods
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
+      this.loadNearby();
       this.scrollToTop();
     }
   }
@@ -244,6 +287,7 @@ export class NearbyServicesComponent implements OnInit {
   previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
+      this.loadNearby();
       this.scrollToTop();
     }
   }
@@ -251,20 +295,45 @@ export class NearbyServicesComponent implements OnInit {
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
+      this.loadNearby();
       this.scrollToTop();
     }
   }
 
   scrollToTop() {
-    const listSection = document.querySelector('.nearby-list-section');
-    if (listSection) {
-      listSection.scrollTop = 0;
+    // In 'both' mode, scroll the sidebar container; in 'list' mode, scroll the list section
+    if (this.viewMode === 'both') {
+      const sidebar = document.querySelector('.nearby-sidebar');
+      if (sidebar) {
+        sidebar.scrollTop = 0;
+      }
+    } else {
+      const listSection = document.querySelector('.nearby-list-section');
+      if (listSection) {
+        listSection.scrollTop = 0;
+      }
     }
+  }
+
+  private updateMapOptions() {
+    const isBothViewDesktop = this.viewMode === 'both' && window.innerWidth >= 1024;
+
+    this.options = {
+      disableDefaultUI: isBothViewDesktop,
+      zoomControl: false,
+      fullscreenControl: false,
+      mapTypeControl: true,
+      streetViewControl: true,
+    };
   }
 
   private updateMarkers() {
     this.markers = this.items
-      .filter(item => item.latitude && item.longitude)
+      .filter(item => {
+        const lat = parseFloat(String(item.latitude));
+        const lng = parseFloat(String(item.longitude));
+        return !isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0;
+      })
       .map(item => {
         const lat = parseFloat(String(item.latitude));
         const lng = parseFloat(String(item.longitude));
@@ -290,11 +359,13 @@ export class NearbyServicesComponent implements OnInit {
 
   focusOnItem(item: any) {
     this.selectedItem = item;
-    this.selectedItem = item;
-    this.center = { lat: item.latitude, lng: item.longitude };
-    this.zoom = 15;
-    // Popup logic is handled in template with *ngIf or similar, 
-    // or by referencing the MapMarker component if we want to open it programmatically.
+    const lat = parseFloat(String(item.latitude));
+    const lng = parseFloat(String(item.longitude));
+
+    if (!isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0) {
+      this.center = { lat, lng };
+      this.zoom = 15;
+    }
   }
 
   getDirections(item: any) {
@@ -304,5 +375,60 @@ export class NearbyServicesComponent implements OnInit {
 
   callNow(phone: string) {
     window.location.href = `tel:${phone}`;
+  }
+
+  // View Mode Toggles
+  setViewMode(mode: 'list' | 'map' | 'both') {
+    // Restriction: Disable 'both' view on mobile size
+    if (window.innerWidth < 1024 && mode === 'both') {
+      this.viewMode = 'list';
+    } else {
+      this.viewMode = mode;
+    }
+
+    this.updateMapOptions();
+
+    // Trigger map resize if needed
+    if (this.viewMode !== 'list') {
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 100);
+    }
+  }
+
+  toggleFilterDrawer() {
+    this.showFilterDrawer = !this.showFilterDrawer;
+  }
+
+  // Modal Methods
+  openInfoModal(item: any) {
+    this.selectedItemDetails = item;
+    this.showInfoModal = true;
+    this.userRating = 0;
+  }
+
+  closeInfoModal() {
+    this.showInfoModal = false;
+    this.selectedItemDetails = null;
+  }
+
+  submitRating() {
+    if (this.userRating === 0) return;
+    // For now, just show a success message or handle as needed
+    alert(`Thank you for rating ${this.selectedItemDetails.name}!`);
+    this.closeInfoModal();
+  }
+
+  applyFilters() {
+    this.currentPage = 1;
+    this.loadNearby();
+  }
+
+  clearFilters() {
+    this.selectedState = '';
+    this.selectedCityDistrict = '';
+    this.selectedPincodeSubdistrict = '';
+    this.currentPage = 1;
+    this.loadNearby();
   }
 }

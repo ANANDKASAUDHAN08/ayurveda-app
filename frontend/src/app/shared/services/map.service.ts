@@ -42,35 +42,56 @@ export class MapService {
     }
 
     // Nearby API Calls
-    getNearbyHospitals(lat: number, lng: number, radius: number = 10): Observable<any> {
-        const params = new HttpParams()
+    getNearbyHospitals(lat: number, lng: number, radius: number = 10, page: number = 1, limit: number = 20, state?: string, city?: string, pincode?: string, search?: string): Observable<any> {
+        let params = new HttpParams()
             .set('lat', lat.toString())
             .set('lng', lng.toString())
-            .set('radius', radius.toString());
+            .set('radius', radius.toString())
+            .set('page', page.toString())
+            .set('limit', limit.toString());
+        if (state) params = params.set('state', state);
+        if (city) params = params.set('city', city);
+        if (pincode) params = params.set('pincode', pincode);
+        if (search) params = params.set('search', search);
         return this.http.get(`${this.apiUrl}/hospitals`, { params });
     }
 
-    getNearbyPharmacies(lat: number, lng: number, radius: number = 5): Observable<any> {
-        const params = new HttpParams()
+    getNearbyPharmacies(lat: number, lng: number, radius: number = 5, page: number = 1, limit: number = 20, state?: string, city?: string, pincode?: string, search?: string): Observable<any> {
+        let params = new HttpParams()
             .set('lat', lat.toString())
             .set('lng', lng.toString())
-            .set('radius', radius.toString());
+            .set('radius', radius.toString())
+            .set('page', page.toString())
+            .set('limit', limit.toString());
+        if (state) params = params.set('state', state);
+        if (city) params = params.set('city', city);
+        if (pincode) params = params.set('pincode', pincode);
+        if (search) params = params.set('search', search);
         return this.http.get(`${this.apiUrl}/pharmacies`, { params });
     }
 
-    getNearbyDoctors(lat: number, lng: number, radius: number = 5): Observable<any> {
-        const params = new HttpParams()
+    getNearbyDoctors(lat: number, lng: number, radius: number = 5, page: number = 1, limit: number = 20, state?: string, city?: string, pincode?: string, search?: string): Observable<any> {
+        let params = new HttpParams()
             .set('lat', lat.toString())
             .set('lng', lng.toString())
-            .set('radius', radius.toString());
+            .set('radius', radius.toString())
+            .set('page', page.toString())
+            .set('limit', limit.toString());
+        if (state) params = params.set('state', state);
+        if (city) params = params.set('city', city);
+        if (pincode) params = params.set('pincode', pincode);
+        if (search) params = params.set('search', search);
         return this.http.get(`${this.apiUrl}/doctors`, { params });
     }
 
-    getNearbyHealthCentres(lat?: number, lng?: number, radius: number = 15, district?: string): Observable<any> {
-        let params = new HttpParams().set('radius', radius.toString());
-        if (district) {
-            params = params.set('district', district);
-        }
+    getNearbyHealthCentres(lat?: number, lng?: number, radius: number = 15, district?: string, state?: string, subdistrict?: string, page: number = 1, limit: number = 20): Observable<any> {
+        let params = new HttpParams()
+            .set('radius', radius.toString())
+            .set('page', page.toString())
+            .set('limit', limit.toString());
+        if (district) params = params.set('district', district);
+        if (state) params = params.set('state', state);
+        if (subdistrict) params = params.set('subdistrict', subdistrict);
         if (lat && lng) {
             params = params.set('lat', lat.toString()).set('lng', lng.toString());
         }

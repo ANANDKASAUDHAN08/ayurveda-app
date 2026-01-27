@@ -19,7 +19,7 @@ exports.getDashboardOverview = async (req, res) => {
         );
 
         const [[refillCount]] = await db.execute(
-            'SELECT COUNT(*) as count FROM medicines WHERE medicine_type = "allopathy" AND stock < 10'
+            'SELECT COUNT(*) as count FROM medicines WHERE medicine_type = \'allopathy\' AND stock < 10'
         );
 
         res.json({
@@ -84,11 +84,11 @@ exports.getHealthPackages = async (req, res) => {
 exports.getPharmacyData = async (req, res) => {
     try {
         const [categories] = await db.execute(
-            'SELECT DISTINCT category FROM medicines WHERE medicine_type = "allopathy"'
+            'SELECT DISTINCT category FROM medicines WHERE medicine_type = \'allopathy\''
         );
 
         const [featured] = await db.execute(
-            'SELECT * FROM medicines WHERE medicine_type = "allopathy" LIMIT 6'
+            'SELECT * FROM medicines WHERE medicine_type = \'allopathy\' LIMIT 6'
         );
 
         res.json({
@@ -108,7 +108,7 @@ exports.getPharmacyData = async (req, res) => {
 exports.getPrinciplesContent = async (req, res) => {
     try {
         const [content] = await db.execute(
-            'SELECT * FROM medicine_type_content WHERE medicine_type = "allopathy" ORDER BY created_at ASC'
+            'SELECT * FROM medicine_type_content WHERE medicine_type = \'allopathy\' ORDER BY created_at ASC'
         );
 
         // Group content for frontend ease

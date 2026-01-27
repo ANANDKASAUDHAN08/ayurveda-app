@@ -106,7 +106,7 @@
                 </div>
 
                 <!-- My Health (If logged in) -->
-                <div *ngIf="isLoggedIn" class="relative my-health-dropdown-container">
+                <!-- <div *ngIf="isLoggedIn" class="relative my-health-dropdown-container">
                     <button (click)="toggleMyHealthDropdown()"
                         class="nav-link text-slate-800 hover:text-emerald-600 transition-colors flex items-center gap-2">
                         {{ 'nav.my_health' | translate }}
@@ -151,14 +151,14 @@
                             <span class="text-sm font-bold text-slate-700">Billing & Plans</span>
                         </a>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Nearby Services -->
-                <!-- <a routerLink="/nearby-services" (click)="careDropdownOpen = false"
+                <a routerLink="/nearby-services" (click)="careDropdownOpen = false"
                     class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all border-t border-slate-50 mt-1">
                     <i class="fas fa-map-marked-alt text-emerald-600 w-5"></i>
                     <span class="text-sm font-black text-emerald-700">Nearby Care</span>
-                </a> -->
+                </a>
             </div>
 
             <!-- Right: Utilities & User Profile -->
@@ -206,61 +206,121 @@
 
                     <!-- Profile Dropdown -->
                     <div *ngIf="profileMenuOpen"
-                        class="absolute top-full right-0 mt-4 w-56 glass rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up z-[110]">
+                        class="absolute top-full right-0 mt-4 w-[280px] md:w-80 bg-white rounded-3xl shadow-2xl overflow-hidden animate-fade-in-up z-[110]">
                         <ng-container *ngIf="isLoggedIn; else guestMenu">
-                            <div class="px-5 py-4 border-b border-slate-50 bg-slate-50/50">
-                                <p class="text-sm font-bold text-slate-900 truncate">{{userName}}</p>
-                                <p class="text-[10px] text-slate-500 font-medium uppercase tracking-wider mt-0.5">{{
-                                    'nav.profile' | translate }}</p>
-                            </div>
-                            <div class="py-2">
-                                <button (click)="navigateToDashboard()"
-                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
-                                    <i class="fas fa-home w-4 text-center text-emerald-600"></i>
-                                    {{ 'nav.dashboard' | translate }}
-                                </button>
-                                <button (click)="navigateToProfile()"
-                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
-                                    <i class="fas fa-user-circle w-4 text-center text-emerald-600"></i>
+                            <!-- User Info Header -->
+                            <div class="px-6 py-5 border-b border-slate-50 bg-slate-50/50">
+                                <p class="text-base font-black text-slate-900 truncate">{{userName}}</p>
+                                <p class="text-[10px] text-emerald-600 font-black uppercase tracking-widest mt-0.5">
                                     {{ 'nav.profile' | translate }}
-                                </button>
-                                <button (click)="navigateToOrders()"
-                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
-                                    <i class="fas fa-shopping-bag w-4 text-center text-emerald-600"></i>
-                                    {{ 'nav.orders' | translate }}
-                                </button>
-                                <button routerLink="/appointments/video" (click)="profileMenuOpen = false"
-                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
-                                    <i class="fas fa-video w-4 text-center text-rose-600"></i>
-                                    My Appointments
-                                </button>
-                                <button (click)="navigateToProfile('reviews')"
-                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
-                                    <i class="fas fa-star w-4 text-center text-amber-500"></i>
-                                    My Reviews
-                                </button>
-                                <button (click)="navigateToFavorites()"
-                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
-                                    <i class="fas fa-heart w-4 text-center text-red-500"></i>
-                                    {{ 'nav.favorites' | translate }}
-                                </button>
-                                <button (click)="navigateToBilling()"
-                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
-                                    <i class="fas fa-credit-card w-4 text-center text-emerald-600"></i>
-                                    Billing & Plans
-                                </button>
+                                </p>
                             </div>
-                            <div class="py-2 border-t border-slate-50">
-                                <button (click)="navigateToSettings()"
-                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-3">
-                                    <i class="fas fa-cog w-4 text-center text-slate-400"></i>
-                                    {{ 'nav.settings' | translate }}
-                                </button>
-                                <button (click)="logout()"
-                                    class="w-full text-left px-5 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors flex items-center gap-3">
-                                    <i class="fas fa-sign-out-alt w-4 text-center"></i>
-                                    {{ 'nav.logout' | translate }}
-                                </button>
+
+                            <div class="p-3 space-y-4 md:p-4 md:space-y-6">
+                                <!-- Group 1: My Health -->
+                                <div>
+                                    <h4
+                                        class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 mb-1.5 md:mb-3">
+                                        Health Dashboard
+                                    </h4>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button (click)="navigateToDashboard()"
+                                            class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-emerald-50 transition-all group">
+                                            <i
+                                                class="fas fa-columns text-emerald-500 text-sm group-hover:scale-110 transition-transform"></i>
+                                            <span
+                                                class="text-xs font-bold text-slate-700 group-hover:text-emerald-700">{{
+                                                'nav.dashboard' | translate }}</span>
+                                        </button>
+                                        <button (click)="navigateToOrders()"
+                                            class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-emerald-50 transition-all group">
+                                            <i
+                                                class="fas fa-box text-orange-500 text-sm group-hover:scale-110 transition-transform"></i>
+                                            <span
+                                                class="text-xs font-bold text-slate-700 group-hover:text-emerald-700">{{
+                                                'nav.orders' | translate }}</span>
+                                        </button>
+                                        <button routerLink="/appointments/video" (click)="profileMenuOpen = false"
+                                            class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-emerald-50 transition-all group">
+                                            <i
+                                                class="fas fa-video text-rose-500 text-sm group-hover:scale-110 transition-transform"></i>
+                                            <span
+                                                class="text-xs font-bold text-slate-700 group-hover:text-emerald-700">Appointments</span>
+                                        </button>
+                                        <button routerLink="/wellness/calendar" (click)="profileMenuOpen = false"
+                                            class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-emerald-50 transition-all group">
+                                            <i
+                                                class="fas fa-calendar-alt text-emerald-500 text-sm group-hover:scale-110 transition-transform"></i>
+                                            <span
+                                                class="text-xs font-bold text-slate-700 group-hover:text-emerald-700">Calendar</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Group 2: Account & Personal -->
+                                <div>
+                                    <h4
+                                        class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 mb-3">
+                                        Personal & Savings
+                                    </h4>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button (click)="navigateToProfile()"
+                                            class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-emerald-50 transition-all group">
+                                            <i
+                                                class="fas fa-user-circle text-purple-500 text-sm group-hover:scale-110 transition-transform"></i>
+                                            <span
+                                                class="text-xs font-bold text-slate-700 group-hover:text-emerald-700">My
+                                                Profile</span>
+                                        </button>
+                                        <button (click)="navigateToFavorites()"
+                                            class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-emerald-50 transition-all group">
+                                            <i
+                                                class="fas fa-heart text-red-500 text-sm group-hover:scale-110 transition-transform"></i>
+                                            <span
+                                                class="text-xs font-bold text-slate-700 group-hover:text-emerald-700">Favorites</span>
+                                        </button>
+                                        <button (click)="navigateToProfile('reviews')"
+                                            class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-emerald-50 transition-all group">
+                                            <i
+                                                class="fas fa-star text-amber-500 text-sm group-hover:scale-110 transition-transform"></i>
+                                            <span
+                                                class="text-xs font-bold text-slate-700 group-hover:text-emerald-700">Reviews</span>
+                                        </button>
+                                        <button (click)="navigateToBilling()"
+                                            class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-emerald-50 transition-all group">
+                                            <i
+                                                class="fas fa-credit-card text-emerald-500 text-sm group-hover:scale-110 transition-transform"></i>
+                                            <span
+                                                class="text-xs font-bold text-slate-700 group-hover:text-emerald-700">Billing</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Group 3: Help & Settings -->
+                                <div>
+                                    <div class="grid grid-cols-2 gap-2 mb-2">
+                                        <button (click)="navigateToSettings()"
+                                            class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-slate-50 transition-all group">
+                                            <i
+                                                class="fas fa-cog text-slate-400 text-sm group-hover:rotate-90 transition-transform duration-500"></i>
+                                            <span
+                                                class="text-xs font-bold text-slate-600 group-hover:text-slate-900">Settings</span>
+                                        </button>
+                                        <button routerLink="/feedback" (click)="profileMenuOpen = false"
+                                            class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-slate-50 transition-all group">
+                                            <i
+                                                class="fas fa-comment-alt text-slate-400 text-sm group-hover:scale-110 transition-transform"></i>
+                                            <span
+                                                class="text-xs font-bold text-slate-600 group-hover:text-slate-900">Feedback</span>
+                                        </button>
+                                    </div>
+                                    <button (click)="logout()"
+                                        class="w-full flex items-center justify-center gap-3 py-2.5 md:py-3 rounded-2xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all font-black text-sm shadow-sm group">
+                                        <i
+                                            class="fas fa-sign-out-alt group-hover:translate-x-1 transition-transform"></i>
+                                        {{ 'nav.logout' | translate }}
+                                    </button>
+                                </div>
                             </div>
                         </ng-container>
                         <ng-template #guestMenu>

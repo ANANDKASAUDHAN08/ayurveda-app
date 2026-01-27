@@ -7,47 +7,87 @@ const getDistanceQuery = (lat, lng, tblLat = 'latitude', tblLng = 'longitude') =
 
 exports.getNearbyHospitals = async (req, res) => {
     try {
-        const { lat, lng, radius = 25, search } = req.query; // increased default radius
+        const { lat, lng, radius = 25, search, page = 1, limit = 20, state, city, pincode } = req.query; // increased default radius
+        const offset = (parseInt(page) - 1) * parseInt(limit);
 
-        if (!lat || !lng) {
+        // Location is optional if searching or filtering
+        const hasLocation = lat && lng && parseFloat(lat) !== 0 && parseFloat(lng) !== 0;
+
+        if (!hasLocation && !search && !state && !city && !pincode) {
             return res.status(400).json({
                 success: false,
-                message: 'Latitude and Longitude are required'
+                message: 'Latitude/Longitude or search/filters are required'
             });
         }
 
-        const distanceSql = getDistanceQuery(lat, lng);
-
-        let query = `
+        const rawDistanceSql = hasLocation ? getDistanceQuery(lat, lng) : 'NULL';
+        const distanceSql = `IF(latitude IS NULL OR longitude IS NULL OR latitude = 0 OR longitude = 0, NULL, ${rawDistanceSql})`;
+        const query = `
             SELECT *, ${distanceSql} AS distance 
-            FROM (
-                SELECT id, name, address, city, state, pincode, latitude, longitude, phone, email, website, type, specialties, rating, data_source
-                FROM hospitals
-                UNION ALL
-                SELECT id, name, address, NULL as city, state, NULL as pincode, NULL as latitude, NULL as longitude, contact as phone, NULL as email, website, category as type, specialties, NULL as rating, 'NABH' as data_source
-                FROM nabh_hospitals
-                UNION ALL
-                SELECT id, hospital_name as name, address, city, state, pincode, NULL as latitude, NULL as longitude, NULL as phone, email, website, hospital_type as type, specialties, NULL as rating, 'Specialty' as data_source
-                FROM hospitals_with_specialties
-            ) as combined
+            FROM hospitals
             WHERE 1=1
+            ${search ? ' AND (name LIKE ? OR specialties LIKE ?)' : ''}
+            ${state ? ' AND state LIKE ?' : ''}
+            ${city ? ' AND city LIKE ?' : ''}
+            ${pincode ? ' AND pincode LIKE ?' : ''}
+            HAVING (
+                (distance <= ? OR distance IS NULL) 
+                ${(search || state || city || pincode) ? ' OR 1=1 ' : ''}
+            )
         `;
 
         const params = [];
         if (search) {
-            query += ' AND (name LIKE ? OR specialties LIKE ?)';
             params.push(`%${search}%`, `%${search}%`);
         }
+        if (state) params.push(`%${state}%`);
+        if (city) params.push(`%${city}%`);
+        if (pincode) params.push(`%${pincode}%`);
+        params.push(parseFloat(radius));
 
-        // Include records without coordinates by checking if distance is NULL
-        query += ` HAVING (distance <= ? OR distance IS NULL) ORDER BY distance ASC LIMIT 100`;
-        params.push(radius);
+        // Get total count for pagination
+        const countQuery = `SELECT COUNT(*) as total FROM (${query}) as filtered`;
+        const [countResult] = await db.execute(countQuery, params);
+        const total = countResult[0].total;
 
-        const [hospitals] = await db.execute(query, params);
+        // Add sorting and final pagination - prioritize items with distance
+        const finalQuery = `${query} ORDER BY (distance IS NULL), distance ASC LIMIT ${Math.max(1, parseInt(limit))} OFFSET ${Math.max(0, parseInt(offset))}`;
+        const [hospitals] = await db.execute(finalQuery, params);
+
+        const cleanedHospitals = hospitals.map(h => {
+            // Clean up '\N' strings
+            const clean = (val) => (val === '\\N' || val === 'NULL' || val === null) ? '' : val;
+
+            let address = clean(h.address);
+            if (!address || address === '') {
+                const parts = [clean(h.city), clean(h.state), clean(h.pincode)].filter(p => p !== '');
+                address = parts.join(', ');
+            }
+
+            return {
+                ...h,
+                address: address,
+                city: clean(h.city),
+                state: clean(h.state),
+                pincode: clean(h.pincode),
+                phone: clean(h.phone),
+                email: clean(h.email),
+                website: clean(h.website),
+                specialties: clean(h.specialties),
+                type: clean(h.type) || 'Hospital',
+                data_source: h.data_source || 'hospitals'
+            };
+        });
 
         res.json({
             success: true,
-            data: hospitals
+            data: cleanedHospitals,
+            pagination: {
+                total,
+                page: parseInt(page),
+                limit: parseInt(limit),
+                pages: Math.ceil(total / parseInt(limit))
+            }
         });
     } catch (error) {
         console.error('Get nearby hospital error:', error);
@@ -60,29 +100,58 @@ exports.getNearbyHospitals = async (req, res) => {
 
 exports.getNearbyPharmacies = async (req, res) => {
     try {
-        const { lat, lng, radius = 5 } = req.query;
+        const { lat, lng, radius = 5, page = 1, limit = 20, state, city, pincode } = req.query;
+        const offset = (parseInt(page) - 1) * parseInt(limit);
 
-        if (!lat || !lng) {
+        // Location is optional if searching or filtering
+        const hasLocation = lat && lng && parseFloat(lat) !== 0 && parseFloat(lng) !== 0;
+
+        if (!hasLocation && !state && !city && !pincode) {
             return res.status(400).json({
                 success: false,
-                message: 'Latitude and Longitude are required'
+                message: 'Latitude/Longitude or filters are required'
             });
         }
 
-        const distanceSql = getDistanceQuery(lat, lng);
+        const rawDistanceSql = hasLocation ? getDistanceQuery(lat, lng) : 'NULL';
+        const distanceSql = `IF(latitude IS NULL OR longitude IS NULL OR latitude = 0 OR longitude = 0, NULL, ${rawDistanceSql})`;
         const query = `
             SELECT *, ${distanceSql} AS distance 
             FROM pharmacies 
-            HAVING distance <= ? 
-            ORDER BY distance ASC 
-            LIMIT 100
+            WHERE 1=1
+            ${state ? ' AND state LIKE ?' : ''}
+            ${city ? ' AND city LIKE ?' : ''}
+            ${pincode ? ' AND pincode LIKE ?' : ''}
+            HAVING (
+                distance <= ? 
+                ${(state || city || pincode) ? ' OR 1=1 ' : ''}
+            )
         `;
 
-        const [pharmacies] = await db.execute(query, [radius]);
+        // Total count
+        const params = [];
+        if (state) params.push(`%${state}%`);
+        if (city) params.push(`%${city}%`);
+        if (pincode) params.push(`%${pincode}%`);
+        params.push(parseFloat(radius));
+
+        const countQuery = `SELECT COUNT(*) as total FROM (${query}) as filtered`;
+        const [countResult] = await db.execute(countQuery, params);
+        const total = countResult[0].total;
+
+        // Final paginated query - prioritize items with distance
+        const finalQuery = `${query} ORDER BY (distance IS NULL), distance ASC LIMIT ${Math.max(1, parseInt(limit))} OFFSET ${Math.max(0, parseInt(offset))}`;
+        const [pharmacies] = await db.execute(finalQuery, params);
 
         res.json({
             success: true,
-            data: pharmacies
+            data: pharmacies,
+            pagination: {
+                total,
+                page: parseInt(page),
+                limit: parseInt(limit),
+                pages: Math.ceil(total / parseInt(limit))
+            }
         });
     } catch (error) {
         console.error('Get nearby pharmacies error:', error);
@@ -95,29 +164,58 @@ exports.getNearbyPharmacies = async (req, res) => {
 
 exports.getNearbyDoctors = async (req, res) => {
     try {
-        const { lat, lng, radius = 5 } = req.query;
+        const { lat, lng, radius = 5, page = 1, limit = 20, state, city, pincode } = req.query;
+        const offset = (parseInt(page) - 1) * parseInt(limit);
 
-        if (!lat || !lng) {
+        // Location is optional if searching or filtering
+        const hasLocation = lat && lng && parseFloat(lat) !== 0 && parseFloat(lng) !== 0;
+
+        if (!hasLocation && !state && !city && !pincode) {
             return res.status(400).json({
                 success: false,
-                message: 'Latitude and Longitude are required'
+                message: 'Latitude/Longitude or filters are required'
             });
         }
 
-        const distanceSql = getDistanceQuery(lat, lng);
+        const rawDistanceSql = hasLocation ? getDistanceQuery(lat, lng) : 'NULL';
+        const distanceSql = `IF(latitude IS NULL OR longitude IS NULL OR latitude = 0 OR longitude = 0, NULL, ${rawDistanceSql})`;
         const query = `
             SELECT *, ${distanceSql} AS distance 
             FROM doctors 
-            HAVING distance <= ? 
-            ORDER BY distance ASC 
-            LIMIT 100
+            WHERE 1=1
+            ${state ? ' AND state LIKE ?' : ''}
+            ${city ? ' AND city LIKE ?' : ''}
+            ${pincode ? ' AND pincode LIKE ?' : ''}
+            HAVING (
+                distance <= ? 
+                ${(state || city || pincode) ? ' OR 1=1 ' : ''}
+            )
         `;
 
-        const [doctors] = await db.execute(query, [radius]);
+        // Total count
+        const params = [];
+        if (state) params.push(`%${state}%`);
+        if (city) params.push(`%${city}%`);
+        if (pincode) params.push(`%${pincode}%`);
+        params.push(parseFloat(radius));
+
+        const countQuery = `SELECT COUNT(*) as total FROM (${query}) as filtered`;
+        const [countResult] = await db.execute(countQuery, params);
+        const total = countResult[0].total;
+
+        // Final paginated query - prioritize items with distance
+        const finalQuery = `${query} ORDER BY (distance IS NULL), distance ASC LIMIT ${Math.max(1, parseInt(limit))} OFFSET ${Math.max(0, parseInt(offset))}`;
+        const [doctors] = await db.execute(finalQuery, params);
 
         res.json({
             success: true,
-            data: doctors
+            data: doctors,
+            pagination: {
+                total,
+                page: parseInt(page),
+                limit: parseInt(limit),
+                pages: Math.ceil(total / parseInt(limit))
+            }
         });
     } catch (error) {
         console.error('Get nearby doctors error:', error);
@@ -130,50 +228,60 @@ exports.getNearbyDoctors = async (req, res) => {
 
 exports.getNearbyHealthCentres = async (req, res) => {
     try {
-        const { lat, lng, radius = 10, district } = req.query;
+        const { lat, lng, radius = 10, district, state, subdistrict, page = 1, limit = 20 } = req.query;
+        const offset = (parseInt(page) - 1) * parseInt(limit);
 
         let query;
         let params = [];
         // Safely generate distance SQL if coordinates are present
-        const distanceSql = (lat && lng) ? getDistanceQuery(parseFloat(lat), parseFloat(lng)) : '0';
+        const rawDistanceSql = (lat && lng) ? getDistanceQuery(parseFloat(lat), parseFloat(lng)) : 'NULL';
+        const distanceSql = `IF(latitude IS NULL OR longitude IS NULL OR latitude = 0 OR longitude = 0, NULL, ${rawDistanceSql})`;
 
-        if (district) {
-            query = `
-                SELECT *, ${distanceSql} AS distance 
-                FROM health_centres 
-                WHERE district_name LIKE ? 
-                ORDER BY distance ASC
-                LIMIT 200
-            `;
-            params = [`%${district}%`];
-        } else if (lat && lng) {
-            query = `
-                SELECT *, ${distanceSql} AS distance 
-                FROM health_centres 
-                HAVING distance <= ? 
-                ORDER BY distance ASC 
-                LIMIT 100
-            `;
-            params = [radius];
-        } else {
-            return res.status(400).json({
-                success: false,
-                message: 'Latitude/Longitude or District is required'
-            });
-        }
+        query = `
+            SELECT *, ${distanceSql} AS distance 
+            FROM health_centres 
+            WHERE 1=1
+            ${state ? ' AND state_name LIKE ?' : ''}
+            ${district ? ' AND district_name LIKE ?' : ''}
+            ${subdistrict ? ' AND subdistrict_name LIKE ?' : ''}
+            HAVING (
+                (distance <= ? OR distance IS NULL)
+                ${(state || district || subdistrict) ? ' OR 1=1 ' : ''}
+            )
+        `;
 
-        const [centres] = await db.execute(query, params);
+        if (state) params.push(`%${state}%`);
+        if (district) params.push(`%${district}%`);
+        if (subdistrict) params.push(`%${subdistrict}%`);
+        params.push(parseFloat(radius));
+
+        // Total count
+        const countQuery = `SELECT COUNT(*) as total FROM (${query}) as filtered`;
+        const [countResult] = await db.execute(countQuery, params);
+        const total = countResult[0].total;
+
+        // Final paginated query - prioritize items with distance
+        const finalQuery = `${query} ORDER BY (distance IS NULL), distance ASC LIMIT ${Math.max(1, parseInt(limit))} OFFSET ${Math.max(0, parseInt(offset))}`;
+        const [centres] = await db.execute(finalQuery, params);
+
+        const mappedCentres = centres.map(c => ({
+            ...c,
+            name: c.facility_name,
+            address: c.facility_address && c.facility_address !== 'NA'
+                ? c.facility_address
+                : `${c.subdistrict_name}, ${c.district_name}, ${c.state_name}`,
+            type: 'health-centre'
+        }));
 
         res.json({
             success: true,
-            data: centres.map(c => ({
-                ...c,
-                name: c.facility_name,
-                address: c.facility_address && c.facility_address !== 'NA'
-                    ? c.facility_address
-                    : `${c.subdistrict_name}, ${c.district_name}, ${c.state_name}`,
-                type: 'health-centre'
-            }))
+            data: mappedCentres,
+            pagination: {
+                total,
+                page: parseInt(page),
+                limit: parseInt(limit),
+                pages: Math.ceil(total / parseInt(limit))
+            }
         });
     } catch (error) {
         console.error('Get nearby health centres error:', error);

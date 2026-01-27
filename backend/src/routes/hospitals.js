@@ -25,7 +25,8 @@ function toRad(degrees) {
 // GET /api/hospitals/nearby - Get nearby hospitals
 router.get('/nearby', async (req, res) => {
     try {
-        const { lat, lng, radius = 10, type } = req.query;
+        const { lat, lng, radius = 10, type, page = 1, limit = 20 } = req.query;
+        const offset = (parseInt(page) - 1) * parseInt(limit);
 
         if (!lat || !lng) {
             return res.status(400).json({ error: 'Latitude and longitude are required' });
@@ -35,51 +36,78 @@ router.get('/nearby', async (req, res) => {
         const userLng = parseFloat(lng);
         const searchRadius = parseFloat(radius);
 
-        // Build query to combine all sources
-        let query = `
-            SELECT * FROM (
-                SELECT id, name, address, city, state, pincode, latitude, longitude, phone, emergency_phone, email, website, type, specialties, rating, data_source
-                FROM hospitals
-                UNION ALL
-                SELECT id, name, address, NULL as city, state, NULL as pincode, NULL as latitude, NULL as longitude, contact as phone, NULL as emergency_phone, NULL as email, website, category as type, specialties, NULL as rating, 'NABH' as data_source
-                FROM nabh_hospitals
-                UNION ALL
-                SELECT id, hospital_name as name, address, city, state, pincode, NULL as latitude, NULL as longitude, NULL as phone, NULL as emergency_phone, email, website, hospital_type as type, specialties, NULL as rating, 'Specialty' as data_source
-                FROM hospitals_with_specialties
-            ) as combined
+        const query = `
+            SELECT id, name, address, city, state, pincode, latitude, longitude, phone, emergency_phone, email, website, type, specialties, rating, data_source
+            FROM hospitals
             WHERE 1=1
+            ${type && (type === 'government' || type === 'private') ? ' AND type = ?' : ''}
         `;
 
         const queryParams = [];
-
         if (type && (type === 'government' || type === 'private')) {
-            query += ' AND type = ?';
             queryParams.push(type);
         }
 
+        // Total count (ignoring pagination)
+        const countQuery = `SELECT COUNT(*) as total FROM (${query}) as filtered`;
+        const [countResult] = await db.execute(countQuery, queryParams);
+        const total = countResult[0].total;
+
         const [hospitals] = await db.execute(query, queryParams);
 
-        // Calculate distance for each hospital and filter by radius
-        const hospitalsWithDistance = hospitals
-            .map(hospital => ({
-                ...hospital,
-                distance: (hospital.latitude && hospital.longitude) ? calculateDistance(
-                    userLat,
-                    userLng,
-                    parseFloat(hospital.latitude),
-                    parseFloat(hospital.longitude)
-                ) : null
-            }))
+        // Calculate distance and clean up data
+        const cleanedHospitals = hospitals
+            .map(hospital => {
+                const clean = (val) => (val === '\\N' || val === 'NULL' || val === null) ? '' : val;
+
+                let address = clean(hospital.address);
+                if (!address || address === '') {
+                    const parts = [clean(hospital.city), clean(hospital.state), clean(hospital.pincode)].filter(p => p !== '');
+                    address = parts.join(', ');
+                }
+
+                const lat = parseFloat(hospital.latitude);
+                const lng = parseFloat(hospital.longitude);
+
+                return {
+                    ...hospital,
+                    address: address,
+                    city: clean(hospital.city),
+                    state: clean(hospital.state),
+                    pincode: clean(hospital.pincode),
+                    phone: clean(hospital.phone),
+                    email: clean(hospital.email),
+                    website: clean(hospital.website),
+                    specialties: clean(hospital.specialties),
+                    type: clean(hospital.type) || 'Hospital',
+                    distance: (lat && lng && lat !== 0 && lng !== 0) ? calculateDistance(
+                        userLat,
+                        userLng,
+                        lat,
+                        lng
+                    ) : null
+                };
+            })
             .filter(hospital => hospital.distance === null || hospital.distance <= searchRadius)
             .sort((a, b) => {
-                if (a.distance === null) return 1;
-                if (b.distance === null) return -1;
+                if (a.distance === null && b.distance !== null) return 1;
+                if (a.distance !== null && b.distance === null) return -1;
+                if (a.distance === null && b.distance === null) return 0;
                 return a.distance - b.distance;
-            }); // Nearby first, then unknown distance (NABH/Specialty)
+            });
+
+        // Apply pagination to cleaned results
+        const paginatedHospitals = cleanedHospitals.slice(offset, offset + parseInt(limit));
 
         res.json({
-            count: hospitalsWithDistance.length,
-            hospitals: hospitalsWithDistance
+            count: total,
+            hospitals: paginatedHospitals,
+            pagination: {
+                total,
+                page: parseInt(page),
+                limit: parseInt(limit),
+                pages: Math.ceil(total / parseInt(limit))
+            }
         });
 
     } catch (error) {

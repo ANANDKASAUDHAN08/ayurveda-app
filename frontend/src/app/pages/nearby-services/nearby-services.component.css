@@ -1,86 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+:host {
+    display: block;
+    height: 100%;
+    /* Theme Color Variables */
+    --primary-color: #047857;
+    --primary-dark: #065f46;
+    --secondary-color: #0f766e;
+    --accent-color: #14b8a6;
+    --bg-light: #f1f5f9;
+    --bg-white: #ffffff;
+    --text-dark: #1e293b;
+    --text-medium: #64748b;
+    --text-light: #94a3b8;
+}
+
+.font-outfit {
+    font-family: 'Outfit', sans-serif;
+}
+
 .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
+    background: #f1f5f9;
     border-radius: 10px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+.custom-scrollbar::-webkit-scrollbar-thumb {
     background: #cbd5e1;
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+.custom-scrollbar-thin::-webkit-scrollbar {
+    height: 4px;
+}
+
+.custom-scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
 
-/* MapLibre Popup Styles Overrides */
-.maplibregl-popup-content {
-    border-radius: 16px !important;
-    padding: 0 !important;
-    overflow: hidden;
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-.maplibregl-popup-close-button {
-    padding: 8px !important;
-    color: #94a3b8 !important;
-    font-size: 16px !important;
-}
-
-.maplibregl-ctrl-group {
-    border-radius: 12px !important;
-    border: none !important;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
-}
-
-/* Mobile legend animation */
 .animate-fade-in {
-    animation: fadeIn 0.2s ease-in;
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-zoom-in {
+    animation: zoomIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(-10px);
     }
 
     to {
         opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
         transform: translateY(0);
     }
 }
 
-/* Hide location button on mobile maps */
-@media (max-width: 1023px) {
+.nearby-sidebar {
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-    .block.lg\:hidden google-map ::ng-deep button[title="Show your location"],
-    .block.lg\:hidden google-map ::ng-deep div[title="Show your location"] {
-        display: none !important;
+.group:hover .group-hover\:scale-110 {
+    transform: scale(1.1);
+}
+
+/* Glassmorphism utility */
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Tablet specific styles (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .nearby-sidebar {
+        width: 100% !important;
     }
 }
 
+/* Mobile specific styles (max-width: 1023px) */
 @media (max-width: 1023px) {
-
     .md\:h-\[calc\(100vh-64px\)\] {
         height: auto !important;
         min-height: 100vh;
     }
 
     .nearby-sidebar {
-        width: 100%;
-        height: auto;
+        width: 100% !important;
+        height: auto !important;
     }
 
     .nearby-list-section {
         height: auto !important;
-        overflow: visible !important;
+        max-height: none;
+        overflow-y: auto !important;
         flex: none !important;
+    }
+
+    /* Mobile map styles */
+    .mobile-map-view {
+        min-height: 100vh;
+        background: white;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-map-container {
+        height: 70vh;
+        width: 100%;
+        position: relative;
+    }
+}
+
+/* Desktop specific improvements */
+@media (min-width: 1024px) {
+    .nearby-list-section {
+        scrollbar-gutter: stable;
     }
 }
