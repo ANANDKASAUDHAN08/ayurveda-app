@@ -156,7 +156,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           type: 'critical_update',
           title: 'App Update Available',
           message: 'A new version of the app is ready. Click to update now.',
-          action_url: '/notifications'
+          action_url: '@action:update'
         });
       });
 

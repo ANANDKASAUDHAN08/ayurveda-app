@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NotificationService, Notification } from '../../../shared/services/notification.service';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter } from 'rxjs/operators';
@@ -48,7 +48,8 @@ export class NotificationsPageComponent implements OnInit {
 
   constructor(
     public notificationService: NotificationService,
-    private swUpdate: SwUpdate
+    private swUpdate: SwUpdate,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -137,6 +138,16 @@ export class NotificationsPageComponent implements OnInit {
           }
         });
       }
+    }
+  }
+
+  handleNotificationClick(notification: Notification) {
+    this.markAsRead(notification);
+
+    if (notification.action_url === '@action:update') {
+      this.updateApp();
+    } else if (notification.action_url) {
+      this.router.navigateByUrl(notification.action_url);
     }
   }
 

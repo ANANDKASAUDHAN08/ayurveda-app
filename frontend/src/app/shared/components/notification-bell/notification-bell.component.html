@@ -45,8 +45,7 @@
 
         <!-- Notifications List -->
         <div *ngIf="!loading && notifications.length > 0" class="max-h-[400px] overflow-y-auto">
-            <div *ngFor="let notification of notifications" [routerLink]="notification.action_url || '/notifications'"
-                (click)="navigateToNotification(notification)"
+            <div *ngFor="let notification of notifications" (click)="navigateToNotification(notification)"
                 class="px-4 py-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
                 [class.bg-blue-50]="!notification.is_read">
 

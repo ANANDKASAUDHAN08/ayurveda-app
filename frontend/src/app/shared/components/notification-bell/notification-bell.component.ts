@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NotificationService, Notification } from '../../services/notification.service';
 import { Subscription } from 'rxjs';
 
@@ -22,7 +22,8 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
 
   constructor(
     public notificationService: NotificationService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -128,7 +129,12 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
   navigateToNotification(notification: Notification) {
     this.markAsRead(notification, new Event('click'));
     this.closeDropdown();
-    // Navigation handled by routerLink in template
+
+    if (notification.action_url === '@action:update') {
+      window.location.reload();
+    } else {
+      this.router.navigateByUrl(notification.action_url || '/notifications');
+    }
   }
 
   @HostListener('document:click', ['$event'])

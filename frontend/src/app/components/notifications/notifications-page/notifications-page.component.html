@@ -119,10 +119,10 @@
 
         <!-- Notifications List -->
         <div *ngIf="!loading && notifications.length > 0" class="space-y-3">
-            <div *ngFor="let notification of notifications" [routerLink]="notification.action_url || null"
+            <div *ngFor="let notification of notifications"
                 class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 hover:shadow-md transition-all cursor-pointer"
                 [class.bg-blue-50]="!notification.is_read" [class.border-blue-200]="!notification.is_read"
-                (click)="markAsRead(notification)">
+                (click)="handleNotificationClick(notification)">
 
                 <div class="flex items-start gap-4">
                     <!-- Icon -->
