@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MorbidityService, MorbidityCode } from '../../../../shared/services/morbidity.service';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { ShareButtonComponent } from '../../../../shared/components/share/share-button/share-button.component';
+import { ShareData } from '../../../../shared/services/share.service';
 
 @Component({
     selector: 'app-ayurveda-dictionary',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, ShareButtonComponent],
     templateUrl: './ayurveda-dictionary.component.html',
     styleUrls: ['./ayurveda-dictionary.component.css']
 })
@@ -119,5 +121,14 @@ export class AyurvedaDictionaryComponent implements OnInit {
             .replace(/Classifed/g, 'Classified'); // Fix typo in dataset
 
         return cleaned.trim();
+    }
+
+    getShareData(): ShareData {
+        const url = `${window.location.origin}/ayurveda/dictionary?q=${this.selectedCode?.namc_term}`;
+        return {
+            title: `Ayurvedic Term: ${this.selectedCode?.namc_term}`,
+            text: `${this.selectedCode?.namc_term} (${this.selectedCode?.namc_term_devanagari}): ${this.selectedCode?.short_definition}. Learn more in the Ayurveda Dictionary.`,
+            url: url
+        };
     }
 }

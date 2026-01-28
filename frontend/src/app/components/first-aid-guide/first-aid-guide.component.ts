@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FirstAidService, FirstAidGuide } from '../../shared/services/first-aid.service';
+import { ShareButtonComponent } from '../../shared/components/share/share-button/share-button.component';
+import { ShareData } from '../../shared/services/share.service';
 
 @Component({
   selector: 'app-first-aid-guide',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ShareButtonComponent],
   templateUrl: './first-aid-guide.component.html',
   styleUrl: './first-aid-guide.component.css'
 })
@@ -20,12 +22,29 @@ export class FirstAidGuideComponent implements OnInit {
 
   constructor(
     private firstAidService: FirstAidService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this.allGuides = this.firstAidService.getAllGuides();
     this.filteredGuides = this.allGuides;
+
+    // Listen for route parameter changes
+    this.route.params.subscribe(params => {
+      const guideId = params['id'];
+      if (guideId) {
+        const guide = this.firstAidService.getGuideById(guideId);
+        if (guide) {
+          this.selectedGuide = guide;
+        } else {
+          // If guide not found, go back to list
+          this.router.navigate(['/first-aid']);
+        }
+      } else {
+        this.selectedGuide = null;
+      }
+    });
   }
 
   onSearch() {
@@ -51,11 +70,11 @@ export class FirstAidGuideComponent implements OnInit {
   }
 
   viewGuideDetail(guide: FirstAidGuide) {
-    this.selectedGuide = guide;
+    this.router.navigate(['/first-aid', guide.id]);
   }
 
   closeDetail() {
-    this.selectedGuide = null;
+    this.router.navigate(['/first-aid']);
   }
 
   getCategoryColor(category: string): string {
@@ -79,5 +98,14 @@ export class FirstAidGuideComponent implements OnInit {
 
   goBackToEmergency() {
     this.router.navigate(['/emergency']);
+  }
+
+  getShareData(): ShareData {
+    const url = `${window.location.origin}/first-aid/${this.selectedGuide?.id}`;
+    return {
+      title: `First Aid Guide: ${this.selectedGuide?.title}`,
+      text: `Immediate actions for ${this.selectedGuide?.title}. Check this first aid guide on HealthConnect.`,
+      url: url
+    };
   }
 }

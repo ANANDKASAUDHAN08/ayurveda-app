@@ -17,12 +17,18 @@
                 </div>
 
                 <!-- History Button - Compact -->
-                <a *ngIf="isLoggedIn" routerLink="/emergency-history"
-                    class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors text-xs sm:text-sm">
-                    <i class="fas fa-history"></i>
-                    <span class="hidden sm:inline">View Call History</span>
-                    <span class="sm:hidden">History</span>
-                </a>
+                <div class="flex items-center gap-2">
+                    <a *ngIf="isLoggedIn" routerLink="/emergency-history"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors text-xs sm:text-sm">
+                        <i class="fas fa-history"></i>
+                        <span class="hidden sm:inline">View Call History</span>
+                        <span class="sm:hidden">History</span>
+                    </a>
+                    <app-share-button [shareData]="getShareData()"
+                        customClass="p-2 bg-white border border-slate-200 text-slate-600 hover:text-emerald-600 rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-emerald-500/20"
+                        title="Share Emergency Hub">
+                    </app-share-button>
+                </div>
             </div>
 
             <!-- Title & Description - More Compact -->

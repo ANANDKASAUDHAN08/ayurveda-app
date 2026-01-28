@@ -101,10 +101,18 @@
                             {{selectedCode.namc_id}}</span>
                     </div>
 
-                    <h2 class="text-3xl font-bold mb-1">{{formatTerm(selectedCode.namc_term)}}</h2>
-                    <p class="text-emerald-100 text-xl font-hindi">{{selectedCode.namc_term_devanagari}}</p>
-                    <p class="text-emerald-200/80 italic text-sm mt-1" *ngIf="selectedCode.namc_term_diacritical">
-                        {{selectedCode.namc_term_diacritical}}</p>
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h2 class="text-3xl font-bold mb-1">{{formatTerm(selectedCode.namc_term)}}</h2>
+                            <p class="text-emerald-100 text-xl font-hindi">{{selectedCode.namc_term_devanagari}}</p>
+                            <p class="text-emerald-200/80 italic text-sm mt-1"
+                                *ngIf="selectedCode.namc_term_diacritical">
+                                {{selectedCode.namc_term_diacritical}}</p>
+                        </div>
+                        <app-share-button [shareData]="getShareData()"
+                            customClass="w-10 h-10 flex items-center justify-center rounded-xl bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm transition-all border border-white/20">
+                        </app-share-button>
+                    </div>
                 </div>
 
                 <!-- Detail Content -->

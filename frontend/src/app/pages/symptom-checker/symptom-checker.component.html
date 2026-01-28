@@ -130,7 +130,7 @@
                     <div class="relative flex-grow min-w-[200px]">
                         <i
                             class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" [(ngModel)]="searchQuery"
+                        <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="runAnalysis()"
                             class="w-full bg-transparent border-none px-4 py-3 pl-10 text-slate-700 font-bold placeholder:text-slate-300 outline-none text-sm"
                             placeholder="Filter symptoms or patterns...">
                     </div>
@@ -164,12 +164,21 @@
                             </p>
                         </div>
 
-                        <div
-                            class="bg-white/5 backdrop-blur-xl border border-white/10 p-5 rounded-2xl text-center min-w-[140px] shadow-lg">
-                            <p class="text-[9px] font-black uppercase tracking-widest text-emerald-300 mb-1 opacity-80">
-                                Confidence</p>
-                            <div class="text-3xl sm:text-4xl font-black tabular-nums drop-shadow-md">
-                                {{diagnosis.diagnosis.confidence}}</div>
+                        <div class="flex flex-col items-center gap-3">
+                            <div
+                                class="bg-white/5 backdrop-blur-xl border border-white/10 p-5 rounded-2xl text-center min-w-[140px] shadow-lg">
+                                <p
+                                    class="text-[9px] font-black uppercase tracking-widest text-emerald-300 mb-1 opacity-80">
+                                    Confidence
+                                </p>
+                                <div class="text-3xl sm:text-4xl font-black tabular-nums drop-shadow-md">
+                                    {{diagnosis.diagnosis.confidence}}</div>
+                            </div>
+
+                            <!-- Share Button -->
+                            <app-share-button [shareData]="getShareData()" label="Share Result" [showLabel]="true"
+                                customClass="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-xl text-[10px] font-black uppercase tracking-widest text-white transition-all">
+                            </app-share-button>
                         </div>
                     </div>
 

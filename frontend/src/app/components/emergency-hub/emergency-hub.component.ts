@@ -12,11 +12,13 @@ import { MobileLocationBarComponent } from '../../shared/components/mobile-locat
 import { LocationService, UserLocation } from '../../shared/services/location.service';
 import { Subscription } from 'rxjs';
 import { MapService } from '../../shared/services/map.service';
+import { ShareButtonComponent } from '../../shared/components/share/share-button/share-button.component';
+import { ShareData } from '../../shared/services/share.service';
 
 @Component({
   selector: 'app-emergency-hub',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterLink, EmergencyContactModalComponent, MedicalInfoModalComponent, DragDropModule, MobileLocationBarComponent],
+  imports: [CommonModule, HttpClientModule, RouterLink, EmergencyContactModalComponent, MedicalInfoModalComponent, DragDropModule, MobileLocationBarComponent, ShareButtonComponent],
   templateUrl: './emergency-hub.component.html',
   styleUrl: './emergency-hub.component.css'
 })
@@ -478,4 +480,11 @@ export class EmergencyHubComponent implements OnInit {
     this.showMedicalModal = false;
   }
 
+  getShareData(): ShareData {
+    return {
+      title: 'Emergency Care Hub - HealthConnect',
+      text: 'Find emergency contacts, medical records, and nearby health centers instantly on HealthConnect.',
+      url: window.location.href
+    };
+  }
 }

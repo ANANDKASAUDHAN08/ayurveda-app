@@ -17,9 +17,86 @@
         </div>
         <div class="relative flex items-center shadow-[0_10px_30px_-10px_rgba(0,0,0,0.15)] rounded-2xl">
             <i class="fas fa-search absolute left-6 text-emerald-500 text-lg"></i>
-            <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()"
+            <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()" (focus)="onFocusSearch()"
+                (blur)="onBlurSearch()" (keyup.enter)="onSearch()"
                 class="w-full py-3.5 pl-14 pr-6 bg-white border border-slate-200 rounded-2xl focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 text-slate-800 placeholder-slate-400 font-bold text-base transition-all"
                 placeholder="Search doctors, medicines...">
+        </div>
+
+        <!-- Mobile Search Suggestions -->
+        <div *ngIf="showSuggestions && ( (searchQuery.length >= 2) || (searchQuery.length === 0 && (searchHistory.length > 0 || popularSearches.length > 0)) )"
+            class="absolute top-[calc(100%+8px)] left-0 right-0 bg-white border border-slate-100 rounded-2xl shadow-2xl z-[100] max-h-[60vh] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-300">
+
+            <!-- Mobile AI Diagnosis Suggestion -->
+            <div *ngIf="searchQuery.length >= 2" (mousedown)="diagnoseSymptoms()"
+                class="m-2 p-3 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-between group active:scale-[0.98] transition-all">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-sm">
+                        <i class="fa-solid fa-microscope text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="font-black text-emerald-900 text-xs">Diagnose with AI</p>
+                        <p class="text-[9px] text-emerald-600 font-bold">Scan for "{{searchQuery}}"</p>
+                    </div>
+                </div>
+                <i class="fas fa-bolt text-emerald-400 text-xs"></i>
+            </div>
+
+            <!-- Suggestion Results -->
+            <div *ngIf="searchQuery.length >= 2" class="p-2 space-y-1">
+                <div *ngFor="let suggestion of suggestions" (mousedown)="selectSuggestion(suggestion)"
+                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition-colors">
+                    <div class="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-slate-400 text-xs">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-slate-800 text-sm">{{ suggestion.name }}</p>
+                        <p class="text-[9px] text-slate-400 uppercase font-black tracking-widest">{{ suggestion.type ||
+                            'Result' }}</p>
+                    </div>
+                </div>
+
+                <!-- Mobile No Results -->
+                <div *ngIf="suggestions.length === 0 && searchQuery.length >= 2" class="py-10 text-center">
+                    <i class="fas fa-search-minus text-2xl text-slate-200 mb-2"></i>
+                    <p class="text-slate-500 text-xs font-bold">No results found</p>
+                </div>
+            </div>
+
+            <!-- Mobile History & Trending (Initial State) -->
+            <div *ngIf="searchQuery.length === 0" class="p-4 space-y-6">
+                <!-- Recent Searches -->
+                <div *ngIf="searchHistory.length > 0">
+                    <div class="flex items-center justify-between mb-3 px-1">
+                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recent
+                            Searches</span>
+                        <button (mousedown)="clearHistory()"
+                            class="text-[9px] font-black text-emerald-600 uppercase">Clear</button>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button *ngFor="let term of searchHistory" (mousedown)="searchFromHistory(term)"
+                            class="px-3 py-1.5 bg-slate-50 text-slate-600 rounded-lg text-xs font-bold border border-slate-100">
+                            {{ term }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Trending -->
+                <div *ngIf="popularSearches.length > 0">
+                    <div class="mb-3 px-1">
+                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Trending
+                            Now</span>
+                    </div>
+                    <div class="space-y-1">
+                        <button *ngFor="let term of popularSearches" (mousedown)="searchPopular(term)"
+                            class="w-full flex items-center gap-3 p-3 text-left hover:bg-slate-50 rounded-xl transition-all">
+                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                            <span class="text-sm font-bold text-slate-700">{{ term }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -226,14 +303,38 @@
                         class="absolute top-[calc(100%+12px)] left-0 right-0 bg-white/95 backdrop-blur-2xl border border-white/30 rounded-[28px] p-2 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.25)] max-h-[450px] overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-300 z-50">
 
                         <!-- Search Query Suggestions -->
-                        <div *ngIf="searchQuery.length >= 2 && suggestions.length > 0" class="p-2 space-y-1">
+                        <div *ngIf="searchQuery.length >= 2" class="p-2 space-y-1">
                             <div class="px-3 py-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                                 Top Suggestions</div>
-                            <div class="flex items-center justify-between p-3.5 rounded-2xl hover:bg-slate-50 cursor-pointer transition-all group"
-                                *ngFor="let suggestion of suggestions" (mousedown)="selectSuggestion(suggestion)">
+
+                            <!-- AI Diagnosis Suggestion (Smart Integration) -->
+                            <div (mousedown)="diagnoseSymptoms()"
+                                class="flex items-center justify-between p-3.5 rounded-2xl bg-emerald-50/50 hover:bg-emerald-100/50 border border-emerald-100/50 cursor-pointer transition-all group mb-2">
                                 <div class="flex items-center gap-4">
                                     <div
-                                        class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 transition-transform group-hover:scale-110">
+                                        class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+                                        <i class="fa-solid fa-microscope text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-black text-emerald-900 text-sm">Diagnose with AI</p>
+                                        <p class="text-[9px] text-emerald-600 font-black uppercase tracking-widest">
+                                            Analyze "{{searchQuery}}" Patterns</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="text-[8px] font-black bg-emerald-600 text-white px-1.5 py-0.5 rounded-md uppercase animate-pulse">Smart
+                                        Scan</span>
+                                    <i
+                                        class="fas fa-arrow-right text-emerald-500 group-hover:translate-x-1 transition-all"></i>
+                                </div>
+                            </div>
+
+                            <div *ngFor="let suggestion of suggestions" (mousedown)="selectSuggestion(suggestion)"
+                                class="flex items-center justify-between p-3.5 rounded-2xl hover:bg-slate-50 cursor-pointer transition-all group">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 transition-transform group-hover:scale-110">
                                         <i class="fas fa-search text-sm"></i>
                                     </div>
                                     <div>
@@ -245,6 +346,17 @@
                                 <i
                                     class="fas fa-arrow-right text-slate-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all"></i>
                             </div>
+
+                            <!-- No Results State -->
+                            <div *ngIf="searchQuery.length >= 2 && suggestions.length === 0" class="py-12 text-center">
+                                <div
+                                    class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-search-minus text-2xl text-slate-300"></i>
+                                </div>
+                                <p class="text-slate-500 font-bold text-sm">No medical results for "{{ searchQuery }}"
+                                </p>
+                                <p class="text-xs text-slate-400 mt-1">Try our AI diagnostic scanner instead.</p>
+                            </div>
                         </div>
 
                         <!-- Initial State (History & Trending) -->
@@ -255,7 +367,7 @@
                                     Recent Searches</div>
                                 <div class="flex flex-wrap gap-2 px-3 mb-4">
                                     <button *ngFor="let term of searchHistory" (mousedown)="searchFromHistory(term)"
-                                        class="px-4 py-2 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 rounded-xl text-sm font-bold transition-all border border-slate-100">
+                                        class="px-4 py-2 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 rounded-xl text-xs font-bold transition-all border border-slate-100">
                                         {{ term }}
                                     </button>
                                 </div>
@@ -268,20 +380,10 @@
                                     <button *ngFor="let term of popularSearches" (mousedown)="searchPopular(term)"
                                         class="flex items-center gap-3 p-3 text-left hover:bg-slate-50 rounded-2xl transition-all">
                                         <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                        <span class="text-sm font-bold text-slate-700">{{ term }}</span>
+                                        <span class="text-xs font-bold text-slate-700">{{ term }}</span>
                                     </button>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- No Results State -->
-                        <div *ngIf="searchQuery.length >= 2 && suggestions.length === 0" class="py-12 text-center">
-                            <div
-                                class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-search-minus text-2xl text-slate-300"></i>
-                            </div>
-                            <p class="text-slate-500 font-bold">No results found for "{{ searchQuery }}"</p>
-                            <p class="text-xs text-slate-400 mt-1">Try searching for something else</p>
                         </div>
                     </div>
                 </div>
@@ -400,6 +502,94 @@
                         <span>Explore Homeopathy</span>
                         <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- AI Diagnostic Pulse Section (Premium & Unique) -->
+<section class="max-w-7xl mx-auto px-4 md:px-8 mb-12 md:mb-20">
+    <div (click)="diagnoseSymptoms()"
+        class="cursor-pointer group relative overflow-hidden rounded-[2.5rem] bg-slate-900 p-8 md:p-12 shadow-2xl transition-all hover:scale-[1.01]">
+        <!-- Animated Background Effects -->
+        <div class="absolute inset-0 bg-gradient-to-r from-emerald-600/20 via-blue-600/10 to-transparent"></div>
+        <div class="absolute -right-20 -top-20 w-80 h-80 bg-emerald-500/20 rounded-full blur-[100px] animate-pulse">
+        </div>
+        <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-blue-500/20 rounded-full blur-[100px] animate-pulse"
+            style="animation-delay: 1s;"></div>
+
+        <!-- Abstract Tech Pattern -->
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none"
+            style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
+
+        <div class="relative z-10 grid lg:grid-cols-2 gap-8 items-center">
+            <div class="space-y-6">
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span class="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400">
+                        AI Diagnostic Protocol Active
+                    </span>
+                </div>
+
+                <h2 class="text-2xl md:text-5xl font-black text-white leading-[1.1] tracking-tighter">
+                    Feeling Unwell?<br />Let AI <span class="text-emerald-400">Scan</span> Your Health.
+                </h2>
+
+                <p class="text-slate-400 text-sm md:text-xl font-medium max-w-lg leading-relaxed">
+                    Map your biological patterns to our neural diagnostic engine for instant clinical insights and
+                    treatment recommendations.
+                </p>
+
+                <div class="flex flex-row md:flex-wrap gap-4 pt-4">
+                    <button
+                        class="px-4 py-2 md:px-8 md:py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl transition-all shadow-xl shadow-emerald-500/20 flex items-center gap-3">
+                        <span> Start <span class="md:inline hidden"> Instant </span> Scan </span>
+                        <i class="fa-solid fa-bolt-lightning text-xs"></i>
+                    </button>
+                    <button (click)="$event.stopPropagation(); navigateTo('/symptom-history')"
+                        class="px-4 py-2 md:px-8 md:py-4 bg-white/5 hover:bg-white/10 text-white border border-white/10 backdrop-blur-md font-black rounded-2xl transition-all">
+                        <span class="md:inline hidden"> View </span> History
+                    </button>
+                </div>
+            </div>
+
+            <!-- Visual Element: Digital Pulse / Health Twin -->
+            <div class="hidden lg:flex justify-center items-center relative py-12">
+                <!-- Outer Rings -->
+                <div
+                    class="absolute w-[400px] h-[400px] border border-emerald-500/10 rounded-full animate-[spin_20s_linear_infinite]">
+                </div>
+                <div
+                    class="absolute w-[300px] h-[300px] border border-blue-500/10 rounded-full animate-[spin_15s_linear_infinite_reverse]">
+                </div>
+
+                <!-- Central Icon with Pulsating Glow -->
+                <div
+                    class="relative w-48 h-48 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-[3rem] shadow-3xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                    <i class="fa-solid fa-dna text-6xl text-white drop-shadow-2xl"></i>
+
+                    <!-- Pulse Waves -->
+                    <div
+                        class="absolute inset-0 rounded-[3rem] border-2 border-emerald-500 animate-[ping_3s_linear_infinite] opacity-50">
+                    </div>
+                    <div class="absolute inset-0 rounded-[3rem] border-2 border-emerald-500 animate-[ping_3s_linear_infinite] opacity-30"
+                        style="animation-delay: 1s"></div>
+                </div>
+
+                <!-- Floating Data Points -->
+                <div
+                    class="absolute top-10 right-20 bg-white/5 backdrop-blur-md p-3 rounded-xl border border-white/10 animate-float">
+                    <div class="text-[10px] font-black text-emerald-400 uppercase mb-1">Heart Rhythm</div>
+                    <div class="text-white font-black">72 BPM</div>
+                </div>
+                <div class="absolute bottom-10 left-20 bg-white/5 backdrop-blur-md p-3 rounded-xl border border-white/10 animate-float"
+                    style="animation-delay: 2s"></div>
+                <div
+                    class="absolute bottom-10 left-20 bg-white/5 backdrop-blur-md p-3 rounded-xl border border-white/10">
+                    <div class="text-[10px] font-black text-blue-400 uppercase mb-1">Cognitive Scan</div>
+                    <div class="text-white font-black">Stable</div>
                 </div>
             </div>
         </div>

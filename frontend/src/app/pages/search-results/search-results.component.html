@@ -29,6 +29,11 @@
                         <span class="text-sm font-medium text-gray-500 whitespace-nowrap" *ngIf="!loading">
                             {{ pagination.total }} items found
                         </span>
+                        <div class="h-1 w-1 bg-gray-300 rounded-full shrink-0" *ngIf="!loading"></div>
+                        <app-share-button *ngIf="!loading" [shareData]="getShareData()"
+                            customClass="text-gray-400 hover:text-emerald-600 transition-colors p-1"
+                            title="Share Search Result">
+                        </app-share-button>
                     </div>
                 </div>
 
@@ -448,7 +453,7 @@
 
                                     <!-- Medicine/Product Grid -->
                                     <div *ngSwitchDefault
-                                        class="grid grid-cols-1 gap-2.5 md:gap-4 lg:gap-6 md:grid-cols-3">
+                                        class="grid grid-cols-2 gap-2.5 md:gap-4 lg:gap-6 md:grid-cols-3">
                                         <app-medicine-card
                                             *ngFor="let product of groupedResults[type].slice(0, getDisplayLimit())"
                                             [product]="product"

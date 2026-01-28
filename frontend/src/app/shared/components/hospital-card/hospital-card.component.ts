@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { RatingDisplayComponent } from '../rating-display/rating-display.component';
 import { getEncyclopediaKey } from '../../utils/specialty-mapping';
+import { ShareButtonComponent } from '../share/share-button/share-button.component';
+import { ShareData } from '../../services/share.service';
 
 @Component({
     selector: 'app-hospital-card',
     standalone: true,
-    imports: [CommonModule, RouterModule, RatingDisplayComponent],
+    imports: [CommonModule, RouterModule, RatingDisplayComponent, ShareButtonComponent],
     templateUrl: './hospital-card.component.html'
 })
 export class HospitalCardComponent {
@@ -84,5 +86,14 @@ export class HospitalCardComponent {
 
     getSpecialtyKey(specialty: string): string | null {
         return getEncyclopediaKey(specialty);
+    }
+
+    getShareData(): ShareData {
+        const url = `${window.location.origin}/hospital/${this.hospital.id}`;
+        return {
+            title: this.formatName(this.hospital.name),
+            text: `Check out ${this.formatName(this.hospital.name)} located in ${this.formatLocation(this.hospital)}. Find more details on HealthConnect!`,
+            url: url
+        };
     }
 }

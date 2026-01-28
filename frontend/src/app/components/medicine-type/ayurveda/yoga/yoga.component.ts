@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AyurvedaService, Exercise, YogaPose } from '../../../../shared/services/ayurveda.service';
+import { ShareButtonComponent } from '../../../../shared/components/share/share-button/share-button.component';
+import { ShareData } from '../../../../shared/services/share.service';
 
 @Component({
   selector: 'app-yoga',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ShareButtonComponent],
   templateUrl: './yoga.component.html',
   styleUrl: './yoga.component.css'
 })
@@ -156,5 +158,21 @@ export class YogaComponent implements OnInit {
   viewExercise(exercise: any): void {
     console.log('Viewing exercise:', exercise);
     // Future: router.navigate to details
+  }
+
+  getSutraShareData(): ShareData {
+    return {
+      title: 'Yoga Sutra for Reflection',
+      text: `"${this.currentSutra?.text}" - ${this.currentSutra?.translation}. Find daily mindfulness on HealthConnect!`,
+      url: window.location.href
+    };
+  }
+
+  getPoseShareData(): ShareData {
+    return {
+      title: `Yoga Pose of the Week: ${this.poseOfWeek?.sanskrit_name}`,
+      text: `Learn ${this.poseOfWeek?.sanskrit_name} (${this.poseOfWeek?.name}). Benefits: ${this.poseOfWeek?.benefits}. Join my practice on HealthConnect!`,
+      url: window.location.href
+    };
   }
 }

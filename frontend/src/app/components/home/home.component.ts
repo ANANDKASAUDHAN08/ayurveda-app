@@ -647,9 +647,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   selectSuggestion(suggestion: any) {
-    this.searchQuery = suggestion.name;
-    this.showSuggestions = false;
-    this.onSearch();
+    if (suggestion.type === 'diagnosis') {
+      this.diagnoseSymptoms(suggestion.name);
+    } else {
+      this.searchQuery = suggestion.name;
+      this.showSuggestions = false;
+      this.onSearch();
+    }
+  }
+
+  diagnoseSymptoms(query?: string) {
+    const q = query || this.searchQuery;
+    const queryParams: any = {};
+    if (q) queryParams.s = q;
+    this.router.navigate(['/symptom-checker'], { queryParams });
   }
 
   searchFromHistory(term: string) {

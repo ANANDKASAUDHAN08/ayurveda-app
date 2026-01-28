@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AyurvedaKnowledgeItem } from '../../shared/services/ayurveda-knowledge.service';
 import { SymptomCheckerService, Symptom, FullDiagnosisResponse } from '../../shared/services/symptom-checker.service';
 import { AyurvedaDetailComponent } from '../../components/medicine-type/ayurveda/ayurveda-detail/ayurveda-detail.component';
 import { AuthService } from '../../shared/services/auth.service';
+import { ShareButtonComponent } from '../../shared/components/share/share-button/share-button.component';
+import { ShareData } from '../../shared/services/share.service';
 
 @Component({
     selector: 'app-symptom-checker',
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterModule, AyurvedaDetailComponent],
+    imports: [CommonModule, FormsModule, RouterModule, AyurvedaDetailComponent, ShareButtonComponent],
     templateUrl: './symptom-checker.component.html',
     styleUrls: ['./symptom-checker.component.css']
 })
@@ -29,11 +31,19 @@ export class SymptomCheckerComponent implements OnInit {
     constructor(
         private symptomService: SymptomCheckerService,
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) { }
 
     ngOnInit(): void {
         this.loadAvailableSymptoms();
+
+        // Check for pre-filled symptom from query params
+        this.route.queryParams.subscribe(params => {
+            if (params['s']) {
+                this.searchQuery = params['s'];
+            }
+        });
     }
 
     loadAvailableSymptoms() {
@@ -78,9 +88,16 @@ export class SymptomCheckerComponent implements OnInit {
         this.isLoadingFlow = true;
         this.hasSearched = true;
 
+        // Sync URL for shareability and persistence
+        // This ensures the '?s=' parameter matches the current input
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { s: this.searchQuery || null },
+            queryParamsHandling: 'merge',
+            replaceUrl: true // Don't clutter history for minor refinements
+        });
+
         // We can combine selected tags and manual search
-        // But backend expects keys from data.csv
-        // If user typed something, we might try to find a match in availableSymptoms
         let symptomsToProcess = [...this.selectedSymptomValues];
         if (this.searchQuery) {
             const match = this.availableSymptoms.find(s =>
@@ -128,5 +145,20 @@ export class SymptomCheckerComponent implements OnInit {
 
     get isLoggedIn(): boolean {
         return this.authService.isLoggedIn();
+    }
+
+    getShareData(): ShareData {
+        const symptoms = this.availableSymptoms
+            .filter(s => this.selectedSymptomValues.includes(s.value))
+            .map(s => s.name)
+            .join(', ');
+        const disease = this.diagnosis?.diagnosis?.disease;
+        const url = window.location.href; // Use full URL with query parameters
+
+        return {
+            title: `Symptom Analysis: ${disease}`,
+            text: `Analyzed symptoms: ${symptoms || this.searchQuery}. Predicted condition: ${disease}. Checked via HealthConnect Symptom Checker.`,
+            url: url
+        };
     }
 }

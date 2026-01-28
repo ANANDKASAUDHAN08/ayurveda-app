@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ContentService } from '../../../shared/services/content.service';
+import { ShareButtonComponent } from '../../../shared/components/share/share-button/share-button.component';
+import { ShareData } from '../../../shared/services/share.service';
 
 @Component({
     selector: 'app-specialty-detail',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, ShareButtonComponent],
     templateUrl: './specialty-detail.component.html',
     styleUrl: './specialty-detail.component.css'
 })
@@ -77,5 +79,14 @@ export class SpecialtyDetailComponent implements OnInit {
                 });
             }
         }, 100);
+    }
+
+    getShareData(): ShareData {
+        const url = window.location.href;
+        return {
+            title: `${this.details?.title} - Medical Encyclopedia`,
+            text: `Learn about ${this.details?.title} on HealthConnect's Medical Encyclopedia.`,
+            url: url
+        };
     }
 }

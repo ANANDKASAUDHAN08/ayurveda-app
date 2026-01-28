@@ -216,14 +216,13 @@
                                         <i class="fa-heart" [ngClass]="isFavorite() ? 'fas text-red-500' : 'far'"></i>
                                         {{ isFavorite() ? 'Liked' : 'Like' }}
                                     </button>
-                                    <button
-                                        class="px-5 py-3 md:py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 
+                                    <app-share-button [shareData]="getShareData()" [showLabel]="true"
+                                        label="Share Article"
+                                        customClass="px-5 py-3 md:py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 
                                               hover:from-emerald-700 hover:to-teal-700
                                               text-white rounded-xl font-bold md:font-semibold shadow-lg
                                               transition-all flex items-center justify-center gap-2 text-xs md:text-sm">
-                                        <i class="fas fa-share-alt"></i>
-                                        Share
-                                    </button>
+                                    </app-share-button>
                                 </div>
                             </div>
                         </div>

@@ -23,6 +23,7 @@ import { LocationPermissionDialogComponent } from './shared/components/location-
 import { LogoutConfirmationComponent } from './shared/components/logout-confirmation/logout-confirmation.component';
 import { LogoutConfirmationService } from './shared/services/logout-confirmation.service';
 import { NotificationService } from './shared/services/notification.service';
+import { ShareModalComponent } from './shared/components/share/share-modal/share-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -44,7 +45,8 @@ import { NotificationService } from './shared/services/notification.service';
     ChatbotComponent,
     UpdateNotificationComponent,
     LocationPermissionDialogComponent,
-    LogoutConfirmationComponent
+    LogoutConfirmationComponent,
+    ShareModalComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']

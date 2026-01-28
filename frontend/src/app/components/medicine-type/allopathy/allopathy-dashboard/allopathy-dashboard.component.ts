@@ -85,4 +85,8 @@ export class AllopathyDashboardComponent implements OnInit {
     this.activeTab = tab;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  navigateToScan(): void {
+    this.router.navigate(['/symptom-checker']);
+  }
 }

@@ -24,6 +24,8 @@ import { AyurvedaService, Herb } from 'src/app/shared/services/ayurveda.service'
 import { HerbCardComponent, HerbCardData } from 'src/app/components/medicine-type/ayurveda/herb-card/herb-card.component';
 import { AyurvedaMedicineCardComponent, AyurvedaMedicineData } from 'src/app/components/medicine-type/ayurveda/ayurveda-medicine-card/ayurveda-medicine-card.component';
 import { AyurvedaMedicineDetailModalComponent } from 'src/app/components/medicine-type/ayurveda/ayurveda-medicine-detail-modal/ayurveda-medicine-detail-modal.component';
+import { ShareButtonComponent } from 'src/app/shared/components/share/share-button/share-button.component';
+import { ShareData } from 'src/app/shared/services/share.service';
 
 @Component({
     selector: 'app-search-results',
@@ -42,7 +44,8 @@ import { AyurvedaMedicineDetailModalComponent } from 'src/app/components/medicin
         HerbDetailComponent,
         HerbCardComponent,
         AyurvedaMedicineCardComponent,
-        AyurvedaMedicineDetailModalComponent
+        AyurvedaMedicineDetailModalComponent,
+        ShareButtonComponent
     ],
     templateUrl: './search-results.component.html',
     styleUrls: ['./search-results.component.css']
@@ -752,5 +755,14 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
             pages.push(i);
         }
         return pages;
+    }
+
+    getShareData(): ShareData {
+        const url = window.location.href;
+        return {
+            title: `Search Results for "${this.filters.q || 'Healthcare'}"`,
+            text: `Check out these ${this.pagination.total} search results for "${this.filters.q || 'healthcare services'}" on HealthConnect.`,
+            url: url
+        };
     }
 }

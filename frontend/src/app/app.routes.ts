@@ -94,6 +94,7 @@ export const routes: Routes = [
     { path: 'wellness', component: AyurvedaWellnessComponent },
     { path: 'emergency', component: EmergencyHubComponent }, // Emergency services - no auth required for quick access
     { path: 'first-aid', component: FirstAidGuideComponent }, // First Aid Guide - no auth required
+    { path: 'first-aid/:id', component: FirstAidGuideComponent }, // First Aid Guide with ID - no auth required
     { path: 'nearby-hospitals', component: NearbyHospitalsComponent }, // Nearby Hospitals - no auth required
     { path: 'emergency-history', component: EmergencyCallHistoryComponent }, // Call History - requires auth
 

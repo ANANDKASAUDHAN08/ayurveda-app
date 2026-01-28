@@ -1,0 +1,86 @@
+<div *ngIf="isOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div (click)="close()" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-fadeIn"></div>
+
+    <!-- Modal Content -->
+    <div class="relative w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl animate-slideUp overflow-hidden">
+        <!-- Header -->
+        <div class="p-8 pb-4 flex items-center justify-between">
+            <div>
+                <h3 class="text-2xl font-black text-slate-900 tracking-tight">Share</h3>
+                <p class="text-sm font-medium text-slate-500 mt-1">Spread the knowledge</p>
+            </div>
+            <button (click)="close()"
+                class="w-10 h-10 flex items-center justify-center rounded-2xl bg-slate-50 text-slate-400 hover:bg-rose-50 hover:text-rose-500 transition-all">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Social Grid -->
+        <div class="px-8 pb-8 pt-4">
+            <div class="grid grid-cols-3 gap-4">
+                <!-- WhatsApp -->
+                <a [href]="links.whatsapp" target="_blank" class="social-btn group">
+                    <div
+                        class="social-icon bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white">
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                    </div>
+                    <span class="social-label">WhatsApp</span>
+                </a>
+
+                <!-- Facebook -->
+                <a [href]="links.facebook" target="_blank" class="social-btn group">
+                    <div class="social-icon bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white">
+                        <i class="fab fa-facebook-f text-2xl"></i>
+                    </div>
+                    <span class="social-label">Facebook</span>
+                </a>
+
+                <!-- Twitter/X -->
+                <a [href]="links.twitter" target="_blank" class="social-btn group">
+                    <div class="social-icon bg-slate-50 text-slate-900 group-hover:bg-slate-900 group-hover:text-white">
+                        <i class="fab fa-x-twitter text-2xl"></i>
+                    </div>
+                    <span class="social-label">Twitter</span>
+                </a>
+
+                <!-- LinkedIn -->
+                <a [href]="links.linkedin" target="_blank" class="social-btn group">
+                    <div class="social-icon bg-sky-50 text-sky-600 group-hover:bg-sky-600 group-hover:text-white">
+                        <i class="fab fa-linkedin-in text-2xl"></i>
+                    </div>
+                    <span class="social-label">LinkedIn</span>
+                </a>
+
+                <!-- Email -->
+                <a [href]="links.email" target="_blank" class="social-btn group">
+                    <div class="social-icon bg-amber-50 text-amber-600 group-hover:bg-amber-600 group-hover:text-white">
+                        <i class="fas fa-envelope text-2xl"></i>
+                    </div>
+                    <span class="social-label">Email</span>
+                </a>
+
+                <!-- Copy Link -->
+                <button (click)="copyLink()" class="social-btn group">
+                    <div
+                        class="social-icon bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white">
+                        <i class="fas fa-link text-2xl"></i>
+                    </div>
+                    <span class="social-label">Copy Link</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Link Preview -->
+        <div class="bg-slate-50 p-6 border-t border-slate-100 flex items-center justify-between gap-4">
+            <div class="min-w-0 flex-1">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Direct Link</p>
+                <p class="text-sm font-bold text-slate-600 truncate">{{data?.url}}</p>
+            </div>
+            <button (click)="copyLink()"
+                class="shrink-0 px-4 py-2 bg-white text-emerald-600 text-xs font-bold rounded-xl shadow-sm border border-emerald-100 hover:bg-emerald-600 hover:text-white transition-all">
+                Copy
+            </button>
+        </div>
+    </div>
+</div>

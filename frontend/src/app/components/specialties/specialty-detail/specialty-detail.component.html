@@ -174,9 +174,14 @@
                             [ngClass]="isAyurvedic() ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'">
                             {{ isAyurvedic() ? 'Ayurvedic Branch' : 'Modern Medical Discipline' }}
                         </span>
-                        <h1 class="text-2xl lg:text-5xl font-black text-slate-900 leading-tight">
-                            {{details.title}}
-                        </h1>
+                        <div class="flex items-center justify-between gap-4">
+                            <h1 class="text-2xl lg:text-5xl font-black text-slate-900 leading-tight">
+                                {{details.title}}
+                            </h1>
+                            <app-share-button [shareData]="getShareData()"
+                                customClass="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center rounded-2xl bg-white text-slate-400 hover:text-emerald-600 transition-all shadow-sm border border-slate-100">
+                            </app-share-button>
+                        </div>
                     </div>
                 </div>
 

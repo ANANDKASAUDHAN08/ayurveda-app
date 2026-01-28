@@ -24,6 +24,23 @@
                 Low Stock
             </span>
         </div>
+
+        <!-- Actions -->
+        <div class="absolute top-1.5 right-1.5 md:top-3 md:right-3 flex flex-col gap-1.5 md:gap-2 z-10">
+            <!-- Favorite Button -->
+            <button *ngIf="getFavoriteType()" (click)="toggleFavorite($event)"
+                class="!w-6 !h-6 !min-w-0 !min-h-0 md:!w-9 md:!h-9 flex items-center justify-center rounded-full transition-all bg-white/90 backdrop-blur-md shadow-sm border border-slate-100 active:scale-90 p-0 overflow-hidden"
+                [class.text-rose-500]="isFavorite()" [class.text-slate-400]="!isFavorite()"
+                [class.border-rose-100]="isFavorite()" title="Add to Favorites">
+                <i [class]="isFavorite() ? 'fas fa-heart' : 'far fa-heart'"
+                    class="!text-[10px] md:!text-xs leading-none"></i>
+            </button>
+
+            <!-- Share Button -->
+            <app-share-button [shareData]="getShareData()"
+                customClass="!w-6 !h-6 !min-w-0 !min-h-0 md:!w-9 md:!h-9 flex items-center justify-center rounded-full text-slate-400 hover:text-emerald-600 transition-all bg-white/90 backdrop-blur-md shadow-sm border border-slate-100 active:scale-90 !p-0 !text-[10px] md:!text-xs">
+            </app-share-button>
+        </div>
     </div>
 
     <!-- Product Info -->
@@ -155,111 +172,101 @@
 
 <!-- List View -->
 <div *ngIf="viewMode === 'list'"
-    class="bg-white rounded-2xl shadow-sm hover:shadow-lg border border-slate-100 p-4 flex gap-5 transition-all cursor-pointer group"
+    class="relative bg-white rounded-2xl shadow-sm hover:shadow-lg border border-slate-100 p-3 md:p-4 flex gap-3 md:gap-5 transition-all cursor-pointer group"
     (click)="onViewDetails($event)">
+
+    <!-- Utilities (Floating Top-Right on Mobile ONLY) -->
+    <div class="absolute top-2 right-2 flex flex-col gap-1.5 z-10 md:hidden">
+        <button *ngIf="getFavoriteType()" (click)="toggleFavorite($event)"
+            class="!w-7 !h-7 !min-w-0 !min-h-0 flex items-center justify-center rounded-full bg-white/95 backdrop-blur-md transition-all shadow-sm border border-slate-100 active:scale-90 p-0"
+            [class.text-rose-500]="isFavorite()" [class.text-slate-400]="!isFavorite()">
+            <i [class]="isFavorite() ? 'fas fa-heart' : 'far fa-heart'" class="text-[10px]"></i>
+        </button>
+        <app-share-button [shareData]="getShareData()"
+            customClass="!w-7 !h-7 !min-w-0 !min-h-0 flex items-center justify-center rounded-full bg-white/95 backdrop-blur-md text-slate-400 hover:text-emerald-600 transition-all border border-slate-100 active:scale-90 !p-0 !text-[10px]">
+        </app-share-button>
+    </div>
 
     <!-- Image -->
     <div
-        class="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 bg-slate-50 rounded-2xl flex items-center justify-center overflow-hidden p-3 transition-colors group-hover:bg-emerald-50/50">
+        class="w-24 h-24 md:w-40 md:h-40 flex-shrink-0 bg-slate-50 rounded-xl md:rounded-2xl flex items-center justify-center overflow-hidden p-2 md:p-3 transition-colors group-hover:bg-emerald-50/50">
         <img *ngIf="product.image_url" [src]="product.image_url"
             class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500"
             [alt]="product.name" (error)="product.image_url = ''">
         <i *ngIf="!product.image_url"
-            [class]="'fas ' + getTypeIcon(product.product_type) + ' text-4xl text-emerald-600/30'"></i>
+            [class]="'fas ' + getTypeIcon(product.product_type) + ' text-3xl md:text-4xl text-emerald-600/30'"></i>
     </div>
 
     <!-- Info -->
     <div class="flex-1 min-w-0 flex flex-col">
-        <div class="flex items-start justify-between gap-4">
-            <div class="flex-1">
-                <div class="flex flex-wrap items-center gap-2 mb-2">
+        <div class="flex flex-col md:flex-row md:items-start justify-between gap-1 md:gap-4">
+            <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2 mb-1 md:mb-2">
                     <h3
-                        class="font-extrabold text-lg md:text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">
-                        {{ product.name | cusTruncate:(isMobile ? 25 : 80) }}
+                        class="font-extrabold text-sm md:text-xl text-slate-900 group-hover:text-emerald-600 transition-colors leading-tight">
+                        {{ product.name | cusTruncate:(isMobile ? 35 : 80) }}
                     </h3>
-                    <span
-                        class="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase rounded-md border border-emerald-100">
-                        {{ (product.category || 'Product') | cusTruncate:(isMobile ? 12 : 30) }}
+                    <span *ngIf="product.category"
+                        class="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[8px] md:text-[10px] font-black uppercase rounded-md border border-emerald-100">
+                        {{ product.category | cusTruncate:(isMobile ? 35 : 80)}}
                     </span>
                 </div>
 
                 <p *ngIf="product.description" class="text-slate-500 text-sm mb-3 line-clamp-2 leading-relaxed">
-                    {{ product.description }}
+                    {{ product.description | cusTruncate:(isMobile ? 20 : 80)}}
                 </p>
 
-                <div class="flex items-center gap-3 text-[11px] font-bold text-slate-400">
+                <div class="flex items-center gap-3 text-[9px] md:text-[11px] font-bold text-slate-400">
                     <span *ngIf="product.manufacturer">
-                        <i class="fas fa-industry mr-1"></i> {{ product.manufacturer | cusTruncate:(isMobile ? 15 : 40)
+                        <i class="fas fa-industry mr-1"></i> {{ product.manufacturer | cusTruncate:(isMobile ? 20 : 40)
                         }}
-                    </span>
-                    <span *ngIf="product.manufacturer && product.medicine_type" class="text-slate-200">|</span>
-                    <span *ngIf="product.medicine_type">
-                        <i class="fas fa-tag mr-1"></i> {{ product.medicine_type | cusTruncate:(isMobile ? 12 : 30) }}
                     </span>
                 </div>
             </div>
 
-            <div class="text-right flex flex-col items-end">
-                <div class="flex flex-col items-end">
+            <div
+                class="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-start mt-2 md:mt-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-50">
+                <div class="flex flex-col items-start md:items-end">
                     <p *ngIf="+product.mrp > +product.price && +product.price > 0"
-                        class="text-xs font-bold text-slate-300 line-through mb-0.5">
+                        class="text-[9px] md:text-xs font-bold text-slate-300 line-through">
                         ₹{{ product.mrp }}
                     </p>
 
                     <div class="flex items-center gap-3">
-                        <!-- Show selling price if available -->
-                        <p *ngIf="+product.price > 0" class="text-2xl font-black text-slate-900">₹{{ product.price }}
+                        <p class="text-base md:text-2xl font-black text-slate-900">
+                            {{ +product.price > 0 ? '₹' + product.price : (+product.mrp > 0 ? '₹' + product.mrp :
+                            'Price: NA') }}
                         </p>
 
-                        <!-- Fallback to MRP if price is 0 -->
-                        <p *ngIf="+product.price <= 0 && +product.mrp > 0" class="text-2xl font-black text-slate-900">
-                            ₹{{ product.mrp }}</p>
+                        <!-- Desktop Utility Row (Hidden on Mobile) -->
+                        <div class="hidden md:flex items-center gap-2">
+                            <app-share-button [shareData]="getShareData()"
+                                customClass="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:text-emerald-600 transition-all shadow-sm border border-slate-100">
+                            </app-share-button>
 
-                        <!-- Show NA only if both are 0 -->
-                        <p *ngIf="+product.price <= 0 && +product.mrp <= 0"
-                            class="text-sm font-bold text-slate-500 uppercase whitespace-nowrap">
-                            {{ isMobile ? 'Price: NA' : 'Price: Not Available' }}
-                        </p>
-                        <!-- Mobile: Eye Icon -->
-                        <button *ngIf="product.product_type === 'medicine'" (click)="onViewDetails($event)"
-                            class="md:hidden w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 transition-all flex items-center justify-center shadow-sm border border-slate-100"
-                            title="View Details">
-                            <i class="fas fa-eye text-xs"></i>
-                        </button>
-                        <!-- Desktop: View Details Button -->
-                        <button *ngIf="product.product_type === 'medicine'" (click)="onViewDetails($event)"
-                            class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold hover:bg-emerald-600 hover:text-white transition-all shadow-sm border border-emerald-100/50"
-                            title="View Details">
-                            <i class="fas fa-eye"></i>
-                            <span>View Details</span>
-                        </button>
+                            <button *ngIf="getFavoriteType()" (click)="toggleFavorite($event)"
+                                class="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 transition-all shadow-sm border border-slate-100"
+                                [class.text-rose-500]="isFavorite()" [class.text-slate-400]="!isFavorite()"
+                                [class.border-rose-100]="isFavorite()" title="Add to Favorites">
+                                <i [class]="isFavorite() ? 'fas fa-heart' : 'far fa-heart'"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Actions -->
-                <div class="flex gap-2">
-                    <ng-container *ngIf="product.product_type === 'medicine' || product.product_type === 'device'">
-                        <!-- Hide Add to Cart for medicine only -->
-                        <button *ngIf="product.product_type !== 'medicine'" (click)="onAddToCart($event)"
-                            [disabled]="isAddingToCart"
-                            class="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all disabled:bg-slate-200 text-xs shadow-lg shadow-emerald-100 whitespace-nowrap">
-                            <i *ngIf="!isAddingToCart" class="fas fa-shopping-cart mr-1.5"></i>
-                            <i *ngIf="isAddingToCart" class="fas fa-circle-notch animate-spin mr-1.5"></i>
-                            {{ isAddingToCart ? 'Adding' : 'Add' }}
-                        </button>
+                <!-- Action Button -->
+                <div class="flex gap-2 ml-auto md:ml-0 md:mt-3">
+                    <button *ngIf="product.product_type === 'medicine'" (click)="onViewDetails($event)"
+                        class="w-8 h-8 md:w-auto md:px-3 md:py-1.5 flex items-center justify-center bg-emerald-50 text-emerald-600 rounded-full md:rounded-lg text-[10px] font-bold hover:bg-emerald-600 hover:text-white transition-all shadow-sm border border-emerald-100/50"
+                        title="View Details">
+                        <i class="fas fa-eye md:mr-2"></i>
+                        <span class="hidden md:inline">View Details</span>
+                    </button>
 
-                        <button *ngIf="product.product_type !== 'medicine'" (click)="onViewDetails($event)"
-                            class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition-all text-xs whitespace-nowrap flex items-center gap-2">
-                            <i class="fas fa-info-circle"></i>
-                            Details
-                        </button>
-                    </ng-container>
-
-                    <button
-                        *ngIf="['ayurveda_medicine', 'ayurveda_exercise', 'ayurveda_article', 'disease', 'yoga_pose', 'herb', 'article', 'lab_test', 'health_package', 'pharmacy'].includes(product.product_type)"
+                    <button *ngIf="['ayurveda_medicine', 'pharmacy', 'health_package'].includes(product.product_type)"
                         (click)="onViewDetails($event)"
-                        class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all text-xs shadow-lg shadow-emerald-100">
-                        View Details
+                        class="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-lg md:rounded-xl transition-all text-[10px] md:text-xs shadow-sm">
+                        Details
                     </button>
                 </div>
             </div>

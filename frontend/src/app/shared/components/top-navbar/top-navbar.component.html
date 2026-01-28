@@ -169,6 +169,13 @@
                     {{ 'nav.emergency' | translate }}
                 </a>
 
+                <!-- Share App Button (Desktop) -->
+                <!-- <button (click)="shareApp()"
+                    class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-xl text-sm font-bold hover:bg-emerald-600 hover:text-white transition-all shadow-sm"
+                    title="Share App">
+                    <i class="fas fa-share-alt"></i>
+                </button> -->
+
                 <!-- Install App Button -->
                 <button *ngIf="showInstallButton$ | async" (click)="installApp()"
                     class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-xl text-sm font-bold hover:bg-emerald-600 hover:text-white transition-all shadow-sm">
@@ -307,6 +314,14 @@
                                                 <span
                                                     class="text-xs font-bold text-slate-600 group-hover:text-slate-900">Settings</span>
                                             </button>
+                                            <button (click)="shareApp(); profileMenuOpen = false"
+                                                class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-emerald-50 transition-all group">
+                                                <i
+                                                    class="fas fa-share-alt text-emerald-500 text-sm group-hover:scale-110 transition-transform"></i>
+                                                <span
+                                                    class="text-xs font-bold text-slate-700 group-hover:text-emerald-700">Share
+                                                    App</span>
+                                            </button>
                                             <button routerLink="/feedback" (click)="profileMenuOpen = false"
                                                 class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl hover:bg-slate-50 transition-all group">
                                                 <i
@@ -338,6 +353,11 @@
                                     <i class="fas fa-user-md text-emerald-600"></i>
                                     <span class="text-sm font-medium text-slate-700">{{ 'nav.doctor_login' | translate
                                         }}</span>
+                                </a>
+                                <a (click)="shareApp(); profileMenuOpen = false"
+                                    class="flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 rounded-xl transition-all border-t border-slate-50 cursor-pointer">
+                                    <i class="fas fa-share-alt text-emerald-600"></i>
+                                    <span class="text-sm font-medium text-slate-700">Share App</span>
                                 </a>
                             </div>
                         </ng-template>

@@ -35,13 +35,20 @@
                     </div>
 
                     <div *ngIf="currentSutra"
-                        class="pt-6 md:pt-8 border-t border-emerald-50/50 max-w-lg mx-auto lg:mx-0 animate-in delay-500">
-                        <p class="text-emerald-800 text-xs md:text-sm font-black uppercase tracking-[0.3em] mb-2">Sutra
-                            of the Moment</p>
-                        <p class="text-gray-950 text-base md:text-xl font-black italic serif-font leading-tight">"{{
-                            currentSutra.text }}"</p>
-                        <p class="text-gray-400 text-[9px] md:text-[10px] font-bold uppercase tracking-widest mt-1">— {{
-                            currentSutra.translation }}</p>
+                        class="pt-6 md:pt-8 border-t border-emerald-50/50 max-w-lg mx-auto lg:mx-0 animate-in delay-500 flex items-start justify-between">
+                        <div class="flex-1">
+                            <p class="text-emerald-800 text-xs md:text-sm font-black uppercase tracking-[0.3em] mb-2">
+                                Sutra
+                                of the Moment</p>
+                            <p class="text-gray-950 text-base md:text-xl font-black italic serif-font leading-tight">"{{
+                                currentSutra.text }}"</p>
+                            <p class="text-gray-400 text-[9px] md:text-[10px] font-bold uppercase tracking-widest mt-1">
+                                — {{
+                                currentSutra.translation }}</p>
+                        </div>
+                        <app-share-button [shareData]="getSutraShareData()"
+                            customClass="mt-6 ml-4 text-emerald-800 hover:text-emerald-600 transition-colors">
+                        </app-share-button>
                     </div>
                 </div>
 
@@ -187,10 +194,15 @@
                             </ul>
                         </div>
                     </div>
-                    <button (click)="scrollToSection('sequences')"
-                        class="w-full md:w-auto px-8 py-4 bg-white text-gray-950 font-black rounded-xl md:rounded-2xl hover:scale-105 transition-all shadow-lg text-[9px] uppercase tracking-[0.3em]">
-                        Start Asana
-                    </button>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <button (click)="scrollToSection('sequences')"
+                            class="w-full md:w-auto px-8 py-4 bg-white text-gray-950 font-black rounded-xl md:rounded-2xl hover:scale-105 transition-all shadow-lg text-[9px] uppercase tracking-[0.3em]">
+                            Start Asana
+                        </button>
+                        <app-share-button [shareData]="getPoseShareData()" [showLabel]="true" label="Share Pose"
+                            customClass="w-full md:w-auto px-8 py-4 bg-emerald-500 text-gray-950 font-black rounded-xl md:rounded-2xl hover:scale-105 transition-all shadow-lg text-[9px] uppercase tracking-[0.3em] flex items-center justify-center gap-2">
+                        </app-share-button>
+                    </div>
                 </div>
 
                 <div class="lg:col-span-6 relative w-full group">

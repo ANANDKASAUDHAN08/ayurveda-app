@@ -219,6 +219,9 @@
                             class="block w-full px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all text-center">
                             <i class="fas fa-heart mr-2"></i> Emergency Hub
                         </a>
+                        <app-share-button [shareData]="getShareData()" [showLabel]="true" label="Share This Guide"
+                            customClass="w-full px-4 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+                        </app-share-button>
                     </div>
                 </div>
 

@@ -14,6 +14,7 @@ import { LocationService, UserLocation } from '../../services/location.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { PwaInstallService } from '../../services/pwa-install.service';
 import { LogoutConfirmationService } from '../../services/logout-confirmation.service';
+import { ShareService } from '../../services/share.service';
 
 @Component({
   selector: 'app-top-navbar',
@@ -85,7 +86,8 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     private snackbarService: SnackbarService,
     public locationService: LocationService,
     private pwaInstallService: PwaInstallService,
-    private logoutConfirmationService: LogoutConfirmationService
+    private logoutConfirmationService: LogoutConfirmationService,
+    private shareService: ShareService
   ) { }
 
   ngOnInit() {
@@ -568,5 +570,13 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
 
   installApp() {
     this.pwaInstallService.installApp();
+  }
+
+  shareApp() {
+    this.shareService.share({
+      title: 'HealthConnect - Your Unified Healthcare Companion',
+      text: 'Check out HealthConnect for all your Ayurvedic and modern healthcare needs! Unified doctors, medicines, and first-aid guides.',
+      url: window.location.origin
+    });
   }
 }
