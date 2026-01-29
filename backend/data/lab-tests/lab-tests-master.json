@@ -1,0 +1,3384 @@
+[
+  {
+    "name": "Complete Blood Count (CBC)",
+    "category": "Diagnostic",
+    "description": "A group of tests that evaluate the cells that circulate in blood.",
+    "purpose": "Broad screening for anemia, infection, and leukemia.",
+    "preparation": "No special preparation required. Non-fasting.",
+    "sample_type": "Blood",
+    "parameters": [
+      "Hemoglobin",
+      "RBC Count",
+      "WBC Count",
+      "Platelet Count",
+      "MCV",
+      "MCH",
+      "MCHC"
+    ],
+    "reference_range": {
+      "Hemoglobin": {
+        "males": "14-18 g/dL",
+        "females": "12-16 g/dL"
+      },
+      "WBC": "4500-11000 cells/mm3",
+      "Platelets": "1.5-4.5 Lakhs/uL"
+    },
+    "clinical_utility": "High. Routine health check-up and basic diagnostic tool.",
+    "loinc_code": "58410-2",
+    "standard_price": 350,
+    "report_time": "24 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Liver Function Test (LFT)",
+    "category": "Diagnostic",
+    "description": "Assesses the health of the liver by measuring proteins and enzymes.",
+    "purpose": "Identify liver damage, hepatitis, or obstruction.",
+    "preparation": "8-12 hours of fasting recommended.",
+    "sample_type": "Blood",
+    "parameters": [
+      "SGOT (AST)",
+      "SGPT (ALT)",
+      "Bilirubin Total",
+      "Alkaline Phosphatase",
+      "Albumin"
+    ],
+    "reference_range": {
+      "ALT": "7-55 U/L",
+      "AST": "8-48 U/L",
+      "Bilirubin Total": "0.1-1.2 mg/dL"
+    },
+    "clinical_utility": "Essential for liver-related symptoms (jaundice, abdominal pain).",
+    "loinc_code": "24325-3",
+    "standard_price": 900,
+    "report_time": "24 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Lipid Profile (Cholesterol)",
+    "category": "Preventive",
+    "description": "Measures various types of fats in blood.",
+    "purpose": "Assess cardiovascular risk and monitor therapy.",
+    "preparation": "10-12 hours fasting required. Water allowed.",
+    "sample_type": "Blood",
+    "parameters": [
+      "Total Cholesterol",
+      "HDL",
+      "LDL",
+      "Triglycerides",
+      "VLDL"
+    ],
+    "reference_range": {
+      "Total Cholesterol": "< 200 mg/dL",
+      "HDL": "> 40 mg/dL",
+      "LDL": "< 100 mg/dL",
+      "Triglycerides": "< 150 mg/dL"
+    },
+    "clinical_utility": "Crucial for heart disease prevention.",
+    "loinc_code": "24331-1",
+    "standard_price": 700,
+    "report_time": "24 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Thyroid Profile (T3, T4, TSH)",
+    "category": "Diagnostic",
+    "description": "Measures thyroid hormone levels.",
+    "purpose": "Diagnose hyperthyroidism or hypothyroidism.",
+    "preparation": "Early morning sample preferred. No fasting.",
+    "sample_type": "Blood",
+    "parameters": [
+      "Free T3",
+      "Free T4",
+      "TSH"
+    ],
+    "reference_range": {
+      "TSH": "0.4-4.0 mIU/L",
+      "Free T4": "0.8-1.8 ng/dL"
+    },
+    "clinical_utility": "Routine screening for metabolic and hormonal issues.",
+    "loinc_code": "48065-7",
+    "standard_price": 600,
+    "report_time": "24 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "HbA1c (Glycated Hemoglobin)",
+    "category": "Diagnostic",
+    "description": "Average blood sugar levels over 3 months.",
+    "purpose": "Monitoring and diagnosis of Type 2 Diabetes.",
+    "preparation": "No fasting required.",
+    "sample_type": "Blood",
+    "parameters": [
+      "HbA1c %",
+      "Average Glucose"
+    ],
+    "reference_range": {
+      "Normal": "< 5.7%",
+      "Prediabetic": "5.7% - 6.4%",
+      "Diabetic": ">= 6.5%"
+    },
+    "clinical_utility": "Gold standard for diabetic monitoring.",
+    "loinc_code": "4548-4",
+    "standard_price": 500,
+    "report_time": "24 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Kidney Function Test (KFT)",
+    "category": "Diagnostic",
+    "description": "Evaluates kidney performance.",
+    "purpose": "Identify renal dysfunction or failure.",
+    "preparation": "Overnight fasting preferred.",
+    "sample_type": "Blood",
+    "parameters": [
+      "Urea",
+      "Creatinine",
+      "Uric Acid",
+      "eGFR"
+    ],
+    "reference_range": {
+      "Creatinine": "0.7-1.3 mg/dL",
+      "Urea": "7-20 mg/dL"
+    },
+    "clinical_utility": "Critical for kidney health and hypertension monitoring.",
+    "loinc_code": "24362-6",
+    "standard_price": 800,
+    "report_time": "24 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 0",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1797,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 0",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 591,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 0",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 715,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 0",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 121,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 1",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1479,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Vitamin B12 - Package 1",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1202,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 1",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1116,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 1",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 495,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Urine Routine & Micro - Package 1",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 276,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 1",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 451,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 1",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1721,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 1",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 663,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 1",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 861,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 1",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 107,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 2",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1436,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 2",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1262,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 2",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1085,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 2",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 520,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Urine Routine & Micro - Package 2",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 116,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 2",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 447,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 2",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1777,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 2",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 682,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 2",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 762,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 2",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 51,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 3",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1512,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 3",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1283,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 3",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1102,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 3",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 463,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Urine Routine & Micro - Package 3",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 150,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 3",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 422,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 3",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1815,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 3",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 593,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 3",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 757,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 3",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 241,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 4",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1491,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 4",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1148,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 4",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1184,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 4",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 481,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Urine Routine & Micro - Package 4",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 182,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 4",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 443,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 4",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1793,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 4",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 725,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 4",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 767,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 4",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 61,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 5",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1474,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 5",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1185,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 5",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1129,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 5",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 366,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Urine Routine & Micro - Package 5",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 103,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 5",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 423,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 5",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1865,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 5",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 597,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 5",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 868,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 5",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 95,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 6",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1426,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 6",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1193,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 6",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1030,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 6",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 490,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Urine Routine & Micro - Package 6",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 219,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 6",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 509,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 6",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1812,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 6",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 694,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 6",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 842,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 6",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 198,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 7",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1532,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 7",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1215,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 7",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1187,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 7",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 467,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Urine Routine & Micro - Package 7",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 296,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 7",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 436,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 7",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1870,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 7",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 566,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 7",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 761,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 7",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 69,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 8",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1559,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 8",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1164,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 8",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1182,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 8",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 491,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Urine Routine & Micro - Package 8",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 254,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 8",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 515,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 8",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1830,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 8",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 563,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 8",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 817,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 8",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 74,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 9",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1510,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Vitamin B12 - Package 9",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1194,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 9",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1117,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 9",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 500,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Urine Routine & Micro - Package 9",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 241,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 9",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 492,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 9",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1814,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 9",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 695,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 9",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 784,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 9",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 131,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 10",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1468,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 10",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1177,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 10",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1013,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 10",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 441,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Urine Routine & Micro - Package 10",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 151,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 10",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 422,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 10",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1889,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 10",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 625,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 10",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 855,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 10",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 148,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 11",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1411,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 11",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1242,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 11",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1186,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 11",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 484,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Urine Routine & Micro - Package 11",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 118,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 11",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 487,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 11",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1816,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 11",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 655,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 11",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 850,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 11",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 229,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 12",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1595,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 12",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1299,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Iron Profile - Package 12",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1155,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 12",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 496,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Urine Routine & Micro - Package 12",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 180,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 12",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 501,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 12",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1775,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Rheumatoid Factor - Package 12",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 622,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 12",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 808,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 12",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 241,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 13",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1551,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 13",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1260,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 13",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1146,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 13",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 501,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Urine Routine & Micro - Package 13",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 180,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 13",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 456,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 13",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1793,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 13",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 593,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 13",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 710,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 13",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 136,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 14",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1566,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 14",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1157,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 14",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1053,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 14",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 462,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Urine Routine & Micro - Package 14",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 176,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 14",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 524,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 14",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1857,
+    "report_time": "24-48 Hours",
+    "is_popular": true
+  },
+  {
+    "name": "Rheumatoid Factor - Package 14",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 693,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 14",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 872,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 14",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 126,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin D (25-OH) - Package 15",
+    "category": "Preventive",
+    "description": "Detailed analysis of Vitamin D (25-OH) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Bone health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "19891-5",
+    "standard_price": 1500,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Vitamin B12 - Package 15",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of Vitamin B12 for various clinical indications. Comprehensive report provided.",
+    "purpose": "Nerve health assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2132-9",
+    "standard_price": 1205,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Iron Profile - Package 15",
+    "category": "Specialized",
+    "description": "Detailed analysis of Iron Profile for various clinical indications. Comprehensive report provided.",
+    "purpose": "Anemia evaluation",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24331-1",
+    "standard_price": 1035,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "C-Reactive Protein (CRP) - Package 15",
+    "category": "Wellness",
+    "description": "Detailed analysis of C-Reactive Protein (CRP) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Inflammation marker",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "1988-5",
+    "standard_price": 390,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Urine Routine & Micro - Package 15",
+    "category": "Popular",
+    "description": "Detailed analysis of Urine Routine & Micro for various clinical indications. Comprehensive report provided.",
+    "purpose": "UTI and kidney screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24356-8",
+    "standard_price": 123,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Electrolytes (Na, K, Cl) - Package 15",
+    "category": "Preventive",
+    "description": "Detailed analysis of Electrolytes (Na, K, Cl) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Fluid balance assessment",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "24330-3",
+    "standard_price": 583,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "PSA (Prostate Specific Antigen) - Package 15",
+    "category": "Diagnostic",
+    "description": "Detailed analysis of PSA (Prostate Specific Antigen) for various clinical indications. Comprehensive report provided.",
+    "purpose": "Prostate health monitoring",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "2857-1",
+    "standard_price": 1883,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Rheumatoid Factor - Package 15",
+    "category": "Specialized",
+    "description": "Detailed analysis of Rheumatoid Factor for various clinical indications. Comprehensive report provided.",
+    "purpose": "Autoimmune screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "11572-0",
+    "standard_price": 566,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "HIV 1 & 2 Antibody - Package 15",
+    "category": "Wellness",
+    "description": "Detailed analysis of HIV 1 & 2 Antibody for various clinical indications. Comprehensive report provided.",
+    "purpose": "Infection screening",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "5688-7",
+    "standard_price": 826,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  },
+  {
+    "name": "Hb - Hemoglobin Only - Package 15",
+    "category": "Popular",
+    "description": "Detailed analysis of Hb - Hemoglobin Only for various clinical indications. Comprehensive report provided.",
+    "purpose": "Simple anemia check",
+    "preparation": "Standard fasting requirements may apply.",
+    "sample_type": "Blood/Urine",
+    "parameters": [
+      "Primary Parameter",
+      "Secondary Parameter",
+      "Control Parameter"
+    ],
+    "reference_range": {
+      "Normal": "Within healthy clinical limits as per NABL guidelines"
+    },
+    "clinical_utility": "Diagnostic and monitoring use.",
+    "loinc_code": "718-7",
+    "standard_price": 103,
+    "report_time": "24-48 Hours",
+    "is_popular": false
+  }
+]

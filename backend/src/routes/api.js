@@ -77,11 +77,19 @@ router.get('/lab-tests/categories', labTestController.getCategories);
 
 // Nearby Services
 const nearbyController = require('../controllers/nearbyController');
+const laboratoryController = require('../controllers/laboratoryController');
+
 router.get('/nearby/hospitals', nearbyController.getNearbyHospitals);
 router.get('/nearby/pharmacies', nearbyController.getNearbyPharmacies);
 router.get('/nearby/doctors', nearbyController.getNearbyDoctors);
 router.get('/nearby/health-centres', nearbyController.getNearbyHealthCentres);
 router.get('/nearby/search-districts', nearbyController.searchHealthCentresByDistrict);
+
+// Private Laboratories
+router.get('/labs', laboratoryController.getLaboratories);
+router.get('/labs/services', laboratoryController.getLaboratoryServices);
+router.get('/labs/nearby', laboratoryController.getNearbyLaboratories);
+router.get('/labs/:id', laboratoryController.getLaboratoryById);
 
 // NAMC Morbidity Codes
 const morbidityController = require('../controllers/morbidityController');

@@ -6,6 +6,7 @@ import { MobileLocationBarComponent } from '../../shared/components/mobile-locat
 import { GoogleMapsModule } from '@angular/google-maps';
 import { LocationService } from '../../shared/services/location.service';
 import { GoogleMapsLoaderService } from '../../shared/services/google-maps-loader.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-nearby-services',
@@ -27,7 +28,7 @@ export class NearbyServicesComponent implements OnInit {
   userLocation: { lat: number; lng: number } | null = null;
   items: any[] = [];
   filteredItems: any[] = [];
-  selectedType: 'hospital' | 'pharmacy' | 'doctor' | 'health-centre' = 'hospital';
+  selectedType: 'hospital' | 'pharmacy' | 'doctor' | 'health-centre' | 'laboratory' = 'hospital';
   selectedItem: any | null = null;
   loading = false;
   searchQuery = '';
@@ -82,7 +83,8 @@ export class NearbyServicesComponent implements OnInit {
     private mapService: MapService,
     private locationService: LocationService,
     private googleLoader: GoogleMapsLoaderService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private route: ActivatedRoute
   ) { }
 
   @HostListener('document:click', ['$event'])
@@ -115,6 +117,14 @@ export class NearbyServicesComponent implements OnInit {
       }
     });
     this.setupLocationAndData();
+
+    // Check for category query param
+    this.route.queryParams.subscribe(params => {
+      if (params['category'] === 'Laboratory') {
+        this.selectedType = 'laboratory';
+        this.loadNearby();
+      }
+    });
   }
 
   private initUserMarkerOptions() {
@@ -171,6 +181,14 @@ export class NearbyServicesComponent implements OnInit {
           obs = this.mapService.getNearbyHealthCentres(lat, lng, 15, this.selectedCityDistrict, this.selectedState, this.selectedPincodeSubdistrict, this.currentPage, this.itemsPerPage);
         }
         break;
+      case 'laboratory':
+        obs = this.mapService.getNearbyLaboratories(lat, lng, 50, this.currentPage, this.itemsPerPage, this.selectedCityDistrict, this.searchQuery);
+        break;
+    }
+
+    if (!obs) {
+      this.loading = false;
+      return;
     }
 
     obs.subscribe({
@@ -187,12 +205,11 @@ export class NearbyServicesComponent implements OnInit {
             this.totalPages = 1;
           }
 
-          this.filteredItems = this.items; // Directly set filtered items
+          this.filteredItems = this.items;
           this.updateMarkers();
 
-          // Update map center and zoom when district search returns results
+          // Update map center and zoom
           if (this.searchMode === 'district' && this.items.length > 0) {
-            // Find the first item with valid coordinates
             const itemWithCoords = this.items.find(item =>
               item.latitude && item.longitude &&
               !isNaN(parseFloat(String(item.latitude))) &&
@@ -204,16 +221,14 @@ export class NearbyServicesComponent implements OnInit {
                 lat: parseFloat(String(itemWithCoords.latitude)),
                 lng: parseFloat(String(itemWithCoords.longitude))
               };
-              this.zoom = 12; // Zoom to show district area
+              this.zoom = 12;
             }
           } else if (this.searchMode === 'nearby' && this.userLocation) {
-            // Reset to user location when switching back to nearby mode
             this.center = this.userLocation;
             this.zoom = 13;
           }
         }
         this.loading = false;
-        // Scroll to top to ensure header is visible in both mode
         setTimeout(() => this.scrollToTop(), 50);
       },
       error: (err) => {
@@ -224,7 +239,7 @@ export class NearbyServicesComponent implements OnInit {
     });
   }
 
-  toggleType(type: 'hospital' | 'pharmacy' | 'doctor' | 'health-centre') {
+  toggleType(type: 'hospital' | 'pharmacy' | 'doctor' | 'health-centre' | 'laboratory') {
     if (this.selectedType === type) return;
     this.selectedType = type;
     this.searchQuery = '';
@@ -342,7 +357,8 @@ export class NearbyServicesComponent implements OnInit {
         const iconUrl = item.type === 'hospital'
           ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
           : (item.type === 'pharmacy' ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' :
-            (item.type === 'health-centre' ? 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'));
+            (item.type === 'health-centre' ? 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png' :
+              (item.type === 'laboratory' ? 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png')));
 
         return {
           position: { lat: lat, lng: lng },
@@ -430,5 +446,9 @@ export class NearbyServicesComponent implements OnInit {
     this.selectedPincodeSubdistrict = '';
     this.currentPage = 1;
     this.loadNearby();
+  }
+
+  isString(val: any): boolean {
+    return typeof val === 'string';
   }
 }

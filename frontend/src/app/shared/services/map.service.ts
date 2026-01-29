@@ -103,6 +103,20 @@ export class MapService {
         return this.http.get(`${this.apiUrl}/search-districts`, { params });
     }
 
+    getNearbyLaboratories(lat: number, lng: number, radius: number = 50, page: number = 1, limit: number = 20, city?: string, search?: string): Observable<any> {
+        let params = new HttpParams()
+            .set('lat', lat.toString())
+            .set('lng', lng.toString())
+            .set('radius', radius.toString())
+            .set('page', page.toString())
+            .set('limit', limit.toString());
+        if (city) params = params.set('city', city);
+        if (search) params = params.set('search', search);
+
+        // API endpoint for private labs is /labs/nearby
+        return this.http.get(`${environment.apiUrl}/labs/nearby`, { params });
+    }
+
     // Distance calculation (Haversine)
     calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
         const R = 6371; // km

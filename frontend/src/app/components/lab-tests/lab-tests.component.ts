@@ -1,55 +1,60 @@
 import { environment } from '@env/environment';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { CartService } from '../../shared/services/cart.service';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { SnackbarService } from '../../shared/services/snackbar.service';
-import { AuthService } from '../../shared/services/auth.service';
+import { LabTest, Laboratory } from './types';
 
-
-export interface LabTest {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  discounted_price: number;
-  description: string;
-  includes: string;
-  parameters_count: number;
-  is_popular: boolean;
-  sample_type: string;
-  fasting_required: boolean;
-  report_time: string;
-}
+// Import sub-components
+import { LabTestCardComponent } from './lab-test-card/lab-test-card.component';
+import { LabTestModalComponent } from './lab-test-modal/lab-test-modal.component';
+import { LaboratoryCardComponent } from './laboratory-card/laboratory-card.component';
+import { LaboratoryModalComponent } from './laboratory-modal/laboratory-modal.component';
 
 @Component({
   selector: 'app-lab-tests',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    LabTestCardComponent,
+    LabTestModalComponent,
+    LaboratoryCardComponent,
+    LaboratoryModalComponent
+  ],
   templateUrl: './lab-tests.component.html',
   styleUrl: './lab-tests.component.css'
 })
-export class LabTestsComponent implements OnInit {
-  // Expose Math for template
+export class LabTestsComponent implements OnInit, OnDestroy {
   Math = Math;
+
+  // View State
+  viewMode: 'tests' | 'labs' = 'tests';
+  loading = false;
+
   // Data
   tests: LabTest[] = [];
-  loading = false;
+  laboratories: Laboratory[] = [];
+
   // Filters
   searchQuery: string = '';
-  selectedCategory: string = 'All';
+  selectedCategory: string = 'All'; // For tests
+  selectedService: string = 'All';  // For labs
   minPrice: number | null = null;
   maxPrice: number | null = null;
   sortBy: string = 'name_asc';
+
   // Pagination
   currentPage = 1;
   itemsPerPage = 12;
-  totalTests = 0;
-  // Categories
-  categories = ['All', 'Popular', 'Preventive', 'Diagnostic', 'Specialized', 'Wellness'];
+  totalItems = 0;
 
-  // Sort options
+  // Dynamic Categories/Services from API
+  categories: string[] = ['All', 'Popular', 'Preventive', 'Diagnostic', 'Specialized', 'Wellness'];
+  services: string[] = ['All'];
+
   sortOptions = [
     { value: 'name_asc', label: 'Name (A-Z)' },
     { value: 'name_desc', label: 'Name (Z-A)' },
@@ -58,153 +63,243 @@ export class LabTestsComponent implements OnInit {
     { value: 'popular', label: 'Most Popular' }
   ];
 
-  // Cart state
-  addingToCart: { [key: number]: boolean } = {};
-
-  // Selected test for details modal
+  // UI State
+  showMobileFilters = false;
+  showMobileCategoryDropdown = false;
+  showMobileSortDropdown = false;
+  showCategoryDropdown = false;
+  showSortDropdown = false;
   selectedTest: LabTest | null = null;
+  selectedLab: Laboratory | null = null;
 
   constructor(
-    private cartService: CartService,
     private snackbar: SnackbarService,
-    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.dropdown-container')) {
+      this.showCategoryDropdown = false;
+      this.showSortDropdown = false;
+      this.showMobileCategoryDropdown = false;
+      this.showMobileSortDropdown = false;
+    }
+  }
+
+  toggleDropdown(type: 'category' | 'sort', event: Event) {
+    event.stopPropagation();
+    if (type === 'category') {
+      this.showCategoryDropdown = !this.showCategoryDropdown;
+      this.showSortDropdown = false;
+    } else {
+      this.showSortDropdown = !this.showSortDropdown;
+      this.showCategoryDropdown = false;
+    }
+  }
+
+  toggleMobileFilters(show: boolean) {
+    this.showMobileFilters = show;
+    if (show) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+  }
+
+  selectCategory(category: string) {
+    if (this.viewMode === 'tests') {
+      this.selectedCategory = category;
+    } else {
+      this.selectedService = category;
+    }
+    this.showCategoryDropdown = false;
+    this.onFilterChange();
+  }
+
+  selectSort(option: any) {
+    this.sortBy = option.value;
+    this.showSortDropdown = false;
+    this.onFilterChange();
+  }
+
+  getSortLabel(): string {
+    return this.sortOptions.find(opt => opt.value === this.sortBy)?.label || 'Sort By';
+  }
+
+  getSelectedCategoryLabel(): string {
+    return this.viewMode === 'tests' ? this.selectedCategory : this.selectedService;
+  }
+
   ngOnInit() {
-    this.loadTests();
+    // Handle query parameters for search
+    this.route.queryParams.subscribe(params => {
+      const query = params['q'] || params['search'];
+      if (query) {
+        this.searchQuery = query;
+      }
+      this.loadInitialData();
+    });
+  }
+
+  loadInitialData() {
+    this.loadData();
+    // Load categories for tests
+    fetch(`${environment.apiUrl}/lab-tests/categories`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          this.categories = ['All', ...data.data];
+        }
+      });
+
+    // Load services for labs
+    fetch(`${environment.apiUrl}/labs/services`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          this.services = ['All', ...data.data];
+        }
+      });
+  }
+
+  loadData() {
+    if (this.viewMode === 'tests') {
+      this.loadTests();
+    } else {
+      this.loadLaboratories();
+    }
   }
 
   loadTests() {
     this.loading = true;
-    // Build query params
     const params: any = {
       page: this.currentPage,
       limit: this.itemsPerPage
     };
-    if (this.selectedCategory !== 'All') {
-      params.category = this.selectedCategory;
-    }
-    if (this.searchQuery) {
-      params.search = this.searchQuery;
-    }
-    if (this.minPrice) {
-      params.minPrice = this.minPrice;
-    }
-    if (this.maxPrice) {
-      params.maxPrice = this.maxPrice;
-    }
-    if (this.sortBy) {
-      params.sortBy = this.sortBy;
-    }
-    // Build query string
-    const queryString = Object.keys(params)
-      .map(key => `${key}=${encodeURIComponent(params[key])}`)
-      .join('&');
-    // Fetch from API
+    if (this.selectedCategory !== 'All') params.category = this.selectedCategory;
+    if (this.searchQuery) params.search = this.searchQuery;
+    if (this.minPrice) params.minPrice = this.minPrice;
+    if (this.maxPrice) params.maxPrice = this.maxPrice;
+    if (this.sortBy) params.sortBy = this.sortBy;
+
+    const queryString = new URLSearchParams(params).toString();
+
     fetch(`${environment.apiUrl}/lab-tests?${queryString}`)
       .then(response => response.json())
       .then(data => {
         if (data.success) {
           this.tests = data.data.results;
-          this.totalTests = data.data.pagination.total;
+          this.totalItems = data.data.pagination.total;
         }
-        setTimeout(() => {
-          this.loading = false;
-        }, 500);
+        setTimeout(() => this.loading = false, 300);
       })
       .catch(error => {
         console.error('Error loading tests:', error);
         this.snackbar.show('Failed to load lab tests', 'error');
-        setTimeout(() => {
-          this.loading = false;
-        }, 500);
+        this.loading = false;
       });
   }
 
-  // Computed properties
+  loadLaboratories() {
+    this.loading = true;
+    const params: any = {
+      page: this.currentPage,
+      limit: this.itemsPerPage
+    };
+    if (this.selectedService !== 'All') params.service = this.selectedService;
+    if (this.searchQuery) params.search = this.searchQuery;
+    // Price sorting doesn't apply to labs usually, but we keep the structure
+
+    const queryString = new URLSearchParams(params).toString();
+
+    fetch(`${environment.apiUrl}/labs?${queryString}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          this.laboratories = data.data.results;
+          this.totalItems = data.data.pagination.total;
+        }
+        setTimeout(() => this.loading = false, 300);
+      })
+      .catch(error => {
+        console.error('Error loading labs:', error);
+        this.snackbar.show('Failed to load laboratories', 'error');
+        this.loading = false;
+      });
+  }
+
   get totalPages() {
-    return Math.ceil(this.totalTests / this.itemsPerPage);
+    return Math.ceil(this.totalItems / this.itemsPerPage);
   }
 
   get pageNumbers(): number[] {
-    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+    const total = this.totalPages;
+    if (total <= 5) return Array.from({ length: total }, (_, i) => i + 1);
+
+    // More aggressive truncation for mobile
+    if (this.currentPage <= 2) return [1, 2, 3, 0, total];
+    if (this.currentPage >= total - 1) return [1, 0, total - 2, total - 1, total];
+    return [1, 0, this.currentPage, 0, total];
   }
 
-  // Pagination methods
+  toggleView(mode: 'tests' | 'labs') {
+    if (this.viewMode === mode) return;
+    this.viewMode = mode;
+    this.currentPage = 1;
+    this.searchQuery = '';
+    this.loadData();
+  }
+
   goToPage(page: number) {
+    if (page === 0) return;
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.loadTests();
+      this.loadData();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
-  nextPage() {
-    this.goToPage(this.currentPage + 1);
-  }
-
-  previousPage() {
-    this.goToPage(this.currentPage - 1);
-  }
-
-  // Filter methods
   onFilterChange() {
-    this.currentPage = 1; // Reset to page 1
-    this.loadTests();
+    this.currentPage = 1;
+    this.loadData();
   }
 
   clearFilters() {
     this.searchQuery = '';
     this.selectedCategory = 'All';
+    this.selectedService = 'All';
     this.minPrice = null;
     this.maxPrice = null;
     this.sortBy = 'name_asc';
     this.currentPage = 1;
-    this.loadTests();
+    this.loadData();
   }
 
-  //Cart integration
-  addToCart(test: LabTest) {
-    if (!this.authService.isLoggedIn()) {
-      this.snackbar.warning('Please login to book an appointment');
-      return;
-    }
 
-    this.addingToCart[test.id] = true;
-
-    this.cartService.addItem({
-      id: String(test.id),
-      name: test.name,
-      product_type: 'lab_test',
-      price: test.discounted_price || 0,
-      quantity: 1,
-      image: ''
-    });
-
-    setTimeout(() => {
-      this.addingToCart[test.id] = false;
-      this.snackbar.show(`${test.name} added to cart!`, 'success');
-    }, 300);
-  }
-
-  // Test details modal
-  openDetails(test: LabTest) {
+  openTestDetails(test: LabTest) {
     this.selectedTest = test;
   }
 
-  closeDetails() {
-    this.selectedTest = null;
+  openLabDetails(lab: Laboratory) {
+    this.selectedLab = lab;
   }
 
-  // Helper methods
+  findNearbyLab() {
+    this.selectedTest = null;
+    this.router.navigate(['/nearby-services'], { queryParams: { category: 'Laboratory' } });
+  }
+
   get hasFilters(): boolean {
-    return this.selectedCategory !== 'All' ||
+    return (this.viewMode === 'tests' ? (this.selectedCategory !== 'All') : (this.selectedService !== 'All')) ||
       !!this.searchQuery ||
       this.minPrice !== null ||
       this.maxPrice !== null;
   }
 
-  getDiscountPercentage(test: LabTest): number {
-    return Math.round(((test.price - test.discounted_price) / test.price) * 100);
+  ngOnDestroy() {
+    document.body.classList.remove('overflow-hidden');
   }
 }

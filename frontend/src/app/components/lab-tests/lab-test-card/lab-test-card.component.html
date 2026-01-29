@@ -1,0 +1,54 @@
+<div
+    class="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full">
+    <!-- Card Header -->
+    <div class="p-3 sm:p-4 border-b border-slate-100 bg-gradient-to-br from-white to-slate-50 flex-grow">
+        <div class="flex items-start justify-between mb-1.5 sm:mb-2">
+            <span
+                class="px-1.5 py-0.5 sm:px-2 sm:py-1 bg-emerald-100 text-emerald-700 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold">
+                {{ test.category }}
+            </span>
+            <i *ngIf="test.is_popular" class="fas fa-fire text-orange-500 text-[10px] sm:text-sm" title="Popular"></i>
+        </div>
+
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1 group-hover:text-emerald-600 transition-colors line-clamp-2"
+            (click)="onOpenDetails()">
+            {{ test.name }}
+        </h3>
+
+        <p class="text-[10px] sm:text-xs text-slate-500 line-clamp-2 mb-2 sm:mb-3">{{ test.description }}</p>
+
+        <!-- Info Badges -->
+        <div class="flex flex-wrap gap-1 mb-1.5">
+            <span class="px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded text-[9px] sm:text-[10px]">
+                <i class="fas fa-vial"></i> {{ test.parameters_count }}
+            </span>
+            <span class="px-1.5 py-0.5 bg-purple-50 text-purple-700 rounded text-[9px] sm:text-[10px]">
+                <i class="fas fa-droplet"></i> {{ test.sample_type }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Card Footer -->
+    <div class="p-2.5 sm:p-4 bg-white border-t border-slate-50 mt-auto flex items-center justify-between gap-2">
+        <!-- <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2 sm:mb-1">
+            <div>
+                <div class="flex items-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                    <span class="text-[9px] sm:text-xs text-slate-400 line-through">₹{{ test.price }}</span>
+                    <span class="px-1 py-0.5 bg-green-100 text-green-700 rounded text-[9px] sm:text-[10px] font-bold">
+                        {{ getDiscountPercentage() }}%
+                    </span>
+                </div>
+                <div class="text-base sm:text-lg font-bold text-emerald-600">₹{{ test.discounted_price }}</div>
+            </div>
+        </div> -->
+
+        <span class="text-sm sm:text-lg font-extrabold text-emerald-600 whitespace-nowrap">₹{{ formatPrice(test.price)
+            }}</span>
+
+        <div
+            class="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-1 bg-slate-50 rounded-lg text-[9px] sm:text-[11px] font-bold text-slate-500 whitespace-nowrap min-w-fit">
+            <i class="fas fa-clock text-emerald-500"></i>
+            <span>{{ test.report_time }}</span>
+        </div>
+    </div>
+</div>

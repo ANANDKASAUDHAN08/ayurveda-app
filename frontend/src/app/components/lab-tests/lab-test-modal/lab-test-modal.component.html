@@ -1,0 +1,117 @@
+<div class="fixed z-[100] left-0 right-0 top-16 bottom-16 bg-white sm:inset-0 sm:flex sm:items-center sm:justify-center sm:p-4 sm:bg-slate-900/60 sm:backdrop-blur-sm"
+    (click)="onClose()">
+    <div class="bg-white w-full h-full sm:h-auto sm:max-h-[85vh] sm:max-w-2xl sm:rounded-2xl sm:shadow-2xl overflow-hidden flex flex-col relative"
+        (click)="$event.stopPropagation()">
+        <!-- Sticky Header -->
+        <div
+            class="sticky top-0 z-[60] p-3 md:p-5 pb-2 bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-500 border-b border-slate-100 backdrop-blur-md">
+            <button (click)="onClose()"
+                class="absolute top-4 right-4 md:h-10 md:w-10 !h-8 !w-8 !min-w-0 !min-h-0 !p-1 bg-slate-100/80 backdrop-blur-md rounded-full text-slate-500 hover:bg-slate-200 transition-all">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="pr-12">
+                <h3 class="text-md md:text-2xl font-bold text-white/90 mb-2 leading-tight">{{ test.name }}</h3>
+                <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-sm font-bold">
+                    {{ test.category }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Scrollable Body -->
+        <div class="overflow-y-auto flex-grow p-5 sm:p-8 pt-6 scrollbar-hide">
+
+            <p class="text-slate-600 mb-6 leading-relaxed text-sm sm:text-base">{{ test.description }}</p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
+                <!-- Parameters -->
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <p class="text-[10px] sm:text-xs text-slate-400 font-bold uppercase mb-1">Parameters</p>
+                    <p class="text-sm sm:text-base font-bold text-slate-900">{{ test.parameters_count }}</p>
+                </div>
+                <!-- Sample -->
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <p class="text-[10px] sm:text-xs text-slate-400 font-bold uppercase mb-1">Sample Type</p>
+                    <p class="text-sm sm:text-base font-bold text-slate-900 truncate">{{ test.sample_type }}</p>
+                </div>
+                <!-- Time -->
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <p class="text-[10px] sm:text-xs text-slate-400 font-bold uppercase mb-1">Report Time</p>
+                    <p class="text-sm sm:text-base font-bold text-slate-900">{{ test.report_time }}</p>
+                </div>
+                <!-- Fasting -->
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <p class="text-[10px] sm:text-xs text-slate-400 font-bold uppercase mb-1">Fasting</p>
+                    <p class="text-sm sm:text-base font-bold text-slate-900">{{ test.fasting_required ? 'Req.' : 'No' }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Details Sections -->
+            <div class="space-y-4 mb-6">
+                <!-- Purpose -->
+                <div *ngIf="test.purpose" class="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <p class="text-sm font-bold text-emerald-900 mb-1 flex items-center gap-2">
+                        <i class="fas fa-info-circle text-emerald-600"></i> Purpose:
+                    </p>
+                    <p class="text-xs sm:text-sm text-emerald-800 leading-relaxed">{{ test.purpose }}</p>
+                </div>
+
+                <!-- Preparation -->
+                <div *ngIf="test.preparation" class="p-4 bg-amber-50 rounded-xl border border-amber-100">
+                    <p class="text-sm font-bold text-amber-900 mb-1 flex items-center gap-2">
+                        <i class="fas fa-clipboard-list text-amber-600"></i> Preparation:
+                    </p>
+                    <p class="text-xs sm:text-sm text-amber-800 leading-relaxed">{{ test.preparation }}</p>
+                </div>
+
+                <!-- Clinical Utility -->
+                <div *ngIf="test.clinical_utility" class="p-4 bg-blue-50 rounded-xl border border-blue-100">
+                    <p class="text-sm font-bold text-blue-900 mb-1 flex items-center gap-2">
+                        <i class="fas fa-microscope text-blue-600"></i> Clinical Utility:
+                    </p>
+                    <p class="text-xs sm:text-sm text-blue-800 leading-relaxed">{{ test.clinical_utility }}</p>
+                </div>
+            </div>
+
+            <!-- Lab Suggestion Card -->
+            <div
+                class="mb-2 bg-gradient-to-r from-teal-600 to-emerald-600 p-5 rounded-2xl text-white shadow-lg overflow-hidden relative">
+                <div class="absolute -right-4 -bottom-4 opacity-10 rotate-12">
+                    <i class="fas fa-map-marker-alt text-8xl"></i>
+                </div>
+                <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-center sm:text-left">
+                        <p class="text-lg font-bold mb-1">Visiting a lab nearby?</p>
+                        <p class="text-xs text-emerald-50">Compare prices at 100+ NABL labs near you.</p>
+                    </div>
+                    <button (click)="onFindLab()"
+                        class="w-full sm:w-auto px-6 py-2.5 bg-white text-emerald-700 rounded-xl text-xs font-extrabold hover:bg-emerald-50 transition-all shadow-md">
+                        Find Lab Near Me
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sticky Footer Action -->
+        <div class="p-3 sm:p-4 bg-white border-t border-slate-100 w-full">
+            <div class="flex flex-row items-center justify-between gap-4">
+                <div class="text-center sm:text-left">
+                    <!-- <div class="flex items-center justify-center sm:justify-start gap-2 mb-1">
+                        <span class="text-xs text-slate-400 line-through">₹{{ formatPrice(test.price) }}</span>
+                        <span class="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-bold">
+                            {{ getDiscountPercentage() }}% OFF
+                        </span>
+                    </div> -->
+                    <div class="text-2xl sm:text-3xl font-bold text-emerald-600">
+                        ₹{{ formatPrice(test.price) }}
+                    </div>
+                </div>
+                <button (click)="onClose()"
+                    class="w-auto px-8 py-1 md:py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-bold shadow-xl transition-all flex items-center justify-center gap-2">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

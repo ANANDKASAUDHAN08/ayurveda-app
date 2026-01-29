@@ -253,10 +253,15 @@
                             <h3 class="text-lg lg:text-xl font-bold text-slate-800">Diagnostic Methods</h3>
                         </div>
                         <ul class="space-y-3">
-                            <li *ngFor="let p of details.procedures.diagnostic"
-                                class="bg-slate-50 p-3.5 lg:p-3 rounded-xl text-slate-700 font-medium text-sm lg:text-base flex items-center">
+                            <li *ngFor="let p of details.procedures.diagnostic" (click)="navigateToTest(p)"
+                                [class.cursor-pointer]="isTestAvailable(p)"
+                                [class.hover:bg-blue-100]="isTestAvailable(p)"
+                                [class.hover:text-blue-800]="isTestAvailable(p)"
+                                class="bg-slate-50 p-3.5 lg:p-3 rounded-xl text-slate-700 font-medium text-sm lg:text-base flex items-center transition-colors">
                                 <div class="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full bg-blue-400 mr-3"></div>
-                                {{p}}
+                                <span class="flex-grow">{{p}}</span>
+                                <i *ngIf="isTestAvailable(p)"
+                                    class="fas fa-external-link-alt ml-2 text-xs opacity-60"></i>
                             </li>
                         </ul>
                     </div>

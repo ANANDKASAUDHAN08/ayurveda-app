@@ -108,6 +108,11 @@
                                     (selectedType === 'health-centre' ? 'bg-white text-[#047857] border-white' : 'bg-white/15 text-white hover:bg-white/25 border-white/25')">
                                     <i class="fas fa-house-medical"></i> Health Centres
                                 </button>
+                                <button (click)="toggleType('laboratory')"
+                                    [class]="'flex-shrink-0 flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] lg:text-xs font-black transition-all whitespace-nowrap border shadow-sm ' + 
+                                    (selectedType === 'laboratory' ? 'bg-white text-[#047857] border-white' : 'bg-white/15 text-white hover:bg-white/25 border-white/25')">
+                                    <i class="fas fa-microscope"></i> Laboratories
+                                </button>
                             </div>
                         </div>
 
@@ -247,7 +252,7 @@
                         <div
                             [class]="'bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl flex items-center justify-center text-[#047857] ' + (viewMode === 'both' ? 'w-14 h-14 text-2xl' : 'w-12 h-12 lg:w-18 lg:h-18 text-2xl lg:text-3xl')">
                             <i class="fas"
-                                [class]="item.type === 'hospital' ? 'fa-hospital' : (item.type === 'pharmacy' ? 'fa-pills' : (item.type === 'health-centre' ? 'fa-house-medical' : 'fa-user-doctor'))"></i>
+                                [class]="item.type === 'hospital' ? 'fa-hospital' : (item.type === 'pharmacy' ? 'fa-pills' : (item.type === 'health-centre' ? 'fa-house-medical' : (item.type === 'laboratory' ? 'fa-microscope' : 'fa-user-doctor')))"></i>
                         </div>
                         <div class="flex-1 min-w-0 w-full">
                             <div
@@ -258,12 +263,26 @@
                                 </h3>
                             </div>
                             <p
-                                [class]="'text-xs text-slate-500 font-medium mb-4 flex items-center gap-1.5 opacity-80 ' + (viewMode === 'both' ? 'justify-center text-center px-4' : 'lg:text-sm')">
+                                [class]="'text-xs text-slate-500 font-medium mb-2 flex items-center gap-1.5 opacity-80 ' + (viewMode === 'both' ? 'justify-center text-center px-4' : 'lg:text-sm')">
                                 <i class="fas fa-location-dot text-emerald-700 shrink-0"></i>
                                 <span [class]="'truncate ' + (viewMode === 'both' ? 'max-w-[200px]' : 'block w-full')">
                                     {{ item.address || (item.district_name + ', ' + item.state_name) }}
                                 </span>
                             </p>
+
+                            <!-- Optional Timings and Website in Card -->
+                            <div *ngIf="item.type === 'laboratory'"
+                                class="flex flex-col gap-1 mb-3 text-[10px] lg:text-[11px] font-medium text-slate-400">
+                                <div *ngIf="item.timings" class="flex items-center gap-1.5 truncate">
+                                    <i class="fas fa-clock text-emerald-600/60 w-3 text-center"></i>
+                                    {{ item.timings }}
+                                </div>
+                                <div *ngIf="item.website" class="flex items-center gap-1.5 truncate">
+                                    <i class="fas fa-globe text-emerald-600/60 w-3 text-center"></i>
+                                    <span class="text-emerald-600 truncate underline underline-offset-2">{{ item.website
+                                        }}</span>
+                                </div>
+                            </div>
 
                             <div
                                 [class]="'flex flex-wrap items-center gap-2 ' + (viewMode === 'both' ? 'justify-center' : 'gap-3')">
@@ -393,6 +412,12 @@
                     </div>
                     <span class="text-xs font-bold text-slate-700">Health Centres</span>
                 </div>
+                <div class="flex items-center gap-4 group">
+                    <div
+                        class="w-3.5 h-3.5 rounded-full bg-pink-500 ring-4 ring-pink-500/20 group-hover:scale-125 transition-transform">
+                    </div>
+                    <span class="text-xs font-bold text-slate-700">Laboratories</span>
+                </div>
             </div>
         </div>
 
@@ -461,6 +486,11 @@
                                     (selectedType === 'health-centre' ? 'bg-white text-[#047857] border-white' : 'bg-white/15 text-white hover:bg-white/25 border-white/25')">
                                     <i class="fas fa-house-medical"></i> Health Centres
                                 </button>
+                                <button (click)="toggleType('laboratory')"
+                                    [class]="'flex-shrink-0 flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] font-black transition-all whitespace-nowrap border shadow-sm ' + 
+                                    (selectedType === 'laboratory' ? 'bg-white text-[#047857] border-white' : 'bg-white/15 text-white hover:bg-white/25 border-white/25')">
+                                    <i class="fas fa-microscope"></i> Laboratories
+                                </button>
                             </div>
 
                             <!-- Search Bar -->
@@ -511,6 +541,10 @@
                         <span class="text-[11px] font-black text-slate-600 uppercase tracking-wider">Health
                             Centres</span>
                     </div>
+                    <div class="flex items-center gap-3 group">
+                        <div class="w-3.5 h-3.5 rounded-full bg-pink-500 ring-4 ring-pink-500/20"></div>
+                        <span class="text-[11px] font-black text-slate-600 uppercase tracking-wider">Laboratories</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -553,7 +587,7 @@
                     <div
                         class="w-14 h-14 lg:w-20 lg:h-20 rounded-2xl lg:rounded-3xl bg-white flex items-center justify-center text-[#047857] text-2xl lg:text-4xl shadow-xl shrink-0">
                         <i class="fas"
-                            [class]="selectedItemDetails.type === 'hospital' ? 'fa-hospital' : (selectedItemDetails.type === 'pharmacy' ? 'fa-pills' : (selectedType === 'health-centre' ? 'fa-house-medical' : 'fa-user-doctor'))"></i>
+                            [class]="selectedItemDetails.type === 'hospital' ? 'fa-hospital' : (selectedItemDetails.type === 'pharmacy' ? 'fa-pills' : (selectedItemDetails.type === 'health-centre' ? 'fa-house-medical' : (selectedItemDetails.type === 'laboratory' ? 'fa-microscope' : 'fa-user-doctor')))"></i>
                     </div>
                     <div class="min-w-0">
                         <h3 class="text-xl lg:text-3xl font-black leading-tight truncate mb-1">{{
@@ -605,6 +639,19 @@
                                     available' }}</p>
                             </div>
                         </div>
+                        <div *ngIf="selectedItemDetails.timings" class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl lg:rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 shrink-0">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">
+                                    Working Hours
+                                </p>
+                                <p class="text-sm lg:text-base font-bold text-slate-700">{{ selectedItemDetails.timings
+                                    }}</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="space-y-5 lg:space-y-6">
                         <div class="flex items-center gap-4">
@@ -635,47 +682,62 @@
                     </div>
                 </div>
 
-                <!-- Specialties (if available) -->
-                <div *ngIf="selectedItemDetails.specialties" class="space-y-3 lg:space-y-4">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Available Specialties
+                <!-- Services (if available) -->
+                <div *ngIf="selectedItemDetails.services" class="space-y-3 lg:space-y-4">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        Services Offered
                     </p>
                     <div class="flex flex-wrap gap-2 lg:gap-3">
-                        <span *ngFor="let spec of selectedItemDetails.specialties?.split(',')"
-                            class="px-4 py-2 bg-emerald-50 text-emerald-700 text-[10px] lg:text-[11px] font-black uppercase tracking-wider rounded-xl border border-emerald-100/50 transition-all hover:bg-emerald-100">
-                            {{ spec.trim() }}
-                        </span>
+                        <ng-container *ngIf="isString(selectedItemDetails.services)">
+                            <span *ngFor="let service of selectedItemDetails.services?.split(',')"
+                                class="px-4 py-2 bg-emerald-50 text-emerald-700 text-[10px] lg:text-[11px] font-black uppercase tracking-wider rounded-xl border border-emerald-100/50 transition-all hover:bg-emerald-100">
+                                {{ service.trim() }}
+                            </span>
+                        </ng-container>
+                        <ng-container *ngIf="!isString(selectedItemDetails.services)">
+                            <span *ngFor="let service of selectedItemDetails.services"
+                                class="px-4 py-2 bg-emerald-50 text-emerald-700 text-[10px] lg:text-[11px] font-black uppercase tracking-wider rounded-xl border border-emerald-100/50 transition-all hover:bg-emerald-100">
+                                {{ service }}
+                            </span>
+                        </ng-container>
                     </div>
                 </div>
 
-                <!-- Rate Your Experience -->
-                <div
-                    class="p-6 lg:p-8 bg-slate-50 rounded-[2rem] lg:rounded-[2.5rem] border border-slate-100 space-y-5 lg:space-y-6">
-                    <div class="text-center">
-                        <h4 class="text-xs lg:text-sm font-black text-slate-900 uppercase tracking-[0.15em] mb-1.5">Rate
-                            Your
-                            Experience
-                        </h4>
-                        <p class="text-[10px] lg:text-xs text-slate-500 font-medium">Your feedback helps others find the
-                            best Ayurvedic care.
-                        </p>
-                    </div>
+                <!-- Specialties (if available for doctors etc) -->
+                <div *ngIf="selectedItemDetails.specialties && !selectedItemDetails.services"
+                    class="space-y-3 lg:space-y-4">
 
-                    <div class="flex justify-center gap-2 lg:gap-4">
-                        <button *ngFor="let star of [1,2,3,4,5]" (click)="userRating = star"
-                            class="w-10 h-10 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl text-lg lg:text-2xl transition-all border-2 flex items-center justify-center group/star"
-                            [class]="userRating >= star ? 'bg-amber-500 border-amber-500 text-white shadow-lg shadow-amber-200 lg:scale-110' : 'bg-white border-slate-200 text-slate-200 hover:text-amber-300 hover:border-amber-100'">
-                            <i class="fas fa-star group-hover/star:scale-110 transition-transform"></i>
-                        </button>
-                    </div>
+                    <!-- Rate Your Experience -->
+                    <div
+                        class="p-6 lg:p-8 bg-slate-50 rounded-[2rem] lg:rounded-[2.5rem] border border-slate-100 space-y-5 lg:space-y-6">
+                        <div class="text-center">
+                            <h4 class="text-xs lg:text-sm font-black text-slate-900 uppercase tracking-[0.15em] mb-1.5">
+                                Rate
+                                Your
+                                Experience
+                            </h4>
+                            <p class="text-[10px] lg:text-xs text-slate-500 font-medium">Your feedback helps others find
+                                the
+                                best Ayurvedic care.
+                            </p>
+                        </div>
 
-                    <div class="pt-2 lg:pt-4">
-                        <button (click)="submitRating()" [disabled]="userRating === 0"
-                            class="w-full py-4 lg:py-5 bg-[#047857] text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-200/50 disabled:opacity-30 disabled:shadow-none hover:bg-[#065f46] hover:-translate-y-1 active:scale-[0.98] transition-all">
-                            Submit Feedback
-                        </button>
+                        <div class="flex justify-center gap-2 lg:gap-4">
+                            <button *ngFor="let star of [1,2,3,4,5]" (click)="userRating = star"
+                                class="w-10 h-10 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl text-lg lg:text-2xl transition-all border-2 flex items-center justify-center group/star"
+                                [class]="userRating >= star ? 'bg-amber-500 border-amber-500 text-white shadow-lg shadow-amber-200 lg:scale-110' : 'bg-white border-slate-200 text-slate-200 hover:text-amber-300 hover:border-amber-100'">
+                                <i class="fas fa-star group-hover/star:scale-110 transition-transform"></i>
+                            </button>
+                        </div>
+
+                        <div class="pt-2 lg:pt-4">
+                            <button (click)="submitRating()" [disabled]="userRating === 0"
+                                class="w-full py-4 lg:py-5 bg-[#047857] text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-200/50 disabled:opacity-30 disabled:shadow-none hover:bg-[#065f46] hover:-translate-y-1 active:scale-[0.98] transition-all">
+                                Submit Feedback
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

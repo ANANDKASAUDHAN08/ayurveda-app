@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
+import { environment } from '@env/environment';
 import { ContentService } from '../../../shared/services/content.service';
 import { ShareButtonComponent } from '../../../shared/components/share/share-button/share-button.component';
 import { ShareData } from '../../../shared/services/share.service';
@@ -17,11 +18,13 @@ export class SpecialtyDetailComponent implements OnInit {
     details: any = null;
     loading: boolean = true;
     error: boolean = false;
+    availableTests: Set<string> = new Set();
 
     showMobileMenu: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private contentService: ContentService
     ) { }
 
@@ -30,6 +33,22 @@ export class SpecialtyDetailComponent implements OnInit {
             this.specialtyName = params['name'];
             this.loadSpecialtyDetails();
         });
+        this.loadAvailableTests();
+    }
+
+    loadAvailableTests(): void {
+        // Fetch lab tests to check availability
+        // We'll use the environment API URL directly since it's common in this project
+        fetch(`${environment.apiUrl}/lab-tests?limit=1000`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.data.results) {
+                    data.data.results.forEach((test: any) => {
+                        this.availableTests.add(test.name.toLowerCase());
+                    });
+                }
+            })
+            .catch(err => console.error('Error loading available tests:', err));
     }
 
     loadSpecialtyDetails(): void {
@@ -48,6 +67,20 @@ export class SpecialtyDetailComponent implements OnInit {
                 this.loading = false;
             }
         });
+    }
+
+    isTestAvailable(procedure: string): boolean {
+        const p = procedure.toLowerCase();
+        // Check if procedure or part of it matches an available test name
+        return Array.from(this.availableTests).some(testName =>
+            p.includes(testName) || testName.includes(p)
+        );
+    }
+
+    navigateToTest(procedure: string): void {
+        if (this.isTestAvailable(procedure)) {
+            this.router.navigate(['/lab-tests'], { queryParams: { q: procedure } });
+        }
     }
 
     isAyurvedic(): boolean {

@@ -1,8 +1,127 @@
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
+/* Filter Bar Sticky Management */
+.sticky.top-0 {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    z-index: 50 !important;
 }
 
+/* Hide Number Input Spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Clean Input Styles */
+input {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+@media (max-width: 1024px) {
+    .sticky.top-0 {
+        position: sticky !important;
+        top: 0 !important;
+    }
+}
+
+/* Keep necessary animations and utils */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.3s ease-out forwards;
+}
+
+/* Ensure parents don't clip dropdowns */
+:host {
+    display: block;
+    position: relative;
+}
+
+.max-h-\[300px\]::-webkit-scrollbar {
+    width: 6px;
+}
+
+.max-h-\[300px\]::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.max-h-\[300px\]::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 9999px;
+}
+
+.max-h-\[300px\]::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+}
+
+/* Fix sticky header visibility */
+.sticky {
+    position: sticky !important;
+    top: 0;
+    overflow: visible !important;
+}
+
+/* Pagination Enhancement */
+.pagination-btn {
+    position: relative;
+    overflow: hidden;
+    color: #475569;
+    border: 1px solid transparent;
+    @apply flex items-center justify-center rounded-xl text-sm font-bold transition-all duration-300;
+}
+
+.pagination-btn:hover:not(.active-page) {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    @apply -translate-y-0.5 shadow-sm;
+}
+
+.active-page {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3), 0 4px 6px -4px rgba(16, 185, 129, 0.3) !important;
+    border-color: transparent !important;
+}
+
+.nav-btn {
+    @apply w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl transition-all duration-300 bg-white border border-slate-200 text-slate-500 shadow-sm shrink-0;
+}
+
+.nav-btn:hover:not(:disabled) {
+    @apply bg-emerald-50 text-emerald-600 border-emerald-100 -translate-y-0.5 shadow-md;
+}
+
+.nav-btn:disabled {
+    @apply opacity-20 cursor-not-allowed grayscale;
+}
+
+.pagination-container {
+    @apply flex flex-nowrap items-center justify-center p-1.5 sm:p-2 bg-white/50 rounded-2xl border border-slate-100 backdrop-blur-sm overflow-x-auto max-w-full mx-auto;
+}
+
+/* Scrollbar Hide Utility */
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
 }
