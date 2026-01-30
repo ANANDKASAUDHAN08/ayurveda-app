@@ -37,3 +37,35 @@
     overflow: hidden;
     line-clamp: 2;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Ensure app-pharmacy-card takes full height within flex grid */
+app-pharmacy-card {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Custom Select styling for better cross-browser look in the teal header */
+select {
+    background-image: none !important;
+}
+
+/* Dropdown Container - ensure overflow is visible */
+.custom-dropdown-container {
+    overflow: visible !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* When dropdown is open, increase z-index */
+.custom-dropdown-container:has([class*="z-[100]"]) {
+    z-index: 100;
+}

@@ -19,6 +19,18 @@ export interface HospitalAspects {
     waiting_time?: number; // 1-5
 }
 
+export interface PharmacyReview {
+    id: number;
+    user_id: number;
+    user_name?: string;
+    pharmacy_id: number;
+    rating: number; // 1-5
+    title?: string;
+    comment: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface WebsiteReview {
     id: number;
     user_id: number;

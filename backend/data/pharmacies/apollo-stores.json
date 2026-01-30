@@ -1,0 +1,62 @@
+[
+  {
+    "name": "KVK NAGAR (SELAIYUR) Chennai",
+    "address": "No.8, Shop No.1, KVK Nagar, Selaiyr, Chennai-600073.",
+    "city": "Chennai",
+    "phone": "4422290635",
+    "latitude": 12.91256,
+    "longitude": 80.14371,
+    "opening_hours": "09:00 AM - 11:00 PM",
+    "brand": "Independent",
+    "data_source": "Apollo Pharmacy Official",
+    "state": "Tamil Nadu"
+  },
+  {
+    "name": "KANNADASAN NAGAR Chennai",
+    "address": "No.6/1, Meenambal Salai, Kannadasan Nagar, Chennai-600 118.",
+    "city": "Chennai",
+    "phone": "4425542003",
+    "latitude": 13.132112,
+    "longitude": 80.258961,
+    "opening_hours": "09:00 AM - 11:00 PM",
+    "brand": "Independent",
+    "data_source": "Apollo Pharmacy Official",
+    "state": "Tamil Nadu"
+  },
+  {
+    "name": "Urapakkam 3 KANCHIPURAM",
+    "address": "No.5, Ground Floor, Gandhi nagar, Iyancherry road, Urapakkam, Kanchipuram Dist - 603202",
+    "city": "KANCHIPURAM",
+    "phone": "7305322232",
+    "latitude": 12.86605,
+    "longitude": 80.07797,
+    "opening_hours": "09:00 AM - 11:00 PM",
+    "brand": "Independent",
+    "data_source": "Apollo Pharmacy Official",
+    "state": "Tamil Nadu"
+  },
+  {
+    "name": "ASHOK NAGAR-II Chennai",
+    "address": "No.61 (New), No. 54 (Old), Block No.72, Plot No.B-224, Sy No.12, 12th Avenue, Ashoknagar Housing Scheme, Ashoknagar, Chennai-600 083.",
+    "city": "Chennai",
+    "phone": "4424700120",
+    "latitude": 13.030461,
+    "longitude": 80.21379,
+    "opening_hours": "09:00 AM - 11:00 PM",
+    "brand": "Independent",
+    "data_source": "Apollo Pharmacy Official",
+    "state": "Tamil Nadu"
+  },
+  {
+    "name": "SENTHILNAGAR MAIN ROAD Chennai",
+    "address": "No.12/3 (New), Sy No.32, Block No.14 (old), Senthil Nagar I Main Road, Senthil Nagar, Kolathur Vi, Chennai-600 099.",
+    "city": "Chennai",
+    "phone": "4426503012",
+    "latitude": 13.121444,
+    "longitude": 80.205235,
+    "opening_hours": "09:00 AM - 11:00 PM",
+    "brand": "Independent",
+    "data_source": "Apollo Pharmacy Official",
+    "state": "Tamil Nadu"
+  }
+]

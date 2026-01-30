@@ -1,156 +1,437 @@
 <app-mobile-location-bar class="md:hidden"></app-mobile-location-bar>
 
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-    <!-- Hero Section - 2 Column Layout -->
-    <div class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white relative overflow-hidden">
-        <!-- Decorative Elements -->
+<div class="min-h-screen bg-gray-50 flex flex-col">
+    <!-- Hero & Search Header -->
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white relative overflow-visible flex-shrink-0">
+        <!-- Decoration -->
         <div class="absolute inset-0 opacity-10">
-            <div class="absolute top-0 left-0 w-72 h-72 bg-white rounded-full blur-3xl"></div>
-            <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute top-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 w-80 h-80 bg-white rounded-full blur-3xl"></div>
         </div>
 
-        <div class="max-w-full mx-auto relative z-10 px-4 sm:px-6 md:px-0">
-            <div class="grid md:grid-cols-2 gap-0">
-                <!-- Left Column - Main Content -->
-                <div class="px-4 pt-6 pb-2 md:px-8 md:py-8 flex flex-col justify-center text-center md:text-left">
-                    <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-2 
-                               bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200">
-                        Find Pharmacies Near You
-                    </h1>
-                    <p class="hidden md:block text-lg md:text-xl text-emerald-50 mb-4 leading-relaxed">
-                        Discover trusted pharmacies with genuine medicines and fast home delivery. Quality healthcare
-                        products at your doorstep.
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="text-center md:text-left">
+                    <h1 class="text-3xl md:text-5xl font-black mb-2 md:mb-4 tracking-tight">Find Pharmacies</h1>
+                    <p class="text-emerald-50 text-sm md:text-lg max-w-xl">
+                        Discover trusted pharmacies and get genuine medicines delivered to your doorstep.
                     </p>
-
-                    <!-- Features Grid - Compact on Mobile -->
-                    <div class="grid grid-cols-4 md:grid-cols-2 gap-2 md:gap-4 mb-4">
-                        <div class="flex flex-col md:flex-row items-center gap-1 md:gap-3 text-center md:text-left">
-                            <div
-                                class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 flex items-center justify-center">
-                                <i class="fas fa-pills text-sm md:text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-[10px] sm:text-xs md:text-lg leading-tight">
-                                    {{pharmacies.length}}+</p>
-                                <p
-                                    class="text-[8px] sm:text-[10px] md:text-sm text-emerald-100 uppercase tracking-tighter md:normal-case md:tracking-normal">
-                                    Pharm</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-col md:flex-row items-center gap-1 md:gap-3 text-center md:text-left">
-                            <div
-                                class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 flex items-center justify-center">
-                                <i class="fas fa-truck text-sm md:text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-[10px] sm:text-xs md:text-lg leading-tight">Fast</p>
-                                <p
-                                    class="text-[8px] sm:text-[10px] md:text-sm text-emerald-100 uppercase tracking-tighter md:normal-case md:tracking-normal">
-                                    Deliv</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-col md:flex-row items-center gap-1 md:gap-3 text-center md:text-left">
-                            <div
-                                class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 flex items-center justify-center">
-                                <i class="fas fa-clock text-sm md:text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-[10px] sm:text-xs md:text-lg leading-tight">24/7</p>
-                                <p
-                                    class="text-[8px] sm:text-[10px] md:text-sm text-emerald-100 uppercase tracking-tighter md:normal-case md:tracking-normal">
-                                    Avail</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-col md:flex-row items-center gap-1 md:gap-3 text-center md:text-left">
-                            <div
-                                class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 flex items-center justify-center">
-                                <i class="fas fa-shield-alt text-sm md:text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-[10px] sm:text-xs md:text-lg leading-tight">Verified</p>
-                                <p
-                                    class="text-[8px] sm:text-[10px] md:text-sm text-emerald-100 uppercase tracking-tighter md:normal-case md:tracking-normal">
-                                    Gen</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- Right Column - Search Section -->
-                <div
-                    class="px-4 pt-2 pb-6 md:px-8 md:py-8 flex flex-col justify-center bg-white/5 md:bg-transparent md:backdrop-blur-0">
-                    <h2 class="hidden md:block text-xl md:text-2xl font-bold mb-2">Search for Medicines</h2>
-                    <p class="hidden md:block text-emerald-50 mb-4">Find trusted pharmacies in your area</p>
-
-                    <!-- Enhanced Search Bar -->
-                    <div class="flex gap-4 md:mb-6">
-                        <div class="flex-1 relative group">
+                <!-- Main Search Area -->
+                <div class="w-full max-w-lg">
+                    <div class="relative group flex items-center gap-2">
+                        <!-- Search Input -->
+                        <div class="flex-1 relative">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                 <i
                                     class="fas fa-search text-gray-400 group-focus-within:text-emerald-600 transition-colors"></i>
                             </div>
-                            <input type="text" [(ngModel)]="searchTerm" (input)="searchPharmacies()" class="block w-full pl-12 pr-12 py-4 border-0 rounded-xl leading-5 
-                                          bg-white/95 backdrop-blur-sm text-gray-900 placeholder-gray-500 
-                                          shadow-2xl shadow-emerald-900/20
-                                          focus:outline-none focus:ring-4 focus:ring-emerald-300/50
-                                          transition-all duration-300 text-base"
-                                placeholder="Search by name, city, state...">
+                            <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()"
+                                class="block w-full pl-12 pr-12 py-4 bg-white rounded-2xl text-gray-900 placeholder-gray-400 
+                                      shadow-2xl shadow-emerald-900/20 focus:outline-none focus:ring-4 focus:ring-emerald-300/50 transition-all"
+                                placeholder="Search by name, city, or address...">
                             <button *ngIf="searchTerm" (click)="clearSearch()"
-                                class="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer group/clear">
-                                <i class="fas fa-times-circle text-gray-400 hover:text-red-500 transition-colors"></i>
+                                class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-red-500">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                        </div>
+
+                        <!-- Mobile Filter Button -->
+                        <button (click)="toggleAdvancedFilters()"
+                            class="md:hidden flex-shrink-0 w-14 h-14 bg-white text-emerald-600 rounded-2xl shadow-2xl shadow-emerald-900/20 flex items-center justify-center hover:bg-emerald-50 transition-all relative">
+                            <i class="fas fa-sliders-h text-lg"></i>
+                            <span
+                                *ngIf="filters.state || filters.city || filters.brand || filters.is24x7 || filters.delivery"
+                                class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-black">
+                                !
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- Results Counter - Mobile Only (Below Search/Filter Row) -->
+                    <div class="md:hidden mt-4">
+                        <div
+                            class="flex items-center gap-3 text-gray-500 bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100 justify-center">
+                            <i class="fas fa-map-marked-alt text-emerald-500"></i>
+                            <span class="text-xs font-bold text-gray-700">
+                                Showing <span class="text-emerald-600">{{ (currentPage - 1) * itemsPerPage + 1 }}</span>
+                                to
+                                <span class="text-emerald-600">{{ Math.min(currentPage * itemsPerPage,
+                                    filteredPharmacies.length) }}</span> of
+                                <span class="text-emerald-600">{{filteredPharmacies.length}}</span> locations
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <!-- Desktop: Results Counter + Filter Toggle + Clear Button (All in one row) -->
+                    <div class="mt-4 hidden md:flex items-center justify-between gap-4">
+                        <!-- Results Counter -->
+                        <div
+                            class="flex items-center gap-3 text-gray-500 bg-white/10 px-4 py-2 rounded-xl shadow-sm border border-white/20">
+                            <i class="fas fa-map-marked-alt text-white"></i>
+                            <span class="text-xs font-bold text-white">
+                                Showing <span class="text-emerald-200">{{ (currentPage - 1) * itemsPerPage + 1 }}</span>
+                                to
+                                <span class="text-emerald-200">{{ Math.min(currentPage * itemsPerPage,
+                                    filteredPharmacies.length) }}</span> of
+                                <span class="text-emerald-200">{{filteredPharmacies.length}}</span> locations
+                            </span>
+                        </div>
+
+                        <!-- Filter Controls -->
+                        <div class="flex items-center gap-3">
+                            <button (click)="toggleAdvancedFilters()" [class.bg-white]="showAdvancedFilters"
+                                [class.text-emerald-700]="showAdvancedFilters"
+                                class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all font-bold text-sm">
+                                <i class="fas" [class.fa-sliders-h]="!showAdvancedFilters"
+                                    [class.fa-chevron-up]="showAdvancedFilters"></i>
+                                {{showAdvancedFilters ? 'Hide Filters' : 'Advanced Filters'}}
+                            </button>
+                            <button
+                                *ngIf="filters.state || filters.city || filters.brand || filters.is24x7 || filters.delivery"
+                                (click)="resetFilters()" class="text-emerald-100 text-xs font-bold hover:underline">
+                                Clear All
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Pharmacies Grid - Full Width, 4 Columns -->
-    <div class="w-full px-4 sm:px-6 md:px-8 py-8 md:py-12">
-        <!-- Results Header -->
-        <div class="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-                <h2 class="text-2xl font-bold text-gray-900">Available Pharmacies</h2>
-                <p class="text-gray-600 mt-1">
-                    Showing <span class="font-semibold text-emerald-600">{{filteredPharmacies.length}}</span>
-                    of <span class="font-semibold">{{pharmacies.length}}</span> pharmacies
-                </p>
-            </div>
-        </div>
+            <!-- Desktop Advanced Filters -->
+            <div *ngIf="showAdvancedFilters"
+                class="hidden md:block mt-8 p-4 sm:p-6 bg-white rounded-2xl shadow-2xl animate-fadeIn text-gray-800 relative z-50">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 items-end overflow-visible">
+                    <!-- State Filter -->
+                    <div class="w-full relative custom-dropdown-container">
+                        <label
+                            class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 px-1">Select
+                            State</label>
+                        <button (click)="toggleStateDropdown($event)"
+                            class="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm font-bold flex items-center justify-between hover:bg-gray-100 transition-all">
+                            <span class="truncate">{{ filters.state || 'All States' }}</span>
+                            <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform"
+                                [class.rotate-180]="isStateDropdownOpen"></i>
+                        </button>
 
-        <!-- Loading State -->
-        <div *ngIf="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <div *ngFor="let i of [1,2,3,4,5,6,7,8]"
-                class="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
-                <div class="h-44 sm:h-56 bg-gradient-to-br from-gray-200 to-gray-300"></div>
-                <div class="p-4 sm:p-6 space-y-4">
-                    <div class="h-6 bg-gray-200 rounded w-3/4"></div>
-                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
-                    <div class="space-y-2">
-                        <div class="h-3 bg-gray-200 rounded"></div>
-                        <div class="h-3 bg-gray-200 rounded w-5/6"></div>
+                        <!-- Dropdown Menu -->
+                        <div *ngIf="isStateDropdownOpen"
+                            class="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 max-h-64 overflow-y-auto z-[100] animate-fadeIn no-scrollbar">
+                            <div (click)="selectState('')"
+                                class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50"
+                                [class.bg-emerald-50]="filters.state === ''"
+                                [class.text-emerald-700]="filters.state === ''">All States</div>
+                            <div *ngFor="let state of states" (click)="selectState(state)"
+                                class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50 last:border-0"
+                                [class.bg-emerald-50]="filters.state === state"
+                                [class.text-emerald-700]="filters.state === state">
+                                {{ state }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- City Filter -->
+                    <div class="w-full relative custom-dropdown-container">
+                        <label
+                            class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 px-1">Select
+                            City</label>
+                        <button (click)="toggleCityDropdown($event)"
+                            class="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm font-bold flex items-center justify-between hover:bg-gray-100 transition-all">
+                            <span class="truncate">{{ filters.city || 'All Cities' }}</span>
+                            <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform"
+                                [class.rotate-180]="isCityDropdownOpen"></i>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div *ngIf="isCityDropdownOpen"
+                            class="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 max-h-64 overflow-y-auto z-[100] animate-fadeIn no-scrollbar">
+                            <div (click)="selectCity('')"
+                                class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50"
+                                [class.bg-emerald-50]="filters.city === ''"
+                                [class.text-emerald-700]="filters.city === ''">All Cities</div>
+                            <div *ngFor="let city of cities" (click)="selectCity(city)"
+                                class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50 last:border-0"
+                                [class.bg-emerald-50]="filters.city === city"
+                                [class.text-emerald-700]="filters.city === city">
+                                {{ city }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Brand Filter -->
+                    <div class="w-full relative custom-dropdown-container">
+                        <label
+                            class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 px-1">Pharmacy
+                            Brand</label>
+                        <button (click)="toggleBrandDropdown($event)"
+                            class="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm font-bold flex items-center justify-between hover:bg-gray-100 transition-all">
+                            <span class="truncate">{{ filters.brand || 'All Brands' }}</span>
+                            <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform"
+                                [class.rotate-180]="isBrandDropdownOpen"></i>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div *ngIf="isBrandDropdownOpen"
+                            class="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 max-h-64 overflow-y-auto z-[100] animate-fadeIn no-scrollbar">
+                            <div (click)="selectBrand('')"
+                                class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50"
+                                [class.bg-emerald-50]="filters.brand === ''"
+                                [class.text-emerald-700]="filters.brand === ''">All Brands</div>
+                            <div *ngFor="let brand of brands" (click)="selectBrand(brand)"
+                                class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50 last:border-0"
+                                [class.bg-emerald-50]="filters.brand === brand"
+                                [class.text-emerald-700]="filters.brand === brand">
+                                {{ brand }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Toggle Options -->
+                    <div class="flex items-center gap-4 py-2">
+                        <label class="flex items-center gap-2.5 cursor-pointer group whitespace-nowrap">
+                            <input type="checkbox" [(ngModel)]="filters.is24x7" (change)="applyFilters()"
+                                class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer transition-colors">
+                            <span
+                                class="text-xs sm:text-sm font-bold text-gray-600 group-hover:text-emerald-600 transition-colors">24/7
+                                Open</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer group whitespace-nowrap">
+                            <input type="checkbox" [(ngModel)]="filters.delivery" (change)="applyFilters()"
+                                class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer transition-colors">
+                            <span
+                                class="text-xs sm:text-sm font-bold text-gray-600 group-hover:text-emerald-600 transition-colors">Home
+                                Delivery</span>
+                        </label>
+                    </div>
+
+                    <!-- Results Counter -->
+                    <div class="flex justify-start sm:justify-end lg:justify-center w-full">
+                        <div
+                            class="inline-flex items-center px-4 py-2.5 bg-emerald-50 text-emerald-700 rounded-full font-black text-[10px] uppercase tracking-wider border border-emerald-100 shadow-sm whitespace-nowrap">
+                            <i class="fas fa-store mr-2 scale-110"></i> Found {{filteredPharmacies.length}} Stores
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Pharmacy Cards - Responsive Columns -->
-        <div *ngIf="!loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-            <app-pharmacy-card *ngFor="let pharmacy of filteredPharmacies" [pharmacy]="pharmacy"></app-pharmacy-card>
+    <!-- Mobile Filter Sidebar -->
+    <div class="md:hidden">
+        <!-- Backdrop Overlay -->
+        <div *ngIf="showAdvancedFilters" (click)="toggleAdvancedFilters()"
+            class="fixed inset-0 bg-black/50 z-40 animate-fadeIn"></div>
+
+        <!-- Sidebar -->
+        <div [class.translate-x-0]="showAdvancedFilters" [class.-translate-x-full]="!showAdvancedFilters"
+            class="fixed top-16 left-0 bottom-16 w-80 max-w-[80vw] bg-white shadow-2xl z-50 transition-transform duration-300 ease-in-out flex flex-col">
+
+            <!-- Sidebar Header -->
+            <div
+                class="flex-shrink-0 bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-4 flex items-center justify-between shadow-md z-10">
+                <h3 class="text-lg font-black flex items-center gap-2">
+                    <i class="fas fa-sliders-h"></i>
+                    Filters
+                </h3>
+                <button (click)="toggleAdvancedFilters()" class="p-2 hover:bg-white/20 rounded-lg transition-all">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Filter Content -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-8">
+                <!-- State Filter -->
+                <div class="w-full relative custom-dropdown-container">
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Select
+                        State</label>
+                    <button (click)="toggleStateDropdown($event)"
+                        class="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm font-bold flex items-center justify-between hover:bg-gray-100 transition-all">
+                        <span class="truncate">{{ filters.state || 'All States' }}</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform"
+                            [class.rotate-180]="isStateDropdownOpen"></i>
+                    </button>
+                    <div *ngIf="isStateDropdownOpen"
+                        class="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 max-h-64 overflow-y-auto z-[100] animate-fadeIn no-scrollbar">
+                        <div (click)="selectState('')"
+                            class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50"
+                            [class.bg-emerald-50]="filters.state === ''"
+                            [class.text-emerald-700]="filters.state === ''">All
+                            States</div>
+                        <div *ngFor="let state of states" (click)="selectState(state)"
+                            class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50 last:border-0"
+                            [class.bg-emerald-50]="filters.state === state"
+                            [class.text-emerald-700]="filters.state === state">
+                            {{ state }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- City Filter -->
+                <div class="w-full relative custom-dropdown-container">
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Select
+                        City</label>
+                    <button (click)="toggleCityDropdown($event)"
+                        class="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm font-bold flex items-center justify-between hover:bg-gray-100 transition-all">
+                        <span class="truncate">{{ filters.city || 'All Cities' }}</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform"
+                            [class.rotate-180]="isCityDropdownOpen"></i>
+                    </button>
+                    <div *ngIf="isCityDropdownOpen"
+                        class="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 max-h-64 overflow-y-auto z-[100] animate-fadeIn no-scrollbar">
+                        <div (click)="selectCity('')"
+                            class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50"
+                            [class.bg-emerald-50]="filters.city === ''" [class.text-emerald-700]="filters.city === ''">
+                            All
+                            Cities</div>
+                        <div *ngFor="let city of cities" (click)="selectCity(city)"
+                            class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50 last:border-0"
+                            [class.bg-emerald-50]="filters.city === city"
+                            [class.text-emerald-700]="filters.city === city">
+                            {{ city }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Brand Filter -->
+                <div class="w-full relative custom-dropdown-container">
+                    <label
+                        class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Pharmacy
+                        Brand</label>
+                    <button (click)="toggleBrandDropdown($event)"
+                        class="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm font-bold flex items-center justify-between hover:bg-gray-100 transition-all">
+                        <span class="truncate">{{ filters.brand || 'All Brands' }}</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform"
+                            [class.rotate-180]="isBrandDropdownOpen"></i>
+                    </button>
+                    <div *ngIf="isBrandDropdownOpen"
+                        class="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 max-h-64 overflow-y-auto z-[100] animate-fadeIn no-scrollbar">
+                        <div (click)="selectBrand('')"
+                            class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50"
+                            [class.bg-emerald-50]="filters.brand === ''"
+                            [class.text-emerald-700]="filters.brand === ''">All
+                            Brands</div>
+                        <div *ngFor="let brand of brands" (click)="selectBrand(brand)"
+                            class="p-3 text-sm font-bold cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-gray-50 last:border-0"
+                            [class.bg-emerald-50]="filters.brand === brand"
+                            [class.text-emerald-700]="filters.brand === brand">
+                            {{ brand }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toggle Options -->
+                <div class="flex flex-col gap-3 py-2">
+                    <label class="flex items-center gap-2.5 cursor-pointer group">
+                        <input type="checkbox" [(ngModel)]="filters.is24x7" (change)="applyFilters()"
+                            class="!w-5 !h-5 !min-w-0 !min-h-0 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer transition-colors">
+                        <span
+                            class="text-sm font-bold text-gray-600 group-hover:text-emerald-600 transition-colors">24/7
+                            Open</span>
+                    </label>
+                    <label class="flex items-center gap-2.5 cursor-pointer group">
+                        <input type="checkbox" [(ngModel)]="filters.delivery" (change)="applyFilters()"
+                            class="!w-5 !h-5 !min-w-0 !min-h-0 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer transition-colors">
+                        <span
+                            class="text-sm font-bold text-gray-600 group-hover:text-emerald-600 transition-colors">Home
+                            Delivery</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Results Counter -->
+            <div class="flex justify-center w-full mb-4">
+                <div
+                    class="inline-flex items-center px-4 py-2.5 bg-emerald-50 text-emerald-700 rounded-full font-black text-[10px] uppercase tracking-wider border border-emerald-100 shadow-sm">
+                    <i class="fas fa-store mr-2 scale-110"></i> Found {{filteredPharmacies.length}} Stores
+                </div>
+            </div>
+
+            <!-- Sidebar Footer with Action Buttons -->
+            <div class="flex-shrink-0 bg-white border-t border-gray-100 p-2 flex gap-3 shadow-lg">
+                <button (click)="resetFilters()"
+                    class="flex-1 px-2 py-1.5 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-200 transition-all active:scale-95">
+                    <i class="fas fa-redo mr-2"></i>Reset
+                </button>
+                <button (click)="toggleAdvancedFilters()"
+                    class="flex-1 px-2 py-1.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-all active:scale-95 shadow-md">
+                    <i class="fas fa-check mr-2"></i>Apply
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- No Results -->
-    <div *ngIf="!loading && filteredPharmacies.length === 0" class="text-center py-20 bg-white rounded-2xl shadow-lg">
-        <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gray-100 mb-6">
-            <i class="fas fa-pills text-gray-400 text-5xl"></i>
+    <!-- Content Section -->
+    <div class="max-w-8xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-3 md:py-5 flex-1">
+        <!-- Loading State -->
+        <div *ngIf="loading" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div *ngFor="let i of [1,2,3,4,5,6,7,8]"
+                class="bg-white rounded-2xl shadow-sm animate-pulse overflow-hidden">
+                <div class="h-24 md:h-44 bg-gray-100"></div>
+                <div class="p-5 space-y-3">
+                    <div class="h-5 bg-gray-200 rounded w-3/4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div class="h-10 bg-gray-200 rounded mt-4"></div>
+                </div>
+            </div>
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-2">No pharmacies found</h3>
-        <p class="text-gray-500 mb-6">Try adjusting your search criteria</p>
-        <button (click)="clearSearch()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg 
-                           transition-colors shadow-lg">
-            Clear Search
-        </button>
+
+        <!-- Cards Grid -->
+        <div *ngIf="!loading && paginatedPharmacies.length > 0"
+            class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-4 lg:gap-6 auto-rows-fr">
+            <app-pharmacy-card *ngFor="let pharmacy of paginatedPharmacies" [pharmacy]="pharmacy" class="w-full flex">
+            </app-pharmacy-card>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!loading && paginatedPharmacies.length === 0"
+            class="py-20 text-center bg-white rounded-3xl shadow-sm border border-gray-100 mx-auto max-w-2xl px-6">
+            <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-search text-gray-300 text-4xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">No Pharmacies Found</h3>
+            <p class="text-gray-500 mb-8">We couldn't find any results matching your search or filters. Try adjusting
+                them.</p>
+            <button (click)="resetFilters()"
+                class="px-8 py-3 bg-emerald-600 text-white font-bold rounded-xl shadow-lg hover:bg-emerald-700 transition-all active:scale-95">
+                Reset All Filters
+            </button>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div *ngIf="!loading && totalPages > 1"
+            class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-gray-100 pt-2 no-scrollbar">
+            <div class="text-sm text-gray-500 font-bold bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-50">
+                Page <span class="text-emerald-600">{{currentPage}}</span> of {{totalPages}}
+            </div>
+
+            <div class="flex items-center gap-1.5 sm:gap-2 max-w-full overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
+                <!-- Previous -->
+                <button (click)="previousPage()" [disabled]="currentPage === 1"
+                    class="flex-shrink-0 p-2 sm:px-4 sm:py-2.5 rounded-xl border border-gray-200 font-bold text-gray-600 disabled:opacity-40 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-all active:scale-95">
+                    <i class="fas fa-chevron-left sm:mr-2"></i> <span class="hidden sm:inline">Prev</span>
+                </button>
+
+                <!-- Page Numbers -->
+                <div class="flex items-center gap-1 sm:gap-2">
+                    <ng-container *ngFor="let page of getVisiblePages()">
+                        <div *ngIf="page === -1" class="px-1 text-gray-400 font-bold">...</div>
+                        <button *ngIf="page !== -1" (click)="goToPage(page)"
+                            [class.bg-emerald-600]="currentPage === page" [class.text-white]="currentPage === page"
+                            [class.border-emerald-600]="currentPage === page" [class.shadow-md]="currentPage === page"
+                            [class.shadow-emerald-200]="currentPage === page"
+                            class="w-9 h-9 sm:w-11 sm:h-11 flex-shrink-0 flex items-center justify-center rounded-xl border border-gray-200 font-bold text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-all active:scale-90">
+                            {{page}}
+                        </button>
+                    </ng-container>
+                </div>
+
+                <!-- Next -->
+                <button (click)="nextPage()" [disabled]="currentPage === totalPages"
+                    class="flex-shrink-0 p-2 sm:px-4 sm:py-2.5 rounded-xl border border-gray-200 font-bold text-gray-600 disabled:opacity-40 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-all active:scale-95">
+                    <span class="hidden sm:inline">Next</span> <i class="fas fa-chevron-right sm:ml-2"></i>
+                </button>
+            </div>
+        </div>
     </div>
 </div>

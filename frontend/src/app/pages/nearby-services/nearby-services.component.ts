@@ -6,7 +6,7 @@ import { MobileLocationBarComponent } from '../../shared/components/mobile-locat
 import { GoogleMapsModule } from '@angular/google-maps';
 import { LocationService } from '../../shared/services/location.service';
 import { GoogleMapsLoaderService } from '../../shared/services/google-maps-loader.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-nearby-services',
@@ -15,7 +15,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './nearby-services.component.html',
   styleUrl: './nearby-services.component.css'
 })
-export class NearbyServicesComponent implements OnInit {
+export class NearbyServicesComponent implements OnInit, OnDestroy {
   @ViewChild('filterDrawerContainer') filterDrawerContainer!: ElementRef;
   // Map Options
   center: google.maps.LatLngLiteral = { lat: 28.6139, lng: 77.2090 }; // Delhi
@@ -84,7 +84,8 @@ export class NearbyServicesComponent implements OnInit {
     private locationService: LocationService,
     private googleLoader: GoogleMapsLoaderService,
     private elementRef: ElementRef,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   @HostListener('document:click', ['$event'])
@@ -125,6 +126,10 @@ export class NearbyServicesComponent implements OnInit {
         this.loadNearby();
       }
     });
+  }
+
+  ngOnDestroy() {
+    document.body.classList.remove('overflow-hidden');
   }
 
   private initUserMarkerOptions() {
@@ -421,11 +426,13 @@ export class NearbyServicesComponent implements OnInit {
     this.selectedItemDetails = item;
     this.showInfoModal = true;
     this.userRating = 0;
+    document.body.classList.add('overflow-hidden');
   }
 
   closeInfoModal() {
     this.showInfoModal = false;
     this.selectedItemDetails = null;
+    document.body.classList.remove('overflow-hidden');
   }
 
   submitRating() {
@@ -450,5 +457,20 @@ export class NearbyServicesComponent implements OnInit {
 
   isString(val: any): boolean {
     return typeof val === 'string';
+  }
+
+  viewAll() {
+    const routeMap: { [key: string]: string } = {
+      'hospital': '/hospitals',
+      'pharmacy': '/pharmacies',
+      'doctor': '/find-doctors',
+      'health-centre': '/hospitals',
+      'laboratory': '/lab-tests'
+    };
+
+    const targetRoute = routeMap[this.selectedType];
+    if (targetRoute) {
+      this.router.navigate([targetRoute]);
+    }
   }
 }

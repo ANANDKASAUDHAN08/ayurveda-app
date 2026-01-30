@@ -116,6 +116,7 @@ app.use('/api/calendar', require('./routes/calendarRoutes')); // Wellness Calend
 app.use('/api/medicines', require('./routes/medicines')); // Dedicated Medicines Discovery API
 app.use('/api/video-consultancy', require('./routes/videoConsultancy')); // Video Consultancy - Appointments & Payment
 app.use('/api/hospital-reviews', require('./routes/hospitalReview.routes')); // Hospital Reviews API
+app.use('/api/pharmacy-reviews', require('./routes/pharmacyReview.routes')); // Pharmacy Reviews API
 app.use('/api/website-reviews', require('./routes/websiteReview.routes')); // Website/Platform Feedback API
 
 // Health check
