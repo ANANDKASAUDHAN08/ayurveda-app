@@ -874,7 +874,8 @@
 
     <!-- Ayurveda Medicine Detail Modal -->
     <app-ayurveda-medicine-detail-modal *ngIf="selectedMedicineForModal" [medicine]="selectedMedicineForModal"
-        (close)="closeMedicineDetails()"></app-ayurveda-medicine-detail-modal>
+        (close)="closeMedicineDetails()">
+    </app-ayurveda-medicine-detail-modal>
 
     <!-- Dosha Quiz Modal -->
     <div *ngIf="showDoshaQuiz"

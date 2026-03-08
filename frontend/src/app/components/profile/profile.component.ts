@@ -1,5 +1,5 @@
 import { environment } from '@env/environment';
-import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/pa
 import { ReviewListComponent } from '../../shared/components/review-list/review-list.component';
 import { HospitalReview, WebsiteReview } from '../../shared/models/review.model';
 import { ProfileExportService } from '../../shared/services/profile-export.service';
+import { ImageCropperComponent, ImageCroppedEvent } from 'ngx-image-cropper';
 
 interface ActivityItem {
   type: 'appointment' | 'profile_update' | 'account';
@@ -32,12 +33,14 @@ interface ActivityItem {
     FormsModule,
     PhoneVerificationModalComponent,
     PasswordStrengthIndicatorComponent,
-    ReviewListComponent
+    ReviewListComponent,
+    ImageCropperComponent
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   environment = environment;
   user: any = null;
   isEditing = false;
@@ -50,6 +53,10 @@ export class ProfileComponent implements OnInit {
   showPasswordModal = false;
   show2FAModal = false;
   showDeleteModal = false;
+  showImageModal = false;
+  showCropModal = false;
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
   newPassword = '';
   isPasswordValid: boolean = false;
   showPassword: boolean = false;
@@ -305,7 +312,9 @@ export class ProfileComponent implements OnInit {
   toggleEdit() {
     this.isEditing = !this.isEditing;
     if (!this.isEditing) {
-      this.loadUser(); //  Reset form if cancelling
+      this.imagePreview = null; // Clear preview on cancel
+      this.selectedFile = null;
+      this.loadUser(); // Reset form if cancelling
     }
   }
 
@@ -373,18 +382,38 @@ export class ProfileComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview = reader.result as string;
-        this.cdr.detectChanges(); // Force update
-      };
-      reader.readAsDataURL(file);
+    if (event.target.files && event.target.files[0]) {
+      this.imageChangedEvent = event;
+      this.showCropModal = true;
+      document.body.style.overflow = 'hidden';
     }
+  }
+
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.objectUrl || event.base64;
+  }
+
+  saveCroppedImage() {
+    if (this.croppedImage) {
+      this.imagePreview = this.croppedImage;
+
+      // Convert Data URL/Object URL to File for upload
+      fetch(this.croppedImage)
+        .then(res => res.blob())
+        .then(blob => {
+          const file = new File([blob], "profile-image.png", { type: "image/png" });
+          this.selectedFile = file;
+          this.showCropModal = false;
+          document.body.style.overflow = 'auto';
+        });
+    }
+  }
+
+  cancelCrop() {
+    this.showCropModal = false;
+    this.imageChangedEvent = '';
+    this.croppedImage = '';
+    document.body.style.overflow = 'auto';
   }
 
   saveProfile() {
@@ -420,7 +449,7 @@ export class ProfileComponent implements OnInit {
             this.user.profile_image = res.user.profile_image;
           }
 
-          localStorage.setItem('user', JSON.stringify(this.user));
+          this.authService.updateUser(this.user);
           this.snackbar.success('Profile updated successfully!');
           this.calculateProfileCompletion();
           this.addActivity('profile_update', 'Profile Updated', 'You updated your profile information', new Date());
@@ -758,5 +787,32 @@ export class ProfileComponent implements OnInit {
     this.snackbar.success('✅ Phone number verified successfully!');
     this.loadUser();
     this.calculateProfileCompletion();
+  }
+
+  openImagePopup() {
+    if (this.imagePreview || this.user?.profile_image || this.user?.avatar_url) {
+      this.showImageModal = true;
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  closeImagePopup() {
+    this.showImageModal = false;
+    document.body.style.overflow = 'auto';
+  }
+
+  triggerFileInput() {
+    this.fileInput.nativeElement.click();
+  }
+
+  getProfileImageUrl(): string {
+    if (this.imagePreview) return this.imagePreview;
+    if (this.user?.profile_image) {
+      return this.user.profile_image.startsWith('http')
+        ? this.user.profile_image
+        : `${environment.apiUrl.replace('/api', '')}/${this.user.profile_image}`;
+    }
+    if (this.user?.avatar_url) return this.user.avatar_url;
+    return '';
   }
 }

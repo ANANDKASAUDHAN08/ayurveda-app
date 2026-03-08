@@ -1,64 +1,73 @@
 <div class="bg-white min-h-screen">
     <!-- Hero Section with Auth Card -->
-    <div
-        class="relative bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-100 overflow-hidden min-h-screen flex items-center">
+    <!-- Futuristic Professional Background -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div
+            class="absolute -top-[10%] left-[10%] w-[50%] h-[50%] rounded-full bg-blue-500/10 blur-[120px] animate-pulse">
+        </div>
+        <div class="absolute -bottom-[10%] right-[10%] w-[40%] h-[40%] rounded-full bg-emerald-500/10 blur-[120px] animate-pulse"
+            style="animation-delay: 3s;"></div>
+    </div>
 
-        <div class="relative max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12">
-            <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
-                <!-- Left Side: Hero Content -->
-                <main class="-mt-8 sm:-mt-4 md:-mt-2 lg:-mt-8 xl:-mt-12">
-                    <div class="lg:text-left">
-                        <h1
-                            class="text-3xl tracking-tight font-extrabold text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6">
-                            Elevate Your Medical Practice with <span class="text-emerald-600">Digital Excellence</span>
-                        </h1>
-                        <p class="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-slate-700 max-w-3xl">
-                            Join the premier network of healthcare professionals. Streamline appointments, manage
-                            patient
-                            records securely, and grow your practice with our comprehensive digital ecosystem.
-                        </p>
+    <div class="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+        <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+            <!-- Left Side: Professional Content -->
+            <div class="text-center lg:text-left space-y-8">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.3em]">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+                    Verified Physician Network
+                </div>
 
-                        <!-- Stats Banner -->
-                        <div
-                            class="mt-8 sm:mt-12 grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 md:grid-cols-4 border-t border-slate-300 pt-6 sm:pt-8">
-                            <div>
-                                <div class="text-3xl font-bold text-slate-900">500+</div>
-                                <div class="text-sm text-slate-600 mt-1">Verified Doctors</div>
-                            </div>
-                            <div>
-                                <div class="text-3xl font-bold text-slate-900">10k+</div>
-                                <div class="text-sm text-slate-600 mt-1">Monthly Patients</div>
-                            </div>
-                            <div>
-                                <div class="text-3xl font-bold text-slate-900">98%</div>
-                                <div class="text-sm text-slate-600 mt-1">Satisfaction Rate</div>
-                            </div>
-                            <div>
-                                <div class="text-3xl font-bold text-slate-900">24/7</div>
-                                <div class="text-sm text-slate-600 mt-1">Support Team</div>
-                            </div>
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] tracking-tight">
+                    Scale Your Practice <br>
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-600 font-extrabold uppercase italic">Infinite</span>
+                </h1>
+
+                <p class="text-lg md:text-xl text-slate-600 font-medium max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                    The next-generation OS for modern doctors. Automate clinical workflows, secure patient sync, and
+                    expansion analytics in one unified interface.
+                </p>
+
+                <!-- Professional Stats Banner -->
+                <div class="grid grid-cols-2 gap-6 pt-8 border-t border-slate-200">
+                    <div class="space-y-1">
+                        <div class="text-4xl font-black text-slate-900">{{ stats.doctors }}+</div>
+                        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active
+                            Practitioners</div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-4xl font-black text-slate-900">{{ (stats.patients / 1000).toFixed(1) }}k+</div>
+                        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Monthly Encounters
                         </div>
                     </div>
-                </main>
+                </div>
+            </div>
 
-                <!-- Right Side: Auth Card -->
-                <div class="mt-8 lg:mt-8 px-4 sm:px-6 lg:px-8 pb-8">
-                    <div class="w-full max-w-md mx-auto">
-                        <!-- Tabs -->
-                        <div class="flex gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+            <!-- Right Side: Professional Auth Card -->
+            <div class="mt-12 lg:mt-0 relative">
+                <!-- Data Glow -->
+                <div class="absolute -inset-10 bg-blue-500/10 blur-[100px] rounded-full opacity-30"></div>
+
+                <div
+                    class="relative bg-white/80 backdrop-blur-3xl border border-white/60 rounded-[3rem] shadow-[0_30px_60px_rgba(0,0,0,0.12)] p-2">
+                    <div class="relative p-8 sm:p-10">
+                        <!-- Switch Mode -->
+                        <div class="flex p-1.5 bg-slate-100 rounded-2xl mb-10 overflow-hidden">
                             <button (click)="switchTab('login')"
-                                class="flex-1 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-center focus:outline-none transition-all rounded-lg sm:rounded-xl border"
-                                [ngClass]="activeTab === 'login' ? 'text-emerald-600 bg-white border-emerald-400 shadow-md shadow-emerald-500/20' : 'text-slate-600 hover:text-slate-900 bg-white/40 backdrop-blur-sm border-white/60 hover:border-white hover:shadow-sm'">
-                                Sign In
+                                class="flex-1 py-3.5 text-xs font-black uppercase tracking-widest transition-all rounded-xl"
+                                [ngClass]="activeTab === 'login' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+                                Portal Access
                             </button>
                             <button (click)="switchTab('register')"
-                                class="flex-1 py-3 text-base font-semibold text-center focus:outline-none transition-all rounded-xl border"
-                                [ngClass]="activeTab === 'register' ? 'text-emerald-600 bg-white border-emerald-400 shadow-md shadow-emerald-500/20' : 'text-slate-600 hover:text-slate-900 bg-white/40 backdrop-blur-sm border-white/60 hover:border-white hover:shadow-sm'">
-                                Create Account
+                                class="flex-1 py-3.5 text-xs font-black uppercase tracking-widest transition-all rounded-xl"
+                                [ngClass]="activeTab === 'register' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+                                New Contract
                             </button>
                         </div>
 
-                        <div class="backdrop-blur-3xl rounded-2xl p-6 md:p-8 min-h-[500px]">
+                        <div class="min-h-[480px]">
                             <!-- 2FA Challenge Section -->
                             <div *ngIf="show2FAChallenge" class="space-y-6 animate-fade-in">
                                 <div class="text-center">
@@ -340,114 +349,93 @@
         </div>
     </div>
 
-    <!-- Features Grid -->
-    <div class="py-24 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-base text-emerald-600 font-semibold tracking-wide uppercase">Powerful Tools</h2>
-                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-                    Everything you need to succeed
-                </p>
+    <!-- Futuristic Features Section -->
+    <div class="py-24 bg-slate-50 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-20">
+                <h2 class="text-xs text-blue-600 font-black uppercase tracking-[0.4em] mb-4">Neural Architecture</h2>
+                <h3 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+                    Beyond Electronic <br> <span class="text-blue-600 italic">Medical Records</span>
+                </h3>
             </div>
 
-            <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <!-- Feature 1 -->
                 <div
-                    class="bg-white rounded-2xl shadow-sm p-8 transition-all duration-300 hover:shadow-lg hover:scale-105">
-                    <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                        </svg>
+                    class="group p-10 bg-white/60 backdrop-blur-xl border border-white/80 rounded-[3rem] shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(37,99,235,0.08)] transition-all duration-500 hover:-translate-y-2">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center text-white text-xl mb-8 shadow-lg shadow-blue-500/20 group-hover:rotate-6 transition-transform">
+                        <i class="fas fa-brain"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Smart Records</h3>
-                    <p class="text-slate-600">
-                        Digital prescription management and secure patient history at your fingertips.
-                    </p>
+                    <h4 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">Smart Scribe</h4>
+                    <p class="text-slate-500 font-medium leading-relaxed">AI-assisted diagnosis and automated
+                        prescription generation that learns your clinical patterns over time.</p>
                 </div>
 
                 <!-- Feature 2 -->
                 <div
-                    class="bg-white rounded-2xl shadow-sm p-8 transition-all duration-300 hover:shadow-lg hover:scale-105">
-                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                    class="group p-10 bg-white/60 backdrop-blur-xl border border-white/80 rounded-[3rem] shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(37,99,235,0.08)] transition-all duration-500 hover:-translate-y-2">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-2xl flex items-center justify-center text-white text-xl mb-8 shadow-lg shadow-indigo-500/20 group-hover:rotate-6 transition-transform">
+                        <i class="fas fa-calendar-check"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Flexible Scheduling</h3>
-                    <p class="text-slate-600">
-                        Set your availability, manage slots, and handle rescheduling effortlessly.
-                    </p>
+                    <h4 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">Infinite Sync</h4>
+                    <p class="text-slate-500 font-medium leading-relaxed">Real-time schedule optimization that minimizes
+                        empty slots and automates patient follow-up protocols.</p>
                 </div>
 
                 <!-- Feature 3 -->
                 <div
-                    class="bg-white rounded-2xl shadow-sm p-8 transition-all duration-300 hover:shadow-lg hover:scale-105">
-                    <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                        </svg>
+                    class="group p-10 bg-white/60 backdrop-blur-xl border border-white/80 rounded-[3rem] shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(37,99,235,0.08)] transition-all duration-500 hover:-translate-y-2">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl flex items-center justify-center text-white text-xl mb-8 shadow-lg shadow-emerald-500/20 group-hover:rotate-6 transition-transform">
+                        <i class="fas fa-chart-line"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Practice Analytics</h3>
-                    <p class="text-slate-600">
-                        Gain insights into your practice growth, patient demographics, and revenue.
-                    </p>
+                    <h4 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">Expansion Ops</h4>
+                    <p class="text-slate-500 font-medium leading-relaxed">Deep-dive practice analytics that predict
+                        patient flow and revenue streams with high-confidence intervals.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- How it Works Timeline -->
-    <div class="py-24 bg-white">
+    <!-- Professional Onboarding Section -->
+    <div class="py-24 bg-white relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-extrabold text-slate-900">How It Works</h2>
+            <div class="text-center mb-20">
+                <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tight">Onboarding Protocol</h2>
+                <p class="text-slate-500 font-medium">Clear stages to establish your digital practice footprint.</p>
             </div>
 
-            <div class="relative">
-                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-slate-200 hidden md:block">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-0 relative">
+                <!-- Connect Line -->
+                <div class="absolute top-[28px] left-[15%] right-[15%] h-0.5 bg-slate-100 hidden md:block"></div>
+
+                <div class="relative flex flex-col items-center text-center p-8 group">
+                    <div
+                        class="w-14 h-14 rounded-full bg-slate-50 border-2 border-slate-100 text-slate-300 flex items-center justify-center text-lg font-black mb-8 relative z-10 group-hover:border-blue-500 group-hover:text-blue-500 transition-all duration-300">
+                        01</div>
+                    <h4 class="text-xl font-black text-slate-900 mb-2">Digital Identity</h4>
+                    <p class="text-slate-500 text-sm font-medium leading-relaxed">Secure registration with medical
+                        licenses and field-specific expertise.</p>
                 </div>
-                <div class="space-y-12">
-                    <!-- Step 1 -->
-                    <div class="relative flex flex-col md:flex-row items-center">
-                        <div class="flex-1 md:text-right md:pr-12 mb-4 md:mb-0">
-                            <h3 class="text-xl font-bold text-slate-900">Register Profile</h3>
-                            <p class="mt-2 text-slate-600">Create your professional profile with credentials and
-                                specialization details.</p>
-                        </div>
-                        <div
-                            class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold z-10 border-4 border-white shadow">
-                            1</div>
-                        <div class="flex-1 md:pl-12"></div>
-                    </div>
 
-                    <!-- Step 2 -->
-                    <div class="relative flex flex-col md:flex-row items-center">
-                        <div class="flex-1 md:pr-12"></div>
-                        <div
-                            class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold z-10 border-4 border-white shadow">
-                            2</div>
-                        <div class="flex-1 md:pl-12 md:text-left mt-4 md:mt-0">
-                            <h3 class="text-xl font-bold text-slate-900">Get Verified</h3>
-                            <p class="mt-2 text-slate-600">Our team verifies your credentials to ensure quality and
-                                trust.</p>
-                        </div>
-                    </div>
+                <div class="relative flex flex-col items-center text-center p-8 group">
+                    <div
+                        class="w-14 h-14 rounded-full bg-slate-50 border-2 border-slate-100 text-slate-300 flex items-center justify-center text-lg font-black mb-8 relative z-10 group-hover:border-blue-500 group-hover:text-blue-500 transition-all duration-300">
+                        02</div>
+                    <h4 class="text-xl font-black text-slate-900 mb-2">Credential Audit</h4>
+                    <p class="text-slate-500 text-sm font-medium leading-relaxed">Verification protocol by our medical
+                        council to ensure network integrity.</p>
+                </div>
 
-                    <!-- Step 3 -->
-                    <div class="relative flex flex-col md:flex-row items-center">
-                        <div class="flex-1 md:text-right md:pr-12 mb-4 md:mb-0">
-                            <h3 class="text-xl font-bold text-slate-900">Start Practicing</h3>
-                            <p class="mt-2 text-slate-600">Set your schedule and start accepting appointments from
-                                patients.</p>
-                        </div>
-                        <div
-                            class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold z-10 border-4 border-white shadow">
-                            3</div>
-                        <div class="flex-1 md:pl-12"></div>
-                    </div>
+                <div class="relative flex flex-col items-center text-center p-8 group">
+                    <div
+                        class="w-14 h-14 rounded-full bg-slate-50 border-2 border-slate-100 text-slate-300 flex items-center justify-center text-lg font-black mb-8 relative z-10 group-hover:border-blue-500 group-hover:text-blue-500 transition-all duration-300">
+                        03</div>
+                    <h4 class="text-xl font-black text-slate-900 mb-2">Operational Sync</h4>
+                    <p class="text-slate-500 text-sm font-medium leading-relaxed">Full access to dashboard tools and
+                        automated appointment streaming.</p>
                 </div>
             </div>
         </div>

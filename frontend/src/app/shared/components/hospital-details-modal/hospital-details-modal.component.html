@@ -5,7 +5,7 @@
         class="bg-white md:rounded-[2.5rem] shadow-2xl w-full max-w-5xl h-full md:h-auto md:max-h-[90vh] overflow-hidden flex flex-col animate-scaleIn relative">
 
         <!-- Modal Header (Mobile Focused) -->
-        <div class="relative h-44 md:h-40 shrink-0 overflow-hidden">
+        <div class="relative h-44 md:h-32 shrink-0 overflow-hidden">
             <!-- Background -->
             <img *ngIf="hospital.image_url" [src]="hospital.image_url" [alt]="hospital.name"
                 class="w-full h-full object-cover">
@@ -40,32 +40,35 @@
                     </div>
 
                     <!-- Name Row -->
-                    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+                    <div class="flex flex-col gap-3">
                         <div class="flex-1 pr-8 md:pr-0">
                             <h2 class="text-lg md:text-2xl font-black leading-tight tracking-tight mb-1">
                                 {{ formatName(hospital.name) }}
                             </h2>
                             <div
-                                class="flex flex-wrap items-center gap-3 text-emerald-100/70 text-[10px] md:text-xs font-bold uppercase tracking-wide">
-                                <span class="flex items-center gap-1"><i
-                                        class="fas fa-map-marker-alt text-emerald-400"></i>
-                                    {{formatLocation(hospital)}}</span>
-                                <span *ngIf="hospital.rating" class="flex items-center gap-1"><i
-                                        class="fas fa-star text-amber-400"></i> {{hospital.rating}}
-                                    Rating</span>
-                            </div>
-                        </div>
+                                class="flex flex-wrap items-center gap-x-4 gap-y-2 text-emerald-100/70 text-[10px] md:text-xs font-bold uppercase tracking-wide">
+                                <span class="flex items-center gap-1">
+                                    <i class="fas fa-map-marker-alt text-emerald-400"></i>
+                                    {{formatLocation(hospital)}}
+                                </span>
+                                <span *ngIf="hospital.rating" class="flex items-center gap-1">
+                                    <i class="fas fa-star text-amber-400"></i> {{hospital.rating}} Rating
+                                </span>
 
-                        <!-- Mobile Action Buttons -->
-                        <div class="flex items-center gap-2">
-                            <a *ngIf="hospital.phone" [href]="'tel:' + hospital.phone"
-                                class="px-4 py-2 bg-white text-emerald-700 font-extrabold rounded-lg text-[10px] flex items-center justify-center gap-1.5 hover:bg-emerald-50 transition-colors shadow-lg active:scale-95">
-                                <i class="fas fa-phone-alt"></i> CALL
-                            </a>
-                            <button (click)="onToggleFavorite($event)"
-                                class="w-9 h-9 bg-white/10 backdrop-blur-md rounded-lg flex items-center justify-center text-white hover:bg-white/20 transition-colors shadow-lg active:scale-90 border border-white/10">
-                                <i class="fas fa-heart text-xs" [class.text-red-500]="isFavorite"></i>
-                            </button>
+                                <!-- Integrated Action Buttons -->
+                                <div class="flex items-center gap-4">
+                                    <a *ngIf="isValidPhone(hospital.phone)" [href]="'tel:' + hospital.phone"
+                                        class="flex items-center gap-1.5 hover:text-white transition-colors">
+                                        <i class="fas fa-phone-alt text-emerald-400"></i> CALL
+                                    </a>
+                                    <button (click)="onToggleFavorite($event)"
+                                        class="flex items-center gap-1.5 hover:text-white transition-colors">
+                                        <i class="fas fa-heart" [class.text-red-500]="isFavorite"
+                                            [class.text-emerald-400]="!isFavorite"></i>
+                                        {{ isFavorite ? 'SAVED' : 'SAVE' }}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -154,7 +157,7 @@
                             </h3>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
-                                <div *ngIf="hospital.phone" class="space-y-0.5">
+                                <div *ngIf="isValidPhone(hospital.phone)" class="space-y-0.5">
                                     <p class="text-[9px] font-bold text-emerald-300/60">Phone</p>
                                     <a [href]="'tel:' + hospital.phone"
                                         class="text-white font-bold text-sm">{{hospital.phone}}</a>
@@ -166,7 +169,15 @@
                                         class="text-white font-bold text-sm">{{hospital.email}}</a>
                                 </div>
 
-                                <div *ngIf="!hospital.phone && !hospital.email"
+                                <div *ngIf="hospital.website" class="space-y-0.5">
+                                    <p class="text-[9px] font-bold text-emerald-300/60">Website</p>
+                                    <a [href]="hospital.website" target="_blank"
+                                        class="text-white font-bold text-sm flex items-center gap-1.5">
+                                        Visit Website <i class="fas fa-external-link-alt text-[8px]"></i>
+                                    </a>
+                                </div>
+
+                                <div *ngIf="!isValidPhone(hospital.phone) && !hospital.email && !hospital.website"
                                     class="col-span-full py-3 px-4 flex flex-col items-center justify-center bg-black/20 rounded-xl border border-white/5">
                                     <i class="fas fa-info-circle text-emerald-500/30 mb-1.5 text-xs"></i>
                                     <p
@@ -179,7 +190,7 @@
                     </div>
 
                     <!-- Location Callout -->
-                    <div *ngIf="hospital.data_source !== 'NABH'"
+                    <div *ngIf="hospital.data_source !== 'NABH' && hasLocationData(hospital)"
                         class="hidden lg:block p-6 bg-gradient-to-br from-gray-900 to-gray-800 rounded-[1.5rem] border border-white/5 text-white">
                         <div class="flex items-center gap-4 mb-4">
                             <div
@@ -191,7 +202,7 @@
                                 <p class="text-xs text-gray-400">Get directions to this facility</p>
                             </div>
                         </div>
-                        <button
+                        <button (click)="openInGoogleMaps(hospital)"
                             class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-2xl transition-all active:scale-95 shadow-lg shadow-emerald-900/40 text-xs uppercase tracking-[0.2em]">
                             Open In Google Maps
                         </button>
@@ -240,8 +251,9 @@
                         </div>
                     </div>
 
-                    <!-- Location Callout -->
-                    <div [ngClass]="hospital.data_source === 'NABH' ? 'block' : 'lg:hidden'"
+                    <!-- Location Callout (NABH / Mobile) -->
+                    <div *ngIf="hasLocationData(hospital) && (hospital.data_source === 'NABH' || true)"
+                        [ngClass]="hospital.data_source === 'NABH' ? 'block' : 'lg:hidden'"
                         class="p-6 bg-gradient-to-br from-gray-900 to-gray-800 rounded-[1.5rem] border border-white/5 text-white">
                         <div class="flex items-center gap-4 mb-4">
                             <div
@@ -253,7 +265,7 @@
                                 <p class="text-xs text-gray-400">Get directions to this facility</p>
                             </div>
                         </div>
-                        <button
+                        <button (click)="openInGoogleMaps(hospital)"
                             class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-2xl transition-all active:scale-95 shadow-lg shadow-emerald-900/40 text-xs uppercase tracking-[0.2em]">
                             Open In Google Maps
                         </button>
@@ -263,15 +275,15 @@
             </div>
 
             <!-- Reviews Tab Content -->
-            <div *ngIf="activeTab === 'reviews'" class="max-w-4xl mx-auto">
+            <div *ngIf="activeTab === 'reviews'" class="w-full">
                 <!-- Header with Rating Stats Inline -->
                 <div class="mb-6 flex justify-between items-center flex-wrap gap-4">
                     <div class="flex items-center gap-4">
-                        <h3 class="text-lg font-bold text-gray-900">Customer Reviews</h3>
+                        <h3 class="text-sm md:text-lg font-bold text-gray-900">Customer Reviews</h3>
 
                         <!-- Inline Rating Stats -->
                         <div *ngIf="reviewStats"
-                            class="flex items-center gap-3 px-4 py-2 bg-white rounded-lg border border-gray-200">
+                            class="flex items-center gap-3 px-4 py-1 md:py-2 bg-white rounded-lg border border-gray-200">
                             <div class="text-2xl font-black text-gray-900">
                                 {{ reviewStats.averageRating | number:'1.1-1' }}
                             </div>
@@ -288,42 +300,44 @@
                     </div>
 
                     <!-- Right: Write Review Button -->
-                    <button (click)="openReviewForm()"
-                        class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-all shadow-sm hover:shadow-md active:scale-95 text-sm">
+                    <button *ngIf="!showReviewForm" (click)="openReviewForm()"
+                        class="px-4 py-1.5 md:px-6 md:py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-all shadow-sm hover:shadow-md active:scale-95 text-sm">
                         <i class="fas fa-pen mr-2"></i>Write a Review
                     </button>
                 </div>
 
-                <!-- Review List -->
-                <app-review-list [reviews]="reviews" [type]="'hospital'"
-                    [currentUserId]="authService.isLoggedIn() ? 1 : undefined" [loading]="reviewsLoading"
-                    [showPagination]="true" [currentPage]="reviewsCurrentPage" [totalPages]="reviewsTotalPages"
-                    (editReview)="onEditReview($event)" (deleteReview)="onDeleteReview($event)"
-                    (pageChange)="onReviewPageChange($event)">
-                </app-review-list>
-            </div>
-
-            <!-- Review Form Modal -->
-            <div *ngIf="showReviewForm" (click)="closeReviewForm()"
-                class="fixed inset-0 z-[1100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-                <div (click)="$event.stopPropagation()"
-                    class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-scaleIn">
-                    <div class="p-6 border-b border-gray-200 flex justify-between items-center">
-                        <h3 class="text-xl font-bold text-gray-900">Write a Review</h3>
+                <!-- Inline Review Form -->
+                <div *ngIf="showReviewForm"
+                    class="mb-8 animate-fadeIn bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="px-6 py-2 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                        <h3 class="text-base md:text-lg font-bold text-gray-900">Write a Review</h3>
                         <button (click)="closeReviewForm()"
-                            class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
-                            <i class="fas fa-times text-gray-500"></i>
+                            class="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center transition-colors shadow-sm">
+                            <i class="fas fa-times text-gray-400"></i>
                         </button>
                     </div>
-                    <app-review-form [type]="'hospital'" [showAspects]="true" (submitReview)="submitReview($event)"
-                        (cancel)="closeReviewForm()"></app-review-form>
+                    <div class="p-2 md:p-2">
+                        <app-review-form [type]="'hospital'" [showAspects]="true" (submitReview)="submitReview($event)"
+                            (cancel)="closeReviewForm()">
+                        </app-review-form>
+                    </div>
+                </div>
+
+                <!-- Review List (Hidden when writing review) -->
+                <div [class.hidden]="showReviewForm">
+                    <app-review-list [reviews]="reviews" [type]="'hospital'"
+                        [currentUserId]="authService.isLoggedIn() ? 1 : undefined" [loading]="reviewsLoading"
+                        [showPagination]="true" [currentPage]="reviewsCurrentPage" [totalPages]="reviewsTotalPages"
+                        (editReview)="onEditReview($event)" (deleteReview)="onDeleteReview($event)"
+                        (pageChange)="onReviewPageChange($event)">
+                    </app-review-list>
                 </div>
             </div>
         </div>
 
         <!-- Modal Footer (Mobile Sticky) -->
         <div
-            class="block md:hidden p-4 md:p-2 border-t border-gray-100 bg-white md:bg-gray-50/50 flex items-center justify-end gap-3 px-6 md:px-10">
+            class="block md:hidden p-2 md:p-2 border-t border-gray-100 bg-white md:bg-gray-50/50 flex items-center justify-end gap-3 px-6 md:px-10">
             <button (click)="onCloseModal()"
                 class="w-full md:w-auto px-10 py-2 bg-gray-900 text-white font-black rounded-2xl md:rounded-full hover:bg-black transition-all shadow-xl text-xs uppercase tracking-widest">
                 Dismiss

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -23,7 +23,7 @@ import { HospitalReview, ReviewStats } from '../../models/review.model';
     ],
     templateUrl: './hospital-details-modal.component.html'
 })
-export class HospitalDetailsModalComponent implements OnChanges {
+export class HospitalDetailsModalComponent implements OnChanges, OnDestroy {
     @Input() hospital: any;
     @Input() isFavorite: boolean = false;
     @Input() showModal: boolean = false;
@@ -45,10 +45,26 @@ export class HospitalDetailsModalComponent implements OnChanges {
     ) { }
 
     ngOnChanges(changes: SimpleChanges) {
+        if (changes['showModal']) {
+            this.toggleBodyScroll(this.showModal);
+        }
+
         if (changes['hospital'] && this.hospital && this.showModal) {
             this.resetModalState();
             this.loadHospitalReviews();
             this.loadReviewStats();
+        }
+    }
+
+    ngOnDestroy() {
+        this.toggleBodyScroll(false);
+    }
+
+    toggleBodyScroll(lock: boolean) {
+        if (lock) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
         }
     }
 
@@ -229,5 +245,32 @@ export class HospitalDetailsModalComponent implements OnChanges {
 
     getSpecialtyKey(specialty: string): string | null {
         return getEncyclopediaKey(specialty);
+    }
+
+    isValidPhone(phone: any): boolean {
+        if (!phone) return false;
+        const p = phone.toString().toLowerCase().trim();
+        return p !== '' && p !== 'null' && p !== 'na' && p !== 'n/a' && p !== 'visit website';
+    }
+
+    hasLocationData(hospital: any): boolean {
+        if (!hospital) return false;
+        const hasCoords = hospital.latitude && hospital.longitude;
+        const hasAddress = hospital.address && hospital.address.trim().length > 5;
+        return !!(hasCoords || hasAddress);
+    }
+
+    openInGoogleMaps(hospital: any) {
+        if (!hospital) return;
+        let url = '';
+        if (hospital.latitude && hospital.longitude) {
+            url = `https://www.google.com/maps/search/?api=1&query=${hospital.latitude},${hospital.longitude}`;
+        } else if (hospital.address) {
+            url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hospital.address)}`;
+        }
+
+        if (url) {
+            window.open(url, '_blank');
+        }
     }
 }

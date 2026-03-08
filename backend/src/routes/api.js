@@ -6,6 +6,7 @@ const userController = require('../controllers/userController');
 const slotControllerNew = require('../controllers/slotControllerNew');
 const appointmentControllerNew = require('../controllers/appointmentControllerNew');
 const labTestController = require('../controllers/labTestController');
+const publicController = require('../controllers/publicController');
 const twoFactorController = require('../controllers/twoFactorController');
 const auth = require('../middleware/auth');
 const { authLimiter, tfaLimiter } = require('../middleware/security');
@@ -17,6 +18,9 @@ router.post('/users/resend-verification', authLimiter, authController.resendVeri
 router.post('/auth/forgot-password', authLimiter, authController.forgotPassword);
 router.post('/auth/reset-password', authLimiter, authController.resetPassword);
 router.get('/auth/verify-reset-token/:token', authController.verifyResetToken);
+
+// Public Stats
+router.get('/public/stats', publicController.getPublicStats);
 
 // Users
 router.get('/users/profile', auth, userController.getProfile);

@@ -56,4 +56,9 @@ export class ContentService {
     getSpecialtyEncyclopedia(): Observable<any> {
         return this.http.get(`${this.baseUrl}/specialty-encyclopedia`);
     }
+
+    // Public Stats
+    getPublicStats(): Observable<any> {
+        return this.http.get(`${environment.apiUrl}/public/stats`);
+    }
 }

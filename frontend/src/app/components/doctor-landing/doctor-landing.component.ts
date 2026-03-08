@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../shared/services/auth.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
+import { ContentService } from '../../shared/services/content.service';
 
 import { OnDestroy, OnInit } from '@angular/core';
 
@@ -42,12 +43,21 @@ export class DoctorLandingComponent implements OnInit, OnDestroy {
   forgotPasswordSubmitting = false;
   private authSub: Subscription | null = null;
 
+  stats: any = {
+    doctors: 0,
+    patients: 0,
+    appointments: 0,
+    hospitals: 0,
+    pharmacies: 0
+  };
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private http: HttpClient,
     private router: Router,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private contentService: ContentService
   ) {
     // Initialize login form
     this.loginForm = this.fb.group({
@@ -79,6 +89,19 @@ export class DoctorLandingComponent implements OnInit, OnDestroy {
           this.router.navigate(['/doctor/dashboard']);
         }
       }
+    });
+
+    this.fetchStats();
+  }
+
+  fetchStats() {
+    this.contentService.getPublicStats().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.stats = res.stats;
+        }
+      },
+      error: (err) => console.error('Error fetching stats:', err)
     });
   }
 

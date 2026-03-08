@@ -217,7 +217,8 @@
                         <ng-container *ngIf="isLoggedIn; else guestMenu">
                             <div class="w-[280px] md:w-80">
                                 <!-- User Info Header -->
-                                <div class="px-6 py-5 border-b border-slate-50 bg-slate-50/50">
+                                <div class="px-6 py-2 border-b border-slate-50 bg-slate-50/50 cursor-pointer hover:bg-emerald-50"
+                                    (click)="navigateToProfile()">
                                     <p class="text-base font-black text-slate-900 truncate">{{userName}}</p>
                                     <p class="text-[10px] text-emerald-600 font-black uppercase tracking-widest mt-0.5">
                                         {{ 'nav.profile' | translate }}

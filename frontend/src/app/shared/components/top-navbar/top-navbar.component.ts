@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { environment } from '@env/environment';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -63,6 +64,7 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   cartCount = 0;
   isLoggedIn = false;
   private cartSubscription?: Subscription;
+  private userSubscription?: Subscription;
   private authSubscription?: Subscription;
 
   // Search autocomplete
@@ -104,13 +106,20 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     this.authSubscription = this.authService.authStatus$.subscribe(
       isLoggedIn => {
         this.isLoggedIn = isLoggedIn;
-        if (isLoggedIn) {
-          this.updateUserData();
-        } else {
+        if (!isLoggedIn) {
           this.clearUserData();
         }
       }
     );
+
+    // Subscribe to user state for profile image/name sync
+    this.userSubscription = this.authService.user$.subscribe(user => {
+      if (user) {
+        this.updateUserData(user);
+      } else {
+        this.clearUserData();
+      }
+    });
 
     // Load search data
     this.loadSearchData();
@@ -131,15 +140,26 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
     this.cartSubscription?.unsubscribe();
     this.cartDataSubscription?.unsubscribe();
     this.authSubscription?.unsubscribe();
+    this.userSubscription?.unsubscribe();
   }
 
   // Update user data from authService
-  private updateUserData() {
-    const user = this.authService.getUser();
+  private updateUserData(user: any) {
     this.userName = user?.name || '';
     this.userRole = user?.role || '';
     this.userInitials = this.calculateInitials(user?.name || 'U');
-    this.userAvatar = user?.avatar_url || '';
+
+    // Prioritize profile_image (uploaded) over avatar_url (Google)
+    if (user?.profile_image) {
+      // Form the full URL for uploaded images
+      this.userAvatar = user.profile_image.startsWith('http')
+        ? user.profile_image
+        : `${environment.apiUrl.replace('/api', '')}/${user.profile_image}`;
+    } else if (user?.avatar_url) {
+      this.userAvatar = user.avatar_url;
+    } else {
+      this.userAvatar = '';
+    }
   }
 
   // Clear user data on logout

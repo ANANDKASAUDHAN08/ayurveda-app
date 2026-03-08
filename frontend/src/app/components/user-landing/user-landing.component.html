@@ -1,558 +1,710 @@
-<div class="bg-gray-50 min-h-screen">
-    <!-- Hero Section with Auth Card -->
-    <div
-        class="relative overflow-hidden bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-100 min-h-screen flex items-center">
-        <div class="max-w-7xl mx-auto w-full">
-            <div class="relative py-12">
-                <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
-                    <!-- Left Side: Hero Content -->
-                    <main class="-mt-8 mx-auto max-w-7xl px-4 sm:-mt-4 sm:px-6 md:-mt-2 lg:-mt-8 lg:px-8 xl:-mt-12">
-                        <div class="sm:text-center lg:text-left">
-                            <h1
-                                class="text-3xl tracking-tight font-extrabold text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
-                                <span class="block xl:inline">Your Health Journey</span>
-                                <span class="block text-emerald-600">Starts Here</span>
-                            </h1>
-                            <p
-                                class="mt-3 text-sm text-slate-700 sm:mt-5 sm:text-base md:text-lg sm:max-w-xl sm:mx-auto md:mt-5 lg:text-xl lg:mx-0">
-                                Find the perfect doctor for your needs. Book appointments, consult online, and manage
-                                your health records - all in one place.
-                            </p>
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 relative overflow-hidden">
+    <!-- Particle Background Effect -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <!-- Floating particles -->
+        <div class="absolute w-2 h-2 bg-emerald-400/30 rounded-full animate-float"
+            style="top: 20%; left: 10%; animation-duration: 6s;"></div>
+        <div class="absolute w-3 h-3 bg-teal-400/20 rounded-full animate-float"
+            style="top: 60%; left: 80%; animation-duration: 8s; animation-delay: 1s;"></div>
+        <div class="absolute w-2 h-2 bg-emerald-300/25 rounded-full animate-float"
+            style="top: 40%; left: 60%; animation-duration: 7s; animation-delay: 2s;"></div>
+        <div class="absolute w-4 h-4 bg-teal-300/15 rounded-full animate-float"
+            style="top: 75%; left: 25%; animation-duration: 9s; animation-delay: 0.5s;"></div>
+        <div class="absolute w-2 h-2 bg-emerald-400/20 rounded-full animate-float"
+            style="top: 30%; left: 85%; animation-duration: 6.5s; animation-delay: 1.5s;"></div>
+        <div class="absolute w-3 h-3 bg-teal-400/25 rounded-full animate-float"
+            style="top: 85%; left: 70%; animation-duration: 8.5s; animation-delay: 2.5s;"></div>
+    </div>
 
-                            <!-- Popular Specialties -->
-                            <div class="mt-8">
-                                <h3 class="text-sm font-semibold text-slate-600 tracking-wider uppercase mb-4">Popular
-                                    Specialties</h3>
-                                <div class="flex flex-wrap gap-3">
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 text-emerald-700">
-                                        <i class="fas fa-leaf mr-2"></i> Ayurveda
-                                    </span>
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">
-                                        <i class="fas fa-heartbeat mr-2"></i> Cardiology
-                                    </span>
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">
-                                        <i class="fas fa-user-md mr-2"></i> General
-                                    </span>
-                                </div>
+    <!-- Hero Section - Vertical Split Layout (60/40) -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-4">
+        <div class="lg:grid lg:grid-cols-5 lg:gap-12 items-start lg:min-h-[85vh]">
+
+            <!-- Left Side: Content (60%) -->
+            <div class="lg:col-span-3 text-center lg:text-left space-y-2 md:space-y-6 py-0 md:py-10">
+                <!-- Badge -->
+                <div
+                    class="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/80 backdrop-blur-md border border-emerald-200/50 shadow-sm">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-[10px] sm:text-xs font-bold text-emerald-700 tracking-wide">Next-Gen Health
+                        Platform
+                    </span>
+                </div>
+
+                <!-- Headline -->
+                <h1
+                    class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-slate-900 leading-[1.1] tracking-tight">
+                    Revolutionizing<br class="hidden md:block">
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 animate-gradient">
+                        Patient Care
+                    </span>
+                </h1>
+
+                <!-- Subtitle -->
+                <p
+                    class="text-sm sm:text-lg md:text-xl lg:text-2xl text-slate-600 font-medium max-w-2xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
+                    Advanced technology meets global connectivity. Discover your perfect healthcare match in seconds.
+                </p>
+
+                <!-- Animated Stats Cards -->
+                <div
+                    class="grid grid-cols-3 gap-2 sm:gap-4 pt-0 sm:pt-6 max-w-full sm:max-w-2xl mx-auto lg:mx-0 stats-section">
+                    <!-- Doctors Card -->
+                    <div
+                        class="group bg-white/60 backdrop-blur-xl border-2 border-emerald-100/50 p-3 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                        <div class="flex justify-center sm:justify-center lg:justify-start mb-1 sm:mb-2">
+                            <div
+                                class="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                                <svg class="w-4 h-4 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
                             </div>
                         </div>
-                    </main>
+                        <div class="text-lg sm:text-3xl font-black text-slate-900 mb-0.5 sm:mb-1">
+                            {{ animatedStats.doctors | number }}+
+                        </div>
+                        <div
+                            class="text-[8px] sm:text-xs font-bold text-emerald-600 uppercase tracking-tight sm:tracking-wide leading-tight">
+                            Active Doctors</div>
+                    </div>
 
-                    <!-- Right Side: Auth Card -->
-                    <div class="mt-8 lg:mt-8 px-4 sm:px-6 lg:px-8 pb-8">
-                        <div class="w-full max-w-md mx-auto">
-                            <!-- Tabs -->
-                            <div class="flex gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-                                <button (click)="switchTab('login')"
-                                    class="flex-1 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-center focus:outline-none transition-all rounded-lg sm:rounded-xl border"
-                                    [ngClass]="activeTab === 'login' ? 'text-emerald-600 bg-white border-emerald-400 shadow-md shadow-emerald-500/20' : 'text-slate-600 hover:text-slate-900 bg-white/40 backdrop-blur-sm border-white/60 hover:border-white hover:shadow-sm'">
-                                    Sign In
+                    <!-- Hospitals Card -->
+                    <div class="group bg-white/60 backdrop-blur-xl border-2 border-teal-100/50 p-3 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                        style="animation-delay: 0.1s;">
+                        <div class="flex justify-center sm:justify-center lg:justify-start mb-1 sm:mb-2">
+                            <div
+                                class="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-teal-500/30">
+                                <svg class="w-4 h-4 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-lg sm:text-3xl font-black text-slate-900 mb-0.5 sm:mb-1">
+                            {{ animatedStats.hospitals | number }}+
+                        </div>
+                        <div
+                            class="text-[8px] sm:text-xs font-bold text-teal-600 uppercase tracking-tight sm:tracking-wide leading-tight">
+                            Partner Hospitals</div>
+                    </div>
+
+                    <!-- Satisfaction Card -->
+                    <div class="group bg-white/60 backdrop-blur-xl border-2 border-emerald-100/50 p-3 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                        style="animation-delay: 0.2s;">
+                        <div class="flex justify-center sm:justify-center lg:justify-start mb-1 sm:mb-2">
+                            <div
+                                class="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-600/30">
+                                <svg class="w-4 h-4 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-lg sm:text-3xl font-black text-slate-900 mb-0.5 sm:mb-1">
+                            {{ animatedStats.satisfaction }}%
+                        </div>
+                        <div
+                            class="text-[8px] sm:text-xs font-bold text-emerald-600 uppercase tracking-tight sm:tracking-wide leading-tight">
+                            Patient
+                            Satisfaction
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Auth Card (40%) -->
+            <div class="lg:col-span-2 mt-8 sm:mt-12 lg:mt-0">
+                <div class="relative">
+                    <!-- Gradient glow behind card -->
+                    <div
+                        class="absolute -inset-2 sm:-inset-4 bg-gradient-to-br from-emerald-400/20 via-teal-400/20 to-emerald-300/20 rounded-3xl sm:rounded-[3rem] blur-2xl sm:blur-3xl">
+                    </div>
+
+                    <!-- Auth Card -->
+                    <div
+                        class="relative bg-white/90 backdrop-blur-2xl border border-white/60 rounded-3xl sm:rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] sm:shadow-[0_25px_60px_rgba(0,0,0,0.1)] p-6 sm:p-8 lg:p-10">
+                        <!-- Tabs -->
+                        <div class="flex p-1.5 bg-slate-100/80 backdrop-blur-sm rounded-xl sm:rounded-2xl mb-6 sm:mb-8">
+                            <button (click)="switchTab('login')"
+                                class="flex-1 py-2.5 sm:py-3.5 text-xs sm:text-sm font-bold transition-all duration-300 rounded-lg sm:rounded-xl"
+                                [ngClass]="activeTab === 'login' ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30' : 'text-slate-500 hover:text-slate-700'">
+                                Login
+                            </button>
+                            <button (click)="switchTab('register')"
+                                class="flex-1 py-2.5 sm:py-3.5 text-xs sm:text-sm font-bold transition-all duration-300 rounded-lg sm:rounded-xl"
+                                [ngClass]="activeTab === 'register' ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30' : 'text-slate-500 hover:text-slate-700'">
+                                Register
+                            </button>
+                        </div>
+
+                        <div class="min-h-[400px] sm:min-h-[480px]">
+                            <!-- 2FA Challenge Section -->
+                            <div *ngIf="show2FAChallenge" class="space-y-6 animate-fade-in">
+                                <div class="text-center">
+                                    <div
+                                        class="h-16 w-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-600 text-2xl">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-slate-900 mb-2">2FA Verification</h3>
+                                    <p class="text-slate-500 text-sm">Enter the 6-digit code from your
+                                        authenticator app.</p>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <input type="text" [(ngModel)]="twoFactorCode" name="twoFactorCode" maxlength="6"
+                                        class="w-full px-4 py-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center text-3xl font-bold tracking-[0.5em] text-emerald-900 focus:bg-white focus:border-emerald-500 outline-none transition-all shadow-sm"
+                                        placeholder="000000">
+                                </div>
+
+                                <button type="button" (click)="verify2FALogin()"
+                                    [disabled]="twoFactorCode.length !== 6 || isLoading"
+                                    class="w-full py-4 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2">
+                                    <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
+                                    <span>Verify & Sign In</span>
                                 </button>
-                                <button (click)="switchTab('register')"
-                                    class="flex-1 py-3 text-base font-semibold text-center focus:outline-none transition-all rounded-xl border"
-                                    [ngClass]="activeTab === 'register' ? 'text-emerald-600 bg-white border-emerald-400 shadow-md shadow-emerald-500/20' : 'text-slate-600 hover:text-slate-900 bg-white/40 backdrop-blur-sm border-white/60 hover:border-white hover:shadow-sm'">
-                                    Create Account
+
+                                <button type="button" (click)="show2FAChallenge = false"
+                                    class="w-full py-2 text-slate-500 font-medium hover:text-slate-700 transition-colors">
+                                    Back to Login
                                 </button>
                             </div>
 
-                            <div class="backdrop-blur-3xl rounded-2xl p-6 md:p-8 min-h-[500px]">
-                                <!-- 2FA Challenge Section -->
-                                <div *ngIf="show2FAChallenge" class="space-y-6 animate-fade-in">
-                                    <div class="text-center">
-                                        <div
-                                            class="h-16 w-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-600 text-2xl">
-                                            <i class="fas fa-shield-alt"></i>
-                                        </div>
-                                        <h3 class="text-xl font-bold text-slate-900 mb-2">2FA Verification</h3>
-                                        <p class="text-slate-500 text-sm">Enter the 6-digit code from your
-                                            authenticator app.</p>
+                            <!-- Login Form Content (Hidden during 2FA) -->
+                            <form *ngIf="!show2FAChallenge && activeTab === 'login'" [formGroup]="loginForm"
+                                (ngSubmit)="onLoginSubmit()" class="space-y-6">
+
+                                <!-- Google OAuth Button -->
+                                <button type="button" (click)="signInWithGoogle('login')"
+                                    class="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-white border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all shadow-sm group">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                                        <path fill="#4285F4"
+                                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                        <path fill="#34A853"
+                                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                        <path fill="#FBBC05"
+                                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                        <path fill="#EA4335"
+                                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                                    </svg>
+                                    <span class="font-semibold text-gray-700 group-hover:text-gray-900">Continue
+                                        with Google</span>
+                                </button>
+
+                                <!-- Divider -->
+                                <div class="relative my-6">
+                                    <div class="absolute inset-0 flex items-center">
+                                        <div class="w-full border-t border-gray-300"></div>
                                     </div>
-
-                                    <div class="space-y-2">
-                                        <input type="text" [(ngModel)]="twoFactorCode" name="twoFactorCode"
-                                            maxlength="6"
-                                            class="w-full px-4 py-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center text-3xl font-bold tracking-[0.5em] text-emerald-900 focus:bg-white focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                            placeholder="000000">
+                                    <div class="relative flex justify-center text-sm">
+                                        <span class="px-4 bg-white/80 backdrop-blur-sm text-gray-500 font-medium">Or
+                                            continue with email</span>
                                     </div>
-
-                                    <button type="button" (click)="verify2FALogin()"
-                                        [disabled]="twoFactorCode.length !== 6 || isLoading"
-                                        class="w-full py-4 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2">
-                                        <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
-                                        <span>Verify & Sign In</span>
-                                    </button>
-
-                                    <button type="button" (click)="show2FAChallenge = false"
-                                        class="w-full py-2 text-slate-500 font-medium hover:text-slate-700 transition-colors">
-                                        Back to Login
-                                    </button>
                                 </div>
 
-                                <!-- Login Form Content (Hidden during 2FA) -->
-                                <form *ngIf="!show2FAChallenge && activeTab === 'login'" [formGroup]="loginForm"
-                                    (ngSubmit)="onLoginSubmit()" class="space-y-6">
-
-                                    <!-- Google OAuth Button -->
-                                    <button type="button" (click)="signInWithGoogle('login')"
-                                        class="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-white border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all shadow-sm group">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24">
-                                            <path fill="#4285F4"
-                                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                                            <path fill="#34A853"
-                                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                                            <path fill="#FBBC05"
-                                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                                            <path fill="#EA4335"
-                                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                                        </svg>
-                                        <span class="font-semibold text-gray-700 group-hover:text-gray-900">Continue
-                                            with Google</span>
-                                    </button>
-
-                                    <!-- Divider -->
-                                    <div class="relative my-6">
-                                        <div class="absolute inset-0 flex items-center">
-                                            <div class="w-full border-t border-gray-300"></div>
+                                <div>
+                                    <label for="login-email" class="block text-sm font-medium text-slate-900">Email
+                                        Address</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-envelope text-slate-500"></i>
                                         </div>
-                                        <div class="relative flex justify-center text-sm">
-                                            <span class="px-4 bg-white/80 backdrop-blur-sm text-gray-500 font-medium">Or
-                                                continue with email</span>
+                                        <input type="email" id="login-email" formControlName="email" #emailInput
+                                            [ngClass]="loginForm.get('email')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                            class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-10 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
+                                            placeholder="you@example.com">
+                                        <div *ngIf="loginForm.get('email')?.value"
+                                            class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                            (click)="clearField(loginForm, 'email')">
+                                            <i class="fas fa-times-circle text-slate-400 hover:text-slate-600"></i>
                                         </div>
                                     </div>
+                                    <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                                        class="mt-1 text-xs text-red-400">Valid email is required</p>
+                                </div>
 
-                                    <div>
-                                        <label for="login-email" class="block text-sm font-medium text-slate-900">Email
-                                            Address</label>
-                                        <div class="mt-1 relative rounded-md shadow-sm">
-                                            <div
-                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-envelope text-slate-500"></i>
-                                            </div>
-                                            <input type="email" id="login-email" formControlName="email" #emailInput
-                                                [ngClass]="loginForm.get('email')?.value ? 'bg-white' : 'bg-emerald-50/50'"
-                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-10 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
-                                                placeholder="you@example.com">
-                                            <div *ngIf="loginForm.get('email')?.value"
-                                                class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                                                (click)="clearField(loginForm, 'email')">
-                                                <i class="fas fa-times-circle text-slate-400 hover:text-slate-600"></i>
-                                            </div>
-                                        </div>
-                                        <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-                                            class="mt-1 text-xs text-red-400">Valid email is required</p>
-                                    </div>
-
-                                    <!-- Email Verification Warning -->
-                                    <div *ngIf="showEmailVerificationWarning"
-                                        class="p-3 md:p-4 bg-amber-50 border-l-4 border-amber-500 text-amber-900 rounded-lg animate-fadeIn">
-                                        <div class="flex items-start justify-between gap-2 md:gap-3">
-                                            <div class="flex items-start gap-2 md:gap-3 flex-1">
-                                                <i
-                                                    class="fas fa-exclamation-triangle mt-0.5 text-amber-600 text-sm md:text-base"></i>
-                                                <div class="flex-1 min-w-0">
-                                                    <p class="text-xs md:text-sm font-semibold">Email Verification
-                                                        Required</p>
-                                                    <p class="text-xs md:text-sm mt-1">Please check your inbox and
-                                                        click the verification link to activate your account.</p>
-                                                    <button (click)="resendVerificationEmail()" type="button"
-                                                        class="mt-2 md:mt-3 text-xs md:text-sm font-medium text-amber-700 hover:text-amber-900 underline inline-flex items-center gap-1">
-                                                        <i class="fas fa-redo text-xs"></i>
-                                                        <span class="hidden sm:inline">Resend Verification Email</span>
-                                                        <span class="sm:hidden">Resend Email</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <button (click)="dismissVerificationWarning()" type="button"
-                                                class="text-amber-600 hover:text-amber-900 flex-shrink-0 p-1">
-                                                <i class="fas fa-times text-sm md:text-base"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label for="login-password"
-                                            class="block text-sm font-medium text-slate-900">Password</label>
-                                        <div class="mt-1 relative rounded-md shadow-sm">
-                                            <div
-                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-lock text-slate-500"></i>
-                                            </div>
-                                            <input [type]="showLoginPassword ? 'text' : 'password'" id="login-password"
-                                                formControlName="password"
-                                                [ngClass]="loginForm.get('password')?.value ? 'bg-white' : 'bg-emerald-50/50'"
-                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
-                                                placeholder="••••••••">
-                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
-                                                <i *ngIf="loginForm.get('password')?.value"
-                                                    class="fas fa-times-circle text-gray-500 hover:text-gray-300 cursor-pointer"
-                                                    (click)="clearField(loginForm, 'password')"></i>
-                                                <i [class]="showLoginPassword ? 'fas fa-eye-slash text-gray-500 hover:text-gray-300' : 'fas fa-eye text-gray-500 hover:text-gray-300'"
-                                                    class="cursor-pointer" (click)="toggleLoginPassword()"></i>
+                                <!-- Email Verification Warning -->
+                                <div *ngIf="showEmailVerificationWarning"
+                                    class="p-3 md:p-4 bg-amber-50 border-l-4 border-amber-500 text-amber-900 rounded-lg animate-fadeIn">
+                                    <div class="flex items-start justify-between gap-2 md:gap-3">
+                                        <div class="flex items-start gap-2 md:gap-3 flex-1">
+                                            <i
+                                                class="fas fa-exclamation-triangle mt-0.5 text-amber-600 text-sm md:text-base"></i>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-xs md:text-sm font-semibold">Email Verification
+                                                    Required</p>
+                                                <p class="text-xs md:text-sm mt-1">Please check your inbox and
+                                                    click the verification link to activate your account.</p>
+                                                <button (click)="resendVerificationEmail()" type="button"
+                                                    class="mt-2 md:mt-3 text-xs md:text-sm font-medium text-amber-700 hover:text-amber-900 underline inline-flex items-center gap-1">
+                                                    <i class="fas fa-redo text-xs"></i>
+                                                    <span class="hidden sm:inline">Resend Verification Email</span>
+                                                    <span class="sm:hidden">Resend Email</span>
+                                                </button>
                                             </div>
                                         </div>
-                                        <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-                                            class="mt-1 text-xs text-red-400">Password is required</p>
-                                    </div>
-
-                                    <button type="submit" [disabled]="loginForm.invalid || isLoading"
-                                        class="w-full py-3.5 md:py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
-                                        <span *ngIf="!isLoading">Sign In</span>
-                                        <span *ngIf="isLoading" class="flex items-center justify-center gap-2"><i
-                                                class="fas fa-spinner fa-spin"></i> Signing
-                                            in...</span>
-                                    </button>
-
-                                    <!-- Forgot Password Link -->
-                                    <div class="text-center mt-3 md:mt-4">
-                                        <button type="button" (click)="openForgotPasswordModal()"
-                                            class="text-sm text-purple-600 hover:text-purple-700 font-medium hover:underline">
-                                            Forgot Password?
+                                        <button (click)="dismissVerificationWarning()" type="button"
+                                            class="text-amber-600 hover:text-amber-900 flex-shrink-0 p-1">
+                                            <i class="fas fa-times text-sm md:text-base"></i>
                                         </button>
                                     </div>
-                                </form>
+                                </div>
 
-                                <!-- Register Form -->
-                                <form *ngIf="activeTab === 'register'" [formGroup]="registerForm"
-                                    (ngSubmit)="onRegisterSubmit()" class="space-y-4">
+                                <div>
+                                    <label for="login-password"
+                                        class="block text-sm font-medium text-slate-900">Password</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-lock text-slate-500"></i>
+                                        </div>
+                                        <input [type]="showLoginPassword ? 'text' : 'password'" id="login-password"
+                                            formControlName="password"
+                                            [ngClass]="loginForm.get('password')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                            class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
+                                            placeholder="••••••••">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
+                                            <i *ngIf="loginForm.get('password')?.value"
+                                                class="fas fa-times-circle text-gray-500 hover:text-gray-300 cursor-pointer"
+                                                (click)="clearField(loginForm, 'password')"></i>
+                                            <i [class]="showLoginPassword ? 'fas fa-eye-slash text-gray-500 hover:text-gray-300' : 'fas fa-eye text-gray-500 hover:text-gray-300'"
+                                                class="cursor-pointer" (click)="toggleLoginPassword()"></i>
+                                        </div>
+                                    </div>
+                                    <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                                        class="mt-1 text-xs text-red-400">Password is required</p>
+                                </div>
 
-                                    <!-- Google OAuth Button -->
-                                    <button type="button" (click)="signInWithGoogle('register')"
-                                        class="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-white border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all shadow-sm group">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24">
-                                            <path fill="#4285F4"
-                                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                                            <path fill="#34A853"
-                                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                                            <path fill="#FBBC05"
-                                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                                            <path fill="#EA4335"
-                                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                                        </svg>
-                                        <span class="font-semibold text-gray-700 group-hover:text-gray-900">Sign up with
-                                            Google</span>
+                                <button type="submit" [disabled]="loginForm.invalid || isLoading"
+                                    class="w-full py-3.5 md:py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <span *ngIf="!isLoading">Sign In</span>
+                                    <span *ngIf="isLoading" class="flex items-center justify-center gap-2"><i
+                                            class="fas fa-spinner fa-spin"></i> Signing
+                                        in...</span>
+                                </button>
+
+                                <!-- Forgot Password Link -->
+                                <div class="text-center mt-3 md:mt-4">
+                                    <button type="button" (click)="openForgotPasswordModal()"
+                                        class="text-sm text-purple-600 hover:text-purple-700 font-medium hover:underline">
+                                        Forgot Password?
                                     </button>
+                                </div>
+                            </form>
 
-                                    <!-- Divider -->
-                                    <div class="relative my-6">
-                                        <div class="absolute inset-0 flex items-center">
-                                            <div class="w-full border-t border-gray-300"></div>
+                            <!-- Register Form -->
+                            <form *ngIf="activeTab === 'register'" [formGroup]="registerForm"
+                                (ngSubmit)="onRegisterSubmit()" class="space-y-4">
+
+                                <!-- Google OAuth Button -->
+                                <button type="button" (click)="signInWithGoogle('register')"
+                                    class="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-white border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all shadow-sm group">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                                        <path fill="#4285F4"
+                                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                        <path fill="#34A853"
+                                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                        <path fill="#FBBC05"
+                                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                        <path fill="#EA4335"
+                                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                                    </svg>
+                                    <span class="font-semibold text-gray-700 group-hover:text-gray-900">Sign up with
+                                        Google</span>
+                                </button>
+
+                                <!-- Divider -->
+                                <div class="relative my-6">
+                                    <div class="absolute inset-0 flex items-center">
+                                        <div class="w-full border-t border-gray-300"></div>
+                                    </div>
+                                    <div class="relative flex justify-center text-sm">
+                                        <span class="px-4 bg-white/80 backdrop-blur-sm text-gray-500 font-medium">Or
+                                            sign up with email</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="reg-name" class="block text-sm font-medium text-slate-900">Full
+                                        Name</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-user text-slate-500"></i>
                                         </div>
-                                        <div class="relative flex justify-center text-sm">
-                                            <span class="px-4 bg-white/80 backdrop-blur-sm text-gray-500 font-medium">Or
-                                                sign up with email</span>
+                                        <input type="text" id="reg-name" formControlName="name" #nameInput
+                                            [ngClass]="registerForm.get('name')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                            class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
+                                            placeholder="John Doe">
+                                        <div *ngIf="registerForm.get('name')?.value"
+                                            class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                            (click)="clearField(registerForm, 'name')">
+                                            <i class="fas fa-times-circle text-slate-400 hover:text-slate-600"></i>
                                         </div>
                                     </div>
+                                    <p *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched"
+                                        class="mt-1 text-xs text-red-400">Name is required</p>
+                                </div>
 
-                                    <div>
-                                        <label for="reg-name" class="block text-sm font-medium text-slate-900">Full
-                                            Name</label>
-                                        <div class="mt-1 relative rounded-md shadow-sm">
-                                            <div
-                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-user text-slate-500"></i>
-                                            </div>
-                                            <input type="text" id="reg-name" formControlName="name" #nameInput
-                                                [ngClass]="registerForm.get('name')?.value ? 'bg-white' : 'bg-emerald-50/50'"
-                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
-                                                placeholder="John Doe">
-                                            <div *ngIf="registerForm.get('name')?.value"
-                                                class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                                                (click)="clearField(registerForm, 'name')">
-                                                <i class="fas fa-times-circle text-slate-400 hover:text-slate-600"></i>
-                                            </div>
+                                <div>
+                                    <label for="reg-email" class="block text-sm font-medium text-slate-900">Email
+                                        Address</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-envelope text-slate-500"></i>
                                         </div>
-                                        <p *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched"
-                                            class="mt-1 text-xs text-red-400">Name is required</p>
-                                    </div>
-
-                                    <div>
-                                        <label for="reg-email" class="block text-sm font-medium text-slate-900">Email
-                                            Address</label>
-                                        <div class="mt-1 relative rounded-md shadow-sm">
-                                            <div
-                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-envelope text-slate-500"></i>
-                                            </div>
-                                            <input type="email" id="reg-email" formControlName="email"
-                                                [ngClass]="registerForm.get('email')?.value ? 'bg-white' : 'bg-emerald-50/50'"
-                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
-                                                placeholder="you@example.com">
-                                            <div *ngIf="registerForm.get('email')?.value"
-                                                class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                                                (click)="clearField(registerForm, 'email')">
-                                                <i class="fas fa-times-circle text-slate-400 hover:text-slate-600"></i>
-                                            </div>
-                                        </div>
-                                        <p *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-                                            class="mt-1 text-xs text-red-400">Valid email is required</p>
-                                    </div>
-
-                                    <div>
-                                        <label for="reg-password"
-                                            class="block text-sm font-medium text-slate-900">Password</label>
-                                        <div class="mt-1 relative rounded-md shadow-sm">
-                                            <div
-                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-lock text-slate-500"></i>
-                                            </div>
-                                            <input [type]="showRegisterPassword ? 'text' : 'password'" id="reg-password"
-                                                formControlName="password" (focus)="isPasswordFocused = true"
-                                                (blur)="isPasswordFocused = false"
-                                                [ngClass]="registerForm.get('password')?.value ? 'bg-white' : 'bg-emerald-50/50'"
-                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
-                                                placeholder="Min 8 chars">
-                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
-                                                <i *ngIf="registerForm.get('password')?.value"
-                                                    (mousedown)="$event.preventDefault()"
-                                                    class="fas fa-times-circle text-gray-500 hover:text-gray-300 cursor-pointer"
-                                                    (click)="clearField(registerForm, 'password')"></i>
-                                                <i [class]="showRegisterPassword ? 'fas fa-eye-slash text-gray-500 hover:text-gray-300' : 'fas fa-eye text-gray-500 hover:text-gray-300'"
-                                                    class="cursor-pointer" (mousedown)="$event.preventDefault()"
-                                                    (click)="toggleRegisterPassword()"></i>
-                                            </div>
-                                        </div>
-                                        <!-- Wrapper with relative positioning -->
-                                        <div class="relative">
-                                            <app-password-strength-indicator
-                                                [password]="registerForm.get('password')?.value || ''"
-                                                [isFocused]="isPasswordFocused"
-                                                (validityChange)="onPasswordValidityChange($event)">
-                                            </app-password-strength-indicator>
+                                        <input type="email" id="reg-email" formControlName="email"
+                                            [ngClass]="registerForm.get('email')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                            class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
+                                            placeholder="you@example.com">
+                                        <div *ngIf="registerForm.get('email')?.value"
+                                            class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                            (click)="clearField(registerForm, 'email')">
+                                            <i class="fas fa-times-circle text-slate-400 hover:text-slate-600"></i>
                                         </div>
                                     </div>
+                                    <p *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+                                        class="mt-1 text-xs text-red-400">Valid email is required</p>
+                                </div>
 
-                                    <div>
-                                        <label for="reg-confirm"
-                                            class="block text-sm font-medium text-slate-900">Confirm
-                                            Password</label>
-                                        <div class="mt-1 relative rounded-md shadow-sm">
-                                            <div
-                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-lock text-slate-500"></i>
-                                            </div>
-                                            <input [type]="showConfirmPassword ? 'text' : 'password'" id="reg-confirm"
-                                                formControlName="confirmPassword"
-                                                [ngClass]="registerForm.get('confirmPassword')?.value ? 'bg-white' : 'bg-emerald-50/50'"
-                                                class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
-                                                placeholder="Confirm password">
-                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
-                                                <i *ngIf="registerForm.get('confirmPassword')?.value"
-                                                    class="fas fa-times-circle text-gray-500 hover:text-gray-300 cursor-pointer"
-                                                    (click)="clearField(registerForm, 'confirmPassword')"></i>
-                                                <i [class]="showConfirmPassword ? 'fas fa-eye-slash text-gray-500 hover:text-gray-300' : 'fas fa-eye text-gray-500 hover:text-gray-300'"
-                                                    class="cursor-pointer" (click)="toggleConfirmPassword()"></i>
-                                            </div>
+                                <div>
+                                    <label for="reg-password"
+                                        class="block text-sm font-medium text-slate-900">Password</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-lock text-slate-500"></i>
                                         </div>
-                                        <p *ngIf="registerForm.errors?.['mismatch'] && registerForm.get('confirmPassword')?.touched"
-                                            class="mt-1 text-xs text-red-400">Passwords do not match</p>
+                                        <input [type]="showRegisterPassword ? 'text' : 'password'" id="reg-password"
+                                            formControlName="password" (focus)="isPasswordFocused = true"
+                                            (blur)="isPasswordFocused = false"
+                                            [ngClass]="registerForm.get('password')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                            class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
+                                            placeholder="Min 8 chars">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
+                                            <i *ngIf="registerForm.get('password')?.value"
+                                                (mousedown)="$event.preventDefault()"
+                                                class="fas fa-times-circle text-gray-500 hover:text-gray-300 cursor-pointer"
+                                                (click)="clearField(registerForm, 'password')"></i>
+                                            <i [class]="showRegisterPassword ? 'fas fa-eye-slash text-gray-500 hover:text-gray-300' : 'fas fa-eye text-gray-500 hover:text-gray-300'"
+                                                class="cursor-pointer" (mousedown)="$event.preventDefault()"
+                                                (click)="toggleRegisterPassword()"></i>
+                                        </div>
                                     </div>
+                                    <!-- Wrapper with relative positioning -->
+                                    <div class="relative">
+                                        <app-password-strength-indicator
+                                            [password]="registerForm.get('password')?.value || ''"
+                                            [isFocused]="isPasswordFocused"
+                                            (validityChange)="onPasswordValidityChange($event)">
+                                        </app-password-strength-indicator>
+                                    </div>
+                                </div>
 
-                                    <button type="submit"
-                                        [disabled]="registerForm.invalid || isLoading || !isPasswordValid"
-                                        [title]="(!isPasswordValid || registerForm.invalid) ? 'Please complete all password requirements' : 'Create your account'"
-                                        class="w-full py-3.5 md:py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
-                                        <span *ngIf="!isLoading">Create Account</span>
-                                        <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin mr-2"></i>
-                                            Creating...</span>
-                                    </button>
-                                    <p *ngIf="!isPasswordValid && registerForm.get('password')?.value"
-                                        class="text-xs text-amber-500 mt-2 flex items-center gap-1">
-                                        <i class="fas fa-info-circle"></i>
-                                        <span>Complete all password requirements to continue</span>
-                                    </p>
-                                </form>
-                            </div>
+                                <div>
+                                    <label for="reg-confirm" class="block text-sm font-medium text-slate-900">Confirm
+                                        Password</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-lock text-slate-500"></i>
+                                        </div>
+                                        <input [type]="showConfirmPassword ? 'text' : 'password'" id="reg-confirm"
+                                            formControlName="confirmPassword"
+                                            [ngClass]="registerForm.get('confirmPassword')?.value ? 'bg-white' : 'bg-emerald-50/50'"
+                                            class="focus:ring-2 focus:ring-emerald-500 focus:border-transparent block w-full pl-10 pr-20 sm:text-sm border-0 rounded-lg py-3.5 text-slate-900 placeholder-slate-500 transition-colors"
+                                            placeholder="Confirm password">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-2">
+                                            <i *ngIf="registerForm.get('confirmPassword')?.value"
+                                                class="fas fa-times-circle text-gray-500 hover:text-gray-300 cursor-pointer"
+                                                (click)="clearField(registerForm, 'confirmPassword')"></i>
+                                            <i [class]="showConfirmPassword ? 'fas fa-eye-slash text-gray-500 hover:text-gray-300' : 'fas fa-eye text-gray-500 hover:text-gray-300'"
+                                                class="cursor-pointer" (click)="toggleConfirmPassword()"></i>
+                                        </div>
+                                    </div>
+                                    <p *ngIf="registerForm.errors?.['mismatch'] && registerForm.get('confirmPassword')?.touched"
+                                        class="mt-1 text-xs text-red-400">Passwords do not match</p>
+                                </div>
+
+                                <button type="submit" [disabled]="registerForm.invalid || isLoading || !isPasswordValid"
+                                    [title]="(!isPasswordValid || registerForm.invalid) ? 'Please complete all password requirements' : 'Create your account'"
+                                    class="w-full py-3.5 md:py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <span *ngIf="!isLoading">Create Account</span>
+                                    <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin mr-2"></i>
+                                        Creating...</span>
+                                </button>
+                                <p *ngIf="!isPasswordValid && registerForm.get('password')?.value"
+                                    class="text-xs text-amber-500 mt-2 flex items-center gap-1">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Complete all password requirements to continue</span>
+                                </p>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- How It Works Section -->
-    <div class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="lg:text-center mb-12">
-                <h2 class="text-base text-emerald-600 font-semibold tracking-wide uppercase">Simple Process</h2>
-                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">How It Works
-                </p>
+<!-- Futuristic How It Works Section -->
+<div class="py-12 bg-slate-50 relative overflow-hidden">
+    <!-- Background Decor -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 blur-[100px] rounded-full"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 blur-[100px] rounded-full"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="text-base text-emerald-600 font-black uppercase tracking-[0.2em] mb-4">The Protocol</h2>
+            <h3 class="text-2xl md:text-5xl font-black text-slate-900 leading-tight">
+                Quantum Shift in <br> <span class="text-emerald-600">Patient Experience</span>
+            </h3>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 sm:gap-6 md:gap-8 lg:gap-12">
+            <div
+                class="group p-3 sm:p-6 md:p-8 lg:p-10 bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl sm:rounded-[2.5rem] shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(16,185,129,0.1)] transition-all duration-500 hover:-translate-y-2">
+                <div
+                    class="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-xl sm:rounded-2xl flex items-center justify-center text-white text-base sm:text-xl md:text-2xl mb-3 sm:mb-6 md:mb-8 shadow-lg shadow-emerald-500/20 group-hover:rotate-12 transition-transform">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h4 class="text-sm sm:text-lg md:text-xl lg:text-2xl font-black text-slate-900 mb-2 sm:mb-3 md:mb-4">
+                    Neural Discovery</h4>
+                <p
+                    class="text-[10px] sm:text-sm md:text-base text-slate-600 font-medium leading-relaxed hidden sm:block">
+                    Search through thousands of verified experts using
+                    our smart AI-powered matching engine.</p>
+                <p class="text-[10px] text-slate-600 font-medium leading-tight sm:hidden">AI-powered expert matching</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div
+                class="group p-3 sm:p-6 md:p-8 lg:p-10 bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl sm:rounded-[2.5rem] shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(16,185,129,0.1)] transition-all duration-500 hover:-translate-y-2">
                 <div
-                    class="bg-white p-8 rounded-2xl shadow-md border border-gray-100 text-center transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-emerald-200">
+                    class="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl sm:rounded-2xl flex items-center justify-center text-white text-base sm:text-xl md:text-2xl mb-3 sm:mb-6 md:mb-8 shadow-lg shadow-blue-500/20 group-hover:rotate-12 transition-transform">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h4 class="text-sm sm:text-lg md:text-xl lg:text-2xl font-black text-slate-900 mb-2 sm:mb-3 md:mb-4">
+                    Instant Sync</h4>
+                <p
+                    class="text-[10px] sm:text-sm md:text-base text-slate-600 font-medium leading-relaxed hidden sm:block">
+                    Book slots in real-time with instant confirmation
+                    and seamless calendar integration.</p>
+                <p class="text-[10px] text-slate-600 font-medium leading-tight sm:hidden">Real-time booking & sync</p>
+            </div>
+
+            <div
+                class="group p-3 sm:p-6 md:p-8 lg:p-10 bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl sm:rounded-[2.5rem] shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(16,185,129,0.1)] transition-all duration-500 hover:-translate-y-2">
+                <div
+                    class="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl sm:rounded-2xl flex items-center justify-center text-white text-base sm:text-xl md:text-2xl mb-3 sm:mb-6 md:mb-8 shadow-lg shadow-purple-500/20 group-hover:rotate-12 transition-transform">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h4 class="text-sm sm:text-lg md:text-xl lg:text-2xl font-black text-slate-900 mb-2 sm:mb-3 md:mb-4">
+                    Infinite Connection</h4>
+                <p
+                    class="text-[10px] sm:text-sm md:text-base text-slate-600 font-medium leading-relaxed hidden sm:block">
+                    Connect via HD video or in-person. Your health
+                    records follow you anywhere, anytime.</p>
+                <p class="text-[10px] text-slate-600 font-medium leading-tight sm:hidden">Video or in-person visits</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Futuristic Testimonials Section -->
+<div class="py-24 bg-slate-900 relative overflow-hidden">
+    <!-- Grid Pattern -->
+    <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100">
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-transparent to-slate-900"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="text-xs text-emerald-400 font-black uppercase tracking-[0.4em] mb-4">Patient Resonance</h2>
+            <h3 class="text-4xl md:text-5xl font-black text-white leading-tight">
+                Nexus of <span class="text-emerald-400">Success Stories</span>
+            </h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div
+                class="group p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] hover:bg-white/10 transition-all duration-500">
+                <div class="flex gap-1 text-emerald-400 mb-6">
+                    <i class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i
+                        class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i
+                        class="fas fa-star text-xs"></i>
+                </div>
+                <p class="text-slate-300 font-medium leading-relaxed mb-8 italic">"Neural Discovery matched me with a
+                    specialist in seconds. The operational sync was flawless."</p>
+                <div class="flex items-center gap-4">
                     <div
-                        class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-600 font-bold text-xl">
-                        1</div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Search</h3>
-                    <p class="text-gray-600">Find specialists by name, specialty, or location.</p>
+                        class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white font-black">
+                        JD</div>
+                    <div class="text-left">
+                        <div class="text-white font-black text-sm">John Doe</div>
+                        <div class="text-slate-500 text-[10px] font-black uppercase tracking-widest">Global Citizen
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div
-                    class="bg-white p-8 rounded-2xl shadow-md border border-gray-100 text-center transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-emerald-200">
+            <div
+                class="group p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] hover:bg-white/10 transition-all duration-500">
+                <div class="flex gap-1 text-emerald-400 mb-6">
+                    <i class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i
+                        class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i
+                        class="fas fa-star text-xs"></i>
+                </div>
+                <p class="text-slate-300 font-medium leading-relaxed mb-8 italic">"Managing my family's health vectors
+                    across continents has never been this intuitive."</p>
+                <div class="flex items-center gap-4">
                     <div
-                        class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-600 font-bold text-xl">
-                        2</div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Book</h3>
-                    <p class="text-gray-600">Select a convenient time slot and confirm booking.</p>
+                        class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-black">
+                        SS</div>
+                    <div class="text-left">
+                        <div class="text-white font-black text-sm">Sarah Smith</div>
+                        <div class="text-slate-500 text-[10px] font-black uppercase tracking-widest">verified patient
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div
-                    class="bg-white p-8 rounded-2xl shadow-md border border-gray-100 text-center transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-emerald-200">
+            <div
+                class="group p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] hover:bg-white/10 transition-all duration-500">
+                <div class="flex gap-1 text-emerald-400 mb-6">
+                    <i class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i
+                        class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i
+                        class="fas fa-star text-xs"></i>
+                </div>
+                <p class="text-slate-300 font-medium leading-relaxed mb-8 italic">"The diagnostic precision and
+                    practitioner verification protocols are standard-setting."</p>
+                <div class="flex items-center gap-4">
                     <div
-                        class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-600 font-bold text-xl">
-                        3</div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Consult</h3>
-                    <p class="text-gray-600">Visit the clinic or consult online securely.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Testimonials Section -->
-    <div class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-12">What Patients Say</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div
-                    class="bg-white p-6 rounded-xl shadow-md border border-gray-100 transition-all duration-300 hover:shadow-xl hover:scale-105">
-                    <div class="flex items-center mb-4">
-                        <div class="text-yellow-400 flex">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <p class="text-gray-700 mb-4">"Found an amazing Ayurveda specialist within minutes. The booking
-                        process was seamless!"</p>
-                    <div class="flex items-center">
-                        <div
-                            class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-700 font-bold">
-                            JD</div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900">John Doe</p>
-                            <p class="text-xs text-gray-500">Verified Patient</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="bg-white p-6 rounded-xl shadow-md border border-gray-100 transition-all duration-300 hover:shadow-xl hover:scale-105">
-                    <div class="flex items-center mb-4">
-                        <div class="text-yellow-400 flex">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <p class="text-gray-700 mb-4">"Great platform! I can manage all my family's appointments in one
-                        place. Highly recommended."</p>
-                    <div class="flex items-center">
-                        <div
-                            class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-700 font-bold">
-                            SS</div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900">Sarah Smith</p>
-                            <p class="text-xs text-gray-500">Verified Patient</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="bg-white p-6 rounded-xl shadow-md border border-gray-100 transition-all duration-300 hover:shadow-xl hover:scale-105">
-                    <div class="flex items-center mb-4">
-                        <div class="text-yellow-400 flex">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                        </div>
-                    </div>
-                    <p class="text-gray-700 mb-4">"Very professional doctors and easy to use interface. The experience
-                        has been fantastic!"</p>
-                    <div class="flex items-center">
-                        <div
-                            class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-700 font-bold">
-                            MJ</div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900">Mike Johnson</p>
-                            <p class="text-xs text-gray-500">Verified Patient</p>
-                        </div>
+                        class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-emerald-500 flex items-center justify-center text-white font-black">
+                        MJ</div>
+                    <div class="text-left">
+                        <div class="text-white font-black text-sm">Mike Johnson</div>
+                        <div class="text-slate-500 text-[10px] font-black uppercase tracking-widest">early adopter</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- FAQ Section -->
-    <div class="py-16 bg-white">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-8">Frequently Asked Questions</h2>
-            <div class="space-y-4">
-                <div
-                    class="bg-white rounded-lg p-6 shadow-md border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-emerald-200">
-                    <h3 class="text-lg font-medium text-gray-900">Is it free to book appointments?</h3>
-                    <p class="mt-2 text-gray-600">Yes, booking appointments through HealthConnect is completely free for
-                        patients.</p>
+<!-- FAQ Section -->
+<div class="py-24 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-black text-slate-900 mb-4">Common Intelligence</h2>
+            <p class="text-slate-500 font-medium">Quick answers to frequently asked questions about our futuristic
+                health platform.</p>
+        </div>
+
+        <div class="space-y-4">
+            <details
+                class="group bg-slate-50/50 rounded-3xl border border-slate-100 p-2 overflow-hidden transition-all">
+                <summary
+                    class="list-none cursor-pointer p-6 flex justify-between items-center bg-white rounded-2xl shadow-sm">
+                    <span class="text-lg font-black text-slate-800">Is it free to book appointments?</span>
+                    <div
+                        class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-500 group-open:rotate-180 transition-transform">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </summary>
+                <div class="p-6 text-slate-600 font-medium leading-relaxed">
+                    Absolutely. Booking via HealthConnect is always free for patients. No hidden fees, ever.
                 </div>
-                <div
-                    class="bg-white rounded-lg p-6 shadow-md border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-emerald-200">
-                    <h3 class="text-lg font-medium text-gray-900">Can I cancel my appointment?</h3>
-                    <p class="mt-2 text-gray-600">Yes, you can cancel or reschedule your appointment from your dashboard
-                        up to 1 hour before the scheduled time.</p>
+            </details>
+
+            <details
+                class="group bg-slate-50/50 rounded-3xl border border-slate-100 p-2 overflow-hidden transition-all">
+                <summary
+                    class="list-none cursor-pointer p-6 flex justify-between items-center bg-white rounded-2xl shadow-sm">
+                    <span class="text-lg font-black text-slate-800">Can I cancel my appointment?</span>
+                    <div
+                        class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-500 group-open:rotate-180 transition-transform">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </summary>
+                <div class="p-6 text-slate-600 font-medium leading-relaxed">
+                    Yes, managing your schedule is easy. You can cancel or reschedule up to 1 hour before the
+                    appointment directly from your futuristic dashboard.
                 </div>
-                <div
-                    class="bg-white rounded-lg p-6 shadow-md border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-emerald-200">
-                    <h3 class="text-lg font-medium text-gray-900">Are the doctors verified?</h3>
-                    <p class="mt-2 text-gray-600">Absolutely. All doctors on our platform undergo a strict verification
-                        process to ensure they are qualified and licensed.</p>
+            </details>
+
+            <details
+                class="group bg-slate-50/50 rounded-3xl border border-slate-100 p-2 overflow-hidden transition-all">
+                <summary
+                    class="list-none cursor-pointer p-6 flex justify-between items-center bg-white rounded-2xl shadow-sm">
+                    <span class="text-lg font-black text-slate-800">Are the doctors verified?</span>
+                    <div
+                        class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-500 group-open:rotate-180 transition-transform">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </summary>
+                <div class="p-6 text-slate-600 font-medium leading-relaxed">
+                    Validation is our core protocol. All practitioners undergo a rigorous medical credentials check
+                    before joining our neural network.
                 </div>
-            </div>
+            </details>
         </div>
     </div>
+</div>
 
-    <!-- Forgot Password Modal -->
-    <div *ngIf="showForgotPasswordModal"
-        class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center px-4 animate-fadeIn">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-scaleIn">
-            <!-- Close Button -->
-            <button (click)="closeForgotPasswordModal()" type="button"
-                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
-                <i class="fas fa-times text-xl"></i>
+<!-- Forgot Password Modal -->
+<div *ngIf="showForgotPasswordModal"
+    class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center px-4 animate-fadeIn">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-scaleIn">
+        <!-- Close Button -->
+        <button (click)="closeForgotPasswordModal()" type="button"
+            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+
+        <!-- Icon -->
+        <div class="mx-auto h-16 w-16 rounded-full bg-purple-100 flex items-center justify-center mb-6">
+            <i class="fas fa-key text-3xl text-purple-600"></i>
+        </div>
+
+        <!-- Title -->
+        <h2 class="text-2xl font-bold text-gray-900 text-center mb-2">Forgot Password?</h2>
+        <p class="text-gray-600 text-center mb-6">Enter your email and we'll send you a link to reset your password.
+        </p>
+
+        <!-- Email Input -->
+        <div>
+            <label for="forgot-password-email" class="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
+            </label>
+            <input type="email" id="forgot-password-email" [(ngModel)]="forgotPasswordEmail"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                placeholder="you@example.com" [disabled]="forgotPasswordSubmitting" />
+        </div>
+
+        <!-- Buttons -->
+        <div class="mt-6 flex gap-3">
+            <button type="button" (click)="closeForgotPasswordModal()" [disabled]="forgotPasswordSubmitting"
+                class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50">
+                Cancel
             </button>
-
-            <!-- Icon -->
-            <div class="mx-auto h-16 w-16 rounded-full bg-purple-100 flex items-center justify-center mb-6">
-                <i class="fas fa-key text-3xl text-purple-600"></i>
-            </div>
-
-            <!-- Title -->
-            <h2 class="text-2xl font-bold text-gray-900 text-center mb-2">Forgot Password?</h2>
-            <p class="text-gray-600 text-center mb-6">Enter your email and we'll send you a link to reset your password.
-            </p>
-
-            <!-- Email Input -->
-            <div>
-                <label for="forgot-password-email" class="block text-sm font-medium text-gray-700 mb-2">
-                    Email Address
-                </label>
-                <input type="email" id="forgot-password-email" [(ngModel)]="forgotPasswordEmail"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                    placeholder="you@example.com" [disabled]="forgotPasswordSubmitting" />
-            </div>
-
-            <!-- Buttons -->
-            <div class="mt-6 flex gap-3">
-                <button type="button" (click)="closeForgotPasswordModal()" [disabled]="forgotPasswordSubmitting"
-                    class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50">
-                    Cancel
-                </button>
-                <button type="button" (click)="submitForgotPassword()" [disabled]="forgotPasswordSubmitting"
-                    class="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
-                    <span *ngIf="!forgotPasswordSubmitting">Send Link</span>
-                    <span *ngIf="forgotPasswordSubmitting" class="flex items-center gap-2">
-                        <i class="fas fa-spinner fa-spin"></i>
-                        Sending...
-                    </span>
-                </button>
-            </div>
+            <button type="button" (click)="submitForgotPassword()" [disabled]="forgotPasswordSubmitting"
+                class="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                <span *ngIf="!forgotPasswordSubmitting">Send Link</span>
+                <span *ngIf="forgotPasswordSubmitting" class="flex items-center gap-2">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    Sending...
+                </span>
+            </button>
         </div>
     </div>
 </div>

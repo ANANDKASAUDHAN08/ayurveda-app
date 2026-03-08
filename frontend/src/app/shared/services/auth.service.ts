@@ -11,6 +11,11 @@ import { LocationService } from './location.service';
 export class AuthService {
     private apiUrl = `${environment.apiUrl}/auth`;
     private tokenKey = 'auth_token';
+    private userKey = 'user';
+
+    // User state observable
+    private userSubject = new BehaviorSubject<any>(this.getUser());
+    public user$ = this.userSubject.asObservable();
 
     // Auth state observable
     private authStatusSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
@@ -28,6 +33,8 @@ export class AuthService {
                     this.ngZone.run(() => {
                         const hasToken = this.isLoggedIn();
                         this.authStatusSubject.next(hasToken);
+                        const user = this.getUser();
+                        this.userSubject.next(user);
                     });
                 }
             });
@@ -69,14 +76,22 @@ export class AuthService {
 
     private setSession(authResult: any) {
         // Set user first so role is available when auth_token triggers storage event in other tabs
-        localStorage.setItem('user', JSON.stringify(authResult.user));
+        this.updateUser(authResult.user);
         localStorage.setItem(this.tokenKey, authResult.token);
+    }
+
+    updateUser(user: any) {
+        if (user) {
+            localStorage.setItem(this.userKey, JSON.stringify(user));
+            this.userSubject.next(user);
+        }
     }
 
     logout() {
         localStorage.removeItem(this.tokenKey);
-        localStorage.removeItem('user');
+        localStorage.removeItem(this.userKey);
         this.authStatusSubject.next(false);
+        this.userSubject.next(null);
     }
 
     resendVerification(email: string, userType: 'user' | 'doctor'): Observable<any> {

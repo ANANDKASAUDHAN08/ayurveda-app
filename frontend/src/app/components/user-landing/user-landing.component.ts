@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../shared/services/auth.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/password-strength-indicator/password-strength-indicator.component';
+import { ContentService } from '../../shared/services/content.service';
 
 @Component({
   selector: 'app-user-landing',
@@ -18,7 +19,54 @@ import { PasswordStrengthIndicatorComponent } from 'src/app/shared/components/pa
     FormsModule,
     PasswordStrengthIndicatorComponent
   ],
-  templateUrl: './user-landing.component.html'
+  templateUrl: './user-landing.component.html',
+  styles: [`
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+      }
+      25% {
+        transform: translateY(-20px) translateX(10px);
+      }
+      50% {
+        transform: translateY(-10px) translateX(-10px);
+      }
+      75% {
+        transform: translateY(-30px) translateX(5px);
+      }
+    }
+
+    @keyframes gradient {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .animate-gradient {
+      background-size: 200% 200%;
+      animation: gradient 3s ease infinite;
+    }
+
+    .animate-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  `]
 })
 export class UserLandingComponent implements OnInit, OnDestroy {
   @ViewChild('emailInput') emailInput!: ElementRef;
@@ -44,11 +92,32 @@ export class UserLandingComponent implements OnInit, OnDestroy {
   isPasswordFocused: boolean = false;
   private authSub: Subscription | null = null;
 
+  stats: any = {
+    doctors: 0,
+    patients: 0,
+    appointments: 0,
+    hospitals: 0,
+    pharmacies: 0,
+    satisfaction: 98
+  };
+
+  // Animated counters
+  animatedStats = {
+    doctors: 0,
+    hospitals: 0,
+    satisfaction: 0
+  };
+
+  // Animation states
+  statsAnimated = false;
+  private intersectionObserver?: IntersectionObserver;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private contentService: ContentService
   ) {
     // Login Form
     this.loginForm = this.fb.group({
@@ -83,12 +152,38 @@ export class UserLandingComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.fetchStats();
+    this.setupIntersectionObserver();
   }
 
   ngOnDestroy() {
     if (this.authSub) {
       this.authSub.unsubscribe();
     }
+  }
+
+  fetchStats() {
+    this.contentService.getPublicStats().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.stats = res.stats;
+          console.log('Stats loaded:', this.stats);
+          // Trigger animation after a short delay to ensure UI is ready
+          setTimeout(() => {
+            console.log('Starting counter animations...');
+            this.animateStatsCounters();
+          }, 300);
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching stats:', err);
+        // Use fallback values and still animate
+        setTimeout(() => {
+          this.animateStatsCounters();
+        }, 300);
+      }
+    });
   }
 
   signInWithGoogle(mode: 'login' | 'register' = 'login') {
@@ -267,5 +362,112 @@ export class UserLandingComponent implements OnInit, OnDestroy {
         this.snackbar.error(err.error?.message || 'Failed to send verification email.');
       }
     });
+  }
+
+  // Animation utilities
+  setupIntersectionObserver() {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.3
+    };
+
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+
+          // Trigger stats animation when stats section is visible
+          if (entry.target.classList.contains('stats-section') && !this.statsAnimated) {
+            this.statsAnimated = true;
+            this.animateStatsCounters();
+          }
+        }
+      });
+    }, options);
+  }
+
+  animateCounter(target: number, duration: number = 2000): Promise<number> {
+    return new Promise((resolve) => {
+      const startTime = Date.now();
+      const startValue = 0;
+
+      const updateCounter = () => {
+        const currentTime = Date.now();
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Easing function for smooth animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const currentValue = Math.floor(startValue + (target - startValue) * easeOutQuart);
+
+        if (progress < 1) {
+          requestAnimationFrame(updateCounter);
+        } else {
+          resolve(target);
+        }
+
+        return currentValue;
+      };
+
+      const animate = () => {
+        const value = updateCounter();
+        requestAnimationFrame(animate);
+      };
+      animate();
+    });
+  }
+
+  animateStatsCounters() {
+    // Animate doctors count
+    const doctorDuration = 2000;
+    const doctorStart = Date.now();
+    const doctorTarget = this.stats.doctors || 500;
+
+    const animateDoctors = () => {
+      const elapsed = Date.now() - doctorStart;
+      const progress = Math.min(elapsed / doctorDuration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 4);
+      this.animatedStats.doctors = Math.floor(doctorTarget * easeOut);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateDoctors);
+      }
+    };
+    animateDoctors();
+
+    // Animate hospitals count
+    const hospitalDuration = 2000;
+    const hospitalStart = Date.now();
+    const hospitalTarget = this.stats.hospitals || 100;
+
+    const animateHospitals = () => {
+      const elapsed = Date.now() - hospitalStart;
+      const progress = Math.min(elapsed / hospitalDuration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 4);
+      this.animatedStats.hospitals = Math.floor(hospitalTarget * easeOut);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateHospitals);
+      }
+    };
+    setTimeout(() => animateHospitals(), 200);
+
+    // Animate satisfaction percentage
+    const satisfactionDuration = 2000;
+    const satisfactionStart = Date.now();
+    const satisfactionTarget = this.stats.satisfaction || 98;
+
+    const animateSatisfaction = () => {
+      const elapsed = Date.now() - satisfactionStart;
+      const progress = Math.min(elapsed / satisfactionDuration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 4);
+      this.animatedStats.satisfaction = Math.floor(satisfactionTarget * easeOut);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateSatisfaction);
+      }
+    };
+    setTimeout(() => animateSatisfaction(), 400);
   }
 }
